@@ -1,0 +1,37 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        app:title="@string/pref_header_general"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            app:key="call_recording"
+            app:title="@string/pref_call_recording_name"
+            app:summary="@string/pref_call_recording_desc"
+            app:iconSpaceReserved="false" />
+
+        <com.chiller3.bcr.LongClickablePreference
+            app:dependency="call_recording"
+            app:key="output_dir"
+            app:persistent="false"
+            app:title="@string/pref_output_dir_name"
+            app:summary="@string/pref_output_dir_desc"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="inhibit_batt_opt"
+            app:title="@string/pref_inhibit_batt_opt_name"
+            app:summary="@string/pref_inhibit_batt_opt_desc"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="@string/pref_header_about"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            app:key="version"
+            app:persistent="false"
+            app:title="@string/pref_version_name"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

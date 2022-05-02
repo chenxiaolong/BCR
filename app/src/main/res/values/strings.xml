@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">BCR</string>
+    <string name="app_name_full">Basic Call Recorder</string>
+
+    <!-- Preference headers -->
+    <string name="pref_header_general">General</string>
+    <string name="pref_header_about">About</string>
+
+    <!-- General preferences -->
+    <string name="pref_call_recording_name">Call recording</string>
+    <string name="pref_call_recording_desc">Record incoming and outgoing phone calls. Microphone and notification permissions are required for recording in the background.</string>
+
+    <string name="pref_output_dir_name">Output directory</string>
+    <string name="pref_output_dir_desc">Pick a directory to store recordings. Long press to reset to the default directory.</string>
+
+    <string name="pref_inhibit_batt_opt_name">Inhibit battery optimization</string>
+    <string name="pref_inhibit_batt_opt_desc">Reduces of the chance of the app being killed by the system.</string>
+
+    <!-- About "preference" -->
+    <string name="pref_version_name">Version</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_persistent_name">Background services</string>
+    <string name="notification_channel_persistent_desc">Persistent notification for background call recording</string>
+    <string name="recording_in_progress">Call recording in progress</string>
+
+    <!-- Quick settings tile -->
+    <string name="quick_settings_label">Call recording</string>
+</resources>

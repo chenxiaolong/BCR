@@ -1,0 +1,8 @@
+<resources>
+    <style name="Theme.BCR" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="windowActionModeOverlay">true</item>
+    </style>
+</resources>
