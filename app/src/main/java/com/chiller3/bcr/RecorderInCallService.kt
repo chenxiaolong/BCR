@@ -1,8 +1,6 @@
 package com.chiller3.bcr
 
 import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.net.Uri
@@ -16,7 +14,6 @@ import android.util.Log
 class RecorderInCallService : InCallService(), RecorderThread.OnRecordingCompletedListener {
     companion object {
         private val TAG = RecorderInCallService::class.java.simpleName
-        private const val CHANNEL_ID = "persistent"
     }
 
     private val handler = Handler(Looper.getMainLooper())
@@ -40,11 +37,6 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
 
             handleStateChange(call)
         }
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        createNotificationChannel()
     }
 
     override fun onCallAdded(call: Call) {
@@ -115,19 +107,6 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
     }
 
     /**
-     * Create a low priority notification channel for the persistent notification.
-     */
-    private fun createNotificationChannel() {
-        val name: CharSequence = getString(R.string.notification_channel_persistent_name)
-        val description = getString(R.string.notification_channel_persistent_desc)
-        val channel = NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_LOW)
-        channel.description = description
-
-        val notificationManager = getSystemService(NotificationManager::class.java)
-        notificationManager.createNotificationChannel(channel)
-    }
-
-    /**
      * Create a persistent notification for use during recording. The notification appearance is
      * fully static and in progress call recording is represented by the presence or absence of the
      * notification.
@@ -137,7 +116,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         val pendingIntent = PendingIntent.getActivity(
             this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
         )
-        val builder = Notification.Builder(this, CHANNEL_ID)
+        val builder = Notification.Builder(this, RecorderApplication.CHANNEL_ID)
         builder.setContentTitle(getText(R.string.recording_in_progress))
         builder.setSmallIcon(R.drawable.ic_launcher_foreground)
         builder.setContentIntent(pendingIntent)

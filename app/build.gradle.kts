@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    compileSdkPreview = "Tiramisu"
+    compileSdk = 32
 
     defaultConfig {
         applicationId = "com.chiller3.bcr"
         minSdk = 29
-        targetSdkPreview = "Tiramisu"
+        targetSdk = 32
         versionCode = 1
         versionName = "1.0"
 

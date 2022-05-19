@@ -12,11 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.BuildCompat
 
 object Permissions {
-    private val REQUIRED_33: Array<String> = arrayOf(Manifest.permission.POST_NOTIFICATIONS)
-
-    @BuildCompat.PrereleaseSdkCheck
-    val REQUIRED: Array<String> = if (BuildCompat.isAtLeastT()) { REQUIRED_33 } else { arrayOf() } +
-           arrayOf(Manifest.permission.RECORD_AUDIO)
+    val REQUIRED: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)
 
     private fun isGranted(context: Context, permission: String) =
         ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
