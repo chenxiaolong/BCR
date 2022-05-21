@@ -13,8 +13,8 @@
     <string name="pref_output_dir_name">Output directory</string>
     <string name="pref_output_dir_desc">Pick a directory to store recordings. Long press to reset to the default directory.</string>
 
-    <string name="pref_inhibit_batt_opt_name">Inhibit battery optimization</string>
-    <string name="pref_inhibit_batt_opt_desc">Reduces of the chance of the app being killed by the system.</string>
+    <string name="pref_inhibit_batt_opt_name">Disable battery optimization</string>
+    <string name="pref_inhibit_batt_opt_desc">Reduces the chance of the app being killed by the system.</string>
 
     <!-- About "preference" -->
     <string name="pref_version_name">Version</string>
