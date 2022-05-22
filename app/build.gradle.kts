@@ -101,6 +101,8 @@ android {
         versionName = gitVersionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "GIT_COMMIT", "\"${gitVersionTriple.third.name}\"")
     }
     signingConfigs {
         create("release") {
