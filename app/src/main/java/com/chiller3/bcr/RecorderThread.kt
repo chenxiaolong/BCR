@@ -14,6 +14,8 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.Integer.min
 import java.nio.channels.FileChannel
+import java.time.Instant
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatterBuilder
 import java.time.format.SignStyle
@@ -41,6 +43,7 @@ class RecorderThread(
     @Volatile private var isCancelled = false
     private var captureFailed = false
     private val handleUri: Uri = call.details.handle
+    private val creationTime: Long = call.details.creationTimeMillis
     private val direction: String? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         when (call.details.callDirection) {
             Call.Details.DIRECTION_INCOMING -> "in"
@@ -57,7 +60,8 @@ class RecorderThread(
 
     private fun getFilename(): String =
         buildString {
-            append(FORMATTER.format(ZonedDateTime.now()))
+            val instant = Instant.ofEpochMilli(creationTime)
+            append(FORMATTER.format(ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())))
 
             if (direction != null) {
                 append('_')
