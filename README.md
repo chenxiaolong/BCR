@@ -46,7 +46,10 @@ As the name alludes, BCR intends to be a basic as possible, with only two config
 
 4. Enable call recording and pick an output directory. If no output directory is selected or if the output directory is no longer accessible, then recordings will be saved to `/sdcard/Android/data/com.chiller3.bcr/files`.
 
-5. For future updates, either flash the new version of the Magisk module or simply extract the `.apk` from the zip file and install it directly.
+5. To install future updates, there are a couple methods:
+
+    * If installed via Magisk, the module can be updated right from Magisk Manager's modules tab. Flashing the new version in Magisk manually also works just as well.
+    * The `.apk` can also be extracted from the zip and be directly installed. With this method, the old version exists as a system app and the new version exists as a user-installed update to the system app. This method is more convenient if BCR is baked into the Android firmware image.
 
 ### How it works
 
