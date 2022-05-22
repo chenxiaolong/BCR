@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.PowerManager
 import android.provider.Settings
 import androidx.core.content.ContextCompat
-import androidx.core.os.BuildCompat
 
 object Permissions {
     val REQUIRED: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)

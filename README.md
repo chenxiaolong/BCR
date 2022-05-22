@@ -8,7 +8,7 @@ BCR is a simple Android call recording app for rooted devices or devices running
 
 ### Features
 
-* Supports Android 10 through 13
+* Supports Android 9 through 13
 * Records FLAC-encoded lossless audio at the device's native sample rate
 * Supports Android's Storage Access Framework (can record to SD cards, USB devices, cloud storage, etc.)
 * Quick settings toggle

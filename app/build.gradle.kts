@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.chiller3.bcr"
-        minSdk = 29
+        minSdk = 28
         targetSdk = 32
         versionCode = 2
         versionName = "1.1"
