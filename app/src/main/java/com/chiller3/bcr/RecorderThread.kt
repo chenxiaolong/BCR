@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.ParcelFileDescriptor
 import android.telecom.Call
+import android.telecom.PhoneAccount
 import android.util.Log
 import androidx.documentfile.provider.DocumentFile
 import java.io.FileOutputStream
@@ -40,10 +41,34 @@ class RecorderThread(
     @Volatile private var isCancelled = false
     private var captureFailed = false
     private val handleUri: Uri = call.details.handle
+    private val direction: String? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        when (call.details.callDirection) {
+            Call.Details.DIRECTION_INCOMING -> "in"
+            Call.Details.DIRECTION_OUTGOING -> "out"
+            else -> null
+        }
+    } else {
+        null
+    }
 
     init {
         Log.i(TAG, "[${id}] Created thread for call: $call")
     }
+
+    private fun getFilename(): String =
+        buildString {
+            append(FORMATTER.format(ZonedDateTime.now()))
+
+            if (direction != null) {
+                append('_')
+                append(direction)
+            }
+
+            if (handleUri.scheme == PhoneAccount.SCHEME_TEL) {
+                append('_')
+                append(handleUri.schemeSpecificPart)
+            }
+        }
 
     override fun run() {
         var success = false
@@ -55,12 +80,7 @@ class RecorderThread(
             if (isCancelled) {
                 Log.i(TAG, "[${id}] Recording cancelled before it began")
             } else {
-                var filename = FORMATTER.format(ZonedDateTime.now())
-                if (handleUri.scheme == "tel") {
-                    filename += "_${handleUri.schemeSpecificPart}"
-                }
-
-                val (uri, pfd) = openOutputFile(filename)
+                val (uri, pfd) = openOutputFile(getFilename())
                 resultUri = uri
 
                 pfd.use {
