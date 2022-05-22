@@ -53,6 +53,7 @@ class RecorderThread(
     } else {
         null
     }
+    private val displayName: String? = call.details.callerDisplayName
 
     init {
         Log.i(TAG, "[${id}] Created thread for call: $call")
@@ -71,6 +72,15 @@ class RecorderThread(
             if (handleUri.scheme == PhoneAccount.SCHEME_TEL) {
                 append('_')
                 append(handleUri.schemeSpecificPart)
+            }
+
+            // AOSP's SAF automatically replaces invalid characters with underscores, but just in
+            // case an OEM fork breaks that, do the replacement ourselves to prevent directory
+            // traversal attacks.
+            val name = displayName?.replace('/', '_')?.trim()
+            if (!name.isNullOrBlank()) {
+                append('_')
+                append(name)
             }
         }
 
