@@ -4,6 +4,8 @@ plugins {
 }
 
 android {
+    namespace = "com.chiller3.bcr"
+
     compileSdk = 32
 
     defaultConfig {
