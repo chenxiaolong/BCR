@@ -1,7 +1,92 @@
+import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.lib.ObjectId
+import org.jetbrains.kotlin.backend.common.pop
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
+
+buildscript {
+    dependencies {
+        classpath("org.eclipse.jgit:org.eclipse.jgit:6.1.0.202203080745-r")
+    }
+}
+
+typealias VersionTriple = Triple<String?, Int, ObjectId>
+
+fun describeVersion(git: Git): VersionTriple {
+    // jgit doesn't provide a nice way to get strongly-typed objects from its `describe` command
+    val describeStr = git.describe().setLong(true).call()
+
+    return if (describeStr != null) {
+        val pieces = describeStr.split('-').toMutableList()
+        val commit = git.repository.resolve(pieces.pop().substring(1))
+        val count = pieces.pop().toInt()
+        val tag = pieces.joinToString("-")
+
+        Triple(tag, count, commit)
+    } else {
+        val log = git.log().call().iterator()
+        val head = log.next()
+        var count = 1
+
+        while (log.hasNext()) {
+            log.next()
+            ++count
+        }
+
+        Triple(null, count, head.id)
+    }
+}
+
+fun getVersionCode(triple: VersionTriple): Int {
+    val tag = triple.first
+    val (major, minor) = if (tag != null) {
+        if (!tag.startsWith('v')) {
+            throw IllegalArgumentException("Tag does not begin with 'v': $tag")
+        }
+
+        val pieces = tag.substring(1).split('.')
+        if (pieces.size != 2) {
+            throw IllegalArgumentException("Tag is not in the form 'v<major>.<minor>': $tag")
+        }
+
+        Pair(pieces[0].toInt(), pieces[1].toInt())
+    } else {
+        Pair(0, 0)
+    }
+
+    // 8 bits for major version, 8 bits for minor version, and 8 bits for git commit count
+    assert(major in 0 until 1.shl(8))
+    assert(minor in 0 until 1.shl(8))
+    assert(triple.second in 0 until 1.shl(8))
+
+    return major.shl(16) or minor.shl(8) or triple.second
+}
+
+fun getVersionName(git: Git, triple: VersionTriple): String {
+    val tag = triple.first?.replace(Regex("^v"), "") ?: "NONE"
+
+    return buildString {
+        append(tag)
+
+        if (triple.second > 0) {
+            append(".r")
+            append(triple.second)
+
+            append(".g")
+            git.repository.newObjectReader().use {
+                append(it.abbreviate(triple.third).name())
+            }
+        }
+    }
+}
+
+val git = Git.open(File(rootDir, ".git"))
+val gitVersionTriple = describeVersion(git)
+val gitVersionCode = getVersionCode(gitVersionTriple)
+val gitVersionName = getVersionName(git, gitVersionTriple)
 
 android {
     namespace = "com.chiller3.bcr"
@@ -12,8 +97,8 @@ android {
         applicationId = "com.chiller3.bcr"
         minSdk = 28
         targetSdk = 32
-        versionCode = 2
-        versionName = "1.1"
+        versionCode = gitVersionCode
+        versionName = gitVersionName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
