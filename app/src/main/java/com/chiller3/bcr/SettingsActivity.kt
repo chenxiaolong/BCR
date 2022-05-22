@@ -135,7 +135,8 @@ class SettingsActivity : AppCompatActivity() {
                     return true
                 }
                 prefVersion -> {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(PROJECT_URL)))
+                    val url = PROJECT_BASE_URL + BuildConfig.GIT_COMMIT
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                     return true
                 }
             }
@@ -170,7 +171,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         companion object {
-            private const val PROJECT_URL = "https://github.com/chenxiaolong/BCR"
+            private const val PROJECT_BASE_URL = "https://github.com/chenxiaolong/BCR/tree/"
         }
     }
 }
