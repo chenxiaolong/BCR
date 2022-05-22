@@ -66,6 +66,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         val state = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             call.details.state
         } else {
+            @Suppress("DEPRECATION")
             call.state
         }
 

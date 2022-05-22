@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.media.*
 import android.net.Uri
+import android.os.Build
 import android.os.ParcelFileDescriptor
 import android.telecom.Call
 import android.util.Log
@@ -199,7 +200,7 @@ class RecorderThread(
     private fun encodeLoop(audioRecord: AudioRecord, codec: MediaCodec, channel: FileChannel) {
         // This is the most we ever read from audioRecord, even if the codec input buffer is
         // larger. This is purely for fast'ish cancellation and not for latency.
-        val maxSamplesInBytes = audioRecord.sampleRate / 10 * audioRecord.format.frameSizeInBytes
+        val maxSamplesInBytes = audioRecord.sampleRate / 10 * getFrameSize(audioRecord.format)
 
         val inputTimestamp = 0L
         var inputComplete = false
@@ -295,7 +296,7 @@ class RecorderThread(
             // AOSP ignores this because FLAC compression is lossless, but just in case the system
             // uses another FLAC encoder that requiress a non-dummy value (eg. 0), we'll just use
             // the PCM s16le bitrate. It's an overestimation, but shouldn't cause any issues.
-            val bitRate = audioFormat.frameSizeInBytes * sampleRate / 8
+            val bitRate = getFrameSize(audioFormat) * sampleRate / 8
 
             val format = MediaFormat()
             format.setString(MediaFormat.KEY_MIME, MediaFormat.MIMETYPE_AUDIO_FLAC)
@@ -318,6 +319,16 @@ class RecorderThread(
             }
 
             return codec
+        }
+
+        private fun getFrameSize(audioFormat: AudioFormat): Int {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                audioFormat.frameSizeInBytes
+            } else{
+                // Hardcoded for Android 9 compatibility only
+                assert(ENCODING == AudioFormat.ENCODING_PCM_16BIT)
+                2 * audioFormat.channelCount
+            }
         }
     }
 
