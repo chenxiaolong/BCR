@@ -76,7 +76,7 @@ class SettingsActivity : AppCompatActivity() {
 
             prefVersion = findPreference(Preferences.PREF_VERSION)!!
             prefVersion.onPreferenceClickListener = this
-            prefVersion.summary = BuildConfig.VERSION_NAME
+            prefVersion.summary = "${BuildConfig.VERSION_NAME} (${BuildConfig.BUILD_TYPE})"
         }
 
         override fun onResume() {
