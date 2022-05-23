@@ -1,0 +1,1 @@
+Please see https://github.com/chenxiaolong/BCR/releases/tag/v1.2 for the changelog.
