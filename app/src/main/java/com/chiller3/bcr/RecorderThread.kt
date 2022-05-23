@@ -1,3 +1,6 @@
+@file:Suppress("OPT_IN_IS_NOT_ENABLED")
+@file:OptIn(ExperimentalUnsignedTypes::class)
+
 package com.chiller3.bcr
 
 import android.annotation.SuppressLint
@@ -6,14 +9,16 @@ import android.media.*
 import android.net.Uri
 import android.os.Build
 import android.os.ParcelFileDescriptor
+import android.system.Os
+import android.system.OsConstants
 import android.telecom.Call
 import android.telecom.PhoneAccount
 import android.util.Log
 import androidx.documentfile.provider.DocumentFile
-import java.io.FileOutputStream
+import java.io.FileDescriptor
 import java.io.IOException
 import java.lang.Integer.min
-import java.nio.channels.FileChannel
+import java.nio.ByteBuffer
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -198,9 +203,8 @@ class RecorderThread(
                     codec.start()
 
                     try {
-                        FileOutputStream(pfd.fileDescriptor).use { file ->
-                            encodeLoop(audioRecord, codec, file.channel)
-                        }
+                        val frames = encodeLoop(audioRecord, codec, pfd.fileDescriptor)
+                        setFlacHeaderDuration(pfd.fileDescriptor, frames)
                     } finally {
                         codec.stop()
                     }
@@ -219,7 +223,7 @@ class RecorderThread(
      * Main loop for encoding captured raw audio into an output file.
      *
      * The loop runs forever until [cancel] is called. At that point, no further data will be read
-     * from [audioRecord] and the remaining output data from [codec] will be written to [channel].
+     * from [audioRecord] and the remaining output data from [codec] will be written to [fd].
      * If [audioRecord] fails to capture data, the loop will behave as if [cancel] was called
      * (ie. abort, but ensuring that the output file is valid).
      *
@@ -228,10 +232,16 @@ class RecorderThread(
      *
      * @param audioRecord [AudioRecord.startRecording] must have been called
      * @param codec [MediaCodec.start] must have been called
+     * @param fd Will be truncated to 0 bytes before writing
      *
      * @throws MediaCodec.CodecException if the codec encounters an error
+     *
+     * @return The number of frames that were recorded
      */
-    private fun encodeLoop(audioRecord: AudioRecord, codec: MediaCodec, channel: FileChannel) {
+    private fun encodeLoop(audioRecord: AudioRecord, codec: MediaCodec, fd: FileDescriptor): ULong {
+        Os.lseek(fd, 0, OsConstants.SEEK_SET)
+        Os.ftruncate(fd, 0)
+
         // This is the most we ever read from audioRecord, even if the codec input buffer is
         // larger. This is purely for fast'ish cancellation and not for latency.
         val maxSamplesInBytes = audioRecord.sampleRate / 10 * getFrameSize(audioRecord.format)
@@ -239,6 +249,8 @@ class RecorderThread(
         val inputTimestamp = 0L
         var inputComplete = false
         val bufferInfo = MediaCodec.BufferInfo()
+        val frameSize = getFrameSize(audioRecord.format)
+        var totalFrames = 0uL
 
         while (true) {
             if (!inputComplete) {
@@ -260,10 +272,11 @@ class RecorderThread(
                         isCancelled = true
                     }
 
+                    val frames = n / frameSize
+
                     // Setting the presentation timestamp will cause `c2.android.flac.encoder`
                     // software encoder to crash with SIGABRT
-                    //inputTimestamp += n / audioRecord.format.frameSizeInBytes * 1000000 /
-                    //        audioRecord.sampleRate
+                    //inputTimestamp += frames * 1000000 / audioRecord.sampleRate
 
                     if (isCancelled) {
                         val duration = "%.1f".format(inputTimestamp / 1000000f)
@@ -278,6 +291,8 @@ class RecorderThread(
                     }
 
                     codec.queueInputBuffer(inputBufferId, 0, n, inputTimestamp, flags)
+
+                    totalFrames += frames.toULong()
                 } else if (inputBufferId != MediaCodec.INFO_TRY_AGAIN_LATER) {
                     Log.w(TAG, "Unexpected input buffer dequeue error: $inputBufferId")
                 }
@@ -287,7 +302,7 @@ class RecorderThread(
             if (outputBufferId >= 0) {
                 val buffer = codec.getOutputBuffer(outputBufferId)!!
 
-                channel.write(buffer)
+                Os.write(fd, buffer)
 
                 codec.releaseOutputBuffer(outputBufferId, false)
 
@@ -300,12 +315,16 @@ class RecorderThread(
                 Log.w(TAG, "Unexpected output buffer dequeue error: $outputBufferId")
             }
         }
+
+        return totalFrames
     }
 
     companion object {
         private val TAG = RecorderThread::class.java.simpleName
         private const val CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO
         private const val ENCODING = AudioFormat.ENCODING_PCM_16BIT
+
+        private val FLAC_MAGIC = ubyteArrayOf(0x66u, 0x4cu, 0x61u, 0x43u) // fLaC
 
         // Eg. 20220429_180249.123-0400
         private val FORMATTER = DateTimeFormatterBuilder()
@@ -362,6 +381,59 @@ class RecorderThread(
                 // Hardcoded for Android 9 compatibility only
                 assert(ENCODING == AudioFormat.ENCODING_PCM_16BIT)
                 2 * audioFormat.channelCount
+            }
+        }
+
+        /**
+         * Write the frame count [frames] to the STREAMINFO metadata block of a flac file. [frames]
+         * should not account for the number of channels (ie. frames, not samples).
+         *
+         * @throws IOException If FLAC metadata does not appear to be valid
+         * @throws IllegalArgumentException if [frames] exceeds the bounds of a 36-bit integer
+         */
+        private fun setFlacHeaderDuration(fd: FileDescriptor, frames: ULong) {
+            if (frames >= 2uL.shl(36)) {
+                throw IllegalArgumentException("Frame count cannot be represented in FLAC: $frames")
+            }
+
+            Os.lseek(fd, 0, OsConstants.SEEK_SET)
+
+            // Magic (4 bytes)
+            // + metadata block header (4 bytes)
+            // + streaminfo block (34 bytes)
+            val buf = UByteArray(42)
+
+            if (Os.read(fd, buf.asByteArray(), 0, buf.size) != buf.size) {
+                throw IOException("EOF reached when reading FLAC headers")
+            }
+
+            // Validate the magic
+            if (ByteBuffer.wrap(buf.asByteArray(), 0, 4) !=
+                ByteBuffer.wrap(FLAC_MAGIC.asByteArray())) {
+                throw IOException("FLAC magic not found")
+            }
+
+            // Validate that the first metadata block is STREAMINFO and has the correct size
+            if (buf[4] and 0x7fu != 0.toUByte()) {
+                throw IOException("First metadata block is not STREAMINFO")
+            }
+
+            val streamInfoSize = buf[5].toUInt().shl(16) or
+                    buf[6].toUInt().shl(8) or buf[7].toUInt()
+            if (streamInfoSize < 34u) {
+                throw IOException("STREAMINFO block is too small")
+            }
+
+            // Total samples field is a 36-bit integer that begins 4 bits into the 21st byte
+            buf[21] = (buf[21] and 0xf0u) or (frames.shr(32) and 0xfu).toUByte()
+            buf[22] = (frames.shr(24) and 0xffu).toUByte()
+            buf[23] = (frames.shr(16) and 0xffu).toUByte()
+            buf[24] = (frames.shr(8) and 0xffu).toUByte()
+            buf[25] = (frames and 0xffu).toUByte()
+
+            Os.lseek(fd, 21, OsConstants.SEEK_SET)
+            if (Os.write(fd, buf.asByteArray(), 21, 5) != 5) {
+                throw IOException("EOF reached when writing frame count")
             }
         }
     }
