@@ -156,6 +156,13 @@ android.applicationVariants.all {
     val variantDir = File(extraDir, variant.name)
 
     val moduleProp = tasks.register("moduleProp${capitalized}") {
+        inputs.property("projectUrl", projectUrl)
+        inputs.property("releaseMetadataBranch", releaseMetadataBranch)
+        inputs.property("variant.applicationId", variant.applicationId)
+        inputs.property("variant.name", variant.name)
+        inputs.property("variant.versionCode", variant.versionCode)
+        inputs.property("variant.versionName", variant.versionName)
+
         val outputFile = File(variantDir, "module.prop")
         outputs.file(outputFile)
 
@@ -177,6 +184,8 @@ android.applicationVariants.all {
     }
 
     val permissionsXml = tasks.register("permissionsXml${capitalized}") {
+        inputs.property("variant.applicationId", variant.applicationId)
+
         val outputFile = File(variantDir, "privapp-permissions-${variant.applicationId}.xml")
         outputs.file(outputFile)
 
@@ -194,6 +203,10 @@ android.applicationVariants.all {
     }
 
     tasks.register<Zip>("zip${capitalized}") {
+        inputs.property("variant.applicationId", variant.applicationId)
+        inputs.property("variant.name", variant.name)
+        inputs.property("variant.versionName", variant.versionName)
+
         archiveFileName.set("BCR-${variant.versionName}-${variant.name}.zip")
         destinationDirectory.set(File(destinationDirectory.asFile.get(), variant.name))
 
@@ -221,6 +234,13 @@ android.applicationVariants.all {
     }
 
     tasks.register("updateJson${capitalized}") {
+        inputs.property("gitVersionTriple", gitVersionTriple)
+        inputs.property("projectUrl", projectUrl)
+        inputs.property("releaseMetadataBranch", releaseMetadataBranch)
+        inputs.property("variant.name", variant.name)
+        inputs.property("variant.versionCode", variant.versionCode)
+        inputs.property("variant.versionName", variant.versionName)
+
         val magiskDir = File(projectDir, "magisk")
         val updatesDir = File(magiskDir, "updates")
         val variantUpdateDir = File(updatesDir, variant.name)
@@ -231,6 +251,10 @@ android.applicationVariants.all {
         outputs.file(changelogFile)
 
         doLast {
+            if (gitVersionTriple.second != 0) {
+                throw IllegalStateException("The release tag must be checked out")
+            }
+
             val root = JSONObject()
             root.put("version", variant.versionName)
             root.put("versionCode", variant.versionCode)
