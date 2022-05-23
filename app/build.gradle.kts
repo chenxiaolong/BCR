@@ -1,6 +1,7 @@
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.ObjectId
 import org.jetbrains.kotlin.backend.common.pop
+import org.json.JSONObject
 
 plugins {
     id("com.android.application")
@@ -10,6 +11,7 @@ plugins {
 buildscript {
     dependencies {
         classpath("org.eclipse.jgit:org.eclipse.jgit:6.1.0.202203080745-r")
+        classpath("org.json:json:20220320")
     }
 }
 
@@ -88,6 +90,9 @@ val gitVersionTriple = describeVersion(git)
 val gitVersionCode = getVersionCode(gitVersionTriple)
 val gitVersionName = getVersionName(git, gitVersionTriple)
 
+val projectUrl = "https://github.com/chenxiaolong/BCR"
+val releaseMetadataBranch = "master"
+
 android {
     namespace = "com.chiller3.bcr"
 
@@ -102,7 +107,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "GIT_COMMIT", "\"${gitVersionTriple.third.name}\"")
+        buildConfigField("String", "PROJECT_URL_AT_COMMIT",
+            "\"${projectUrl}/tree/${gitVersionTriple.third.name}\"")
     }
     signingConfigs {
         create("release") {
@@ -154,14 +160,19 @@ android.applicationVariants.all {
         outputs.file(outputFile)
 
         doLast {
-            outputFile.writeText("""
-                id=${variant.applicationId}
-                name=Basic Call Recorder
-                version=v${variant.versionName}
-                versionCode=${variant.versionCode}
-                author=chenxiaolong
-                description=Basic Call Recorder
-            """.trimIndent())
+            val props = LinkedHashMap<String, String>()
+            props["id"] = variant.applicationId
+            props["name"] = "BCR"
+            props["version"] = "v${variant.versionName}"
+            props["versionCode"] = variant.versionCode.toString()
+            props["author"] = "chenxiaolong"
+            props["description"] = "Basic Call Recorder"
+
+            if (variant.name == "release") {
+                props["updateJson"] = "${projectUrl}/raw/${releaseMetadataBranch}/app/magisk/updates/${variant.name}/info.json"
+            }
+
+            outputFile.writeText(props.map { "${it.key}=${it.value}" }.joinToString("\n"))
         }
     }
 
@@ -207,5 +218,30 @@ android.applicationVariants.all {
 
         from(File(rootDir, "LICENSE"))
         from(File(rootDir, "README.md"))
+    }
+
+    tasks.register("updateJson${capitalized}") {
+        val magiskDir = File(projectDir, "magisk")
+        val updatesDir = File(magiskDir, "updates")
+        val variantUpdateDir = File(updatesDir, variant.name)
+        val jsonFile = File(variantUpdateDir, "info.json")
+        val changelogFile = File(variantUpdateDir, "changelog.txt")
+
+        outputs.file(jsonFile)
+        outputs.file(changelogFile)
+
+        doLast {
+            val root = JSONObject()
+            root.put("version", variant.versionName)
+            root.put("versionCode", variant.versionCode)
+            root.put("zipUrl", "${projectUrl}/releases/download/${gitVersionTriple.first}/BCR-${variant.versionName}-release.zip")
+            root.put("changelog", "${projectUrl}/raw/${releaseMetadataBranch}/app/magisk/updates/${variant.name}/changelog.txt")
+
+            jsonFile.writer().use {
+                root.write(it, 4, 0)
+            }
+
+            changelogFile.writeText("Please see ${projectUrl}/releases/tag/${gitVersionTriple.first} for the changelog.\n")
+        }
     }
 }
