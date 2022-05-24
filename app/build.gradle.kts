@@ -225,8 +225,11 @@ android.applicationVariants.all {
         }
 
         val magiskDir = File(projectDir, "magisk")
-        from(magiskDir) {
-            into("META-INF/com/google/android")
+
+        for (script in arrayOf("update-binary", "updater-script")) {
+            from(File(magiskDir, script)) {
+                into("META-INF/com/google/android")
+            }
         }
 
         from(File(rootDir, "LICENSE"))
