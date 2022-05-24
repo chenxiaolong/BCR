@@ -237,7 +237,7 @@ android.applicationVariants.all {
     }
 
     tasks.register("updateJson${capitalized}") {
-        inputs.property("gitVersionTriple", gitVersionTriple)
+        inputs.property("gitVersionTriple.first", gitVersionTriple.first)
         inputs.property("projectUrl", projectUrl)
         inputs.property("releaseMetadataBranch", releaseMetadataBranch)
         inputs.property("variant.name", variant.name)
