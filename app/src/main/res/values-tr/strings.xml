@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">BCR</string>
+    <string name="app_name_full">Basic Call Recorder</string>
+
+    <!-- Preference headers -->
+    <string name="pref_header_general">Genel</string>
+    <string name="pref_header_about">Hakkında</string>
+
+    <!-- General preferences -->
+    <string name="pref_call_recording_name">Çağrı kaydı</string>
+    <string name="pref_call_recording_desc">Gelen ve giden çağrıları kaydet. Arka planda kayıt için mikrofon ve bildirim izinleri gereklidir.</string>
+
+    <string name="pref_output_dir_name">Kayıt konumu</string>
+    <string name="pref_output_dir_desc">Kayıtlar için bir konum seçin. Konumu sıfırlamak için uzun basın.</string>
+
+    <string name="pref_inhibit_batt_opt_name">Pil optimizasyonunu devre dışı bırak</string>
+    <string name="pref_inhibit_batt_opt_desc">Uygulamanın sistem tarafından durdurulma riskini azaltır.</string>
+
+    <!-- About "preference" -->
+    <string name="pref_version_name">Versiyon</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_persistent_name">Arka plan servisleri</string>
+    <string name="notification_channel_persistent_desc">Arka plan çağrı kaydı için kalıcı bildirim</string>
+    <string name="recording_in_progress">Çağrı kaydediliyor</string>
+
+    <!-- Quick settings tile -->
+    <string name="quick_settings_label">Çağrı kaydı</string>
+</resources>
