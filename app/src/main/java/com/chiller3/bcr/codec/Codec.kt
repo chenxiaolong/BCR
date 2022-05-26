@@ -8,32 +8,17 @@ import android.util.Log
 import java.io.FileDescriptor
 
 sealed class Codec {
-    /** Meaning of the codec parameter value. */
-    abstract val codecParamType: CodecParamType
+    /** User-facing name of the codec. */
+    abstract val name: String
 
-    /** Valid range for [codecParamValue]. */
-    abstract val codecParamRange: UIntRange
+    /** Meaning of the codec parameter value. */
+    abstract val paramType: CodecParamType
+
+    /** Valid range for the codec-specific parameter value. */
+    abstract val paramRange: UIntRange
 
     /** Default codec parameter value. */
-    abstract val codecParamDefault: UInt
-
-    /**
-     * User specified codec parameter value.
-     *
-     * @throws IllegalArgumentException if the value is not in [codecParamRange]
-     */
-    var codecParamUser: UInt? = null
-        set(value) {
-            if (value == null || value in codecParamRange) {
-                field = value
-            } else {
-                throw IllegalArgumentException("Value $value not in range $codecParamRange")
-            }
-        }
-
-    /** Get the codec parameter value or the default if unset. */
-    val codecParamValue: UInt
-        get() = codecParamUser ?: codecParamDefault
+    abstract val paramDefault: UInt
 
     /** The MIME type of the container storing the encoded audio stream. */
     abstract val mimeTypeContainer: String
@@ -51,13 +36,34 @@ sealed class Codec {
     /**
      * Create a [MediaFormat] representing the encoded audio with parameters matching the specified
      * input PCM audio format.
+     *
+     * @param param Codec-specific parameter value. Must be in the [paramRange] range. If null,
+     * [paramDefault] is used.
+     *
+     * @throws IllegalArgumentException if [param] is outside [paramRange]
      */
-    open fun getMediaFormat(audioFormat: AudioFormat, sampleRate: Int): MediaFormat =
-        MediaFormat().apply {
+    fun getMediaFormat(audioFormat: AudioFormat, sampleRate: Int, param: UInt?): MediaFormat {
+        if (param != null && param !in paramRange) {
+            throw IllegalArgumentException("Parameter $param not in range $paramRange")
+        }
+
+        val format = MediaFormat().apply {
             setString(MediaFormat.KEY_MIME, mimeTypeAudio)
             setInteger(MediaFormat.KEY_CHANNEL_COUNT, audioFormat.channelCount)
             setInteger(MediaFormat.KEY_SAMPLE_RATE, sampleRate)
         }
+
+        updateMediaFormat(format, param ?: paramDefault)
+
+        return format
+    }
+
+    /**
+     * Update [mediaFormat] with parameter keys relevant to the codec-specific parameter.
+     *
+     * @param param Guaranteed to be within [paramRange]
+     */
+    protected abstract fun updateMediaFormat(mediaFormat: MediaFormat, param: UInt)
 
     /**
      * Create a [MediaCodec] encoder that produces [mediaFormat] output.
@@ -93,17 +99,5 @@ sealed class Codec {
 
     companion object {
         private val TAG = Codec::class.java.simpleName
-
-        private var _all: Array<Codec>? = null
-        val all: Array<Codec>
-            get() {
-                if (_all == null) {
-                    _all = arrayOf(FlacCodec(), OpusCodec(), AacCodec())
-                }
-                return _all!!
-            }
-
-        val default: Codec
-            get() = all.first()
     }
 }
