@@ -8,11 +8,14 @@ import java.io.File
 
 object Preferences {
     const val PREF_CALL_RECORDING = "call_recording"
-    const val PREF_CODEC_NAME = "codec_name"
-    const val PREF_CODEC_PARAM_FORMAT = "codec_param_%s"
     const val PREF_OUTPUT_DIR = "output_dir"
+    const val PREF_OUTPUT_FORMAT = "output_format"
     const val PREF_INHIBIT_BATT_OPT = "inhibit_batt_opt"
     const val PREF_VERSION = "version"
+
+    // Not associated with a UI preference
+    private const val PREF_CODEC_NAME = "codec_name"
+    private const val PREF_CODEC_PARAM_PREFIX = "codec_param_"
 
     /**
      * Get the default output directory. The directory should always be writable and is suitable for
@@ -127,7 +130,7 @@ object Preferences {
      */
     fun getCodecParam(context: Context, name: String): UInt? {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val key = PREF_CODEC_PARAM_FORMAT.format(name)
+        val key = PREF_CODEC_PARAM_PREFIX + name
         // Use a sentinel value because doing contains + getInt results in TOCTOU issues
         val value = prefs.getInt(key, -1)
 
@@ -153,12 +156,29 @@ object Preferences {
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = prefs.edit()
-        val key = PREF_CODEC_PARAM_FORMAT.format(name)
+        val key = PREF_CODEC_PARAM_PREFIX + name
 
         if (param == null) {
             editor.remove(key)
         } else {
             editor.putInt(key, param.toInt())
+        }
+
+        editor.apply()
+    }
+
+    /**
+     * Remove the default codec preference and the parameters for all codecs.
+     */
+    fun resetAllCodecs(context: Context) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val keys = prefs.all.keys.filter {
+            it == PREF_CODEC_NAME || it.startsWith(PREF_CODEC_PARAM_PREFIX)
+        }
+        val editor = prefs.edit()
+
+        for (key in keys) {
+            editor.remove(key)
         }
 
         editor.apply()

@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
+import com.chiller3.bcr.codec.CodecParamType
+import com.chiller3.bcr.codec.Codecs
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +33,7 @@ class SettingsActivity : AppCompatActivity() {
         SharedPreferences.OnSharedPreferenceChangeListener {
         private lateinit var prefCallRecording: SwitchPreferenceCompat
         private lateinit var prefOutputDir: LongClickablePreference
+        private lateinit var prefOutputFormat: LongClickablePreference
         private lateinit var prefInhibitBatteryOpt: SwitchPreferenceCompat
         private lateinit var prefVersion: Preference
 
@@ -71,6 +74,11 @@ class SettingsActivity : AppCompatActivity() {
             prefOutputDir.onPreferenceLongClickListener = this
             refreshOutputDir()
 
+            prefOutputFormat = findPreference(Preferences.PREF_OUTPUT_FORMAT)!!
+            prefOutputFormat.onPreferenceClickListener = this
+            prefOutputFormat.onPreferenceLongClickListener = this
+            refreshOutputFormat()
+
             prefInhibitBatteryOpt = findPreference(Preferences.PREF_INHIBIT_BATT_OPT)!!
             prefInhibitBatteryOpt.onPreferenceChangeListener = this
 
@@ -98,6 +106,18 @@ class SettingsActivity : AppCompatActivity() {
             val outputDir = Preferences.getOutputDir(requireContext())
             val summary = getString(R.string.pref_output_dir_desc)
             prefOutputDir.summary = "${summary}\n\n${outputDir}"
+        }
+
+        private fun refreshOutputFormat() {
+            val (codec, codecParamSaved) = Codecs.fromPreferences(requireContext())
+            val codecParam = codecParamSaved ?: codec.paramDefault
+            val summary = getString(R.string.pref_output_format_desc)
+            val paramText = when (codec.paramType) {
+                CodecParamType.CompressionLevel -> codecParam.toString()
+                CodecParamType.Bitrate -> "${codecParam / 1_000u} kbps"
+            }
+
+            prefOutputFormat.summary = "${summary}\n\n${codec.name} (${paramText})"
         }
 
         private fun refreshInhibitBatteryOptState() {
@@ -134,6 +154,10 @@ class SettingsActivity : AppCompatActivity() {
                     requestSafOutputDir.launch(null)
                     return true
                 }
+                prefOutputFormat -> {
+                    // TODO: Open codec configuration dialog
+                    return true
+                }
                 prefVersion -> {
                     val uri = Uri.parse(BuildConfig.PROJECT_URL_AT_COMMIT)
                     startActivity(Intent(Intent.ACTION_VIEW, uri))
@@ -149,6 +173,11 @@ class SettingsActivity : AppCompatActivity() {
                 prefOutputDir -> {
                     Preferences.setOutputDir(requireContext(), null)
                     refreshOutputDir()
+                    return true
+                }
+                prefOutputFormat -> {
+                    Preferences.resetAllCodecs(requireContext())
+                    refreshOutputFormat()
                     return true
                 }
             }

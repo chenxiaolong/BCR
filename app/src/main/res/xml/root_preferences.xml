@@ -17,6 +17,14 @@
             app:summary="@string/pref_output_dir_desc"
             app:iconSpaceReserved="false" />
 
+        <com.chiller3.bcr.LongClickablePreference
+            app:dependency="call_recording"
+            app:key="output_format"
+            app:persistent="false"
+            app:title="@string/pref_output_format_name"
+            app:summary="@string/pref_output_format_desc"
+            app:iconSpaceReserved="false" />
+
         <SwitchPreferenceCompat
             app:key="inhibit_batt_opt"
             app:title="@string/pref_inhibit_batt_opt_name"
