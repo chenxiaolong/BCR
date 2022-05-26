@@ -14,6 +14,7 @@ import android.telecom.PhoneAccount
 import android.util.Log
 import androidx.documentfile.provider.DocumentFile
 import com.chiller3.bcr.codec.Codec
+import com.chiller3.bcr.codec.Codecs
 import com.chiller3.bcr.codec.Container
 import java.io.IOException
 import java.lang.Integer.min
@@ -43,8 +44,11 @@ class RecorderThread(
     private val listener: OnRecordingCompletedListener,
     call: Call,
 ): Thread() {
+    // Thread state
     @Volatile private var isCancelled = false
     private var captureFailed = false
+
+    // Filename
     private val handleUri: Uri = call.details.handle
     private val creationTime: Long = call.details.creationTimeMillis
     private val direction: String? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -58,11 +62,16 @@ class RecorderThread(
     }
     private val displayName: String? = call.details.callerDisplayName
 
-    // TODO
-    private val codec = Codec.default
+    // Codec
+    private val codec: Codec
+    private val codecParam: UInt?
 
     init {
         Log.i(TAG, "[${id}] Created thread for call: $call")
+
+        val savedCodec = Codecs.fromPreferences(context)
+        codec = savedCodec.first
+        codecParam = savedCodec.second
     }
 
     private fun getFilename(): String =
@@ -198,7 +207,8 @@ class RecorderThread(
             audioRecord.startRecording()
 
             try {
-                val mediaFormat = codec.getMediaFormat(audioFormat, audioRecord.sampleRate)
+                // audioRecord.format has the detected native sample rate
+                val mediaFormat = codec.getMediaFormat(audioRecord.format, codecParam)
                 val mediaCodec = codec.getMediaCodec(mediaFormat)
 
                 try {

@@ -1,27 +1,29 @@
 package com.chiller3.bcr.codec
 
-import android.media.AudioFormat
 import android.media.MediaFormat
 import android.media.MediaMuxer
 import android.os.Build
 import androidx.annotation.RequiresApi
 import java.io.FileDescriptor
 
-class OpusCodec : Codec() {
-    override val codecParamType: CodecParamType = CodecParamType.Bitrate
-    override val codecParamRange: UIntRange = 6_000u..510_000u
+object OpusCodec : Codec() {
+    override val name: String = "OGG/Opus"
+    override val paramType: CodecParamType = CodecParamType.Bitrate
+    override val paramRange: UIntRange = 6_000u..510_000u
     // "Essentially transparent mono or stereo speech, reasonable music"
     // https://wiki.hydrogenaud.io/index.php?title=Opus
-    override val codecParamDefault: UInt = 48_000u
+    override val paramDefault: UInt = 48_000u
     // https://datatracker.ietf.org/doc/html/rfc7845#section-9
     override val mimeTypeContainer: String = "audio/ogg"
-    override var mimeTypeAudio: String = MediaFormat.MIMETYPE_AUDIO_OPUS
+    override val mimeTypeAudio: String = MediaFormat.MIMETYPE_AUDIO_OPUS
     override val supported: Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
-    override fun getMediaFormat(audioFormat: AudioFormat, sampleRate: Int): MediaFormat =
-        super.getMediaFormat(audioFormat, sampleRate).apply {
-            setInteger(MediaFormat.KEY_BIT_RATE, codecParamValue.toInt() * audioFormat.channelCount)
+    override fun updateMediaFormat(mediaFormat: MediaFormat, param: UInt) {
+        mediaFormat.apply {
+            val channelCount = getInteger(MediaFormat.KEY_CHANNEL_COUNT)
+            setInteger(MediaFormat.KEY_BIT_RATE, param.toInt() * channelCount)
         }
+    }
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun getContainer(fd: FileDescriptor): Container =

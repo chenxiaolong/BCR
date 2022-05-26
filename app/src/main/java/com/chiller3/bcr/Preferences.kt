@@ -9,8 +9,13 @@ import java.io.File
 object Preferences {
     const val PREF_CALL_RECORDING = "call_recording"
     const val PREF_OUTPUT_DIR = "output_dir"
+    const val PREF_OUTPUT_FORMAT = "output_format"
     const val PREF_INHIBIT_BATT_OPT = "inhibit_batt_opt"
     const val PREF_VERSION = "version"
+
+    // Not associated with a UI preference
+    private const val PREF_CODEC_NAME = "codec_name"
+    private const val PREF_CODEC_PARAM_PREFIX = "codec_param_"
 
     /**
      * Get the default output directory. The directory should always be writable and is suitable for
@@ -89,6 +94,93 @@ object Preferences {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = prefs.edit()
         editor.putBoolean(PREF_CALL_RECORDING, enabled)
+        editor.apply()
+    }
+
+    /**
+     * Get the saved output codec.
+     *
+     * Use [getCodecParam] to get the codec-specific parameter.
+     */
+    fun getCodecName(context: Context): String? {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        return prefs.getString(PREF_CODEC_NAME, null)
+    }
+
+    /**
+     * Save the selected output codec.
+     *
+     * Use [setCodecParam] to set the codec-specific parameter.
+     */
+    fun setCodecName(context: Context, name: String?) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val editor = prefs.edit()
+
+        if (name == null) {
+            editor.remove(PREF_CODEC_NAME)
+        } else {
+            editor.putString(PREF_CODEC_NAME, name)
+        }
+
+        editor.apply()
+    }
+
+    /**
+     * Get the codec-specific parameter for codec [name].
+     */
+    fun getCodecParam(context: Context, name: String): UInt? {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val key = PREF_CODEC_PARAM_PREFIX + name
+        // Use a sentinel value because doing contains + getInt results in TOCTOU issues
+        val value = prefs.getInt(key, -1)
+
+        return if (value == -1) {
+            null
+        } else {
+            value.toUInt()
+        }
+    }
+
+    /**
+     * Set the codec-specific parameter for codec [name].
+     *
+     * @param param Must not be [UInt.MAX_VALUE]
+     *
+     * @throws IllegalArgumentException if [param] is [UInt.MAX_VALUE]
+     */
+    fun setCodecParam(context: Context, name: String, param: UInt?) {
+        // -1 (when casted to int) is used as a sentinel value
+        if (param == UInt.MAX_VALUE) {
+            throw IllegalArgumentException("Parameter cannot be ${UInt.MAX_VALUE}")
+        }
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val editor = prefs.edit()
+        val key = PREF_CODEC_PARAM_PREFIX + name
+
+        if (param == null) {
+            editor.remove(key)
+        } else {
+            editor.putInt(key, param.toInt())
+        }
+
+        editor.apply()
+    }
+
+    /**
+     * Remove the default codec preference and the parameters for all codecs.
+     */
+    fun resetAllCodecs(context: Context) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val keys = prefs.all.keys.filter {
+            it == PREF_CODEC_NAME || it.startsWith(PREF_CODEC_PARAM_PREFIX)
+        }
+        val editor = prefs.edit()
+
+        for (key in keys) {
+            editor.remove(key)
+        }
+
         editor.apply()
     }
 }
