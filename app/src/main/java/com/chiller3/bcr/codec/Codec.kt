@@ -37,12 +37,14 @@ sealed class Codec {
      * Create a [MediaFormat] representing the encoded audio with parameters matching the specified
      * input PCM audio format.
      *
+     * @param audioFormat [AudioFormat.getSampleRate] must not be
+     * [AudioFormat.SAMPLE_RATE_UNSPECIFIED].
      * @param param Codec-specific parameter value. Must be in the [paramRange] range. If null,
      * [paramDefault] is used.
      *
      * @throws IllegalArgumentException if [param] is outside [paramRange]
      */
-    fun getMediaFormat(audioFormat: AudioFormat, sampleRate: Int, param: UInt?): MediaFormat {
+    fun getMediaFormat(audioFormat: AudioFormat, param: UInt?): MediaFormat {
         if (param != null && param !in paramRange) {
             throw IllegalArgumentException("Parameter $param not in range $paramRange")
         }
@@ -50,7 +52,7 @@ sealed class Codec {
         val format = MediaFormat().apply {
             setString(MediaFormat.KEY_MIME, mimeTypeAudio)
             setInteger(MediaFormat.KEY_CHANNEL_COUNT, audioFormat.channelCount)
-            setInteger(MediaFormat.KEY_SAMPLE_RATE, sampleRate)
+            setInteger(MediaFormat.KEY_SAMPLE_RATE, audioFormat.sampleRate)
         }
 
         updateMediaFormat(format, param ?: paramDefault)

@@ -207,7 +207,8 @@ class RecorderThread(
             audioRecord.startRecording()
 
             try {
-                val mediaFormat = codec.getMediaFormat(audioFormat, audioRecord.sampleRate, codecParam)
+                // audioRecord.format has the detected native sample rate
+                val mediaFormat = codec.getMediaFormat(audioRecord.format, codecParam)
                 val mediaCodec = codec.getMediaCodec(mediaFormat)
 
                 try {
