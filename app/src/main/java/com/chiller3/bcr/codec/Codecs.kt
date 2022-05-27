@@ -5,10 +5,10 @@ import com.chiller3.bcr.Preferences
 
 object Codecs {
     val all: Array<Codec> = arrayOf(OpusCodec, AacCodec, FlacCodec)
-    val default: Codec = all.first { it.supported }
+    private val default: Codec = all.first { it.supported }
 
     /** Find output codec by name. */
-    fun getByName(name: String): Codec? = all.find { it.name == name }
+    private fun getByName(name: String): Codec? = all.find { it.name == name }
 
     /**
      * Get the saved codec from the preferences or fall back to the default.

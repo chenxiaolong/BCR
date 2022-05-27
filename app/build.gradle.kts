@@ -85,7 +85,7 @@ fun getVersionName(git: Git, triple: VersionTriple): String {
     }
 }
 
-val git = Git.open(File(rootDir, ".git"))
+val git = Git.open(File(rootDir, ".git"))!!
 val gitVersionTriple = describeVersion(git)
 val gitVersionCode = getVersionCode(gitVersionTriple)
 val gitVersionName = getVersionName(git, gitVersionTriple)

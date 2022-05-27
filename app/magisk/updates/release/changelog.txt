@@ -4,6 +4,9 @@
 * README.md: Remove mention of cloud storage. Android's Storage Access Framework does not support cloud storage when opening folders (Issue: #30, PR: #31, @chenxiaolong)
 * Add full changelog text for updates from Magisk Manager (PR: #36, @chenxiaolong)
 
+Non-user-facing changes:
+* Fix minor compiler warnings (PR: #xx, @chenxiaolong)
+
 ### Version 1.3
 
 * Write audio duration to FLAC metadata after recording is complete (Issue: #19, PR: #20, @chenxiaolong)
