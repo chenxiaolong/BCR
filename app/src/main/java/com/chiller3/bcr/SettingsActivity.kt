@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
-import com.chiller3.bcr.codec.CodecParamType
 import com.chiller3.bcr.codec.Codecs
 
 class SettingsActivity : AppCompatActivity() {
@@ -33,7 +32,7 @@ class SettingsActivity : AppCompatActivity() {
         SharedPreferences.OnSharedPreferenceChangeListener {
         private lateinit var prefCallRecording: SwitchPreferenceCompat
         private lateinit var prefOutputDir: LongClickablePreference
-        private lateinit var prefOutputFormat: LongClickablePreference
+        private lateinit var prefOutputFormat: Preference
         private lateinit var prefInhibitBatteryOpt: SwitchPreferenceCompat
         private lateinit var prefVersion: Preference
 
@@ -76,7 +75,6 @@ class SettingsActivity : AppCompatActivity() {
 
             prefOutputFormat = findPreference(Preferences.PREF_OUTPUT_FORMAT)!!
             prefOutputFormat.onPreferenceClickListener = this
-            prefOutputFormat.onPreferenceLongClickListener = this
             refreshOutputFormat()
 
             prefInhibitBatteryOpt = findPreference(Preferences.PREF_INHIBIT_BATT_OPT)!!
@@ -112,10 +110,7 @@ class SettingsActivity : AppCompatActivity() {
             val (codec, codecParamSaved) = Codecs.fromPreferences(requireContext())
             val codecParam = codecParamSaved ?: codec.paramDefault
             val summary = getString(R.string.pref_output_format_desc)
-            val paramText = when (codec.paramType) {
-                CodecParamType.CompressionLevel -> codecParam.toString()
-                CodecParamType.Bitrate -> "${codecParam / 1_000u} kbps"
-            }
+            val paramText = codec.paramType.format(codecParam)
 
             prefOutputFormat.summary = "${summary}\n\n${codec.name} (${paramText})"
         }
@@ -155,7 +150,8 @@ class SettingsActivity : AppCompatActivity() {
                     return true
                 }
                 prefOutputFormat -> {
-                    // TODO: Open codec configuration dialog
+                    CodecBottomSheetFragment().show(
+                        childFragmentManager, CodecBottomSheetFragment.TAG)
                     return true
                 }
                 prefVersion -> {
@@ -175,26 +171,25 @@ class SettingsActivity : AppCompatActivity() {
                     refreshOutputDir()
                     return true
                 }
-                prefOutputFormat -> {
-                    Preferences.resetAllCodecs(requireContext())
-                    refreshOutputFormat()
-                    return true
-                }
             }
 
             return false
         }
 
         override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-            // Update the switch state if it was toggled outside of the preference (eg. from the
-            // quick settings toggle)
-            when (key) {
-                prefCallRecording.key -> {
+            when {
+                // Update the switch state if it was toggled outside of the preference (eg. from the
+                // quick settings toggle)
+                key == prefCallRecording.key -> {
                     val current = prefCallRecording.isChecked
                     val expected = sharedPreferences.getBoolean(key, current)
                     if (current != expected) {
                         prefCallRecording.isChecked = expected
                     }
+                }
+                // Update the output format state when it's changed by the bottom sheet
+                Preferences.isCodecKey(key) -> {
+                    refreshOutputFormat()
                 }
             }
         }

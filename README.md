@@ -9,7 +9,11 @@ BCR is a simple Android call recording app for rooted devices or devices running
 ### Features
 
 * Supports Android 9 through 13
-* Records FLAC-encoded lossless audio at the device's native sample rate
+* Supports compressed output in various formats:
+  * FLAC - Lossless, larger files (default)
+  * OGG/Opus - Lossy, smallest files, Android 10+ only
+  * M4A/AAC - Lossy, smaller files
+* Records at the device's native sample rate
 * Supports Android's Storage Access Framework (can record to SD cards, USB devices, etc.)
 * Quick settings toggle
 * Material You dynamic theming
@@ -24,8 +28,6 @@ As the name alludes, BCR intends to be a basic as possible, with only two config
 
 * Automatic deletion of old recordings
 * Changing the filename format
-* Support for other lossless codecs
-* Support for lossy audio compression
 * Support for old Android versions (support is dropped as soon as maintenance becomes cumbersome)
 * Workarounds for [OEM-specific battery optimization and app killing behavior](https://dontkillmyapp.com/)
 * Workarounds for devices that don't support the [`VOICE_CALL` audio source](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#VOICE_CALL) (eg. using microphone + speakerphone)
@@ -65,7 +67,7 @@ BCR relies heavily on system app permissions in order to function properly. This
 
     This permission is used to record from the `VOICE_CALL` audio stream. This stream, along with some others, like `VOICE_DOWNLINK` and `VOICE_UPLINK`, cannot be accessed without this system permission.
 
-With these two permissions, BCR can reliably detect phone calls and record from the call's audio stream. The recording process pulls PCM s16le raw audio at the device's native sample rate and uses `MediaCodec`'s builtin (software) FLAC encoder to create a losslessly compressed recording.
+With these two permissions, BCR can reliably detect phone calls and record from the call's audio stream. The recording process pulls PCM s16le raw audio at the device's native sample rate and uses Android's built-in encoders to produce the compressed output file.
 
 ### Verifying digital signatures
 

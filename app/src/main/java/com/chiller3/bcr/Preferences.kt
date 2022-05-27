@@ -97,6 +97,9 @@ object Preferences {
         editor.apply()
     }
 
+    fun isCodecKey(key: String): Boolean =
+        key == PREF_CODEC_NAME || key.startsWith(PREF_CODEC_PARAM_PREFIX)
+
     /**
      * Get the saved output codec.
      *
@@ -172,9 +175,7 @@ object Preferences {
      */
     fun resetAllCodecs(context: Context) {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val keys = prefs.all.keys.filter {
-            it == PREF_CODEC_NAME || it.startsWith(PREF_CODEC_PARAM_PREFIX)
-        }
+        val keys = prefs.all.keys.filter(::isCodecKey)
         val editor = prefs.edit()
 
         for (key in keys) {

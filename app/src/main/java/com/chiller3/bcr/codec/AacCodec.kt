@@ -13,6 +13,7 @@ object AacCodec : Codec() {
     // AAC-LC: 2 * 64kbps/channel.
     // https://trac.ffmpeg.org/wiki/Encode/AAC
     override val paramRange: UIntRange = 24_000u..128_000u
+    override val paramStepSize: UInt = 4_000u
     override val paramDefault: UInt = 64_000u
     // https://datatracker.ietf.org/doc/html/rfc6381#section-3.1
     override val mimeTypeContainer: String = "audio/mp4"
