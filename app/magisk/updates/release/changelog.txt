@@ -5,7 +5,7 @@
 * Add full changelog text for updates from Magisk Manager (PR: #36, @chenxiaolong)
 
 Non-user-facing changes:
-* Fix minor compiler warnings (PR: #xx, @chenxiaolong)
+* Fix minor compiler warnings (PR: #37, @chenxiaolong)
 
 ### Version 1.3
 
