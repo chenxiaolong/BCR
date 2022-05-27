@@ -130,6 +130,6 @@ class CodecBottomSheetFragment : BottomSheetDialogFragment(),
     }
 
     companion object {
-        val TAG = CodecBottomSheetFragment::class.java.simpleName
+        val TAG: String = CodecBottomSheetFragment::class.java.simpleName
     }
 }
