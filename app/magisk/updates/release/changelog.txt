@@ -1,1 +1,38 @@
-Please see https://github.com/chenxiaolong/BCR/releases/tag/v1.3 for the changelog.
+### Unreleased
+
+* Add support for configurable output formats: OGG/Opus (Android 10+), M4A/AAC, FLAC (Issue: #21, PR: #29, #32, #34, #35, @chenxiaolong)
+* README.md: Remove mention of cloud storage. Android's Storage Access Framework does not support cloud storage when opening folders (Issue: #30, PR: #31, @chenxiaolong)
+* Add full changelog text for updates from Magisk Manager (PR: #36, @chenxiaolong)
+
+### Version 1.3
+
+* Write audio duration to FLAC metadata after recording is complete (Issue: #19, PR: #20, @chenxiaolong)
+* Add Turkish translations (Issue: #18, PR: #22, @fnldstntn)
+
+Non-user-facing changes:
+* Don't add irrelevant update metadata to release zips (PR: #23, @chenxiaolong)
+* Fix serialization exception when running the `updateJson` gradle tasks (PR: #24, @chenxiaolong)
+
+### Version 1.2
+
+* Fix typo and improve wording of battery optimization preference (PR: #4, @EleoXDA)
+* Add Russian translations (PR: #7, @marat2509)
+* Add support for API 28 (Android 9) (Issue: #6, PR: #10, @chenxiaolong)
+* Add incoming/outgoing tag to filenames (Issue: #3, PR: #11, @chenxiaolong)
+* Add caller ID to filenames for incoming calls (Android 10+ only) (Issue: #3, PR: #13, @chenxiaolong)
+* Fix filename timestamps to match the call log exactly (Issue: #3, PR: #12, @chenxiaolong)
+* The about link in the app now links to the exact commit the version was built from (PR: #15, @chenxiaolong)
+* Add support for Magisk's built-in module updater (PR: #16, @chenxiaolong)
+
+Non-user-facing changes:
+* Update gradle and Android gradle plugin dependencies (PR: #9, @chenxiaolong)
+* Add git commit to version number for debug builds (PR: #14, @chenxiaolong)
+* Ensure custom gradle tasks (`moduleProp`, `permissionsXml`, `zip`, and `updateJson`) rebuild when input variables (eg. git commit) change (PR: #17, @chenxiaolong)
+
+### Version 1.1
+
+* Target Android SDK 32. BCR was previously targeting the Tiramisu (33) preview SDK, which made it not installable on stable Android versions. (Issue: #1, PR: #2, @chenxiaolong)
+
+### Version 1.0
+
+* Initial release

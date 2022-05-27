@@ -248,10 +248,8 @@ android.applicationVariants.all {
         val updatesDir = File(magiskDir, "updates")
         val variantUpdateDir = File(updatesDir, variant.name)
         val jsonFile = File(variantUpdateDir, "info.json")
-        val changelogFile = File(variantUpdateDir, "changelog.txt")
 
         outputs.file(jsonFile)
-        outputs.file(changelogFile)
 
         doLast {
             if (gitVersionTriple.second != 0) {
@@ -267,8 +265,6 @@ android.applicationVariants.all {
             jsonFile.writer().use {
                 root.write(it, 4, 0)
             }
-
-            changelogFile.writeText("Please see ${projectUrl}/releases/tag/${gitVersionTriple.first} for the changelog.\n")
         }
     }
 }
