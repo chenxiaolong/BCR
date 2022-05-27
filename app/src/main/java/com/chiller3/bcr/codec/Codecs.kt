@@ -4,8 +4,8 @@ import android.content.Context
 import com.chiller3.bcr.Preferences
 
 object Codecs {
-    val all: Array<Codec> = arrayOf(FlacCodec, OpusCodec, AacCodec)
-    val default: Codec = all.first()
+    val all: Array<Codec> = arrayOf(OpusCodec, AacCodec, FlacCodec)
+    val default: Codec = all.first { it.supported }
 
     /** Find output codec by name. */
     fun getByName(name: String): Codec? = all.find { it.name == name }
@@ -29,11 +29,5 @@ object Codecs {
         val param = Preferences.getCodecParam(context, codec.name)?.coerceIn(codec.paramRange)
 
         return Pair(codec, param)
-    }
-
-    /** Save the selected codec and its parameter to the preferences. */
-    fun saveToPreferences(context: Context, codec: Codec, param: UInt?) {
-        Preferences.setCodecName(context, codec.name)
-        Preferences.setCodecParam(context, codec.name, param)
     }
 }
