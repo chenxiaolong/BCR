@@ -125,6 +125,8 @@ class CodecBottomSheetFragment : BottomSheetDialogFragment(),
             codecReset -> {
                 Preferences.resetAllCodecs(requireContext())
                 refreshCodec()
+                // Need to explicitly refresh the parameter when the default codec is already chosen
+                refreshParam()
             }
         }
     }

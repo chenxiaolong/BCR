@@ -1,6 +1,6 @@
 ### Unreleased
 
-* Add support for configurable output formats: OGG/Opus (Android 10+), M4A/AAC, FLAC (Issue: #21, PR: #29, #32, #34, #35, @chenxiaolong)
+* Add support for configurable output formats: OGG/Opus (Android 10+), M4A/AAC, FLAC (Issue: #21, PR: #29, #32, #34, #35, #38, @chenxiaolong)
 * README.md: Remove mention of cloud storage. Android's Storage Access Framework does not support cloud storage when opening folders (Issue: #30, PR: #31, @chenxiaolong)
 * Add full changelog text for updates from Magisk Manager (PR: #36, @chenxiaolong)
 
