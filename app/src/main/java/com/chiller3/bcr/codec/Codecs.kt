@@ -17,11 +17,13 @@ object Codecs {
      */
     fun fromPreferences(context: Context): Pair<Codec, UInt?> {
         val savedCodecName = Preferences.getCodecName(context)
-        val codec = if (savedCodecName != null) {
-            getByName(savedCodecName) ?: default
-        } else {
-            default
-        }
+
+        // Use the saved codec if it is valid and supported on the current device. Otherwise, fall
+        // back to the default.
+        val codec = savedCodecName
+            ?.let { getByName(it) }
+            ?.let { if (it.supported) { it } else { null } }
+            ?: default
 
         // Clamp to the codec's allowed parameter range in case the range is shrunk
         val param = Preferences.getCodecParam(context, codec.name)?.coerceIn(codec.paramRange)

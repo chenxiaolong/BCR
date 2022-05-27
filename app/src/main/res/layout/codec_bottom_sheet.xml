@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="@dimen/bottom_sheet_overall_padding">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
+        android:text="@string/bottom_sheet_output_format"
+        android:textAppearance="?attr/textAppearanceHeadline6" />
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/codec_name_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:selectionRequired="true"
+        app:singleSelection="true" />
+
+    <TextView
+        android:id="@+id/codec_param_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/bottom_sheet_section_separation"
+        android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
+        android:textAppearance="?attr/textAppearanceHeadline6" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/codec_param"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:labelBehavior="visible" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/codec_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/bottom_sheet_section_separation"
+        android:text="@string/bottom_sheet_reset"
+        style="?attr/materialButtonOutlinedStyle" />
+</LinearLayout>

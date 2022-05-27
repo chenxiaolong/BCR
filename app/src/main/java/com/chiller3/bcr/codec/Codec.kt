@@ -17,6 +17,9 @@ sealed class Codec {
     /** Valid range for the codec-specific parameter value. */
     abstract val paramRange: UIntRange
 
+    /** Reasonable step size for selecting a value via the UI. */
+    abstract val paramStepSize: UInt
+
     /** Default codec parameter value. */
     abstract val paramDefault: UInt
 

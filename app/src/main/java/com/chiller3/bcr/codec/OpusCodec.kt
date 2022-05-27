@@ -10,6 +10,7 @@ object OpusCodec : Codec() {
     override val name: String = "OGG/Opus"
     override val paramType: CodecParamType = CodecParamType.Bitrate
     override val paramRange: UIntRange = 6_000u..510_000u
+    override val paramStepSize: UInt = 2_000u
     // "Essentially transparent mono or stereo speech, reasonable music"
     // https://wiki.hydrogenaud.io/index.php?title=Opus
     override val paramDefault: UInt = 48_000u

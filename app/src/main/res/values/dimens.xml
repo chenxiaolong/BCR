@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="bottom_sheet_overall_padding">28dp</dimen>
+    <dimen name="bottom_sheet_title_margin_bottom">16dp</dimen>
+    <dimen name="bottom_sheet_section_separation">28dp</dimen>
+</resources>
