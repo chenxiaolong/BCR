@@ -93,7 +93,7 @@ class RecorderThread(
 
             for ((source, target) in redactions) {
                 result = result
-                    .replace(Uri.encode(source), Uri.encode(target))
+                    .replace(Uri.encode(source), target)
                     .replace(source, target)
             }
 
