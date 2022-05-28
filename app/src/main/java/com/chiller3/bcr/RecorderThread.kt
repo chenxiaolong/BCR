@@ -51,6 +51,7 @@ class RecorderThread(
     // Filename
     private val filenameLock = Object()
     private lateinit var filename: String
+    private val redactions = HashMap<String, String>()
 
     // Codec
     private val codec: Codec
@@ -86,6 +87,20 @@ class RecorderThread(
         Log.w(TAG, "[${id}] $msg")
     }
 
+    fun redact(msg: String): String {
+        synchronized(filenameLock) {
+            var result = msg
+
+            for ((source, target) in redactions) {
+                result = result
+                    .replace(Uri.encode(source), Uri.encode(target))
+                    .replace(source, target)
+            }
+
+            return result
+        }
+    }
+
     /**
      * Update [filename] with information from [details].
      *
@@ -93,6 +108,8 @@ class RecorderThread(
      */
     fun onCallDetailsChanged(details: Call.Details) {
         synchronized(filenameLock) {
+            redactions.clear()
+
             filename = buildString {
                 val instant = Instant.ofEpochMilli(details.creationTimeMillis)
                 append(FORMATTER.format(ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())))
@@ -108,12 +125,16 @@ class RecorderThread(
                 if (details.handle.scheme == PhoneAccount.SCHEME_TEL) {
                     append('_')
                     append(details.handle.schemeSpecificPart)
+
+                    redactions[details.handle.schemeSpecificPart] = "<phone number>"
                 }
 
                 val callerName = details.callerDisplayName?.trim()
                 if (!callerName.isNullOrBlank()) {
                     append('_')
                     append(callerName)
+
+                    redactions[callerName] = "<caller name>"
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -121,6 +142,8 @@ class RecorderThread(
                     if (!contactName.isNullOrBlank()) {
                         append('_')
                         append(contactName)
+
+                        redactions[contactName] = "<contact name>"
                     }
                 }
             }
@@ -129,7 +152,7 @@ class RecorderThread(
             // directory traversal attacks.
                 .replace('/', '_').trim()
 
-            logI("Updated filename due to call details change: $filename")
+            logI("Updated filename due to call details change: ${redact(filename)}")
         }
     }
 
@@ -154,12 +177,12 @@ class RecorderThread(
 
                 val finalFilename = synchronized(filenameLock) { filename }
                 if (finalFilename != initialFilename) {
-                    logI("Renaming $initialFilename to $finalFilename")
+                    logI("Renaming ${redact(initialFilename)} to ${redact(finalFilename)}")
 
                     if (file.renameTo(finalFilename)) {
                         resultUri = file.uri
                     } else {
-                        logW("Failed to rename to final filename: $finalFilename")
+                        logW("Failed to rename to final filename: ${redact(finalFilename)}")
                     }
                 }
 

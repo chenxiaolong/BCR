@@ -153,14 +153,14 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
     }
 
     override fun onRecordingCompleted(thread: RecorderThread, uri: Uri) {
-        Log.i(TAG, "Recording completed: ${thread.id}: $uri")
+        Log.i(TAG, "Recording completed: ${thread.id}: ${thread.redact(uri.toString())}")
         handler.post {
             onThreadExited()
         }
     }
 
     override fun onRecordingFailed(thread: RecorderThread, uri: Uri?) {
-        Log.w(TAG, "Recording failed: ${thread.id}: $uri")
+        Log.w(TAG, "Recording failed: ${thread.id}: ${thread.redact(uri.toString())}")
         handler.post {
             onThreadExited()
         }

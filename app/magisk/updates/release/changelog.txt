@@ -2,6 +2,7 @@
 
 * Optionally add contact name to output filename if Contacts permission is granted (Android 11+) (Issue: #28, PR: #42, @chenxiaolong)
 * Add Spanish translation (PR: #41, @nmayorga092)
+* Redact sensitive information from logcat logs (PR: #43, @chenxiaolong)
 
 ### Version 1.4
 
