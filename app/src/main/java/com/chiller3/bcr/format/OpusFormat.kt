@@ -1,4 +1,4 @@
-package com.chiller3.bcr.codec
+package com.chiller3.bcr.format
 
 import android.media.MediaFormat
 import android.media.MediaMuxer
@@ -6,9 +6,9 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import java.io.FileDescriptor
 
-object OpusCodec : Codec() {
+object OpusFormat : Format() {
     override val name: String = "OGG/Opus"
-    override val paramType: CodecParamType = CodecParamType.Bitrate
+    override val paramType: FormatParamType = FormatParamType.Bitrate
     override val paramRange: UIntRange = 6_000u..510_000u
     override val paramStepSize: UInt = 2_000u
     // "Essentially transparent mono or stereo speech, reasonable music"

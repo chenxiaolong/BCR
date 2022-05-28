@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
-import com.chiller3.bcr.codec.Codecs
+import com.chiller3.bcr.format.Formats
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,12 +107,12 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         private fun refreshOutputFormat() {
-            val (codec, codecParamSaved) = Codecs.fromPreferences(requireContext())
-            val codecParam = codecParamSaved ?: codec.paramDefault
+            val (format, formatParamSaved) = Formats.fromPreferences(requireContext())
+            val formatParam = formatParamSaved ?: format.paramDefault
             val summary = getString(R.string.pref_output_format_desc)
-            val paramText = codec.paramType.format(codecParam)
+            val paramText = format.paramType.format(formatParam)
 
-            prefOutputFormat.summary = "${summary}\n\n${codec.name} (${paramText})"
+            prefOutputFormat.summary = "${summary}\n\n${format.name} (${paramText})"
         }
 
         private fun refreshInhibitBatteryOptState() {
@@ -150,8 +150,8 @@ class SettingsActivity : AppCompatActivity() {
                     return true
                 }
                 prefOutputFormat -> {
-                    CodecBottomSheetFragment().show(
-                        childFragmentManager, CodecBottomSheetFragment.TAG)
+                    FormatBottomSheetFragment().show(
+                        childFragmentManager, FormatBottomSheetFragment.TAG)
                     return true
                 }
                 prefVersion -> {
@@ -188,7 +188,7 @@ class SettingsActivity : AppCompatActivity() {
                     }
                 }
                 // Update the output format state when it's changed by the bottom sheet
-                Preferences.isCodecKey(key) -> {
+                Preferences.isFormatKey(key) -> {
                     refreshOutputFormat()
                 }
             }

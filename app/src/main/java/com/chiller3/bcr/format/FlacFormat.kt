@@ -1,11 +1,11 @@
-package com.chiller3.bcr.codec
+package com.chiller3.bcr.format
 
 import android.media.MediaFormat
 import java.io.FileDescriptor
 
-object FlacCodec: Codec() {
+object FlacFormat: Format() {
     override val name: String = "FLAC"
-    override val paramType: CodecParamType = CodecParamType.CompressionLevel
+    override val paramType: FormatParamType = FormatParamType.CompressionLevel
     override val paramRange: UIntRange = 0u..8u
     override val paramStepSize: UInt = 1u
     // Devices are fast enough nowadays to use the highest compression for realtime recording

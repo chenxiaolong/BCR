@@ -14,8 +14,8 @@ object Preferences {
     const val PREF_VERSION = "version"
 
     // Not associated with a UI preference
-    private const val PREF_CODEC_NAME = "codec_name"
-    private const val PREF_CODEC_PARAM_PREFIX = "codec_param_"
+    private const val PREF_FORMAT_NAME = "codec_name"
+    private const val PREF_FORMAT_PARAM_PREFIX = "codec_param_"
 
     /**
      * Get the default output directory. The directory should always be writable and is suitable for
@@ -97,43 +97,43 @@ object Preferences {
         editor.apply()
     }
 
-    fun isCodecKey(key: String): Boolean =
-        key == PREF_CODEC_NAME || key.startsWith(PREF_CODEC_PARAM_PREFIX)
+    fun isFormatKey(key: String): Boolean =
+        key == PREF_FORMAT_NAME || key.startsWith(PREF_FORMAT_PARAM_PREFIX)
 
     /**
-     * Get the saved output codec.
+     * Get the saved output format.
      *
-     * Use [getCodecParam] to get the codec-specific parameter.
+     * Use [getFormatParam] to get the format-specific parameter.
      */
-    fun getCodecName(context: Context): String? {
+    fun getFormatName(context: Context): String? {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        return prefs.getString(PREF_CODEC_NAME, null)
+        return prefs.getString(PREF_FORMAT_NAME, null)
     }
 
     /**
-     * Save the selected output codec.
+     * Save the selected output format.
      *
-     * Use [setCodecParam] to set the codec-specific parameter.
+     * Use [setFormatParam] to set the format-specific parameter.
      */
-    fun setCodecName(context: Context, name: String?) {
+    fun setFormatName(context: Context, name: String?) {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = prefs.edit()
 
         if (name == null) {
-            editor.remove(PREF_CODEC_NAME)
+            editor.remove(PREF_FORMAT_NAME)
         } else {
-            editor.putString(PREF_CODEC_NAME, name)
+            editor.putString(PREF_FORMAT_NAME, name)
         }
 
         editor.apply()
     }
 
     /**
-     * Get the codec-specific parameter for codec [name].
+     * Get the format-specific parameter for format [name].
      */
-    fun getCodecParam(context: Context, name: String): UInt? {
+    fun getFormatParam(context: Context, name: String): UInt? {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val key = PREF_CODEC_PARAM_PREFIX + name
+        val key = PREF_FORMAT_PARAM_PREFIX + name
         // Use a sentinel value because doing contains + getInt results in TOCTOU issues
         val value = prefs.getInt(key, -1)
 
@@ -145,13 +145,13 @@ object Preferences {
     }
 
     /**
-     * Set the codec-specific parameter for codec [name].
+     * Set the format-specific parameter for format [name].
      *
      * @param param Must not be [UInt.MAX_VALUE]
      *
      * @throws IllegalArgumentException if [param] is [UInt.MAX_VALUE]
      */
-    fun setCodecParam(context: Context, name: String, param: UInt?) {
+    fun setFormatParam(context: Context, name: String, param: UInt?) {
         // -1 (when casted to int) is used as a sentinel value
         if (param == UInt.MAX_VALUE) {
             throw IllegalArgumentException("Parameter cannot be ${UInt.MAX_VALUE}")
@@ -159,7 +159,7 @@ object Preferences {
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = prefs.edit()
-        val key = PREF_CODEC_PARAM_PREFIX + name
+        val key = PREF_FORMAT_PARAM_PREFIX + name
 
         if (param == null) {
             editor.remove(key)
@@ -171,11 +171,11 @@ object Preferences {
     }
 
     /**
-     * Remove the default codec preference and the parameters for all codecs.
+     * Remove the default format preference and the parameters for all formats.
      */
-    fun resetAllCodecs(context: Context) {
+    fun resetAllFormats(context: Context) {
         val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-        val keys = prefs.all.keys.filter(::isCodecKey)
+        val keys = prefs.all.keys.filter(::isFormatKey)
         val editor = prefs.edit()
 
         for (key in keys) {

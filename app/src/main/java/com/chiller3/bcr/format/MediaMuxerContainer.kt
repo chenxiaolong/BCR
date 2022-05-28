@@ -1,4 +1,4 @@
-package com.chiller3.bcr.codec
+package com.chiller3.bcr.format
 
 import android.media.MediaCodec
 import android.media.MediaFormat

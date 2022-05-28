@@ -1,7 +1,7 @@
 @file:Suppress("OPT_IN_IS_NOT_ENABLED")
 @file:OptIn(ExperimentalUnsignedTypes::class)
 
-package com.chiller3.bcr.codec
+package com.chiller3.bcr.format
 
 import android.media.MediaCodec
 import android.media.MediaFormat
