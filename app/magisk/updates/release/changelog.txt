@@ -1,6 +1,7 @@
 ### Unreleased
 
 * Optionally add contact name to output filename if Contacts permission is granted (Android 11+) (Issue: #28, PR: #42, @chenxiaolong)
+* Add Spanish translation (PR: #41, @nmayorga092)
 
 ### Version 1.4
 
