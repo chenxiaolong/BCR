@@ -26,7 +26,7 @@
     <string name="bottom_sheet_output_format">Çıkış formatı</string>
     <string name="bottom_sheet_compression_level">Sıkıştırma seviyesi</string>
     <string name="bottom_sheet_bitrate">Bitrate</string>
-    <string name="bottom_sheet_reset">Varsayılana dödür</string>
+    <string name="bottom_sheet_reset">Varsayılana döndür</string>
     
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Arka plan servisleri</string>
