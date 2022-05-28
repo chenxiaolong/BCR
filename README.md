@@ -24,7 +24,7 @@ BCR is a simple Android call recording app for rooted devices or devices running
 
 ### Non-features
 
-As the name alludes, BCR intends to be a basic as possible, with only two configuration options: an on/off switch and the output directory. The project will have succeeded at its goal if the only updates it ever needs are for compatibility with new Android versions. Thus, many potentially useful features will never be implemented, such as:
+As the name alludes, BCR intends to be a basic as possible. The project will have succeeded at its goal if the only updates it ever needs are for compatibility with new Android versions. Thus, many potentially useful features will never be implemented, such as:
 
 * Automatic deletion of old recordings
 * Changing the filename format
