@@ -1,3 +1,7 @@
+### Unreleased
+
+* Enable minification (without obfuscation) to shrink the download size by ~64% (PR: #45, @chenxiaolong)
+
 ### Version 1.5
 
 * Optionally add contact name to output filename if Contacts permission is granted (Android 11+) (Issue: #28, PR: #42, @chenxiaolong)
