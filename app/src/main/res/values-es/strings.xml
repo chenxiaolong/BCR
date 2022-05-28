@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">BCR</string>
+    <string name="app_name_full">Basic Call Recorder</string>
+
+    <!-- Preference headers -->
+    <string name="pref_header_general">General</string>
+    <string name="pref_header_about">Acerca de</string>
+
+    <!-- General preferences -->
+    <string name="pref_call_recording_name">Grabacion de llamada</string>
+    <string name="pref_call_recording_desc">Grabar llamadas telefónicas entrantes y salientes. Se requieren permisos de micrófono y notificación para grabar en segundo plano.</string>
+
+    <string name="pref_output_dir_name">Directorio de salida</string>
+    <string name="pref_output_dir_desc">Elija un directorio para almacenar grabaciones. Mantenga pulsado para restablecer el directorio predeterminado.</string>
+
+    <string name="pref_output_format_name">Formato de salida</string>
+    <string name="pref_output_format_desc">Seleccione un formato de codificación para las grabaciones.</string>
+
+    <string name="pref_inhibit_batt_opt_name">Deshabilitar la optimización de la batería</string>
+    <string name="pref_inhibit_batt_opt_desc">Reduce la posibilidad de que el sistema elimine la aplicación.</string>
+
+    <!-- About "preference" -->
+    <string name="pref_version_name">Versión</string>
+
+    <!-- Output format bottom sheet -->
+    <string name="bottom_sheet_output_format">Formato de salida</string>
+    <string name="bottom_sheet_compression_level">Nivel de compresión</string>
+    <string name="bottom_sheet_bitrate">Bitrate</string>
+    <string name="bottom_sheet_reset">Restablecer los valores predeterminados</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_persistent_name">Servicios en segundo plano</string>
+    <string name="notification_channel_persistent_desc">Notificación persistente para grabación de llamadas en segundo plano</string>
+    <string name="recording_in_progress">Grabación de llamadas en curso</string>
+
+    <!-- Quick settings tile -->
+    <string name="quick_settings_label">Grabación de llamada</string>
+</resources>
