@@ -2,16 +2,12 @@ package com.chiller3.bcr.format
 
 import android.media.MediaCodec
 import android.media.MediaFormat
-import java.io.FileDescriptor
 import java.nio.ByteBuffer
 
 /**
  * Abstract class for writing encoded samples to a container format.
- *
- * @param fd Output file descriptor. This class does not take ownership of it and it should not
- * be touched outside of this class until [stop] is called and returns.
  */
-sealed class Container(val fd: FileDescriptor) {
+sealed class Container {
     /**
      * Start the muxer process.
      *

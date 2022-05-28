@@ -16,8 +16,11 @@ import java.nio.ByteBuffer
  *
  * [MediaCodec] already produces a well-formed FLAC file, thus this class writes those samples
  * directly to the output file.
+ *
+ * @param fd Output file descriptor. This class does not take ownership of it and it should not
+ * be touched outside of this class until [stop] is called and returns.
  */
-class FlacContainer(fd: FileDescriptor) : Container(fd) {
+class FlacContainer(private val fd: FileDescriptor) : Container() {
     private var lastPresentationTimeUs = -1L
     private var isStopped = true
 
