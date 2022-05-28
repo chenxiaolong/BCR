@@ -37,6 +37,13 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
 
             handleStateChange(call)
         }
+
+        override fun onDetailsChanged(call: Call, details: Call.Details) {
+            super.onDetailsChanged(call, details)
+            Log.d(TAG, "onDetailsChanged: $call, $details")
+
+            handleDetailsChange(call, details)
+        }
     }
 
     override fun onCallAdded(call: Call) {
@@ -93,6 +100,16 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
                 ++pendingExit
             }
         }
+    }
+
+    /**
+     * Notify recording thread of call details changes.
+     *
+     * The recording thread uses call details for generating filenames.
+     */
+    private fun handleDetailsChange(call: Call, details: Call.Details) {
+        // The call may not exist if this is called after handleStateChange with STATE_DISCONNECTING
+        recorders[call]?.onCallDetailsChanged(details)
     }
 
     /**

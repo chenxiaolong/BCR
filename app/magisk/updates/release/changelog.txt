@@ -1,3 +1,7 @@
+### Unreleased
+
+* Optionally add contact name to output filename if Contacts permission is granted (Android 11+) (Issue: #28, PR: #42, @chenxiaolong)
+
 ### Version 1.4
 
 * Add support for configurable output formats: OGG/Opus (Android 10+), M4A/AAC, FLAC (Issue: #21, PR: #29, #32, #34, #35, #38, @chenxiaolong)

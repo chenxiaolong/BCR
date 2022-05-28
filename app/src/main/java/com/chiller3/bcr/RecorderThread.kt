@@ -49,79 +49,126 @@ class RecorderThread(
     private var captureFailed = false
 
     // Filename
-    private val handleUri: Uri = call.details.handle
-    private val creationTime: Long = call.details.creationTimeMillis
-    private val direction: String? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        when (call.details.callDirection) {
-            Call.Details.DIRECTION_INCOMING -> "in"
-            Call.Details.DIRECTION_OUTGOING -> "out"
-            else -> null
-        }
-    } else {
-        null
-    }
-    private val displayName: String? = call.details.callerDisplayName
+    private val filenameLock = Object()
+    private lateinit var filename: String
 
     // Codec
     private val codec: Codec
     private val codecParam: UInt?
 
     init {
-        Log.i(TAG, "[${id}] Created thread for call: $call")
+        logI("Created thread for call: $call")
+
+        onCallDetailsChanged(call.details)
 
         val savedCodec = Codecs.fromPreferences(context)
         codec = savedCodec.first
         codecParam = savedCodec.second
     }
 
-    private fun getFilename(): String =
-        buildString {
-            val instant = Instant.ofEpochMilli(creationTime)
-            append(FORMATTER.format(ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())))
+    private fun logD(msg: String) {
+        Log.d(TAG, "[${id}] $msg")
+    }
 
-            if (direction != null) {
-                append('_')
-                append(direction)
-            }
+    private fun logE(msg: String, throwable: Throwable) {
+        Log.e(TAG, "[${id}] $msg", throwable)
+    }
 
-            if (handleUri.scheme == PhoneAccount.SCHEME_TEL) {
-                append('_')
-                append(handleUri.schemeSpecificPart)
-            }
+    private fun logE(msg: String) {
+        Log.e(TAG, "[${id}] $msg")
+    }
 
-            // AOSP's SAF automatically replaces invalid characters with underscores, but just in
-            // case an OEM fork breaks that, do the replacement ourselves to prevent directory
-            // traversal attacks.
-            val name = displayName?.replace('/', '_')?.trim()
-            if (!name.isNullOrBlank()) {
-                append('_')
-                append(name)
+    private fun logI(msg: String) {
+        Log.i(TAG, "[${id}] $msg")
+    }
+
+    private fun logW(msg: String) {
+        Log.w(TAG, "[${id}] $msg")
+    }
+
+    /**
+     * Update [filename] with information from [details].
+     *
+     * This function holds a lock on [filenameLock] until it returns.
+     */
+    fun onCallDetailsChanged(details: Call.Details) {
+        synchronized(filenameLock) {
+            filename = buildString {
+                val instant = Instant.ofEpochMilli(details.creationTimeMillis)
+                append(FORMATTER.format(ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())))
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    when (details.callDirection) {
+                        Call.Details.DIRECTION_INCOMING -> append("_in")
+                        Call.Details.DIRECTION_OUTGOING -> append("_out")
+                        Call.Details.DIRECTION_UNKNOWN -> {}
+                    }
+                }
+
+                if (details.handle.scheme == PhoneAccount.SCHEME_TEL) {
+                    append('_')
+                    append(details.handle.schemeSpecificPart)
+                }
+
+                val callerName = details.callerDisplayName?.trim()
+                if (!callerName.isNullOrBlank()) {
+                    append('_')
+                    append(callerName)
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    val contactName = details.contactDisplayName?.trim()
+                    if (!contactName.isNullOrBlank()) {
+                        append('_')
+                        append(contactName)
+                    }
+                }
             }
+            // AOSP's SAF automatically replaces invalid characters with underscores, but just
+            // in case an OEM fork breaks that, do the replacement ourselves to prevent
+            // directory traversal attacks.
+                .replace('/', '_').trim()
+
+            logI("Updated filename due to call details change: $filename")
         }
+    }
 
     override fun run() {
         var success = false
         var resultUri: Uri? = null
 
         try {
-            Log.i(TAG, "[${id}] Recording thread started")
+            logI("Recording thread started")
 
             if (isCancelled) {
-                Log.i(TAG, "[${id}] Recording cancelled before it began")
+                logI("Recording cancelled before it began")
             } else {
-                val (uri, pfd) = openOutputFile(getFilename())
-                resultUri = uri
+                val initialFilename = synchronized(filenameLock) { filename }
+
+                val (file, pfd) = openOutputFile(initialFilename)
+                resultUri = file.uri
 
                 pfd.use {
                     recordUntilCancelled(it)
                 }
 
+                val finalFilename = synchronized(filenameLock) { filename }
+                if (finalFilename != initialFilename) {
+                    logI("Renaming $initialFilename to $finalFilename")
+
+                    if (file.renameTo(finalFilename)) {
+                        resultUri = file.uri
+                    } else {
+                        logW("Failed to rename to final filename: $finalFilename")
+                    }
+                }
+
                 success = !captureFailed
             }
         } catch (e: Exception) {
-            Log.e(TAG, "[${id}] Error during recording", e)
+            logE("Error during recording", e)
         } finally {
-            Log.i(TAG, "[${id}] Recording thread completed")
+            logI("Recording thread completed")
 
             if (success) {
                 listener.onRecordingCompleted(this, resultUri!!)
@@ -143,7 +190,7 @@ class RecorderThread(
         isCancelled = true
     }
 
-    data class OutputFile(val uri: Uri, val pfd: ParcelFileDescriptor)
+    data class OutputFile(val file: DocumentFile, val pfd: ParcelFileDescriptor)
 
     /**
      * Try to create and open a new output file in the user-chosen directory if possible and fall
@@ -159,12 +206,12 @@ class RecorderThread(
                 val userDir = DocumentFile.fromTreeUri(context, userUri)
                 return openOutputFileInDir(userDir!!, name)
             } catch (e: Exception) {
-                Log.e(TAG, "Failed to open file in user-specified directory: $userUri", e)
+                logE("Failed to open file in user-specified directory: $userUri", e)
             }
         }
 
         val fallbackDir = DocumentFile.fromFile(Preferences.getDefaultOutputDir(context))
-        Log.d(TAG, "Using fallback directory: ${fallbackDir.uri}")
+        logD("Using fallback directory: ${fallbackDir.uri}")
 
         return openOutputFileInDir(fallbackDir, name)
     }
@@ -180,7 +227,7 @@ class RecorderThread(
             ?: throw IOException("Failed to create file in ${directory.uri}")
         val pfd = context.contentResolver.openFileDescriptor(file.uri, "rw")
             ?: throw IOException("Failed to open file at ${file.uri}")
-        return OutputFile(file.uri, pfd)
+        return OutputFile(file, pfd)
     }
 
     /**
@@ -275,14 +322,14 @@ class RecorderThread(
                     val maxRead = min(maxSamplesInBytes, buffer.remaining())
                     val n = audioRecord.read(buffer, maxRead)
                     if (n < 0) {
-                        Log.e(TAG, "Error when reading samples from ${audioRecord}: $n")
+                        logE("Error when reading samples from ${audioRecord}: $n")
                         isCancelled = true
                         captureFailed = true
                     } else if (n == 0) {
                         // This should never be hit because AOSP guarantees that MediaCodec's
                         // ByteBuffers are direct buffers, but this is not publicly documented
                         // behavior
-                        Log.e(TAG, "MediaCodec's ByteBuffer was not a direct buffer")
+                        logE( "MediaCodec's ByteBuffer was not a direct buffer")
                         isCancelled = true
                     } else {
                         val frames = n / frameSize
@@ -291,7 +338,7 @@ class RecorderThread(
 
                     if (isCancelled) {
                         val duration = "%.1f".format(inputTimestamp / 1_000_000.0)
-                        Log.d(TAG, "Input complete after ${duration}s")
+                        logD("Input complete after ${duration}s")
                         inputComplete = true
                     }
 
@@ -305,7 +352,7 @@ class RecorderThread(
                     // software encoder to crash with SIGABRT
                     mediaCodec.queueInputBuffer(inputBufferId, 0, n, 0, flags)
                 } else if (inputBufferId != MediaCodec.INFO_TRY_AGAIN_LATER) {
-                    Log.w(TAG, "Unexpected input buffer dequeue error: $inputBufferId")
+                    logW("Unexpected input buffer dequeue error: $inputBufferId")
                 }
             }
 
@@ -323,11 +370,11 @@ class RecorderThread(
                 }
             } else if (outputBufferId == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
                 val outputFormat = mediaCodec.outputFormat
-                Log.d(TAG, "Output format changed to: $outputFormat")
+                logD("Output format changed to: $outputFormat")
                 trackIndex = container.addTrack(outputFormat)
                 container.start()
             } else if (outputBufferId != MediaCodec.INFO_TRY_AGAIN_LATER) {
-                Log.w(TAG, "Unexpected output buffer dequeue error: $outputBufferId")
+                logW("Unexpected output buffer dequeue error: $outputBufferId")
             }
         }
     }
