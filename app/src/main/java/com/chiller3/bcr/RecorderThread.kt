@@ -2,10 +2,7 @@ package com.chiller3.bcr
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.media.AudioFormat
-import android.media.AudioRecord
-import android.media.MediaCodec
-import android.media.MediaRecorder
+import android.media.*
 import android.net.Uri
 import android.os.Build
 import android.os.ParcelFileDescriptor
@@ -13,11 +10,12 @@ import android.telecom.Call
 import android.telecom.PhoneAccount
 import android.util.Log
 import androidx.documentfile.provider.DocumentFile
+import com.chiller3.bcr.format.Container
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.Formats
-import com.chiller3.bcr.format.Container
 import java.io.IOException
 import java.lang.Integer.min
+import java.nio.ByteBuffer
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -279,31 +277,106 @@ class RecorderThread(
             try {
                 // audioRecord.format has the detected native sample rate
                 val mediaFormat = format.getMediaFormat(audioRecord.format, formatParam)
-                val mediaCodec = format.getMediaCodec(mediaFormat)
+                val mediaCodec = if (!format.passthrough) {
+                    format.getMediaCodec(mediaFormat)
+                } else {
+                    null
+                }
 
                 try {
-                    mediaCodec.start()
+                    mediaCodec?.start()
 
                     try {
                         val container = format.getContainer(pfd.fileDescriptor)
 
                         try {
-                            encodeLoop(audioRecord, mediaCodec, container)
+                            if (mediaCodec != null) {
+                                encodeLoop(audioRecord, mediaCodec, container)
+                            } else {
+                                passthroughLoop(audioRecord, mediaFormat, container)
+                            }
+
                             container.stop()
                         } finally {
                             container.release()
                         }
                     } finally {
-                        mediaCodec.stop()
+                        mediaCodec?.stop()
                     }
                 } finally {
-                    mediaCodec.release()
+                    mediaCodec?.release()
                 }
             } finally {
                 audioRecord.stop()
             }
         } finally {
             audioRecord.release()
+        }
+    }
+
+    /**
+     * Main loop for capturing raw audio into a PCM-based output file.
+     *
+     * The loop runs forever until [cancel] is called. At that point, no further data will be read
+     * from [audioRecord]. If [audioRecord] fails to capture data, the loop will behave as if
+     * [cancel] was called (ie. abort, but ensuring that the output file is valid).
+     *
+     * The approximate amount of time to cancel reading from the audio source is 100ms. This does
+     * not include the time required to write out the remaining encoded data to the output file.
+     *
+     * @param audioRecord [AudioRecord.startRecording] must have been called
+     * @param container [Container.start] must *not* have been called. It will be left in a started
+     * state after this method returns.
+     */
+    private fun passthroughLoop(
+        audioRecord: AudioRecord,
+        mediaFormat: MediaFormat,
+        container: Container,
+    ) {
+        var inputTimestamp = 0L
+        val bufferInfo = MediaCodec.BufferInfo()
+        val frameSize = audioRecord.format.frameSizeInBytesCompat
+
+        // This is the most we ever read from audioRecord, even if the codec input buffer is
+        // larger. This is purely for fast'ish cancellation and not for latency.
+        val maxSamplesInBytes = audioRecord.sampleRate / 10 * frameSize
+
+        val buffer = ByteBuffer.allocateDirect(maxSamplesInBytes)
+        val trackIndex = container.addTrack(mediaFormat)
+        container.start()
+
+        while (true) {
+            val maxRead = min(maxSamplesInBytes, buffer.remaining())
+            val n = audioRecord.read(buffer, maxRead)
+            if (n < 0) {
+                logE("Error when reading samples from ${audioRecord}: $n")
+                isCancelled = true
+                captureFailed = true
+            } else if (n == 0) {
+                logE( "Unexpected EOF from AudioRecord")
+                isCancelled = true
+            } else {
+                val frames = n / frameSize
+                inputTimestamp += frames * 1_000_000L / audioRecord.sampleRate
+
+                bufferInfo.offset = 0
+                bufferInfo.size = buffer.limit()
+                bufferInfo.presentationTimeUs = 0
+                bufferInfo.flags = if (isCancelled) {
+                    MediaCodec.BUFFER_FLAG_END_OF_STREAM
+                } else {
+                    0
+                }
+
+                container.writeSamples(trackIndex, buffer, bufferInfo)
+                buffer.clear()
+            }
+
+            if (isCancelled) {
+                val duration = "%.1f".format(inputTimestamp / 1_000_000.0)
+                logD("Input complete after ${duration}s")
+                break
+            }
         }
     }
 
@@ -326,15 +399,15 @@ class RecorderThread(
      * @throws MediaCodec.CodecException if the codec encounters an error
      */
     private fun encodeLoop(audioRecord: AudioRecord, mediaCodec: MediaCodec, container: Container) {
-        // This is the most we ever read from audioRecord, even if the codec input buffer is
-        // larger. This is purely for fast'ish cancellation and not for latency.
-        val maxSamplesInBytes = audioRecord.sampleRate / 10 * getFrameSize(audioRecord.format)
-
         var inputTimestamp = 0L
         var inputComplete = false
         val bufferInfo = MediaCodec.BufferInfo()
-        val frameSize = getFrameSize(audioRecord.format)
+        val frameSize = audioRecord.format.frameSizeInBytesCompat
         var trackIndex = -1
+
+        // This is the most we ever read from audioRecord, even if the codec input buffer is
+        // larger. This is purely for fast'ish cancellation and not for latency.
+        val maxSamplesInBytes = audioRecord.sampleRate / 10 * frameSize
 
         while (true) {
             if (!inputComplete) {
@@ -419,16 +492,6 @@ class RecorderThread(
             .appendFraction(ChronoField.NANO_OF_SECOND, 0, 9, true)
             .appendOffset("+HHMMss", "+0000")
             .toFormatter()
-
-        private fun getFrameSize(audioFormat: AudioFormat): Int {
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                audioFormat.frameSizeInBytes
-            } else{
-                // Hardcoded for Android 9 compatibility only
-                assert(ENCODING == AudioFormat.ENCODING_PCM_16BIT)
-                2 * audioFormat.channelCount
-            }
-        }
     }
 
     interface OnRecordingCompletedListener {

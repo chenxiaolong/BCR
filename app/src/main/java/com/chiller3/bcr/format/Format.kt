@@ -6,6 +6,7 @@ import android.media.MediaCodecList
 import android.media.MediaFormat
 import android.util.Log
 import java.io.FileDescriptor
+import java.lang.IllegalStateException
 
 sealed class Format {
     /** User-facing name of the format. */
@@ -33,6 +34,9 @@ sealed class Format {
      */
     abstract val mimeTypeAudio: String
 
+    /** Whether the format takes the PCM samples as is without encoding. */
+    abstract val passthrough: Boolean
+
     /** Whether the format is supported on the current device. */
     abstract val supported: Boolean
 
@@ -58,7 +62,7 @@ sealed class Format {
             setInteger(MediaFormat.KEY_SAMPLE_RATE, audioFormat.sampleRate)
         }
 
-        updateMediaFormat(format, param ?: paramDefault)
+        updateMediaFormat(format, audioFormat, param ?: paramDefault)
 
         return format
     }
@@ -68,7 +72,11 @@ sealed class Format {
      *
      * @param param Guaranteed to be within [paramRange]
      */
-    protected abstract fun updateMediaFormat(mediaFormat: MediaFormat, param: UInt)
+    protected abstract fun updateMediaFormat(
+        mediaFormat: MediaFormat,
+        audioFormat: AudioFormat,
+        param: UInt,
+    )
 
     /**
      * Create a [MediaCodec] encoder that produces [mediaFormat] output.
@@ -77,8 +85,13 @@ sealed class Format {
      *
      * @throws Exception if the device does not support encoding with the parameters set in
      * [mediaFormat] or if configuring the [MediaCodec] fails.
+     * @throws IllegalStateException if [passthrough] is true
      */
     fun getMediaCodec(mediaFormat: MediaFormat): MediaCodec {
+        if (passthrough) {
+            throw IllegalStateException("Tried to create MediaCodec for passthrough format")
+        }
+
         val encoder = MediaCodecList(MediaCodecList.REGULAR_CODECS).findEncoderForFormat(mediaFormat)
             ?: throw Exception("No suitable encoder found for $mediaFormat")
         Log.d(TAG, "Audio encoder: $encoder")
@@ -98,7 +111,7 @@ sealed class Format {
     /**
      * Create a container muxer that takes encoded input and writes the muxed output to [fd].
      *
-     * @param fd The container does not take ownership of the file descriptor
+     * @param fd The container does not take ownership of the file descriptor.
      */
     abstract fun getContainer(fd: FileDescriptor): Container
 

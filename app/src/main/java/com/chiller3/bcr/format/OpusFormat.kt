@@ -1,5 +1,6 @@
 package com.chiller3.bcr.format
 
+import android.media.AudioFormat
 import android.media.MediaFormat
 import android.media.MediaMuxer
 import android.os.Build
@@ -17,9 +18,14 @@ object OpusFormat : Format() {
     // https://datatracker.ietf.org/doc/html/rfc7845#section-9
     override val mimeTypeContainer: String = "audio/ogg"
     override val mimeTypeAudio: String = MediaFormat.MIMETYPE_AUDIO_OPUS
+    override val passthrough: Boolean = false
     override val supported: Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
-    override fun updateMediaFormat(mediaFormat: MediaFormat, param: UInt) {
+    override fun updateMediaFormat(
+        mediaFormat: MediaFormat,
+        audioFormat: AudioFormat,
+        param: UInt,
+    ) {
         mediaFormat.apply {
             val channelCount = getInteger(MediaFormat.KEY_CHANNEL_COUNT)
             setInteger(MediaFormat.KEY_BIT_RATE, param.toInt() * channelCount)

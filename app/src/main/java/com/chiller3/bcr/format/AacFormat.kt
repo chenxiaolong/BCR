@@ -1,5 +1,6 @@
 package com.chiller3.bcr.format
 
+import android.media.AudioFormat
 import android.media.MediaCodecInfo
 import android.media.MediaFormat
 import android.media.MediaMuxer
@@ -18,9 +19,14 @@ object AacFormat : Format() {
     // https://datatracker.ietf.org/doc/html/rfc6381#section-3.1
     override val mimeTypeContainer: String = "audio/mp4"
     override val mimeTypeAudio: String = MediaFormat.MIMETYPE_AUDIO_AAC
+    override val passthrough: Boolean = false
     override val supported: Boolean = true
 
-    override fun updateMediaFormat(mediaFormat: MediaFormat, param: UInt) {
+    override fun updateMediaFormat(
+        mediaFormat: MediaFormat,
+        audioFormat: AudioFormat,
+        param: UInt,
+    ) {
         mediaFormat.apply {
             val profile = if (param >= 32_000u) {
                 MediaCodecInfo.CodecProfileLevel.AACObjectLC

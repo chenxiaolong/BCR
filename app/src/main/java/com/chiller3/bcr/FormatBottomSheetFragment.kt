@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.FormatParamType
 import com.chiller3.bcr.format.Formats
@@ -18,8 +20,9 @@ import com.google.android.material.slider.Slider
 class FormatBottomSheetFragment : BottomSheetDialogFragment(),
     MaterialButtonToggleGroup.OnButtonCheckedListener, LabelFormatter, Slider.OnChangeListener,
     View.OnClickListener {
+    private lateinit var formatParamGroup: LinearLayout
     private lateinit var formatParamTitle: TextView
-    private lateinit var formatParam: Slider
+    private lateinit var formatParamSlider: Slider
     private lateinit var formatReset: MaterialButton
     private lateinit var formatNameGroup: MaterialButtonToggleGroup
     private val buttonIdToFormat = HashMap<Int, Format>()
@@ -33,11 +36,13 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
     ): View? {
         val bottomSheet = inflater.inflate(R.layout.format_bottom_sheet, container, false)
 
+        formatParamGroup = bottomSheet.findViewById(R.id.format_param_group)
+
         formatParamTitle = bottomSheet.findViewById(R.id.format_param_title)
 
-        formatParam = bottomSheet.findViewById(R.id.format_param)
-        formatParam.setLabelFormatter(this)
-        formatParam.addOnChangeListener(this)
+        formatParamSlider = bottomSheet.findViewById(R.id.format_param_slider)
+        formatParamSlider.setLabelFormatter(this)
+        formatParamSlider.addOnChangeListener(this)
 
         formatReset = bottomSheet.findViewById(R.id.format_reset)
         formatReset.setOnClickListener(this)
@@ -88,13 +93,24 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
             FormatParamType.Bitrate -> R.string.bottom_sheet_bitrate
         }
 
+        formatParamGroup.isVisible = format.paramRange.first != format.paramRange.last
+
         formatParamTitle.setText(titleResId)
 
-        formatParam.valueFrom = format.paramRange.first.toFloat()
-        formatParam.valueTo = format.paramRange.last.toFloat()
-        formatParam.stepSize = format.paramStepSize.toFloat()
+        formatParamSlider.valueFrom = format.paramRange.first.toFloat()
+        formatParamSlider.valueTo = format.paramRange.last.toFloat()
+        formatParamSlider.stepSize = format.paramStepSize.toFloat()
+        formatParamSlider.value = (param ?: format.paramDefault).toFloat()
 
-        formatParam.value = (param ?: format.paramDefault).toFloat()
+        // Needed due to a bug in the material3 library where the slider label does not disappear
+        // when the slider visibility is set to View.GONE
+        // https://github.com/material-components/material-components-android/issues/2726
+        if (format.paramRange.first == format.paramRange.last) {
+            val ensureLabelsRemoved = formatParamSlider.javaClass.superclass
+                .getDeclaredMethod("ensureLabelsRemoved")
+            ensureLabelsRemoved.isAccessible = true
+            ensureLabelsRemoved.invoke(formatParamSlider)
+        }
     }
 
     override fun onButtonChecked(
@@ -113,7 +129,7 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
 
     override fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
         when (slider) {
-            formatParam -> {
+            formatParamSlider -> {
                 val format = buttonIdToFormat[formatNameGroup.checkedButtonId]!!
                 Preferences.setFormatParam(requireContext(), format.name, value.toUInt())
             }

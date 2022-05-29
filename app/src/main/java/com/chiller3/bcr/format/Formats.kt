@@ -4,7 +4,7 @@ import android.content.Context
 import com.chiller3.bcr.Preferences
 
 object Formats {
-    val all: Array<Format> = arrayOf(OpusFormat, AacFormat, FlacFormat)
+    val all: Array<Format> = arrayOf(OpusFormat, AacFormat, FlacFormat, WaveFormat)
     private val default: Format = all.first { it.supported }
 
     /** Find output format by name. */

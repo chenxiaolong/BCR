@@ -21,19 +21,26 @@
         app:selectionRequired="true"
         app:singleSelection="true" />
 
-    <TextView
-        android:id="@+id/format_param_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/bottom_sheet_section_separation"
-        android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
-        android:textAppearance="?attr/textAppearanceHeadline6" />
-
-    <com.google.android.material.slider.Slider
-        android:id="@+id/format_param"
+    <LinearLayout
+        android:id="@+id/format_param_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:labelBehavior="visible" />
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+        <TextView
+            android:id="@+id/format_param_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/bottom_sheet_section_separation"
+            android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
+            android:textAppearance="?attr/textAppearanceHeadline6" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/format_param_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:labelBehavior="visible" />
+    </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/format_reset"
