@@ -6,6 +6,7 @@
 
 Non-user-facing changes:
 * Improve output format parameter abstraction (PR: #49, @chenxiaolong)
+* Use view binding instead of findViewById where possible (PR: #50, @chenxiaolong)
 
 ### Version 1.5
 

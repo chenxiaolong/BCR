@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
+import com.chiller3.bcr.databinding.FormatBottomSheetBinding
+import com.chiller3.bcr.databinding.FormatBottomSheetButtonBinding
 import com.chiller3.bcr.format.*
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.slider.LabelFormatter
 import com.google.android.material.slider.Slider
@@ -18,11 +17,10 @@ import com.google.android.material.slider.Slider
 class FormatBottomSheetFragment : BottomSheetDialogFragment(),
     MaterialButtonToggleGroup.OnButtonCheckedListener, LabelFormatter, Slider.OnChangeListener,
     View.OnClickListener {
-    private lateinit var formatParamGroup: LinearLayout
-    private lateinit var formatParamTitle: TextView
-    private lateinit var formatParamSlider: Slider
-    private lateinit var formatReset: MaterialButton
-    private lateinit var formatNameGroup: MaterialButtonToggleGroup
+    private var _binding: FormatBottomSheetBinding? = null
+    private val binding
+        get() = _binding!!
+
     private val buttonIdToFormat = HashMap<Int, Format>()
     private val formatToButtonId = HashMap<Format, Int>()
     private lateinit var formatParamInfo: FormatParamInfo
@@ -31,42 +29,39 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val bottomSheet = inflater.inflate(R.layout.format_bottom_sheet, container, false)
+    ): View {
+        _binding = FormatBottomSheetBinding.inflate(inflater, container, false)
 
-        formatParamGroup = bottomSheet.findViewById(R.id.format_param_group)
+        binding.paramSlider.setLabelFormatter(this)
+        binding.paramSlider.addOnChangeListener(this)
 
-        formatParamTitle = bottomSheet.findViewById(R.id.format_param_title)
-
-        formatParamSlider = bottomSheet.findViewById(R.id.format_param_slider)
-        formatParamSlider.setLabelFormatter(this)
-        formatParamSlider.addOnChangeListener(this)
-
-        formatReset = bottomSheet.findViewById(R.id.format_reset)
-        formatReset.setOnClickListener(this)
-
-        formatNameGroup = bottomSheet.findViewById(R.id.format_name_group)!!
+        binding.reset.setOnClickListener(this)
 
         for (format in Formats.all) {
             if (!format.supported) {
                 continue
             }
 
-            val button = layoutInflater.inflate(
-                R.layout.format_bottom_sheet_button, formatNameGroup, false) as MaterialButton
+            val buttonBinding = FormatBottomSheetButtonBinding.inflate(
+                inflater, binding.nameGroup, false)
             val id = ViewCompat.generateViewId()
-            button.id = id
-            button.text = format.name
-            formatNameGroup.addView(button)
+            buttonBinding.root.id = id
+            buttonBinding.root.text = format.name
+            binding.nameGroup.addView(buttonBinding.root)
             buttonIdToFormat[id] = format
             formatToButtonId[format] = id
         }
 
-        formatNameGroup.addOnButtonCheckedListener(this)
+        binding.nameGroup.addOnButtonCheckedListener(this)
 
         refreshFormat()
 
-        return bottomSheet
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     /**
@@ -76,7 +71,7 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
      */
     private fun refreshFormat() {
         val (format, _) = Formats.fromPreferences(requireContext())
-        formatNameGroup.check(formatToButtonId[format]!!)
+        binding.nameGroup.check(formatToButtonId[format]!!)
     }
 
     /**
@@ -88,28 +83,28 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
 
         when (val info = format.paramInfo) {
             is RangedParamInfo -> {
-                formatParamGroup.isVisible = true
+                binding.paramGroup.isVisible = true
 
-                formatParamTitle.setText(when (info.type) {
+                binding.paramTitle.setText(when (info.type) {
                     RangedParamType.CompressionLevel -> R.string.bottom_sheet_compression_level
                     RangedParamType.Bitrate -> R.string.bottom_sheet_bitrate
                 })
 
-                formatParamSlider.valueFrom = info.range.first.toFloat()
-                formatParamSlider.valueTo = info.range.last.toFloat()
-                formatParamSlider.stepSize = info.stepSize.toFloat()
-                formatParamSlider.value = (param ?: info.default).toFloat()
+                binding.paramSlider.valueFrom = info.range.first.toFloat()
+                binding.paramSlider.valueTo = info.range.last.toFloat()
+                binding.paramSlider.stepSize = info.stepSize.toFloat()
+                binding.paramSlider.value = (param ?: info.default).toFloat()
             }
             NoParamInfo -> {
-                formatParamGroup.isVisible = false
+                binding.paramGroup.isVisible = false
 
                 // Needed due to a bug in the material3 library where the slider label does not disappear
                 // when the slider visibility is set to View.GONE
                 // https://github.com/material-components/material-components-android/issues/2726
-                val ensureLabelsRemoved = formatParamSlider.javaClass.superclass
+                val ensureLabelsRemoved = binding.paramSlider.javaClass.superclass
                     .getDeclaredMethod("ensureLabelsRemoved")
                 ensureLabelsRemoved.isAccessible = true
-                ensureLabelsRemoved.invoke(formatParamSlider)
+                ensureLabelsRemoved.invoke(binding.paramSlider)
             }
         }
     }
@@ -130,8 +125,8 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
 
     override fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
         when (slider) {
-            formatParamSlider -> {
-                val format = buttonIdToFormat[formatNameGroup.checkedButtonId]!!
+            binding.paramSlider -> {
+                val format = buttonIdToFormat[binding.nameGroup.checkedButtonId]!!
                 Preferences.setFormatParam(requireContext(), format.name, value.toUInt())
             }
         }
@@ -139,7 +134,7 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
 
     override fun onClick(v: View?) {
         when (v) {
-            formatReset -> {
+            binding.reset -> {
                 Preferences.resetAllFormats(requireContext())
                 refreshFormat()
                 // Need to explicitly refresh the parameter when the default format is already chosen
