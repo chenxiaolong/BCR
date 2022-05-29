@@ -1,14 +1,15 @@
-package com.chiller3.bcr.codec
+package com.chiller3.bcr.format
 
+import android.media.AudioFormat
 import android.media.MediaCodecInfo
 import android.media.MediaFormat
 import android.media.MediaMuxer
 import java.io.FileDescriptor
 
-object AacCodec : Codec() {
+object AacFormat : Format() {
     override val name: String = "M4A/AAC"
-    override val paramType: CodecParamType = CodecParamType.Bitrate
-    // The codec has no hard limits, so the lower bound is ffmpeg's recommended minimum bitrate for
+    override val paramType: FormatParamType = FormatParamType.Bitrate
+    // The format has no hard limits, so the lower bound is ffmpeg's recommended minimum bitrate for
     // HE-AAC: 24kbps/channel. The upper bound is twice the bitrate for audible transparency with
     // AAC-LC: 2 * 64kbps/channel.
     // https://trac.ffmpeg.org/wiki/Encode/AAC
@@ -18,9 +19,14 @@ object AacCodec : Codec() {
     // https://datatracker.ietf.org/doc/html/rfc6381#section-3.1
     override val mimeTypeContainer: String = "audio/mp4"
     override val mimeTypeAudio: String = MediaFormat.MIMETYPE_AUDIO_AAC
+    override val passthrough: Boolean = false
     override val supported: Boolean = true
 
-    override fun updateMediaFormat(mediaFormat: MediaFormat, param: UInt) {
+    override fun updateMediaFormat(
+        mediaFormat: MediaFormat,
+        audioFormat: AudioFormat,
+        param: UInt,
+    ) {
         mediaFormat.apply {
             val profile = if (param >= 32_000u) {
                 MediaCodecInfo.CodecProfileLevel.AACObjectLC

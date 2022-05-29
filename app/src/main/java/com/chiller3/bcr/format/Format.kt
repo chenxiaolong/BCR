@@ -1,4 +1,4 @@
-package com.chiller3.bcr.codec
+package com.chiller3.bcr.format
 
 import android.media.AudioFormat
 import android.media.MediaCodec
@@ -6,21 +6,22 @@ import android.media.MediaCodecList
 import android.media.MediaFormat
 import android.util.Log
 import java.io.FileDescriptor
+import java.lang.IllegalStateException
 
-sealed class Codec {
-    /** User-facing name of the codec. */
+sealed class Format {
+    /** User-facing name of the format. */
     abstract val name: String
 
-    /** Meaning of the codec parameter value. */
-    abstract val paramType: CodecParamType
+    /** Meaning of the format parameter value. */
+    abstract val paramType: FormatParamType
 
-    /** Valid range for the codec-specific parameter value. */
+    /** Valid range for the format-specific parameter value. */
     abstract val paramRange: UIntRange
 
     /** Reasonable step size for selecting a value via the UI. */
     abstract val paramStepSize: UInt
 
-    /** Default codec parameter value. */
+    /** Default format parameter value. */
     abstract val paramDefault: UInt
 
     /** The MIME type of the container storing the encoded audio stream. */
@@ -29,11 +30,14 @@ sealed class Codec {
     /**
      * The MIME type of the encoded audio stream inside the container.
      *
-     * May be the same as [mimeTypeContainer] for some codecs.
+     * May be the same as [mimeTypeContainer] for some formats.
      */
     abstract val mimeTypeAudio: String
 
-    /** Whether the codec is supported on the current device. */
+    /** Whether the format takes the PCM samples as is without encoding. */
+    abstract val passthrough: Boolean
+
+    /** Whether the format is supported on the current device. */
     abstract val supported: Boolean
 
     /**
@@ -42,7 +46,7 @@ sealed class Codec {
      *
      * @param audioFormat [AudioFormat.getSampleRate] must not be
      * [AudioFormat.SAMPLE_RATE_UNSPECIFIED].
-     * @param param Codec-specific parameter value. Must be in the [paramRange] range. If null,
+     * @param param Format-specific parameter value. Must be in the [paramRange] range. If null,
      * [paramDefault] is used.
      *
      * @throws IllegalArgumentException if [param] is outside [paramRange]
@@ -58,17 +62,21 @@ sealed class Codec {
             setInteger(MediaFormat.KEY_SAMPLE_RATE, audioFormat.sampleRate)
         }
 
-        updateMediaFormat(format, param ?: paramDefault)
+        updateMediaFormat(format, audioFormat, param ?: paramDefault)
 
         return format
     }
 
     /**
-     * Update [mediaFormat] with parameter keys relevant to the codec-specific parameter.
+     * Update [mediaFormat] with parameter keys relevant to the format-specific parameter.
      *
      * @param param Guaranteed to be within [paramRange]
      */
-    protected abstract fun updateMediaFormat(mediaFormat: MediaFormat, param: UInt)
+    protected abstract fun updateMediaFormat(
+        mediaFormat: MediaFormat,
+        audioFormat: AudioFormat,
+        param: UInt,
+    )
 
     /**
      * Create a [MediaCodec] encoder that produces [mediaFormat] output.
@@ -77,8 +85,13 @@ sealed class Codec {
      *
      * @throws Exception if the device does not support encoding with the parameters set in
      * [mediaFormat] or if configuring the [MediaCodec] fails.
+     * @throws IllegalStateException if [passthrough] is true
      */
     fun getMediaCodec(mediaFormat: MediaFormat): MediaCodec {
+        if (passthrough) {
+            throw IllegalStateException("Tried to create MediaCodec for passthrough format")
+        }
+
         val encoder = MediaCodecList(MediaCodecList.REGULAR_CODECS).findEncoderForFormat(mediaFormat)
             ?: throw Exception("No suitable encoder found for $mediaFormat")
         Log.d(TAG, "Audio encoder: $encoder")
@@ -98,11 +111,11 @@ sealed class Codec {
     /**
      * Create a container muxer that takes encoded input and writes the muxed output to [fd].
      *
-     * @param fd The container does not take ownership of the file descriptor
+     * @param fd The container does not take ownership of the file descriptor.
      */
     abstract fun getContainer(fd: FileDescriptor): Container
 
     companion object {
-        private val TAG = Codec::class.java.simpleName
+        private val TAG = Format::class.java.simpleName
     }
 }

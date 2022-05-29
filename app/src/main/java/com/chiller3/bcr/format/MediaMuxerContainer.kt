@@ -1,4 +1,4 @@
-package com.chiller3.bcr.codec
+package com.chiller3.bcr.format
 
 import android.media.MediaCodec
 import android.media.MediaFormat
@@ -15,7 +15,7 @@ import java.nio.ByteBuffer
 class MediaMuxerContainer(
     fd: FileDescriptor,
     containerFormat: Int,
-) : Container(fd) {
+) : Container() {
     private val muxer = MediaMuxer(fd, containerFormat)
 
     override fun start() {
