@@ -8,9 +8,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
-import com.chiller3.bcr.format.Format
-import com.chiller3.bcr.format.FormatParamType
-import com.chiller3.bcr.format.Formats
+import com.chiller3.bcr.format.*
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
@@ -27,7 +25,7 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
     private lateinit var formatNameGroup: MaterialButtonToggleGroup
     private val buttonIdToFormat = HashMap<Int, Format>()
     private val formatToButtonId = HashMap<Format, Int>()
-    private lateinit var formatParamType: FormatParamType
+    private lateinit var formatParamInfo: FormatParamInfo
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -86,30 +84,33 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
      */
     private fun refreshParam() {
         val (format, param) = Formats.fromPreferences(requireContext())
-        formatParamType = format.paramType
+        formatParamInfo = format.paramInfo
 
-        val titleResId = when (format.paramType) {
-            FormatParamType.CompressionLevel -> R.string.bottom_sheet_compression_level
-            FormatParamType.Bitrate -> R.string.bottom_sheet_bitrate
-        }
+        when (val info = format.paramInfo) {
+            is RangedParamInfo -> {
+                formatParamGroup.isVisible = true
 
-        formatParamGroup.isVisible = format.paramRange.first != format.paramRange.last
+                formatParamTitle.setText(when (info.type) {
+                    RangedParamType.CompressionLevel -> R.string.bottom_sheet_compression_level
+                    RangedParamType.Bitrate -> R.string.bottom_sheet_bitrate
+                })
 
-        formatParamTitle.setText(titleResId)
+                formatParamSlider.valueFrom = info.range.first.toFloat()
+                formatParamSlider.valueTo = info.range.last.toFloat()
+                formatParamSlider.stepSize = info.stepSize.toFloat()
+                formatParamSlider.value = (param ?: info.default).toFloat()
+            }
+            NoParamInfo -> {
+                formatParamGroup.isVisible = false
 
-        formatParamSlider.valueFrom = format.paramRange.first.toFloat()
-        formatParamSlider.valueTo = format.paramRange.last.toFloat()
-        formatParamSlider.stepSize = format.paramStepSize.toFloat()
-        formatParamSlider.value = (param ?: format.paramDefault).toFloat()
-
-        // Needed due to a bug in the material3 library where the slider label does not disappear
-        // when the slider visibility is set to View.GONE
-        // https://github.com/material-components/material-components-android/issues/2726
-        if (format.paramRange.first == format.paramRange.last) {
-            val ensureLabelsRemoved = formatParamSlider.javaClass.superclass
-                .getDeclaredMethod("ensureLabelsRemoved")
-            ensureLabelsRemoved.isAccessible = true
-            ensureLabelsRemoved.invoke(formatParamSlider)
+                // Needed due to a bug in the material3 library where the slider label does not disappear
+                // when the slider visibility is set to View.GONE
+                // https://github.com/material-components/material-components-android/issues/2726
+                val ensureLabelsRemoved = formatParamSlider.javaClass.superclass
+                    .getDeclaredMethod("ensureLabelsRemoved")
+                ensureLabelsRemoved.isAccessible = true
+                ensureLabelsRemoved.invoke(formatParamSlider)
+            }
         }
     }
 
@@ -125,7 +126,7 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
     }
 
     override fun getFormattedValue(value: Float): String =
-        formatParamType.format(value.toUInt())
+        formatParamInfo.format(value.toUInt())
 
     override fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
         when (slider) {

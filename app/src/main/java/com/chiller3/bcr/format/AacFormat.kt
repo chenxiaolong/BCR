@@ -8,14 +8,16 @@ import java.io.FileDescriptor
 
 object AacFormat : Format() {
     override val name: String = "M4A/AAC"
-    override val paramType: FormatParamType = FormatParamType.Bitrate
-    // The format has no hard limits, so the lower bound is ffmpeg's recommended minimum bitrate for
-    // HE-AAC: 24kbps/channel. The upper bound is twice the bitrate for audible transparency with
-    // AAC-LC: 2 * 64kbps/channel.
-    // https://trac.ffmpeg.org/wiki/Encode/AAC
-    override val paramRange: UIntRange = 24_000u..128_000u
-    override val paramStepSize: UInt = 4_000u
-    override val paramDefault: UInt = 64_000u
+    override val paramInfo: FormatParamInfo = RangedParamInfo(
+        RangedParamType.Bitrate,
+        // The format has no hard limits, so the lower bound is ffmpeg's recommended minimum bitrate
+        // for HE-AAC: 24kbps/channel. The upper bound is twice the bitrate for audible transparency
+        // with AAC-LC: 2 * 64kbps/channel.
+        // https://trac.ffmpeg.org/wiki/Encode/AAC
+        24_000u..128_000u,
+        4_000u,
+        64_000u,
+    )
     // https://datatracker.ietf.org/doc/html/rfc6381#section-3.1
     override val mimeTypeContainer: String = "audio/mp4"
     override val mimeTypeAudio: String = MediaFormat.MIMETYPE_AUDIO_AAC
