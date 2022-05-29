@@ -25,8 +25,11 @@ object Formats {
             ?.let { if (it.supported) { it } else { null } }
             ?: default
 
-        // Clamp to the format's allowed parameter range in case the range is shrunk
-        val param = Preferences.getFormatParam(context, format.name)?.coerceIn(format.paramRange)
+        // Convert the saved value to the nearest valid value (eg. in case bitrate range or step
+        // size in changed in a future version)
+        val param = Preferences.getFormatParam(context, format.name)?.let {
+            format.paramInfo.toNearest(it)
+        }
 
         return Pair(format, param)
     }

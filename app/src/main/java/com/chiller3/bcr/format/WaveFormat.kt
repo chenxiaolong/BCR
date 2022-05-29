@@ -9,10 +9,7 @@ object WaveFormat : Format() {
     const val KEY_X_FRAME_SIZE_IN_BYTES = "x-frame-size-in-bytes"
 
     override val name: String = "WAV/PCM"
-    override val paramType: FormatParamType = FormatParamType.CompressionLevel
-    override val paramRange: UIntRange = 0u..0u
-    override val paramStepSize: UInt = 0u
-    override val paramDefault: UInt = 0u
+    override val paramInfo: FormatParamInfo = NoParamInfo
     // Should be "audio/vnd.wave" [1], but Android only recognizes "audio/x-wav" [2] for the
     // purpose of picking an appropriate file extension when creating a file via SAF.
     // [1] https://datatracker.ietf.org/doc/html/rfc2361

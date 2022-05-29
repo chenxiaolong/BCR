@@ -9,12 +9,14 @@ import java.io.FileDescriptor
 
 object OpusFormat : Format() {
     override val name: String = "OGG/Opus"
-    override val paramType: FormatParamType = FormatParamType.Bitrate
-    override val paramRange: UIntRange = 6_000u..510_000u
-    override val paramStepSize: UInt = 2_000u
-    // "Essentially transparent mono or stereo speech, reasonable music"
-    // https://wiki.hydrogenaud.io/index.php?title=Opus
-    override val paramDefault: UInt = 48_000u
+    override val paramInfo: FormatParamInfo = RangedParamInfo(
+        RangedParamType.Bitrate,
+        6_000u..510_000u,
+        2_000u,
+        // "Essentially transparent mono or stereo speech, reasonable music"
+        // https://wiki.hydrogenaud.io/index.php?title=Opus
+        48_000u,
+    )
     // https://datatracker.ietf.org/doc/html/rfc7845#section-9
     override val mimeTypeContainer: String = "audio/ogg"
     override val mimeTypeAudio: String = MediaFormat.MIMETYPE_AUDIO_OPUS

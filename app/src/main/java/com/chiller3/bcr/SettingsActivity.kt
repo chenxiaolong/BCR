@@ -10,6 +10,8 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.chiller3.bcr.format.Formats
+import com.chiller3.bcr.format.NoParamInfo
+import com.chiller3.bcr.format.RangedParamInfo
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,11 +110,14 @@ class SettingsActivity : AppCompatActivity() {
 
         private fun refreshOutputFormat() {
             val (format, formatParamSaved) = Formats.fromPreferences(requireContext())
-            val formatParam = formatParamSaved ?: format.paramDefault
+            val formatParam = formatParamSaved ?: format.paramInfo.default
             val summary = getString(R.string.pref_output_format_desc)
-            val paramText = format.paramType.format(formatParam)
+            val suffix = when (val info = format.paramInfo) {
+                is RangedParamInfo -> " (${info.format(formatParam)})"
+                NoParamInfo -> ""
+            }
 
-            prefOutputFormat.summary = "${summary}\n\n${format.name} (${paramText})"
+            prefOutputFormat.summary = "${summary}\n\n${format.name}${suffix}"
         }
 
         private fun refreshInhibitBatteryOptState() {

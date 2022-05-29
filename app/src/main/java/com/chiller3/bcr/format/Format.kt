@@ -12,17 +12,8 @@ sealed class Format {
     /** User-facing name of the format. */
     abstract val name: String
 
-    /** Meaning of the format parameter value. */
-    abstract val paramType: FormatParamType
-
-    /** Valid range for the format-specific parameter value. */
-    abstract val paramRange: UIntRange
-
-    /** Reasonable step size for selecting a value via the UI. */
-    abstract val paramStepSize: UInt
-
-    /** Default format parameter value. */
-    abstract val paramDefault: UInt
+    /** Details about the format parameter range and default value. */
+    abstract val paramInfo: FormatParamInfo
 
     /** The MIME type of the container storing the encoded audio stream. */
     abstract val mimeTypeContainer: String
@@ -46,14 +37,13 @@ sealed class Format {
      *
      * @param audioFormat [AudioFormat.getSampleRate] must not be
      * [AudioFormat.SAMPLE_RATE_UNSPECIFIED].
-     * @param param Format-specific parameter value. Must be in the [paramRange] range. If null,
-     * [paramDefault] is used.
+     * @param param Format-specific parameter value. Must be valid according to [paramInfo].
      *
-     * @throws IllegalArgumentException if [param] is outside [paramRange]
+     * @throws IllegalArgumentException if [FormatParamInfo.validate] fails
      */
     fun getMediaFormat(audioFormat: AudioFormat, param: UInt?): MediaFormat {
-        if (param != null && param !in paramRange) {
-            throw IllegalArgumentException("Parameter $param not in range $paramRange")
+        if (param != null) {
+            paramInfo.validate(param)
         }
 
         val format = MediaFormat().apply {
@@ -62,7 +52,7 @@ sealed class Format {
             setInteger(MediaFormat.KEY_SAMPLE_RATE, audioFormat.sampleRate)
         }
 
-        updateMediaFormat(format, audioFormat, param ?: paramDefault)
+        updateMediaFormat(format, audioFormat, param ?: paramInfo.default)
 
         return format
     }
@@ -70,7 +60,7 @@ sealed class Format {
     /**
      * Update [mediaFormat] with parameter keys relevant to the format-specific parameter.
      *
-     * @param param Guaranteed to be within [paramRange]
+     * @param param Guaranteed to be valid according to [paramInfo]
      */
     protected abstract fun updateMediaFormat(
         mediaFormat: MediaFormat,
