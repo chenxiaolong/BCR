@@ -2,6 +2,10 @@
 
 * Enable minification (without obfuscation) to shrink the download size by ~64% (PR: #45, @chenxiaolong)
 * Update Turkish translations (PR: #46, @fnldstntn)
+* Add support for WAV/PCM output for troubleshooting (bypasses encoding/compression pipeline) (PR: #48, @chenxiaolong)
+
+Non-user-facing changes:
+* Improve output format parameter abstraction (PR: #49, @chenxiaolong)
 
 ### Version 1.5
 
