@@ -4,25 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.chiller3.bcr.databinding.FormatBottomSheetBinding
-import com.chiller3.bcr.databinding.FormatBottomSheetButtonBinding
+import com.chiller3.bcr.databinding.FormatBottomSheetChipBinding
 import com.chiller3.bcr.format.*
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.button.MaterialButtonToggleGroup
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.LabelFormatter
 import com.google.android.material.slider.Slider
 
 class FormatBottomSheetFragment : BottomSheetDialogFragment(),
-    MaterialButtonToggleGroup.OnButtonCheckedListener, LabelFormatter, Slider.OnChangeListener,
+    ChipGroup.OnCheckedStateChangeListener, LabelFormatter, Slider.OnChangeListener,
     View.OnClickListener {
     private var _binding: FormatBottomSheetBinding? = null
     private val binding
         get() = _binding!!
 
-    private val buttonIdToFormat = HashMap<Int, Format>()
-    private val formatToButtonId = HashMap<Format, Int>()
+    private val chipIdToFormat = HashMap<Int, Format>()
+    private val formatToChipId = HashMap<Format, Int>()
     private lateinit var formatParamInfo: FormatParamInfo
 
     override fun onCreateView(
@@ -42,17 +41,18 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
                 continue
             }
 
-            val buttonBinding = FormatBottomSheetButtonBinding.inflate(
+            val chipBinding = FormatBottomSheetChipBinding.inflate(
                 inflater, binding.nameGroup, false)
-            val id = ViewCompat.generateViewId()
-            buttonBinding.root.id = id
-            buttonBinding.root.text = format.name
-            binding.nameGroup.addView(buttonBinding.root)
-            buttonIdToFormat[id] = format
-            formatToButtonId[format] = id
+            val id = View.generateViewId()
+            chipBinding.root.id = id
+            chipBinding.root.text = format.name
+            chipBinding.root.layoutDirection = View.LAYOUT_DIRECTION_LOCALE
+            binding.nameGroup.addView(chipBinding.root)
+            chipIdToFormat[id] = format
+            formatToChipId[format] = id
         }
 
-        binding.nameGroup.addOnButtonCheckedListener(this)
+        binding.nameGroup.setOnCheckedStateChangeListener(this)
 
         refreshFormat()
 
@@ -67,11 +67,11 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
     /**
      * Update UI based on currently selected format in the preferences.
      *
-     * Calls [refreshParam] via [onButtonChecked].
+     * Calls [refreshParam] via [onCheckedChanged].
      */
     private fun refreshFormat() {
         val (format, _) = Formats.fromPreferences(requireContext())
-        binding.nameGroup.check(formatToButtonId[format]!!)
+        binding.nameGroup.check(formatToChipId[format]!!)
     }
 
     /**
@@ -109,15 +109,9 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
         }
     }
 
-    override fun onButtonChecked(
-        group: MaterialButtonToggleGroup?,
-        checkedId: Int,
-        isChecked: Boolean
-    ) {
-        if (isChecked) {
-            Preferences.setFormatName(requireContext(), buttonIdToFormat[checkedId]!!.name)
-            refreshParam()
-        }
+    override fun onCheckedChanged(group: ChipGroup, checkedIds: MutableList<Int>) {
+        Preferences.setFormatName(requireContext(), chipIdToFormat[checkedIds.first()]!!.name)
+        refreshParam()
     }
 
     override fun getFormattedValue(value: Float): String =
@@ -126,7 +120,7 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
     override fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
         when (slider) {
             binding.paramSlider -> {
-                val format = buttonIdToFormat[binding.nameGroup.checkedButtonId]!!
+                val format = chipIdToFormat[binding.nameGroup.checkedChipId]!!
                 Preferences.setFormatParam(requireContext(), format.name, value.toUInt())
             }
         }
