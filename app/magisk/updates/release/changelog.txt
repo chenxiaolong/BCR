@@ -1,3 +1,7 @@
+### Unreleased
+
+* Change output format button group to material chips to prevent text from being cut off with narrower screen widths (Issue: #52, PR: #55, @chenxiaolong)
+
 ### Version 1.6
 
 * Enable minification (without obfuscation) to shrink the download size by ~64% (PR: #45, @chenxiaolong)

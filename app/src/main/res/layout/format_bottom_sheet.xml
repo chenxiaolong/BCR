@@ -14,9 +14,9 @@
         android:text="@string/bottom_sheet_output_format"
         android:textAppearance="?attr/textAppearanceHeadline6" />
 
-    <com.google.android.material.button.MaterialButtonToggleGroup
+    <com.chiller3.bcr.ChipGroupCentered
         android:id="@+id/name_group"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:selectionRequired="true"
         app:singleSelection="true" />
