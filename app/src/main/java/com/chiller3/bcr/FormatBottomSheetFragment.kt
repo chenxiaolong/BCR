@@ -1,3 +1,6 @@
+@file:Suppress("OPT_IN_IS_NOT_ENABLED")
+@file:OptIn(ExperimentalUnsignedTypes::class)
+
 package com.chiller3.bcr
 
 import android.os.Bundle
@@ -10,12 +13,10 @@ import com.chiller3.bcr.databinding.FormatBottomSheetChipBinding
 import com.chiller3.bcr.format.*
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.ChipGroup
-import com.google.android.material.slider.LabelFormatter
 import com.google.android.material.slider.Slider
 
 class FormatBottomSheetFragment : BottomSheetDialogFragment(),
-    ChipGroup.OnCheckedStateChangeListener, LabelFormatter, Slider.OnChangeListener,
-    View.OnClickListener {
+    ChipGroup.OnCheckedStateChangeListener, Slider.OnChangeListener, View.OnClickListener {
     private var _binding: FormatBottomSheetBinding? = null
     private val binding
         get() = _binding!!
@@ -31,8 +32,15 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
     ): View {
         _binding = FormatBottomSheetBinding.inflate(inflater, container, false)
 
-        binding.paramSlider.setLabelFormatter(this)
+        binding.paramSlider.setLabelFormatter {
+            formatParamInfo.format(it.toUInt())
+        }
         binding.paramSlider.addOnChangeListener(this)
+
+        binding.sampleRateSlider.setLabelFormatter {
+            SampleRates.format(sampleRateFromIndex(it.toInt()))
+        }
+        binding.sampleRateSlider.addOnChangeListener(this)
 
         binding.reset.setOnClickListener(this)
 
@@ -55,6 +63,7 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
         binding.nameGroup.setOnCheckedStateChangeListener(this)
 
         refreshFormat()
+        refreshSampleRate()
 
         return binding.root
     }
@@ -109,13 +118,25 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
         }
     }
 
+    private fun refreshSampleRate() {
+        val sampleRate = SampleRates.fromPreferences(requireContext())
+
+        // Index == SampleRates.all.size is used to represent the native sample rate option
+        binding.sampleRateSlider.valueFrom = 0f
+        binding.sampleRateSlider.valueTo = SampleRates.all.size.toFloat()
+        binding.sampleRateSlider.stepSize = 1f
+
+        if (sampleRate == null) {
+            binding.sampleRateSlider.value = SampleRates.all.size.toFloat()
+        } else {
+            binding.sampleRateSlider.value = SampleRates.all.indexOf(sampleRate).toFloat()
+        }
+    }
+
     override fun onCheckedChanged(group: ChipGroup, checkedIds: MutableList<Int>) {
         Preferences.setFormatName(requireContext(), chipIdToFormat[checkedIds.first()]!!.name)
         refreshParam()
     }
-
-    override fun getFormattedValue(value: Float): String =
-        formatParamInfo.format(value.toUInt())
 
     override fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
         when (slider) {
@@ -123,21 +144,35 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
                 val format = chipIdToFormat[binding.nameGroup.checkedChipId]!!
                 Preferences.setFormatParam(requireContext(), format.name, value.toUInt())
             }
+            binding.sampleRateSlider -> {
+                val sampleRate = sampleRateFromIndex(value.toInt())
+                Preferences.setSampleRate(requireContext(), sampleRate)
+            }
         }
     }
 
     override fun onClick(v: View?) {
         when (v) {
             binding.reset -> {
-                Preferences.resetAllFormats(requireContext())
+                val context = requireContext()
+                Preferences.resetAllFormats(context)
+                Preferences.setSampleRate(context, null)
                 refreshFormat()
                 // Need to explicitly refresh the parameter when the default format is already chosen
                 refreshParam()
+                refreshSampleRate()
             }
         }
     }
 
     companion object {
         val TAG: String = FormatBottomSheetFragment::class.java.simpleName
+
+        private fun sampleRateFromIndex(index: Int) =
+            if (index == SampleRates.all.size) {
+                null
+            } else {
+                SampleRates.all[index]
+            }
     }
 }

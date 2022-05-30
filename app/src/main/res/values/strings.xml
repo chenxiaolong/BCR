@@ -26,6 +26,7 @@
     <string name="bottom_sheet_output_format">Output format</string>
     <string name="bottom_sheet_compression_level">Compression level</string>
     <string name="bottom_sheet_bitrate">Bitrate</string>
+    <string name="bottom_sheet_sample_rate">Sample rate</string>
     <string name="bottom_sheet_reset">Reset to defaults</string>
 
     <!-- Notifications -->

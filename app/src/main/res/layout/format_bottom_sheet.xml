@@ -42,6 +42,20 @@
             app:labelBehavior="visible" />
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/bottom_sheet_section_separation"
+        android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
+        android:text="@string/bottom_sheet_sample_rate"
+        android:textAppearance="?attr/textAppearanceHeadline6" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/sample_rate_slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:labelBehavior="visible" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/reset"
         android:layout_width="wrap_content"

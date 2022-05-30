@@ -13,6 +13,7 @@ import androidx.documentfile.provider.DocumentFile
 import com.chiller3.bcr.format.Container
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.Formats
+import com.chiller3.bcr.format.SampleRates
 import java.io.IOException
 import java.lang.Integer.min
 import java.nio.ByteBuffer
@@ -54,6 +55,7 @@ class RecorderThread(
     // Format
     private val format: Format
     private val formatParam: UInt?
+    private val sampleRate = SampleRates.fromPreferences(context)
 
     init {
         logI("Created thread for call: $call")
@@ -261,10 +263,14 @@ class RecorderThread(
     private fun recordUntilCancelled(pfd: ParcelFileDescriptor) {
         AndroidProcess.setThreadPriority(AndroidProcess.THREAD_PRIORITY_AUDIO)
 
-        val audioFormat = AudioFormat.Builder()
-            .setEncoding(ENCODING)
-            .setChannelMask(CHANNEL_CONFIG)
-            .build()
+        val audioFormat = AudioFormat.Builder().run {
+            setEncoding(ENCODING)
+            setChannelMask(CHANNEL_CONFIG)
+            if (sampleRate != null) {
+                setSampleRate(sampleRate.toInt())
+            }
+            build()
+        }
         val audioRecord = AudioRecord.Builder()
             .setAudioSource(MediaRecorder.AudioSource.VOICE_CALL)
             .setAudioFormat(audioFormat)
