@@ -5,6 +5,7 @@ package com.chiller3.bcr.format
 
 import android.content.Context
 import com.chiller3.bcr.Preferences
+import com.chiller3.bcr.R
 
 object SampleRates {
     /**
@@ -37,9 +38,9 @@ object SampleRates {
         return null
     }
 
-    fun format(sampleRate: UInt?): String =
+    fun format(context: Context, sampleRate: UInt?): String =
         if (sampleRate == null) {
-            "native"
+            context.getString(R.string.bottom_sheet_sample_rate_native)
         } else {
             "$sampleRate Hz"
         }
