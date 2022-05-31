@@ -126,8 +126,8 @@ To create a release build with a specific signing key, set up the following envi
 export RELEASE_KEYSTORE=/path/to/keystore.jks
 export RELEASE_KEY_ALIAS=alias_name
 
-read -s RELEASE_KEYSTORE_PASSPHRASE
-read -s RELEASE_KEY_PASSPHRASE
+read -r -s RELEASE_KEYSTORE_PASSPHRASE
+read -r -s RELEASE_KEY_PASSPHRASE
 export RELEASE_KEYSTORE_PASSPHRASE
 export RELEASE_KEY_PASSPHRASE
 ```
