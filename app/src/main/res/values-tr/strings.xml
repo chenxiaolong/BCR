@@ -26,12 +26,17 @@
     <string name="bottom_sheet_output_format">Çıkış formatı</string>
     <string name="bottom_sheet_compression_level">Sıkıştırma seviyesi</string>
     <string name="bottom_sheet_bitrate">Bitrate</string>
+    <string name="bottom_sheet_sample_rate">Örnekleme hızı</string>
+    <string name="bottom_sheet_sample_rate_native">Varsayılana örnekleme hızı</string>
     <string name="bottom_sheet_reset">Varsayılana döndür</string>
     
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Arka plan servisleri</string>
     <string name="notification_channel_persistent_desc">Arka plan çağrı kaydı için kalıcı bildirim</string>
+    <string name="notification_channel_alerts_name">Uyarılar</string>
+    <string name="notification_channel_alerts_desc">Kayıt esnasındaki hatalar için uyarılar</string>
     <string name="notification_recording_in_progress">Çağrı kaydediliyor</string>
+    <string name="notification_recording_failed">Çağrı kaydı başarısız</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Çağrı kaydı</string>
