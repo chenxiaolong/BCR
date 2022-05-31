@@ -2,6 +2,7 @@
 
 * Change output format button group to material chips to prevent text from being cut off with narrower screen widths (Issue: #52, PR: #55, @chenxiaolong)
 * Add support for configuring the capture sample rate (PR: #56, @chenxiaolong)
+* Send notification if an error occurs during call recording (PR: #57, @chenxiaolong)
 
 ### Version 1.6
 
