@@ -1,6 +1,7 @@
 package com.chiller3.bcr
 
 import android.app.Notification
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.net.Uri
@@ -29,6 +30,8 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
      * the recording thread fails before the call is disconnected.
      */
     private var pendingExit = 0
+
+    private var failedNotificationId = 2
 
     private val callback = object : Call.Callback() {
         override fun onStateChanged(call: Call, state: Int) {
@@ -134,18 +137,45 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         val pendingIntent = PendingIntent.getActivity(
             this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
         )
-        val builder = Notification.Builder(this, RecorderApplication.CHANNEL_ID)
-        builder.setContentTitle(getText(R.string.recording_in_progress))
-        builder.setSmallIcon(R.drawable.ic_launcher_foreground)
-        builder.setContentIntent(pendingIntent)
-        builder.setOngoing(true)
 
-        // Inhibit 10-second delay when showing persistent notification
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            builder.setForegroundServiceBehavior(Notification.FOREGROUND_SERVICE_IMMEDIATE)
+        return Notification.Builder(this, RecorderApplication.CHANNEL_ID_PERSISTENT).run {
+            setContentTitle(getText(R.string.notification_recording_in_progress))
+            setSmallIcon(R.drawable.ic_launcher_foreground)
+            setContentIntent(pendingIntent)
+            setOngoing(true)
+
+            // Inhibit 10-second delay when showing persistent notification
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                setForegroundServiceBehavior(Notification.FOREGROUND_SERVICE_IMMEDIATE)
+            }
+            build()
         }
-        return builder.build()
     }
+
+    private fun createRecordingFailedNotification(errorMsg: String?, uri: Uri?): Notification =
+        Notification.Builder(this, RecorderApplication.CHANNEL_ID_ALERTS).run {
+            val text = buildString {
+                val errorMsgTrimmed = errorMsg?.trim()
+                if (!errorMsgTrimmed.isNullOrBlank()) {
+                    append(errorMsgTrimmed)
+                }
+                if (uri != null) {
+                    if (!isEmpty()) {
+                        append("\n\n")
+                    }
+                    append(uri)
+                }
+            }
+
+            setContentTitle(getString(R.string.notification_recording_failed))
+            if (text.isNotBlank()) {
+                setContentText(text)
+                style = Notification.BigTextStyle()
+            }
+            setSmallIcon(R.drawable.ic_launcher_foreground)
+
+            build()
+        }
 
     private fun onThreadExited() {
         --pendingExit
@@ -159,10 +189,15 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         }
     }
 
-    override fun onRecordingFailed(thread: RecorderThread, uri: Uri?) {
+    override fun onRecordingFailed(thread: RecorderThread, errorMsg: String?, uri: Uri?) {
         Log.w(TAG, "Recording failed: ${thread.id}: ${thread.redact(uri.toString())}")
         handler.post {
             onThreadExited()
+
+            val notification = createRecordingFailedNotification(errorMsg, uri)
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.notify(failedNotificationId, notification)
+            ++failedNotificationId
         }
     }
 }

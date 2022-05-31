@@ -33,7 +33,10 @@
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Background services</string>
     <string name="notification_channel_persistent_desc">Persistent notification for background call recording</string>
-    <string name="recording_in_progress">Call recording in progress</string>
+    <string name="notification_channel_alerts_name">Alerts</string>
+    <string name="notification_channel_alerts_desc">Alerts for errors during call recording</string>
+    <string name="notification_recording_in_progress">Call recording in progress</string>
+    <string name="notification_recording_failed">Failed to record call</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Call recording</string>
