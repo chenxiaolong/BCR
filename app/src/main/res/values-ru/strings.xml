@@ -22,7 +22,7 @@
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Фоновые сервисы</string>
     <string name="notification_channel_persistent_desc">Постоянное уведомление для записи вызовов в фоновом режиме</string>
-    <string name="recording_in_progress">Происходит запись вызова</string>
+    <string name="notification_recording_in_progress">Происходит запись вызова</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Запись звонка</string>

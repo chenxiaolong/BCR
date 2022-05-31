@@ -158,6 +158,7 @@ class RecorderThread(
 
     override fun run() {
         var success = false
+        var errorMsg: String? = null
         var resultUri: Uri? = null
 
         try {
@@ -190,13 +191,14 @@ class RecorderThread(
             }
         } catch (e: Exception) {
             logE("Error during recording", e)
+            errorMsg = e.localizedMessage
         } finally {
             logI("Recording thread completed")
 
             if (success) {
                 listener.onRecordingCompleted(this, resultUri!!)
             } else {
-                listener.onRecordingFailed(this, resultUri)
+                listener.onRecordingFailed(this, errorMsg, resultUri)
             }
         }
     }
@@ -511,6 +513,6 @@ class RecorderThread(
          * output file containing partially recorded audio. If [uri] is null, then either the output
          * file could not be created or the thread was cancelled before it was started.
          */
-        fun onRecordingFailed(thread: RecorderThread, uri: Uri?)
+        fun onRecordingFailed(thread: RecorderThread, errorMsg: String?, uri: Uri?)
     }
 }
