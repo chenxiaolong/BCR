@@ -12,6 +12,7 @@ import androidx.preference.SwitchPreferenceCompat
 import com.chiller3.bcr.format.Formats
 import com.chiller3.bcr.format.NoParamInfo
 import com.chiller3.bcr.format.RangedParamInfo
+import com.chiller3.bcr.format.SampleRates
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -109,15 +110,17 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         private fun refreshOutputFormat() {
-            val (format, formatParamSaved) = Formats.fromPreferences(requireContext())
+            val context = requireContext()
+            val (format, formatParamSaved) = Formats.fromPreferences(context)
             val formatParam = formatParamSaved ?: format.paramInfo.default
             val summary = getString(R.string.pref_output_format_desc)
-            val suffix = when (val info = format.paramInfo) {
-                is RangedParamInfo -> " (${info.format(formatParam)})"
+            val prefix = when (val info = format.paramInfo) {
+                is RangedParamInfo -> "${info.format(formatParam)}, "
                 NoParamInfo -> ""
             }
+            val sampleRate = SampleRates.format(context, SampleRates.fromPreferences(context))
 
-            prefOutputFormat.summary = "${summary}\n\n${format.name}${suffix}"
+            prefOutputFormat.summary = "${summary}\n\n${format.name} (${prefix}${sampleRate})"
         }
 
         private fun refreshInhibitBatteryOptState() {
@@ -193,7 +196,7 @@ class SettingsActivity : AppCompatActivity() {
                     }
                 }
                 // Update the output format state when it's changed by the bottom sheet
-                Preferences.isFormatKey(key) -> {
+                Preferences.isFormatKey(key) || key == Preferences.PREF_SAMPLE_RATE -> {
                     refreshOutputFormat()
                 }
             }

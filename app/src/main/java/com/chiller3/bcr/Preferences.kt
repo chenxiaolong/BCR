@@ -16,6 +16,7 @@ object Preferences {
     // Not associated with a UI preference
     private const val PREF_FORMAT_NAME = "codec_name"
     private const val PREF_FORMAT_PARAM_PREFIX = "codec_param_"
+    const val PREF_SAMPLE_RATE = "sample_rate"
 
     /**
      * Get the default output directory. The directory should always be writable and is suitable for
@@ -180,6 +181,46 @@ object Preferences {
 
         for (key in keys) {
             editor.remove(key)
+        }
+
+        editor.apply()
+    }
+
+    /**
+     * Get the saved sample rate.
+     */
+    fun getSampleRate(context: Context): UInt? {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        // Use a sentinel value because doing contains + getInt results in TOCTOU issues
+        val value = prefs.getInt(PREF_SAMPLE_RATE, -1)
+
+        return if (value == -1) {
+            null
+        } else {
+            value.toUInt()
+        }
+    }
+
+    /**
+     * Set the sample rate.
+     *
+     * @param sampleRate Must not be [UInt.MAX_VALUE]
+     *
+     * @throws IllegalArgumentException if [sampleRate] is [UInt.MAX_VALUE]
+     */
+    fun setSampleRate(context: Context, sampleRate: UInt?) {
+        // -1 (when casted to int) is used as a sentinel value
+        if (sampleRate == UInt.MAX_VALUE) {
+            throw IllegalArgumentException("Sample rate cannot be ${UInt.MAX_VALUE}")
+        }
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val editor = prefs.edit()
+
+        if (sampleRate == null) {
+            editor.remove(PREF_SAMPLE_RATE)
+        } else {
+            editor.putInt(PREF_SAMPLE_RATE, sampleRate.toInt())
         }
 
         editor.apply()

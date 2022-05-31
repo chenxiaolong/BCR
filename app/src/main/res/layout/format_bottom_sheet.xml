@@ -1,52 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
-    android:padding="@dimen/bottom_sheet_overall_padding">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
-        android:text="@string/bottom_sheet_output_format"
-        android:textAppearance="?attr/textAppearanceHeadline6" />
-
-    <com.chiller3.bcr.ChipGroupCentered
-        android:id="@+id/name_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:selectionRequired="true"
-        app:singleSelection="true" />
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:id="@+id/param_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:padding="@dimen/bottom_sheet_overall_padding">
+
         <TextView
-            android:id="@+id/param_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
+            android:text="@string/bottom_sheet_output_format"
+            android:textAppearance="?attr/textAppearanceHeadline6" />
+
+        <com.chiller3.bcr.ChipGroupCentered
+            android:id="@+id/name_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:selectionRequired="true"
+            app:singleSelection="true" />
+
+        <LinearLayout
+            android:id="@+id/param_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <TextView
+                android:id="@+id/param_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/bottom_sheet_section_separation"
+                android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
+                android:textAppearance="?attr/textAppearanceHeadline6" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/param_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:labelBehavior="visible" />
+        </LinearLayout>
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/bottom_sheet_section_separation"
             android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
+            android:text="@string/bottom_sheet_sample_rate"
             android:textAppearance="?attr/textAppearanceHeadline6" />
 
-        <com.google.android.material.slider.Slider
-            android:id="@+id/param_slider"
+        <com.chiller3.bcr.ChipGroupCentered
+            android:id="@+id/sample_rate_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:labelBehavior="visible" />
-    </LinearLayout>
+            app:selectionRequired="true"
+            app:singleSelection="true" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/reset"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/bottom_sheet_section_separation"
-        android:text="@string/bottom_sheet_reset"
-        style="?attr/materialButtonOutlinedStyle" />
-</LinearLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/bottom_sheet_section_separation"
+            android:text="@string/bottom_sheet_reset"
+            style="?attr/materialButtonOutlinedStyle" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
