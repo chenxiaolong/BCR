@@ -1,4 +1,4 @@
-### Unreleased
+### Version 1.8
 
 * Update Turkish translations (PR: #58, @fnldstntn)
 * Fix overlapping audio and other audible artifacts when using an encoded format (OPUS, AAC, or FLAC) (Issue: #39 #54, PR: #59, @chenxiaolong)
