@@ -341,7 +341,7 @@ class RecorderThread(
         mediaFormat: MediaFormat,
         container: Container,
     ) {
-        var inputTimestamp = 0L
+        var numFrames = 0L
         val bufferInfo = MediaCodec.BufferInfo()
         val frameSize = audioRecord.format.frameSizeInBytesCompat
 
@@ -364,25 +364,24 @@ class RecorderThread(
                 logE( "Unexpected EOF from AudioRecord")
                 isCancelled = true
             } else {
-                val frames = n / frameSize
-                inputTimestamp += frames * 1_000_000L / audioRecord.sampleRate
-
                 bufferInfo.offset = 0
                 bufferInfo.size = buffer.limit()
-                bufferInfo.presentationTimeUs = 0
+                bufferInfo.presentationTimeUs = numFrames * 1_000_000L / audioRecord.sampleRate
                 bufferInfo.flags = if (isCancelled) {
                     MediaCodec.BUFFER_FLAG_END_OF_STREAM
                 } else {
                     0
                 }
 
+                numFrames += n / frameSize
+
                 container.writeSamples(trackIndex, buffer, bufferInfo)
                 buffer.clear()
             }
 
             if (isCancelled) {
-                val duration = "%.1f".format(inputTimestamp / 1_000_000.0)
-                logD("Input complete after ${duration}s")
+                val durationSecs = numFrames.toDouble() / audioRecord.sampleRate
+                logD("Input complete after ${"%.1f".format(durationSecs)}s")
                 break
             }
         }
@@ -407,7 +406,7 @@ class RecorderThread(
      * @throws MediaCodec.CodecException if the codec encounters an error
      */
     private fun encodeLoop(audioRecord: AudioRecord, mediaCodec: MediaCodec, container: Container) {
-        var inputTimestamp = 0L
+        var numFrames = 0L
         var inputComplete = false
         val bufferInfo = MediaCodec.BufferInfo()
         val frameSize = audioRecord.format.frameSizeInBytesCompat
@@ -436,25 +435,23 @@ class RecorderThread(
                         logE( "MediaCodec's ByteBuffer was not a direct buffer")
                         isCancelled = true
                     } else {
-                        val frames = n / frameSize
-                        inputTimestamp += frames * 1_000_000L / audioRecord.sampleRate
+                        val flags = if (isCancelled) {
+                            MediaCodec.BUFFER_FLAG_END_OF_STREAM
+                        } else {
+                            0
+                        }
+
+                        val timestampUs = numFrames * 1_000_000L / audioRecord.sampleRate
+                        mediaCodec.queueInputBuffer(inputBufferId, 0, n, timestampUs, flags)
+
+                        numFrames += n / frameSize
                     }
 
                     if (isCancelled) {
-                        val duration = "%.1f".format(inputTimestamp / 1_000_000.0)
-                        logD("Input complete after ${duration}s")
+                        val durationSecs = numFrames.toDouble() / audioRecord.sampleRate
+                        logD("Input complete after ${"%.1f".format(durationSecs)}s")
                         inputComplete = true
                     }
-
-                    val flags = if (inputComplete) {
-                        MediaCodec.BUFFER_FLAG_END_OF_STREAM
-                    } else {
-                        0
-                    }
-
-                    // Setting the presentation timestamp will cause `c2.android.flac.encoder`
-                    // software encoder to crash with SIGABRT
-                    mediaCodec.queueInputBuffer(inputBufferId, 0, n, 0, flags)
                 } else if (inputBufferId != MediaCodec.INFO_TRY_AGAIN_LATER) {
                     logW("Unexpected input buffer dequeue error: $inputBufferId")
                 }
