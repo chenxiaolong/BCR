@@ -1,3 +1,8 @@
+### Unreleased
+
+* Update Turkish translations (PR: #58, @fnldstntn)
+* Fix overlapping audio and other audible artifacts when using an encoded format (OPUS, AAC, or FLAC) (Issue: #39 #54, PR: #59, @chenxiaolong)
+
 ### Version 1.7
 
 * Change output format button group to material chips to prevent text from being cut off with narrower screen widths (Issue: #52, PR: #55, @chenxiaolong)
