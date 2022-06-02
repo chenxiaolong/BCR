@@ -1,12 +1,9 @@
 package com.chiller3.bcr.format
 
 import android.media.AudioFormat
-import android.media.MediaCodec
-import android.media.MediaCodecList
 import android.media.MediaFormat
-import android.util.Log
+import com.chiller3.bcr.frameSizeInBytesCompat
 import java.io.FileDescriptor
-import java.lang.IllegalStateException
 
 sealed class Format {
     /** User-facing name of the format. */
@@ -50,9 +47,10 @@ sealed class Format {
             setString(MediaFormat.KEY_MIME, mimeTypeAudio)
             setInteger(MediaFormat.KEY_CHANNEL_COUNT, audioFormat.channelCount)
             setInteger(MediaFormat.KEY_SAMPLE_RATE, audioFormat.sampleRate)
+            setInteger(KEY_X_FRAME_SIZE_IN_BYTES, audioFormat.frameSizeInBytesCompat)
         }
 
-        updateMediaFormat(format, audioFormat, param ?: paramInfo.default)
+        updateMediaFormat(format, param ?: paramInfo.default)
 
         return format
     }
@@ -62,41 +60,23 @@ sealed class Format {
      *
      * @param param Guaranteed to be valid according to [paramInfo]
      */
-    protected abstract fun updateMediaFormat(
-        mediaFormat: MediaFormat,
-        audioFormat: AudioFormat,
-        param: UInt,
-    )
+    protected abstract fun updateMediaFormat(mediaFormat: MediaFormat, param: UInt)
 
     /**
-     * Create a [MediaCodec] encoder that produces [mediaFormat] output.
+     * Create an [Encoder] that produces [mediaFormat] output.
      *
-     * @param mediaFormat The [MediaFormat] instance returned by [getMediaFormat]
+     * @param mediaFormat The [MediaFormat] instance returned by [getMediaFormat].
+     * @param container The [Container] instance returned by [getContainer].
      *
      * @throws Exception if the device does not support encoding with the parameters set in
-     * [mediaFormat] or if configuring the [MediaCodec] fails.
-     * @throws IllegalStateException if [passthrough] is true
+     * [mediaFormat] or if configuring the encoder fails.
      */
-    fun getMediaCodec(mediaFormat: MediaFormat): MediaCodec {
+    fun getEncoder(mediaFormat: MediaFormat, container: Container): Encoder =
         if (passthrough) {
-            throw IllegalStateException("Tried to create MediaCodec for passthrough format")
+            PassthroughEncoder(mediaFormat, container)
+        } else {
+            MediaCodecEncoder(mediaFormat, container)
         }
-
-        val encoder = MediaCodecList(MediaCodecList.REGULAR_CODECS).findEncoderForFormat(mediaFormat)
-            ?: throw Exception("No suitable encoder found for $mediaFormat")
-        Log.d(TAG, "Audio encoder: $encoder")
-
-        val codec = MediaCodec.createByCodecName(encoder)
-
-        try {
-            codec.configure(mediaFormat, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE)
-        } catch (e: Exception) {
-            codec.release()
-            throw e
-        }
-
-        return codec
-    }
 
     /**
      * Create a container muxer that takes encoded input and writes the muxed output to [fd].
@@ -106,6 +86,6 @@ sealed class Format {
     abstract fun getContainer(fd: FileDescriptor): Container
 
     companion object {
-        private val TAG = Format::class.java.simpleName
+        const val KEY_X_FRAME_SIZE_IN_BYTES = "x-frame-size-in-bytes"
     }
 }

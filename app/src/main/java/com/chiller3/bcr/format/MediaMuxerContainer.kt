@@ -18,17 +18,14 @@ class MediaMuxerContainer(
 ) : Container() {
     private val muxer = MediaMuxer(fd, containerFormat)
 
-    override fun start() {
+    override fun start() =
         muxer.start()
-    }
 
-    override fun stop() {
+    override fun stop() =
         muxer.stop()
-    }
 
-    override fun release() {
+    override fun release() =
         muxer.release()
-    }
 
     override fun addTrack(mediaFormat: MediaFormat): Int =
         muxer.addTrack(mediaFormat)

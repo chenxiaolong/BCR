@@ -2,7 +2,9 @@ package com.chiller3.bcr
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.media.*
+import android.media.AudioFormat
+import android.media.AudioRecord
+import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.ParcelFileDescriptor
@@ -10,12 +12,11 @@ import android.telecom.Call
 import android.telecom.PhoneAccount
 import android.util.Log
 import androidx.documentfile.provider.DocumentFile
-import com.chiller3.bcr.format.Container
+import com.chiller3.bcr.format.Encoder
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.Formats
 import com.chiller3.bcr.format.SampleRates
 import java.io.IOException
-import java.lang.Integer.min
 import java.nio.ByteBuffer
 import java.time.Instant
 import java.time.ZoneId
@@ -204,8 +205,9 @@ class RecorderThread(
     }
 
     /**
-     * Cancel current recording. This stops capturing audio after approximately 100ms, but the
-     * thread does not exit until all data encoded so far has been written to the output file.
+     * Cancel current recording. This stops capturing audio after processing the next minimum buffer
+     * size, but the thread does not exit until all data encoded so far has been written to the
+     * output file.
      *
      * If called before [start], the thread will not record any audio not create an output file. In
      * this scenario, [OnRecordingCompletedListener.onRecordingFailed] will be called with a null
@@ -283,36 +285,26 @@ class RecorderThread(
             audioRecord.startRecording()
 
             try {
-                // audioRecord.format has the detected native sample rate
-                val mediaFormat = format.getMediaFormat(audioRecord.format, formatParam)
-                val mediaCodec = if (!format.passthrough) {
-                    format.getMediaCodec(mediaFormat)
-                } else {
-                    null
-                }
+                val container = format.getContainer(pfd.fileDescriptor)
 
                 try {
-                    mediaCodec?.start()
+                    // audioRecord.format has the detected native sample rate
+                    val mediaFormat = format.getMediaFormat(audioRecord.format, formatParam)
+                    val encoder = format.getEncoder(mediaFormat, container)
 
                     try {
-                        val container = format.getContainer(pfd.fileDescriptor)
+                        encoder.start()
 
                         try {
-                            if (mediaCodec != null) {
-                                encodeLoop(audioRecord, mediaCodec, container)
-                            } else {
-                                passthroughLoop(audioRecord, mediaFormat, container)
-                            }
-
-                            container.stop()
+                            encodeLoop(audioRecord, encoder)
                         } finally {
-                            container.release()
+                            encoder.stop()
                         }
                     } finally {
-                        mediaCodec?.stop()
+                        encoder.release()
                     }
                 } finally {
-                    mediaCodec?.release()
+                    container.release()
                 }
             } finally {
                 audioRecord.stop()
@@ -323,161 +315,60 @@ class RecorderThread(
     }
 
     /**
-     * Main loop for capturing raw audio into a PCM-based output file.
+     * Main loop for encoding captured raw audio into an output file.
      *
      * The loop runs forever until [cancel] is called. At that point, no further data will be read
-     * from [audioRecord]. If [audioRecord] fails to capture data, the loop will behave as if
-     * [cancel] was called (ie. abort, but ensuring that the output file is valid).
+     * from [audioRecord] and the remaining output data from [encoder] will be written to the output
+     * file. If [audioRecord] fails to capture data, the loop will behave as if [cancel] was called
+     * (ie. abort, but ensuring that the output file is valid).
      *
-     * The approximate amount of time to cancel reading from the audio source is 100ms. This does
-     * not include the time required to write out the remaining encoded data to the output file.
+     * The approximate amount of time to cancel reading from the audio source is the time it takes
+     * to process the minimum buffer size. Additionally, additional time is needed to write out the
+     * remaining encoded data to the output file.
      *
      * @param audioRecord [AudioRecord.startRecording] must have been called
-     * @param container [Container.start] must *not* have been called. It will be left in a started
-     * state after this method returns.
+     * @param encoder [Encoder.start] must have been called
+     *
+     * @throws Exception if the audio recorder or encoder encounters an error
      */
-    private fun passthroughLoop(
-        audioRecord: AudioRecord,
-        mediaFormat: MediaFormat,
-        container: Container,
-    ) {
+    private fun encodeLoop(audioRecord: AudioRecord, encoder: Encoder) {
         var numFrames = 0L
-        val bufferInfo = MediaCodec.BufferInfo()
         val frameSize = audioRecord.format.frameSizeInBytesCompat
 
-        // This is the most we ever read from audioRecord, even if the codec input buffer is
-        // larger. This is purely for fast'ish cancellation and not for latency.
-        val maxSamplesInBytes = audioRecord.sampleRate / 10 * frameSize
+        val bufSize = AudioRecord.getMinBufferSize(audioRecord.sampleRate, CHANNEL_CONFIG, ENCODING)
+        if (bufSize < 0) {
+            throw Exception("Failure when querying minimum buffer size: $bufSize")
+        }
+        logD("AudioRecord buffer size: $bufSize")
 
-        val buffer = ByteBuffer.allocateDirect(maxSamplesInBytes)
-        val trackIndex = container.addTrack(mediaFormat)
-        container.start()
+        // Use a slightly larger buffer to reduce the chance of problems under load
+        val buffer = ByteBuffer.allocateDirect(bufSize * 2)
 
-        while (true) {
-            val maxRead = min(maxSamplesInBytes, buffer.remaining())
-            val n = audioRecord.read(buffer, maxRead)
+        while (!isCancelled) {
+            val n = audioRecord.read(buffer, buffer.remaining())
             if (n < 0) {
-                logE("Error when reading samples from ${audioRecord}: $n")
+                logE("Error when reading samples from $audioRecord: $n")
                 isCancelled = true
                 captureFailed = true
             } else if (n == 0) {
                 logE( "Unexpected EOF from AudioRecord")
                 isCancelled = true
             } else {
-                bufferInfo.offset = 0
-                bufferInfo.size = buffer.limit()
-                bufferInfo.presentationTimeUs = numFrames * 1_000_000L / audioRecord.sampleRate
-                bufferInfo.flags = if (isCancelled) {
-                    MediaCodec.BUFFER_FLAG_END_OF_STREAM
-                } else {
-                    0
-                }
+                buffer.limit(n)
+                encoder.encode(buffer, false)
+                buffer.clear()
 
                 numFrames += n / frameSize
-
-                container.writeSamples(trackIndex, buffer, bufferInfo)
-                buffer.clear()
-            }
-
-            if (isCancelled) {
-                val durationSecs = numFrames.toDouble() / audioRecord.sampleRate
-                logD("Input complete after ${"%.1f".format(durationSecs)}s")
-                break
             }
         }
-    }
 
-    /**
-     * Main loop for encoding captured raw audio into an output file.
-     *
-     * The loop runs forever until [cancel] is called. At that point, no further data will be read
-     * from [audioRecord] and the remaining output data from [mediaCodec] will be written to
-     * [container]. If [audioRecord] fails to capture data, the loop will behave as if [cancel] was
-     * called (ie. abort, but ensuring that the output file is valid).
-     *
-     * The approximate amount of time to cancel reading from the audio source is 100ms. This does
-     * not include the time required to write out the remaining encoded data to the output file.
-     *
-     * @param audioRecord [AudioRecord.startRecording] must have been called
-     * @param mediaCodec [MediaCodec.start] must have been called
-     * @param container [Container.start] must *not* have been called. It will be left in a started
-     * state after this method returns.
-     *
-     * @throws MediaCodec.CodecException if the codec encounters an error
-     */
-    private fun encodeLoop(audioRecord: AudioRecord, mediaCodec: MediaCodec, container: Container) {
-        var numFrames = 0L
-        var inputComplete = false
-        val bufferInfo = MediaCodec.BufferInfo()
-        val frameSize = audioRecord.format.frameSizeInBytesCompat
-        var trackIndex = -1
+        // Signal EOF with empty buffer
+        logD("Sending EOF to encoder")
+        buffer.limit(buffer.position())
+        encoder.encode(buffer, true)
 
-        // This is the most we ever read from audioRecord, even if the codec input buffer is
-        // larger. This is purely for fast'ish cancellation and not for latency.
-        val maxSamplesInBytes = audioRecord.sampleRate / 10 * frameSize
-
-        while (true) {
-            if (!inputComplete) {
-                val inputBufferId = mediaCodec.dequeueInputBuffer(10000)
-                if (inputBufferId >= 0) {
-                    val buffer = mediaCodec.getInputBuffer(inputBufferId)!!
-
-                    val maxRead = min(maxSamplesInBytes, buffer.remaining())
-                    val n = audioRecord.read(buffer, maxRead)
-                    if (n < 0) {
-                        logE("Error when reading samples from ${audioRecord}: $n")
-                        isCancelled = true
-                        captureFailed = true
-                    } else if (n == 0) {
-                        // This should never be hit because AOSP guarantees that MediaCodec's
-                        // ByteBuffers are direct buffers, but this is not publicly documented
-                        // behavior
-                        logE( "MediaCodec's ByteBuffer was not a direct buffer")
-                        isCancelled = true
-                    } else {
-                        val flags = if (isCancelled) {
-                            MediaCodec.BUFFER_FLAG_END_OF_STREAM
-                        } else {
-                            0
-                        }
-
-                        val timestampUs = numFrames * 1_000_000L / audioRecord.sampleRate
-                        mediaCodec.queueInputBuffer(inputBufferId, 0, n, timestampUs, flags)
-
-                        numFrames += n / frameSize
-                    }
-
-                    if (isCancelled) {
-                        val durationSecs = numFrames.toDouble() / audioRecord.sampleRate
-                        logD("Input complete after ${"%.1f".format(durationSecs)}s")
-                        inputComplete = true
-                    }
-                } else if (inputBufferId != MediaCodec.INFO_TRY_AGAIN_LATER) {
-                    logW("Unexpected input buffer dequeue error: $inputBufferId")
-                }
-            }
-
-            val outputBufferId = mediaCodec.dequeueOutputBuffer(bufferInfo, 0)
-            if (outputBufferId >= 0) {
-                val buffer = mediaCodec.getOutputBuffer(outputBufferId)!!
-
-                container.writeSamples(trackIndex, buffer, bufferInfo)
-
-                mediaCodec.releaseOutputBuffer(outputBufferId, false)
-
-                if (bufferInfo.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM != 0) {
-                    // Output has been fully written
-                    break
-                }
-            } else if (outputBufferId == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
-                val outputFormat = mediaCodec.outputFormat
-                logD("Output format changed to: $outputFormat")
-                trackIndex = container.addTrack(outputFormat)
-                container.start()
-            } else if (outputBufferId != MediaCodec.INFO_TRY_AGAIN_LATER) {
-                logW("Unexpected output buffer dequeue error: $outputBufferId")
-            }
-        }
+        val durationSecs = numFrames.toDouble() / audioRecord.sampleRate
+        logD("Input complete after ${"%.1f".format(durationSecs)}s")
     }
 
     companion object {

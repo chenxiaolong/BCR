@@ -7,6 +7,7 @@ import android.media.MediaCodec
 import android.media.MediaFormat
 import android.system.Os
 import android.system.OsConstants
+import android.util.Log
 import java.io.FileDescriptor
 import java.io.IOException
 import java.nio.ByteBuffer
@@ -21,47 +22,66 @@ import java.nio.ByteBuffer
  * be touched outside of this class until [stop] is called and returns.
  */
 class FlacContainer(private val fd: FileDescriptor) : Container() {
+    private var isStarted = false
     private var lastPresentationTimeUs = -1L
-    private var isStopped = true
+    private var track = -1
 
     override fun start() {
-        if (isStopped) {
-            Os.lseek(fd, 0, OsConstants.SEEK_SET)
-            Os.ftruncate(fd, 0)
-            isStopped = false
-        } else {
-            throw IllegalStateException("Called start when already started")
+        if (isStarted) {
+            throw IllegalStateException("Container already started")
         }
+
+        Os.lseek(fd, 0, OsConstants.SEEK_SET)
+        Os.ftruncate(fd, 0)
+
+        isStarted = true
     }
 
     override fun stop() {
-        if (!isStopped) {
-            isStopped = true
+        if (!isStarted) {
+            throw IllegalStateException("Container not started")
+        }
 
-            if (lastPresentationTimeUs >= 0) {
-                setHeaderDuration()
-            }
-        } else {
-            throw IllegalStateException("Called stop when already stopped")
+        isStarted = false
+
+        if (lastPresentationTimeUs >= 0) {
+            Log.d(TAG, "Setting duration field in header")
+            setHeaderDuration()
         }
     }
 
     override fun release() {
-        if (!isStopped) {
+        if (isStarted) {
             stop()
         }
     }
 
-    override fun addTrack(mediaFormat: MediaFormat): Int =
-        // Not needed
-        -1
+    override fun addTrack(mediaFormat: MediaFormat): Int {
+        if (isStarted) {
+            throw IllegalStateException("Container already started")
+        } else if (track >= 0) {
+            throw IllegalStateException("Track already added")
+        }
+
+        track = 0
+        return track
+    }
 
     override fun writeSamples(trackIndex: Int, byteBuffer: ByteBuffer,
                               bufferInfo: MediaCodec.BufferInfo) {
+        if (!isStarted) {
+            throw IllegalStateException("Container not started")
+        } else if (track < 0) {
+            throw IllegalStateException("No track has been added")
+        } else if (track != trackIndex) {
+            throw IllegalStateException("Invalid track: $trackIndex")
+        }
+
         Os.write(fd, byteBuffer)
 
         if ((bufferInfo.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
             lastPresentationTimeUs = bufferInfo.presentationTimeUs
+            Log.d(TAG, "Received EOF; final presentation timestamp: $lastPresentationTimeUs")
         }
     }
 
@@ -127,6 +147,7 @@ class FlacContainer(private val fd: FileDescriptor) : Container() {
     }
 
     companion object {
+        private val TAG = FlacContainer::class.java.simpleName
         private val FLAC_MAGIC = ubyteArrayOf(0x66u, 0x4cu, 0x61u, 0x43u) // fLaC
     }
 }
