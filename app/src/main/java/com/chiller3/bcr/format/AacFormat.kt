@@ -1,6 +1,5 @@
 package com.chiller3.bcr.format
 
-import android.media.AudioFormat
 import android.media.MediaCodecInfo
 import android.media.MediaFormat
 import android.media.MediaMuxer
@@ -24,11 +23,7 @@ object AacFormat : Format() {
     override val passthrough: Boolean = false
     override val supported: Boolean = true
 
-    override fun updateMediaFormat(
-        mediaFormat: MediaFormat,
-        audioFormat: AudioFormat,
-        param: UInt,
-    ) {
+    override fun updateMediaFormat(mediaFormat: MediaFormat, param: UInt) {
         mediaFormat.apply {
             val profile = if (param >= 32_000u) {
                 MediaCodecInfo.CodecProfileLevel.AACObjectLC

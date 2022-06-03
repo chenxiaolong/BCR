@@ -12,59 +12,69 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 class WaveContainer(private val fd: FileDescriptor) : Container() {
-    private var isStopped = true
-    private var trackAdded = true
+    private var isStarted = false
+    private var track = -1
     private var frameSize = 0
     private var channelCount = 0
     private var sampleRate = 0
 
     override fun start() {
-        if (isStopped) {
-            Os.ftruncate(fd, 0)
-
-            // Skip header
-            Os.lseek(fd, HEADER_SIZE.toLong(), OsConstants.SEEK_SET)
-
-            isStopped = false
-        } else {
-            throw IllegalStateException("Called start when already started")
+        if (isStarted) {
+            throw IllegalStateException("Container already started")
         }
+
+        Os.ftruncate(fd, 0)
+
+        // Skip header
+        Os.lseek(fd, HEADER_SIZE.toLong(), OsConstants.SEEK_SET)
+
+        isStarted = true
     }
 
     override fun stop() {
-        if (!isStopped) {
-            isStopped = true
+        if (!isStarted) {
+            throw IllegalStateException("Container not started")
+        }
 
-            if (trackAdded) {
-                val fileSize = Os.lseek(fd, 0, OsConstants.SEEK_CUR)
-                val header = buildHeader(fileSize)
-                Os.lseek(fd, 0, OsConstants.SEEK_SET)
-                Os.write(fd, header)
-            }
-        } else {
-            throw IllegalStateException("Called stop when already stopped")
+        isStarted = false
+
+        if (track >= 0) {
+            val fileSize = Os.lseek(fd, 0, OsConstants.SEEK_CUR)
+            val header = buildHeader(fileSize)
+            Os.lseek(fd, 0, OsConstants.SEEK_SET)
+            Os.write(fd, header)
         }
     }
 
     override fun release() {
-        if (!isStopped) {
+        if (isStarted) {
             stop()
         }
     }
 
     override fun addTrack(mediaFormat: MediaFormat): Int {
-        trackAdded = true
-        frameSize = mediaFormat.getInteger(WaveFormat.KEY_X_FRAME_SIZE_IN_BYTES)
+        if (isStarted) {
+            throw IllegalStateException("Container already started")
+        } else if (track >= 0) {
+            throw IllegalStateException("Track already added")
+        }
+
+        track = 0
+        frameSize = mediaFormat.getInteger(Format.KEY_X_FRAME_SIZE_IN_BYTES)
         channelCount = mediaFormat.getInteger(MediaFormat.KEY_CHANNEL_COUNT)
         sampleRate = mediaFormat.getInteger(MediaFormat.KEY_SAMPLE_RATE)
 
-        return -1
+        return track
     }
 
     override fun writeSamples(trackIndex: Int, byteBuffer: ByteBuffer,
                               bufferInfo: MediaCodec.BufferInfo) {
-        if (!trackAdded) {
+        if (!isStarted) {
+            throw IllegalStateException("Container not started")
+        } else if (track < 0) {
             throw IllegalStateException("No track has been added")
+        } else if (track != trackIndex) {
+            throw IllegalStateException("Invalid track: $trackIndex")
         }
 
         Os.write(fd, byteBuffer)
