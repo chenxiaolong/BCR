@@ -14,9 +14,22 @@ object Preferences {
     const val PREF_VERSION = "version"
 
     // Not associated with a UI preference
+    private const val PREF_DEBUG_MODE = "debug_mode"
     private const val PREF_FORMAT_NAME = "codec_name"
     private const val PREF_FORMAT_PARAM_PREFIX = "codec_param_"
     const val PREF_SAMPLE_RATE = "sample_rate"
+
+    fun isDebugMode(context: Context): Boolean {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        return prefs.getBoolean(PREF_DEBUG_MODE, false)
+    }
+
+    fun setDebugMode(context: Context, enabled: Boolean) {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val editor = prefs.edit()
+        editor.putBoolean(PREF_DEBUG_MODE, enabled)
+        editor.apply()
+    }
 
     /**
      * Get the default output directory. The directory should always be writable and is suitable for

@@ -37,7 +37,7 @@ class SettingsActivity : AppCompatActivity() {
         private lateinit var prefOutputDir: LongClickablePreference
         private lateinit var prefOutputFormat: Preference
         private lateinit var prefInhibitBatteryOpt: SwitchPreferenceCompat
-        private lateinit var prefVersion: Preference
+        private lateinit var prefVersion: LongClickablePreference
 
         private val requestPermissionRequired =
             registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { granted ->
@@ -85,7 +85,8 @@ class SettingsActivity : AppCompatActivity() {
 
             prefVersion = findPreference(Preferences.PREF_VERSION)!!
             prefVersion.onPreferenceClickListener = this
-            prefVersion.summary = "${BuildConfig.VERSION_NAME} (${BuildConfig.BUILD_TYPE})"
+            prefVersion.onPreferenceLongClickListener = this
+            refreshVersion()
         }
 
         override fun onResume() {
@@ -121,6 +122,15 @@ class SettingsActivity : AppCompatActivity() {
             val sampleRate = SampleRates.format(context, SampleRates.fromPreferences(context))
 
             prefOutputFormat.summary = "${summary}\n\n${format.name} (${prefix}${sampleRate})"
+        }
+
+        private fun refreshVersion() {
+            val suffix = if (!BuildConfig.DEBUG && Preferences.isDebugMode(requireContext())) {
+                "+debugmode"
+            } else {
+                ""
+            }
+            prefVersion.summary = "${BuildConfig.VERSION_NAME} (${BuildConfig.BUILD_TYPE}${suffix})"
         }
 
         private fun refreshInhibitBatteryOptState() {
@@ -177,6 +187,12 @@ class SettingsActivity : AppCompatActivity() {
                 prefOutputDir -> {
                     Preferences.setOutputDir(requireContext(), null)
                     refreshOutputDir()
+                    return true
+                }
+                prefVersion -> {
+                    val context = requireContext()
+                    Preferences.setDebugMode(context, !Preferences.isDebugMode(context))
+                    refreshVersion()
                     return true
                 }
             }
