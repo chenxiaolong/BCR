@@ -1,3 +1,7 @@
+### Version 1.9
+
+* Improve buffering to reduce chance of audio drops (Issue: #39 #54, PR: #59, @chenxiaolong)
+
 ### Version 1.8
 
 * Update Turkish translations (PR: #58, @fnldstntn)
