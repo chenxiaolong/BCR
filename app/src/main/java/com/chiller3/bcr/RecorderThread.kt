@@ -357,9 +357,15 @@ class RecorderThread(
 
         // Use a slightly larger buffer to reduce the chance of problems under load
         val buffer = ByteBuffer.allocateDirect(bufSize * 2)
+        val bufferFrames = buffer.capacity().toLong() / frameSize
+        val bufferNs = bufferFrames * 1_000_000_000L / audioRecord.sampleRate
 
         while (!isCancelled) {
+            val begin = System.nanoTime()
             val n = audioRecord.read(buffer, buffer.remaining())
+            val recordElapsed = System.nanoTime() - begin
+            var encodeElapsed = 0L
+
             if (n < 0) {
                 Log.e(tag, "Error when reading samples from $audioRecord: $n")
                 isCancelled = true
@@ -369,10 +375,24 @@ class RecorderThread(
                 isCancelled = true
             } else {
                 buffer.limit(n)
+
+                val encodeBegin = System.nanoTime()
                 encoder.encode(buffer, false)
+                encodeElapsed = System.nanoTime() - encodeBegin
+
                 buffer.clear()
 
                 numFrames += n / frameSize
+            }
+
+            val totalElapsed = System.nanoTime() - begin
+            if (encodeElapsed > bufferNs) {
+                Log.w(tag, "Encoding took too long: " +
+                        "timestamp=${numFrames.toDouble() / audioRecord.sampleRate}s, " +
+                        "buffer=${bufferNs / 1_000_000.0}ms, " +
+                        "total=${totalElapsed / 1_000_000.0}ms, " +
+                        "record=${recordElapsed / 1_000_000.0}ms, " +
+                        "encode=${encodeElapsed / 1_000_000.0}ms")
             }
         }
 
