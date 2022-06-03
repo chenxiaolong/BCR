@@ -26,12 +26,17 @@
     <string name="bottom_sheet_output_format">Formato de salida</string>
     <string name="bottom_sheet_compression_level">Nivel de compresión</string>
     <string name="bottom_sheet_bitrate">Bitrate</string>
+    <string name="bottom_sheet_sample_rate">Frecuencia de muestreo</string>
+    <string name="bottom_sheet_sample_rate_native">Frecuencia de muestreo nativa</string>
     <string name="bottom_sheet_reset">Restablecer los valores predeterminados</string>
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Servicios en segundo plano</string>
     <string name="notification_channel_persistent_desc">Notificación persistente para grabación de llamadas en segundo plano</string>
+    <string name="notification_channel_alerts_name">Alertas</string>
+    <string name="notification_channel_alerts_desc">Alertas de errores durante la grabación de llamadas</string>
     <string name="notification_recording_in_progress">Grabación de llamadas en curso</string>
+    <string name="notification_recording_failed">No se pudo grabar la llamada</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Grabación de llamada</string>
