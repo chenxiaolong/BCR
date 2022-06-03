@@ -1,6 +1,6 @@
 ### Version 1.9
 
-* Improve buffering to reduce chance of audio drops (Issue: #39 #54, PR: #59, @chenxiaolong)
+* Improve buffering to reduce chance of audio drops (Issue: #39 #54, PR: #61, @chenxiaolong)
 
 ### Version 1.8
 
