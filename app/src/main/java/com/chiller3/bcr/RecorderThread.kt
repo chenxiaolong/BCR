@@ -8,6 +8,8 @@ import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.ParcelFileDescriptor
+import android.system.Os
+import android.system.OsConstants
 import android.telecom.Call
 import android.telecom.PhoneAccount
 import android.util.Log
@@ -44,6 +46,9 @@ class RecorderThread(
     private val listener: OnRecordingCompletedListener,
     call: Call,
 ): Thread() {
+    private val tag = "${RecorderThread::class.java.simpleName}/${id}"
+    private val isDebug = BuildConfig.DEBUG || Preferences.isDebugMode(context)
+
     // Thread state
     @Volatile private var isCancelled = false
     private var captureFailed = false
@@ -59,33 +64,13 @@ class RecorderThread(
     private val sampleRate = SampleRates.fromPreferences(context)
 
     init {
-        logI("Created thread for call: $call")
+        Log.i(tag, "Created thread for call: $call")
 
         onCallDetailsChanged(call.details)
 
         val savedFormat = Formats.fromPreferences(context)
         format = savedFormat.first
         formatParam = savedFormat.second
-    }
-
-    private fun logD(msg: String) {
-        Log.d(TAG, "[${id}] $msg")
-    }
-
-    private fun logE(msg: String, throwable: Throwable) {
-        Log.e(TAG, "[${id}] $msg", throwable)
-    }
-
-    private fun logE(msg: String) {
-        Log.e(TAG, "[${id}] $msg")
-    }
-
-    private fun logI(msg: String) {
-        Log.i(TAG, "[${id}] $msg")
-    }
-
-    private fun logW(msg: String) {
-        Log.w(TAG, "[${id}] $msg")
     }
 
     fun redact(msg: String): String {
@@ -153,7 +138,7 @@ class RecorderThread(
             // directory traversal attacks.
                 .replace('/', '_').trim()
 
-            logI("Updated filename due to call details change: ${redact(filename)}")
+            Log.i(tag, "Updated filename due to call details change: ${redact(filename)}")
         }
     }
 
@@ -163,14 +148,14 @@ class RecorderThread(
         var resultUri: Uri? = null
 
         try {
-            logI("Recording thread started")
+            Log.i(tag, "Recording thread started")
 
             if (isCancelled) {
-                logI("Recording cancelled before it began")
+                Log.i(tag, "Recording cancelled before it began")
             } else {
                 val initialFilename = synchronized(filenameLock) { filename }
 
-                val (file, pfd) = openOutputFile(initialFilename)
+                val (file, pfd) = openOutputFile(initialFilename, format.mimeTypeContainer)
                 resultUri = file.uri
 
                 pfd.use {
@@ -179,22 +164,31 @@ class RecorderThread(
 
                 val finalFilename = synchronized(filenameLock) { filename }
                 if (finalFilename != initialFilename) {
-                    logI("Renaming ${redact(initialFilename)} to ${redact(finalFilename)}")
+                    Log.i(tag, "Renaming ${redact(initialFilename)} to ${redact(finalFilename)}")
 
                     if (file.renameTo(finalFilename)) {
                         resultUri = file.uri
                     } else {
-                        logW("Failed to rename to final filename: ${redact(finalFilename)}")
+                        Log.w(tag, "Failed to rename to final filename: ${redact(finalFilename)}")
                     }
                 }
 
                 success = !captureFailed
             }
         } catch (e: Exception) {
-            logE("Error during recording", e)
+            Log.e(tag, "Error during recording", e)
             errorMsg = e.localizedMessage
         } finally {
-            logI("Recording thread completed")
+            Log.i(tag, "Recording thread completed")
+
+            try {
+                if (isDebug) {
+                    Log.d(tag, "Dumping logcat due to debug mode")
+                    dumpLogcat()
+                }
+            } catch (e: Exception) {
+                Log.w(tag, "Failed to dump logcat", e)
+            }
 
             if (success) {
                 listener.onRecordingCompleted(this, resultUri!!)
@@ -217,40 +211,60 @@ class RecorderThread(
         isCancelled = true
     }
 
+    private fun dumpLogcat() {
+        openOutputFile("${filename}.log", "text/plain").pfd.use {
+            Os.lseek(it.fileDescriptor, 0, OsConstants.SEEK_END)
+
+            val process = ProcessBuilder("logcat", "-d").start()
+            try {
+                val data = process.inputStream.use { stream -> stream.readBytes() }
+                Os.write(it.fileDescriptor, data, 0, data.size)
+            } finally {
+                process.waitFor()
+            }
+        }
+    }
+
     data class OutputFile(val file: DocumentFile, val pfd: ParcelFileDescriptor)
 
     /**
      * Try to create and open a new output file in the user-chosen directory if possible and fall
-     * back to the default output directory if not. [name] should not contain a file extension.
+     * back to the default output directory if not. [name] should not contain a file extension. The
+     * file extension is automatically determined from [mimeType].
      *
      * @throws IOException if the file could not be created in either directory
      */
-    private fun openOutputFile(name: String): OutputFile {
+    private fun openOutputFile(name: String, mimeType: String): OutputFile {
         val userUri = Preferences.getSavedOutputDir(context)
         if (userUri != null) {
             try {
                 // Only returns null on API <21
                 val userDir = DocumentFile.fromTreeUri(context, userUri)
-                return openOutputFileInDir(userDir!!, name)
+                return openOutputFileInDir(userDir!!, name, mimeType)
             } catch (e: Exception) {
-                logE("Failed to open file in user-specified directory: $userUri", e)
+                Log.e(tag, "Failed to open file in user-specified directory: $userUri", e)
             }
         }
 
         val fallbackDir = DocumentFile.fromFile(Preferences.getDefaultOutputDir(context))
-        logD("Using fallback directory: ${fallbackDir.uri}")
+        Log.d(tag, "Using fallback directory: ${fallbackDir.uri}")
 
-        return openOutputFileInDir(fallbackDir, name)
+        return openOutputFileInDir(fallbackDir, name, mimeType)
     }
 
     /**
      * Create and open a new output file with name [name] inside [directory]. [name] should not
-     * contain a file extension. The file extension is automatically determined from [format].
+     * contain a file extension. The extension is determined [mimeType]. The file extension is
+     * automatically determined from [format].
      *
      * @throws IOException if file creation or opening fails
      */
-    private fun openOutputFileInDir(directory: DocumentFile, name: String): OutputFile {
-        val file = directory.createFile(format.mimeTypeContainer, name)
+    private fun openOutputFileInDir(
+        directory: DocumentFile,
+        name: String,
+        mimeType: String,
+    ): OutputFile {
+        val file = directory.createFile(mimeType, name)
             ?: throw IOException("Failed to create file in ${directory.uri}")
         val pfd = context.contentResolver.openFileDescriptor(file.uri, "rw")
             ?: throw IOException("Failed to open file at ${file.uri}")
@@ -339,7 +353,7 @@ class RecorderThread(
         if (bufSize < 0) {
             throw Exception("Failure when querying minimum buffer size: $bufSize")
         }
-        logD("AudioRecord buffer size: $bufSize")
+        Log.d(tag, "AudioRecord buffer size: $bufSize")
 
         // Use a slightly larger buffer to reduce the chance of problems under load
         val buffer = ByteBuffer.allocateDirect(bufSize * 2)
@@ -347,11 +361,11 @@ class RecorderThread(
         while (!isCancelled) {
             val n = audioRecord.read(buffer, buffer.remaining())
             if (n < 0) {
-                logE("Error when reading samples from $audioRecord: $n")
+                Log.e(tag, "Error when reading samples from $audioRecord: $n")
                 isCancelled = true
                 captureFailed = true
             } else if (n == 0) {
-                logE( "Unexpected EOF from AudioRecord")
+                Log.e(tag,  "Unexpected EOF from AudioRecord")
                 isCancelled = true
             } else {
                 buffer.limit(n)
@@ -363,16 +377,15 @@ class RecorderThread(
         }
 
         // Signal EOF with empty buffer
-        logD("Sending EOF to encoder")
+        Log.d(tag, "Sending EOF to encoder")
         buffer.limit(buffer.position())
         encoder.encode(buffer, true)
 
         val durationSecs = numFrames.toDouble() / audioRecord.sampleRate
-        logD("Input complete after ${"%.1f".format(durationSecs)}s")
+        Log.d(tag, "Input complete after ${"%.1f".format(durationSecs)}s")
     }
 
     companion object {
-        private val TAG = RecorderThread::class.java.simpleName
         private const val CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO
         private const val ENCODING = AudioFormat.ENCODING_PCM_16BIT
 
