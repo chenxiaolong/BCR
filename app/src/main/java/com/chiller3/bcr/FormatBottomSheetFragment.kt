@@ -52,7 +52,6 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
 
         binding.nameGroup.setOnCheckedStateChangeListener(this)
 
-        addSampleRateChip(inflater, null)
         for (sampleRate in SampleRates.all) {
             addSampleRateChip(inflater, sampleRate)
         }
@@ -82,12 +81,12 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
         formatToChipId[format] = id
     }
 
-    private fun addSampleRateChip(inflater: LayoutInflater, sampleRate: UInt?) {
+    private fun addSampleRateChip(inflater: LayoutInflater, sampleRate: UInt) {
         val chipBinding = FormatBottomSheetChipBinding.inflate(
             inflater, binding.sampleRateGroup, false)
         val id = View.generateViewId()
         chipBinding.root.id = id
-        chipBinding.root.text = SampleRates.format(requireContext(), sampleRate)
+        chipBinding.root.text = SampleRates.format(sampleRate)
         chipBinding.root.layoutDirection = View.LAYOUT_DIRECTION_LOCALE
         binding.sampleRateGroup.addView(chipBinding.root)
         chipIdToSampleRate[id] = sampleRate

@@ -27,7 +27,6 @@
     <string name="bottom_sheet_compression_level">Sıkıştırma seviyesi</string>
     <string name="bottom_sheet_bitrate">Bitrate</string>
     <string name="bottom_sheet_sample_rate">Örnekleme hızı</string>
-    <string name="bottom_sheet_sample_rate_native">Varsayılana örnekleme hızı</string>
     <string name="bottom_sheet_reset">Varsayılana döndür</string>
     
     <!-- Notifications -->

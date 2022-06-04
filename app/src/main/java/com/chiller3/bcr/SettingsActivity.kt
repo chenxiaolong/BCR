@@ -119,7 +119,7 @@ class SettingsActivity : AppCompatActivity() {
                 is RangedParamInfo -> "${info.format(formatParam)}, "
                 NoParamInfo -> ""
             }
-            val sampleRate = SampleRates.format(context, SampleRates.fromPreferences(context))
+            val sampleRate = SampleRates.format(SampleRates.fromPreferences(context))
 
             prefOutputFormat.summary = "${summary}\n\n${format.name} (${prefix}${sampleRate})"
         }

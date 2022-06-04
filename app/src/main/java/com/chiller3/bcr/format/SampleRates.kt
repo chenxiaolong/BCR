@@ -22,26 +22,23 @@ object SampleRates {
         24_000u,
         48_000u,
     )
+    val default = all.last()
 
     /**
      * Get the saved sample rate from the preferences.
      *
-     * If the saved sample rate is no longer valid, then null is returned.
+     * If the saved sample rate is no longer valid or no sample rate is selected, then [default]
+     * is returned.
      */
-    fun fromPreferences(context: Context): UInt? {
+    fun fromPreferences(context: Context): UInt {
         val savedSampleRate = Preferences.getSampleRate(context)
 
         if (savedSampleRate != null && all.contains(savedSampleRate)) {
             return savedSampleRate
         }
 
-        return null
+        return default
     }
 
-    fun format(context: Context, sampleRate: UInt?): String =
-        if (sampleRate == null) {
-            context.getString(R.string.bottom_sheet_sample_rate_native)
-        } else {
-            "$sampleRate Hz"
-        }
+    fun format(sampleRate: UInt): String = "$sampleRate Hz"
 }
