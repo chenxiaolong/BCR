@@ -36,7 +36,7 @@
         app:title="@string/pref_header_about"
         app:iconSpaceReserved="false">
 
-        <Preference
+        <com.chiller3.bcr.LongClickablePreference
             app:key="version"
             app:persistent="false"
             app:title="@string/pref_version_name"
