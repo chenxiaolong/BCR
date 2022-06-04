@@ -277,7 +277,7 @@ class RecorderThread(
      */
     @SuppressLint("MissingPermission")
     private fun recordUntilCancelled(pfd: ParcelFileDescriptor) {
-        AndroidProcess.setThreadPriority(AndroidProcess.THREAD_PRIORITY_AUDIO)
+        AndroidProcess.setThreadPriority(AndroidProcess.THREAD_PRIORITY_URGENT_AUDIO)
 
         val audioFormat = AudioFormat.Builder().run {
             setEncoding(ENCODING)
