@@ -1,3 +1,7 @@
+### Unreleased
+
+* Fix persistent notification icon being too small (PR: #67, @chenxiaolong)
+
 ### Version 1.10
 
 * Update Spanish translations (PR: #64, @nmayorga092)
