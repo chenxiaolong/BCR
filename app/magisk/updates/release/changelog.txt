@@ -1,3 +1,9 @@
+### Version 1.10
+
+* Update Spanish translations (PR: #64, @nmayorga092)
+* Add hidden debug mode, which saves logs for each recording (long press version number to enable) (PR: #65, @chenxiaolong)
+* Set recording thread priority to THREAD_PRIORITY_URGENT_AUDIO (Issue: #39 #54, PR: #66, @chenxiaolong)
+
 ### Version 1.9
 
 * Improve buffering to reduce chance of audio drops (Issue: #39 #54, PR: #61, @chenxiaolong)
