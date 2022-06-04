@@ -78,9 +78,7 @@ class RecorderThread(
             var result = msg
 
             for ((source, target) in redactions) {
-                result = result
-                    .replace(Uri.encode(source), target)
-                    .replace(source, target)
+                result = result.replace(source, target)
             }
 
             return result
