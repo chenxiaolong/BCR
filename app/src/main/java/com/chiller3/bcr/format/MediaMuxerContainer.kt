@@ -15,7 +15,7 @@ import java.nio.ByteBuffer
 class MediaMuxerContainer(
     fd: FileDescriptor,
     containerFormat: Int,
-) : Container() {
+) : Container {
     private val muxer = MediaMuxer(fd, containerFormat)
 
     override fun start() =

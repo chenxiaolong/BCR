@@ -7,27 +7,27 @@ import java.nio.ByteBuffer
 /**
  * Abstract class for writing encoded samples to a container format.
  */
-sealed class Container {
+interface Container {
     /**
      * Start the muxer process.
      *
      * Must be called before [writeSamples].
      */
-    abstract fun start()
+    fun start()
 
     /**
      * Stop the muxer process.
      *
      * Must not be called if [start] did not complete successfully.
      */
-    abstract fun stop()
+    fun stop()
 
     /**
      * Free resources used by the muxer process.
      *
      * Can be called in any state. If the muxer process is started, it will be stopped.
      */
-    abstract fun release()
+    fun release()
 
     /**
      * Add a track to the container with the specified format.
@@ -36,7 +36,7 @@ sealed class Container {
      *
      * @param mediaFormat Must be the instance returned by [MediaCodec.getOutputFormat]
      */
-    abstract fun addTrack(mediaFormat: MediaFormat): Int
+    fun addTrack(mediaFormat: MediaFormat): Int
 
     /**
      * Write encoded samples to the output container.
@@ -45,6 +45,5 @@ sealed class Container {
      *
      * @param trackIndex Must be an index returned by [addTrack]
      */
-    abstract fun writeSamples(trackIndex: Int, byteBuffer: ByteBuffer,
-                              bufferInfo: MediaCodec.BufferInfo)
+    fun writeSamples(trackIndex: Int, byteBuffer: ByteBuffer, bufferInfo: MediaCodec.BufferInfo)
 }

@@ -21,7 +21,7 @@ import java.nio.ByteBuffer
  * @param fd Output file descriptor. This class does not take ownership of it and it should not
  * be touched outside of this class until [stop] is called and returns.
  */
-class FlacContainer(private val fd: FileDescriptor) : Container() {
+class FlacContainer(private val fd: FileDescriptor) : Container {
     private var isStarted = false
     private var lastPresentationTimeUs = -1L
     private var track = -1
