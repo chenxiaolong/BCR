@@ -45,7 +45,7 @@ class RecorderThread(
     private val context: Context,
     private val listener: OnRecordingCompletedListener,
     call: Call,
-): Thread() {
+) : Thread(RecorderThread::class.java.simpleName) {
     private val tag = "${RecorderThread::class.java.simpleName}/${id}"
     private val isDebug = BuildConfig.DEBUG || Preferences.isDebugMode(context)
 
