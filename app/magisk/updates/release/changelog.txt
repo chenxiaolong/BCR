@@ -2,6 +2,10 @@
 
 * Fix persistent notification icon being too small (PR: #67, @chenxiaolong)
 
+Non-user-facing changes:
+
+* Change Container abstract class to an interface (PR: #68, @chenxiaolong)
+
 ### Version 1.10
 
 * Update Spanish translations (PR: #64, @nmayorga092)
