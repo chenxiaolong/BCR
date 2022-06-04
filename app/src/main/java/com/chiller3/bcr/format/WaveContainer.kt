@@ -11,7 +11,7 @@ import java.io.FileDescriptor
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-class WaveContainer(private val fd: FileDescriptor) : Container() {
+class WaveContainer(private val fd: FileDescriptor) : Container {
     private var isStarted = false
     private var track = -1
     private var frameSize = 0
