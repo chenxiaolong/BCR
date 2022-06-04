@@ -140,7 +140,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
 
         return Notification.Builder(this, RecorderApplication.CHANNEL_ID_PERSISTENT).run {
             setContentTitle(getText(R.string.notification_recording_in_progress))
-            setSmallIcon(R.drawable.ic_launcher_foreground)
+            setSmallIcon(R.drawable.ic_launcher_quick_settings)
             setContentIntent(pendingIntent)
             setOngoing(true)
 
@@ -172,7 +172,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
                 setContentText(text)
                 style = Notification.BigTextStyle()
             }
-            setSmallIcon(R.drawable.ic_launcher_foreground)
+            setSmallIcon(R.drawable.ic_launcher_quick_settings)
 
             build()
         }
