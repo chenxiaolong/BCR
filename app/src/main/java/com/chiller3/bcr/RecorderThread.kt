@@ -237,8 +237,10 @@ class RecorderThread(
         if (userUri != null) {
             try {
                 // Only returns null on API <21
-                val userDir = DocumentFile.fromTreeUri(context, userUri)
-                return openOutputFileInDir(userDir!!, name, mimeType)
+                val userDir = DocumentFile.fromTreeUri(context, userUri)!!
+                Log.d(tag, "Using user-specified directory: ${userDir.uri}")
+
+                return openOutputFileInDir(userDir, name, mimeType)
             } catch (e: Exception) {
                 Log.e(tag, "Failed to open file in user-specified directory: $userUri", e)
             }
@@ -279,18 +281,26 @@ class RecorderThread(
     private fun recordUntilCancelled(pfd: ParcelFileDescriptor) {
         AndroidProcess.setThreadPriority(AndroidProcess.THREAD_PRIORITY_URGENT_AUDIO)
 
-        val audioFormat = AudioFormat.Builder().run {
-            setEncoding(ENCODING)
-            setChannelMask(CHANNEL_CONFIG)
-            if (sampleRate != null) {
-                setSampleRate(sampleRate.toInt())
-            }
-            build()
+        val minBufSize = AudioRecord.getMinBufferSize(sampleRate.toInt(), CHANNEL_CONFIG, ENCODING)
+        if (minBufSize < 0) {
+            throw Exception("Failure when querying minimum buffer size: $minBufSize")
         }
-        val audioRecord = AudioRecord.Builder()
-            .setAudioSource(MediaRecorder.AudioSource.VOICE_CALL)
-            .setAudioFormat(audioFormat)
-            .build()
+        Log.d(tag, "AudioRecord minimum buffer size: $minBufSize")
+
+        val audioRecord = AudioRecord(
+            MediaRecorder.AudioSource.VOICE_CALL,
+            sampleRate.toInt(),
+            CHANNEL_CONFIG,
+            ENCODING,
+            // On some devices, MediaCodec occasionally has sudden spikes in processing time, so use
+            // a large internal buffer to reduce the chance of overrun on the recording side.
+            minBufSize * 20,
+        )
+        val initialBufSize = audioRecord.bufferSizeInFrames *
+                audioRecord.format.frameSizeInBytesCompat
+        Log.d(tag, "AudioRecord initial buffer size: $initialBufSize")
+
+        Log.d(tag, "AudioRecord format: ${audioRecord.format}")
 
         // Where's my RAII? :(
         try {
@@ -308,7 +318,7 @@ class RecorderThread(
                         encoder.start()
 
                         try {
-                            encodeLoop(audioRecord, encoder)
+                            encodeLoop(audioRecord, encoder, minBufSize)
                         } finally {
                             encoder.stop()
                         }
@@ -340,18 +350,13 @@ class RecorderThread(
      *
      * @param audioRecord [AudioRecord.startRecording] must have been called
      * @param encoder [Encoder.start] must have been called
+     * @param bufSize Size of buffer to use for each [AudioRecord.read] operation
      *
      * @throws Exception if the audio recorder or encoder encounters an error
      */
-    private fun encodeLoop(audioRecord: AudioRecord, encoder: Encoder) {
+    private fun encodeLoop(audioRecord: AudioRecord, encoder: Encoder, bufSize: Int) {
         var numFrames = 0L
         val frameSize = audioRecord.format.frameSizeInBytesCompat
-
-        val bufSize = AudioRecord.getMinBufferSize(audioRecord.sampleRate, CHANNEL_CONFIG, ENCODING)
-        if (bufSize < 0) {
-            throw Exception("Failure when querying minimum buffer size: $bufSize")
-        }
-        Log.d(tag, "AudioRecord buffer size: $bufSize")
 
         // Use a slightly larger buffer to reduce the chance of problems under load
         val buffer = ByteBuffer.allocateDirect(bufSize * 2)
@@ -385,7 +390,7 @@ class RecorderThread(
 
             val totalElapsed = System.nanoTime() - begin
             if (encodeElapsed > bufferNs) {
-                Log.w(tag, "Encoding took too long: " +
+                Log.w(tag, "${encoder.javaClass.simpleName} took too long: " +
                         "timestamp=${numFrames.toDouble() / audioRecord.sampleRate}s, " +
                         "buffer=${bufferNs / 1_000_000.0}ms, " +
                         "total=${totalElapsed / 1_000_000.0}ms, " +

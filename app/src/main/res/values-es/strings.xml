@@ -27,7 +27,6 @@
     <string name="bottom_sheet_compression_level">Nivel de compresión</string>
     <string name="bottom_sheet_bitrate">Bitrate</string>
     <string name="bottom_sheet_sample_rate">Frecuencia de muestreo</string>
-    <string name="bottom_sheet_sample_rate_native">Frecuencia de muestreo nativa</string>
     <string name="bottom_sheet_reset">Restablecer los valores predeterminados</string>
 
     <!-- Notifications -->
