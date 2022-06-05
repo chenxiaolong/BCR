@@ -390,7 +390,7 @@ class RecorderThread(
 
             val totalElapsed = System.nanoTime() - begin
             if (encodeElapsed > bufferNs) {
-                Log.w(tag, "Encoding took too long: " +
+                Log.w(tag, "${encoder.javaClass.simpleName} took too long: " +
                         "timestamp=${numFrames.toDouble() / audioRecord.sampleRate}s, " +
                         "buffer=${bufferNs / 1_000_000.0}ms, " +
                         "total=${totalElapsed / 1_000_000.0}ms, " +
