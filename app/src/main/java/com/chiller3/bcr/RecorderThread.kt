@@ -237,8 +237,10 @@ class RecorderThread(
         if (userUri != null) {
             try {
                 // Only returns null on API <21
-                val userDir = DocumentFile.fromTreeUri(context, userUri)
-                return openOutputFileInDir(userDir!!, name, mimeType)
+                val userDir = DocumentFile.fromTreeUri(context, userUri)!!
+                Log.d(tag, "Using user-specified directory: ${userDir.uri}")
+
+                return openOutputFileInDir(userDir, name, mimeType)
             } catch (e: Exception) {
                 Log.e(tag, "Failed to open file in user-specified directory: $userUri", e)
             }
