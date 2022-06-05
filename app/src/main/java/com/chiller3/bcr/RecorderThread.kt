@@ -298,6 +298,8 @@ class RecorderThread(
                 audioRecord.format.frameSizeInBytesCompat
         Log.d(tag, "AudioRecord initial buffer size: $initialBufSize")
 
+        Log.d(tag, "AudioRecord format: ${audioRecord.format}")
+
         // Where's my RAII? :(
         try {
             audioRecord.startRecording()
