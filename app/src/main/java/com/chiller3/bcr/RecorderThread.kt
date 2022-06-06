@@ -18,6 +18,8 @@ import com.chiller3.bcr.format.Encoder
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.Formats
 import com.chiller3.bcr.format.SampleRates
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.time.Instant
@@ -272,23 +274,22 @@ class RecorderThread(
         val targetFile = createFileInDir(targetDir, sourceFile.name!!, sourceFile.type!!)
 
         try {
-            openFile(sourceFile).use { source ->
-                openFile(targetFile).use { target ->
-                    val buffer = ByteBuffer.allocateDirect(16 * 1024)
+            openFile(sourceFile).use { sourcePfd ->
+                FileInputStream(sourcePfd.fileDescriptor).use { sourceStream ->
+                    openFile(targetFile).use { targetPfd ->
+                        FileOutputStream(targetPfd.fileDescriptor).use { targetStream ->
+                            val sourceChannel = sourceStream.channel
+                            val targetChannel = targetStream.channel
 
-                    while (true) {
-                        val nRead = Os.read(source.fileDescriptor, buffer)
-                        if (nRead == 0) {
-                            break
+                            var offset = 0L
+                            var remain = sourceChannel.size()
+
+                            while (remain > 0) {
+                                val n = targetChannel.transferFrom(sourceChannel, offset, remain)
+                                offset += n
+                                remain -= n
+                            }
                         }
-                        buffer.flip()
-
-                        val nWritten = Os.write(target.fileDescriptor, buffer)
-                        if (nWritten != nRead) {
-                            throw IOException("Unexpected EOF (read $nRead, wrote $nWritten)")
-                        }
-
-                        buffer.clear()
                     }
                 }
             }
