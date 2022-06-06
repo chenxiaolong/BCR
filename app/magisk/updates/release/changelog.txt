@@ -2,6 +2,7 @@
 
 * Fix persistent notification icon being too small (PR: #67, @chenxiaolong)
 * Increase internal buffer sizes to reduce chance of encoding slowdowns causing audible artifacts (Issue: #39 #54, PR: #69, @chenxiaolong)
+* Show user-friendly path instead of a raw URI for the output directory (PR: #71, @chenxiaolong)
 
 Non-user-facing changes:
 
