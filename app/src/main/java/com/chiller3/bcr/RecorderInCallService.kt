@@ -183,16 +183,14 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
     }
 
     override fun onRecordingCompleted(thread: RecorderThread, uri: Uri) {
-        val decoded = Uri.decode(uri.toString())
-        Log.i(TAG, "Recording completed: ${thread.id}: ${thread.redact(decoded)}")
+        Log.i(TAG, "Recording completed: ${thread.id}: ${thread.redact(uri)}")
         handler.post {
             onThreadExited()
         }
     }
 
     override fun onRecordingFailed(thread: RecorderThread, errorMsg: String?, uri: Uri?) {
-        val decoded = Uri.decode(uri.toString())
-        Log.w(TAG, "Recording failed: ${thread.id}: ${thread.redact(decoded)}")
+        Log.w(TAG, "Recording failed: ${thread.id}: ${uri?.let { thread.redact(it) }}")
         handler.post {
             onThreadExited()
 

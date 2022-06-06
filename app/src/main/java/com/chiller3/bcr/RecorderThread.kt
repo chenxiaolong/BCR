@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.ParcelFileDescriptor
 import android.system.Os
-import android.system.OsConstants
 import android.telecom.Call
 import android.telecom.PhoneAccount
 import android.util.Log
@@ -18,6 +17,8 @@ import com.chiller3.bcr.format.Encoder
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.Formats
 import com.chiller3.bcr.format.SampleRates
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.time.Instant
@@ -73,7 +74,7 @@ class RecorderThread(
         formatParam = savedFormat.second
     }
 
-    fun redact(msg: String): String {
+    private fun redact(msg: String): String {
         synchronized(filenameLock) {
             var result = msg
 
@@ -84,6 +85,8 @@ class RecorderThread(
             return result
         }
     }
+
+    fun redact(uri: Uri): String = redact(Uri.decode(uri.toString()))
 
     /**
      * Update [filename] with information from [details].
@@ -152,22 +155,27 @@ class RecorderThread(
                 Log.i(tag, "Recording cancelled before it began")
             } else {
                 val initialFilename = synchronized(filenameLock) { filename }
+                val outputFile = createFileInDefaultDir(initialFilename, format.mimeTypeContainer)
+                resultUri = outputFile.uri
 
-                val (file, pfd) = openOutputFile(initialFilename, format.mimeTypeContainer)
-                resultUri = file.uri
+                try {
+                    openFile(outputFile).use {
+                        recordUntilCancelled(it)
+                    }
+                } finally {
+                    val finalFilename = synchronized(filenameLock) { filename }
+                    if (finalFilename != initialFilename) {
+                        Log.i(tag, "Renaming ${redact(initialFilename)} to ${redact(finalFilename)}")
 
-                pfd.use {
-                    recordUntilCancelled(it)
-                }
+                        if (outputFile.renameTo(finalFilename)) {
+                            resultUri = outputFile.uri
+                        } else {
+                            Log.w(tag, "Failed to rename to final filename: ${redact(finalFilename)}")
+                        }
+                    }
 
-                val finalFilename = synchronized(filenameLock) { filename }
-                if (finalFilename != initialFilename) {
-                    Log.i(tag, "Renaming ${redact(initialFilename)} to ${redact(finalFilename)}")
-
-                    if (file.renameTo(finalFilename)) {
-                        resultUri = file.uri
-                    } else {
-                        Log.w(tag, "Failed to rename to final filename: ${redact(finalFilename)}")
+                    tryMoveToUserDir(outputFile)?.let {
+                        resultUri = it.uri
                     }
                 }
 
@@ -210,66 +218,123 @@ class RecorderThread(
     }
 
     private fun dumpLogcat() {
-        openOutputFile("${filename}.log", "text/plain").pfd.use {
-            Os.lseek(it.fileDescriptor, 0, OsConstants.SEEK_END)
+        val outputFile = createFileInDefaultDir("${filename}.log", "text/plain")
 
-            val process = ProcessBuilder("logcat", "-d").start()
-            try {
-                val data = process.inputStream.use { stream -> stream.readBytes() }
-                Os.write(it.fileDescriptor, data, 0, data.size)
-            } finally {
-                process.waitFor()
+        try {
+            openFile(outputFile).use {
+                val process = ProcessBuilder("logcat", "-d").start()
+                try {
+                    val data = process.inputStream.use { stream -> stream.readBytes() }
+                    Os.write(it.fileDescriptor, data, 0, data.size)
+                } finally {
+                    process.waitFor()
+                }
             }
+        } finally {
+            tryMoveToUserDir(outputFile)
         }
     }
 
-    data class OutputFile(val file: DocumentFile, val pfd: ParcelFileDescriptor)
-
     /**
-     * Try to create and open a new output file in the user-chosen directory if possible and fall
-     * back to the default output directory if not. [name] should not contain a file extension. The
-     * file extension is automatically determined from [mimeType].
+     * Try to move [sourceFile] to the user output directory.
      *
-     * @throws IOException if the file could not be created in either directory
+     * @return Whether the user output directory is set and the file was successfully moved
      */
-    private fun openOutputFile(name: String, mimeType: String): OutputFile {
-        val userUri = Preferences.getSavedOutputDir(context)
-        if (userUri != null) {
-            try {
-                // Only returns null on API <21
-                val userDir = DocumentFile.fromTreeUri(context, userUri)!!
-                Log.d(tag, "Using user-specified directory: ${userDir.uri}")
+    private fun tryMoveToUserDir(sourceFile: DocumentFile): DocumentFile? {
+        val userDir = Preferences.getSavedOutputDir(context)?.let {
+            // Only returns null on API <21
+            DocumentFile.fromTreeUri(context, it)!!
+        } ?: return null
 
-                return openOutputFileInDir(userDir, name, mimeType)
-            } catch (e: Exception) {
-                Log.e(tag, "Failed to open file in user-specified directory: $userUri", e)
-            }
+        val redactedSource = redact(sourceFile.uri)
+
+        return try {
+            val targetFile = moveFileToDir(sourceFile, userDir)
+            val redactedTarget = redact(targetFile.uri)
+
+            Log.i(tag, "Successfully moved $redactedSource to $redactedTarget")
+            sourceFile.delete()
+
+            targetFile
+        } catch (e: Exception) {
+            Log.e(tag, "Failed to move $redactedSource to $userDir", e)
+            null
         }
-
-        val fallbackDir = DocumentFile.fromFile(Preferences.getDefaultOutputDir(context))
-        Log.d(tag, "Using fallback directory: ${fallbackDir.uri}")
-
-        return openOutputFileInDir(fallbackDir, name, mimeType)
     }
 
     /**
-     * Create and open a new output file with name [name] inside [directory]. [name] should not
-     * contain a file extension. The extension is determined [mimeType]. The file extension is
-     * automatically determined from [format].
+     * Move [sourceFile] to [targetDir].
      *
-     * @throws IOException if file creation or opening fails
+     * @return The [DocumentFile] for the newly moved file.
      */
-    private fun openOutputFileInDir(
-        directory: DocumentFile,
-        name: String,
-        mimeType: String,
-    ): OutputFile {
-        val file = directory.createFile(mimeType, name)
-            ?: throw IOException("Failed to create file in ${directory.uri}")
-        val pfd = context.contentResolver.openFileDescriptor(file.uri, "rw")
+    private fun moveFileToDir(sourceFile: DocumentFile, targetDir: DocumentFile): DocumentFile {
+        val targetFile = createFileInDir(targetDir, sourceFile.name!!, sourceFile.type!!)
+
+        try {
+            openFile(sourceFile).use { sourcePfd ->
+                FileInputStream(sourcePfd.fileDescriptor).use { sourceStream ->
+                    openFile(targetFile).use { targetPfd ->
+                        FileOutputStream(targetPfd.fileDescriptor).use { targetStream ->
+                            val sourceChannel = sourceStream.channel
+                            val targetChannel = targetStream.channel
+
+                            var offset = 0L
+                            var remain = sourceChannel.size()
+
+                            while (remain > 0) {
+                                val n = targetChannel.transferFrom(sourceChannel, offset, remain)
+                                offset += n
+                                remain -= n
+                            }
+                        }
+                    }
+                }
+            }
+
+            sourceFile.delete()
+            return targetFile
+        } catch (e: Exception) {
+            targetFile.delete()
+            throw e
+        }
+    }
+
+    /**
+     * Create [name] in the default output directory.
+     *
+     * @param name Should not contain a file extension
+     * @param mimeType Determines the file extension
+     *
+     * @throws IOException if the file could not be created in the default directory
+     */
+    private fun createFileInDefaultDir(name: String, mimeType: String): DocumentFile {
+        val defaultDir = DocumentFile.fromFile(Preferences.getDefaultOutputDir(context))
+        return createFileInDir(defaultDir, name, mimeType)
+    }
+
+    /**
+     * Create a new file with name [name] inside [dir].
+     *
+     * @param name Should not contain a file extension
+     * @param mimeType Determines the file extension
+     *
+     * @throws IOException if file creation fails
+     */
+    private fun createFileInDir(dir: DocumentFile, name: String, mimeType: String): DocumentFile {
+        Log.d(tag, "Creating ${redact(name)} with MIME type $mimeType in ${dir.uri}")
+
+        return dir.createFile(mimeType, name)
+            ?: throw IOException("Failed to create file in ${dir.uri}")
+    }
+
+    /**
+     * Open seekable file descriptor to [file].
+     *
+     * @throws IOException if [file] cannot be opened
+     */
+    private fun openFile(file: DocumentFile): ParcelFileDescriptor =
+        context.contentResolver.openFileDescriptor(file.uri, "rw")
             ?: throw IOException("Failed to open file at ${file.uri}")
-        return OutputFile(file, pfd)
-    }
 
     /**
      * Record from [MediaRecorder.AudioSource.VOICE_CALL] until [cancel] is called or an audio
