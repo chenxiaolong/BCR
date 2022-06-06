@@ -1,9 +1,11 @@
 package com.chiller3.bcr
 
+import android.content.ContentResolver
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.provider.DocumentsContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
@@ -105,9 +107,26 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         private fun refreshOutputDir() {
-            val outputDir = Preferences.getOutputDir(requireContext())
+            val context = requireContext()
+            val outputDirUri = Preferences.getOutputDir(context)
+            val outputDirFormatted = when {
+                outputDirUri.scheme == ContentResolver.SCHEME_FILE -> outputDirUri.path
+                outputDirUri.scheme == ContentResolver.SCHEME_CONTENT
+                        && outputDirUri.authority == "com.android.externalstorage.documents" -> {
+                    val treeDocumentId = DocumentsContract.getTreeDocumentId(outputDirUri)
+                    val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
+                        outputDirUri, treeDocumentId)
+
+                    DocumentsContract.findDocumentPath(context.contentResolver, childrenUri)
+                        ?.path
+                        ?.joinToString("/")
+                        ?: outputDirUri.toString()
+                }
+                else -> outputDirUri.toString()
+            }
+
             val summary = getString(R.string.pref_output_dir_desc)
-            prefOutputDir.summary = "${summary}\n\n${outputDir}"
+            prefOutputDir.summary = "${summary}\n\n${outputDirFormatted}"
         }
 
         private fun refreshOutputFormat() {

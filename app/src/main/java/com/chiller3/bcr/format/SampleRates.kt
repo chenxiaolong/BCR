@@ -5,7 +5,6 @@ package com.chiller3.bcr.format
 
 import android.content.Context
 import com.chiller3.bcr.Preferences
-import com.chiller3.bcr.R
 
 object SampleRates {
     /**
