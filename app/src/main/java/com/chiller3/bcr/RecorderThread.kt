@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.ParcelFileDescriptor
 import android.system.Os
-import android.system.OsConstants
 import android.telecom.Call
 import android.telecom.PhoneAccount
 import android.util.Log
@@ -223,8 +222,6 @@ class RecorderThread(
 
         try {
             openFile(outputFile).use {
-                Os.lseek(it.fileDescriptor, 0, OsConstants.SEEK_END)
-
                 val process = ProcessBuilder("logcat", "-d").start()
                 try {
                     val data = process.inputStream.use { stream -> stream.readBytes() }
