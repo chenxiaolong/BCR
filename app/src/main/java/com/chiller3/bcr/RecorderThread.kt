@@ -358,8 +358,8 @@ class RecorderThread(
             CHANNEL_CONFIG,
             ENCODING,
             // On some devices, MediaCodec occasionally has sudden spikes in processing time, so use
-            // a large internal buffer to reduce the chance of overrun on the recording side.
-            minBufSize * 20,
+            // a larger internal buffer to reduce the chance of overrun on the recording side.
+            minBufSize * 6,
         )
         val initialBufSize = audioRecord.bufferSizeInFrames *
                 audioRecord.format.frameSizeInBytesCompat
