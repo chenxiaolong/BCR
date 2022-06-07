@@ -1,4 +1,4 @@
-### Unreleased
+### Version 1.12
 
 * Fix potential crash when showing user-friendly output directory path (PR: #74, @chenxiaolong)
   * Fixes regression in version 1.11
