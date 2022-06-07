@@ -1,7 +1,8 @@
 ### Unreleased
 
 * Fix persistent notification icon being too small (PR: #67, @chenxiaolong)
-* Increase internal buffer sizes to reduce chance of encoding slowdowns causing audible artifacts (Issue: #39 #54, PR: #69, @chenxiaolong)
+* Increase internal buffer sizes to reduce chance of encoding slowdowns causing audible artifacts (Issue: #39 #54, PR: #69 #73, @chenxiaolong)
+  * The native sample rate option had to be removed for this change
 * Show user-friendly path instead of a raw URI for the output directory (PR: #71, @chenxiaolong)
 * Work around SAF slowness by recording to the default directory and then moving to the user directory after recording is completed (Issue: #39 #54, PR: #72, @chenxiaolong)
 
