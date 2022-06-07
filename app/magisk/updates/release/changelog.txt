@@ -1,3 +1,8 @@
+### Unreleased
+
+* Fix potential crash when showing user-friendly output directory path (PR: #74, @chenxiaolong)
+  * Fixes regression in version 1.11
+
 ### Version 1.11
 
 * Fix persistent notification icon being too small (PR: #67, @chenxiaolong)
