@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.provider.DocumentsContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
@@ -113,14 +112,19 @@ class SettingsActivity : AppCompatActivity() {
                 outputDirUri.scheme == ContentResolver.SCHEME_FILE -> outputDirUri.path
                 outputDirUri.scheme == ContentResolver.SCHEME_CONTENT
                         && outputDirUri.authority == "com.android.externalstorage.documents" -> {
-                    val treeDocumentId = DocumentsContract.getTreeDocumentId(outputDirUri)
-                    val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(
-                        outputDirUri, treeDocumentId)
+                    // DocumentsContract.findDocumentPath() may sometimes crash with a permission
+                    // error when passed a children document URI after an app upgrade, even though
+                    // the app still has valid persisted URI permissions. Instead, just parse the
+                    // URI manually. The format of SAF URIs hasn't changed across the versions of
+                    // Android that BCR supports.
+                    val segments = outputDirUri.pathSegments
+                    val treeIndex = segments.indexOf("tree")
 
-                    DocumentsContract.findDocumentPath(context.contentResolver, childrenUri)
-                        ?.path
-                        ?.joinToString("/")
-                        ?: outputDirUri.toString()
+                    if (treeIndex >= 0 && treeIndex < segments.size - 1) {
+                        segments[treeIndex + 1]
+                    } else {
+                        outputDirUri.toString()
+                    }
                 }
                 else -> outputDirUri.toString()
             }
