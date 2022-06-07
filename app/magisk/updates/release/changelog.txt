@@ -1,4 +1,4 @@
-### Unreleased
+### Version 1.11
 
 * Fix persistent notification icon being too small (PR: #67, @chenxiaolong)
 * Increase internal buffer sizes to reduce chance of encoding slowdowns causing audible artifacts (Issue: #39 #54, PR: #69 #73, @chenxiaolong)
