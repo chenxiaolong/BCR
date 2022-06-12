@@ -3,8 +3,8 @@
     <string name="app_name_full">Podstawowy rejestrator rozmów</string>
 
     <!-- Preference headers -->
-    <string name="pref_header_general">General</string>
-    <string name="pref_header_about">About</string>
+    <string name="pref_header_general">Ogólne</string>
+    <string name="pref_header_about">O aplikacji</string>
 
     <!-- General preferences -->
     <string name="pref_call_recording_name">Nagrywanie rozmów</string>
