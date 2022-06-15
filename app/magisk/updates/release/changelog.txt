@@ -3,6 +3,8 @@
 * Add Polish translations (PR: #76, @uvzen)
 * Target stable API 33 (Tiramisu) (PR: #82, @chenxiaolong)
 
+Non-user-facing changes:
+* Update Android gradle plugin to 7.2.1 and Kotlin to 1.7.0 (PR: #83, @chenxiaolong)
 
 ### Version 1.12
 
