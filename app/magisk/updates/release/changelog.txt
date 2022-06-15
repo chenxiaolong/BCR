@@ -1,3 +1,9 @@
+### Unreleased
+
+* Add Polish translations (PR: #76, @uvzen)
+* Target stable API 33 (Tiramisu) (PR: #82, @chenxiaolong)
+
+
 ### Version 1.12
 
 * Fix potential crash when showing user-friendly output directory path (PR: #74, @chenxiaolong)
