@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">BCR</string>
+    <string name="app_name_full">Podstawowy rejestrator rozmów</string>
+
+    <!-- Preference headers -->
+    <string name="pref_header_general">Ogólne</string>
+    <string name="pref_header_about">O aplikacji</string>
+
+    <!-- General preferences -->
+    <string name="pref_call_recording_name">Nagrywanie rozmów</string>
+    <string name="pref_call_recording_desc">Nagrywaj przychodzące i wychodzące rozmowy telefoniczne. Do nagrywania w tle wymagane są uprawnienia do mikrofonu i powiadomień.</string>
+
+    <string name="pref_output_dir_name">Katalog wyjściowy</string>
+    <string name="pref_output_dir_desc">Wybierz katalog do przechowywania nagrań. Przytrzymaj, aby zresetować do katalogu domyślnego.</string>
+
+    <string name="pref_output_format_name">Format wyjściowy</string>
+    <string name="pref_output_format_desc">Wybierz format kodowania nagrań.</string>
+
+    <string name="pref_inhibit_batt_opt_name">Wyłącz optymalizację baterii</string>
+    <string name="pref_inhibit_batt_opt_desc">Zmniejsza szansę na zabicie aplikacji przez system.</string>
+
+    <!-- About "preference" -->
+    <string name="pref_version_name">Wersja</string>
+
+    <!-- Output format bottom sheet -->
+    <string name="bottom_sheet_output_format">Format wyjściowy</string>
+    <string name="bottom_sheet_compression_level">Poziom kompresji</string>
+    <string name="bottom_sheet_bitrate">Szybkość transmisji</string>
+    <string name="bottom_sheet_sample_rate">Szybkość próbkowania</string>
+    <string name="bottom_sheet_reset">Przywróć domyślne ustawienia</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_persistent_name">Usługi w tle</string>
+    <string name="notification_channel_persistent_desc">Stałe powiadomienie o nagrywaniu rozmów w tle</string>
+    <string name="notification_channel_alerts_name">Alerty</string>
+    <string name="notification_channel_alerts_desc">Alerty o błędach podczas nagrywania rozmów</string>
+    <string name="notification_recording_in_progress">Trwa nagrywanie rozmowy</string>
+    <string name="notification_recording_failed">Nie udało się nagrać rozmowy</string>
+
+    <!-- Quick settings tile -->
+    <string name="quick_settings_label">Nagrywanie rozmów</string>
+</resources>
