@@ -1,4 +1,4 @@
-### Unreleased
+### Version 1.13
 
 * Add Polish translations (PR: #76, @uvzen)
 * Target stable API 33 (Tiramisu) (PR: #82, @chenxiaolong)
