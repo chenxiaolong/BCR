@@ -20,6 +20,7 @@ object Permissions {
         }
 
     val REQUIRED: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO) + NOTIFICATION
+    val OPTIONAL: Array<String> = arrayOf(Manifest.permission.READ_CONTACTS)
 
     private fun isGranted(context: Context, permission: String) =
         ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED

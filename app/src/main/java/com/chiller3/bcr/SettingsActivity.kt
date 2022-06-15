@@ -42,7 +42,8 @@ class SettingsActivity : AppCompatActivity() {
 
         private val requestPermissionRequired =
             registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { granted ->
-                if (granted.all { it.value }) {
+                // Call recording can still be enabled if optional permissions were not granted
+                if (granted.all { it.key !in Permissions.REQUIRED || it.value }) {
                     prefCallRecording.isChecked = true
                 } else {
                     startActivity(Permissions.getAppInfoIntent(requireContext()))
@@ -174,7 +175,8 @@ class SettingsActivity : AppCompatActivity() {
                 prefCallRecording -> if (Permissions.haveRequired(context)) {
                     return true
                 } else {
-                    requestPermissionRequired.launch(Permissions.REQUIRED)
+                    // Ask for optional permissions the first time only
+                    requestPermissionRequired.launch(Permissions.REQUIRED + Permissions.OPTIONAL)
                 }
                 // This is only reachable if battery optimization is not already inhibited
                 prefInhibitBatteryOpt -> requestInhibitBatteryOpt.launch(

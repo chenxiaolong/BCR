@@ -51,6 +51,10 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
 
 4. Enable call recording and pick an output directory. If no output directory is selected or if the output directory is no longer accessible, then recordings will be saved to `/sdcard/Android/data/com.chiller3.bcr/files`.
 
+    When enabling call recording the first time, BCR will prompt for microphone, notification (Android 13+), and contacts permissions. Microphone and notification permissions are required for BCR to be able to record phone calls in the background.
+
+    The contacts permission is optional, but if allowed, contact names will be added to the recordings' filenames. BCR never sends contact information anywhere. In fact, it does not even have the `INTERNET` permission. However, other third party applications may be able to see the contact names if they can access the output directory.
+
 5. To install future updates, there are a couple methods:
 
     * If installed via Magisk, the module can be updated right from Magisk Manager's modules tab. Flashing the new version in Magisk manually also works just as well.
