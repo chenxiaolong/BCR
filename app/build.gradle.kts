@@ -96,12 +96,12 @@ val releaseMetadataBranch = "master"
 android {
     namespace = "com.chiller3.bcr"
 
-    compileSdk = 32
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "com.chiller3.bcr"
         minSdk = 28
-        targetSdk = 32
+        targetSdk = 33
         versionCode = gitVersionCode
         versionName = gitVersionName
 
