@@ -2,6 +2,9 @@
 
 * Add Polish translations (PR: #76, @uvzen)
 * Target stable API 33 (Tiramisu) (PR: #82, @chenxiaolong)
+* Add optional contacts permission to initial permissions prompt (Issue: #78 #80, PR: #84, @chenxiaolong)
+  * If allowed, contact names are added to the output filenames.
+  * This feature was implemented in version 1.5, but required the user to manually enable from the system settings.
 
 Non-user-facing changes:
 * Update Android gradle plugin to 7.2.1 and Kotlin to 1.7.0 (PR: #83, @chenxiaolong)
