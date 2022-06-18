@@ -21,10 +21,12 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.nio.ByteBuffer
+import java.time.Duration
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatterBuilder
+import java.time.format.DateTimeParseException
 import java.time.format.SignStyle
 import java.time.temporal.ChronoField
 import android.os.Process as AndroidProcess
@@ -54,6 +56,9 @@ class RecorderThread(
     // Thread state
     @Volatile private var isCancelled = false
     private var captureFailed = false
+
+    // Timestamp
+    private lateinit var callTimestamp: ZonedDateTime
 
     // Filename
     private val filenameLock = Object()
@@ -100,7 +105,8 @@ class RecorderThread(
 
             filename = buildString {
                 val instant = Instant.ofEpochMilli(details.creationTimeMillis)
-                append(FORMATTER.format(ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())))
+                callTimestamp = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
+                append(FORMATTER.format(callTimestamp))
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     when (details.callDirection) {
@@ -178,6 +184,8 @@ class RecorderThread(
                     tryMoveToUserDir(outputFile)?.let {
                         resultUri = it.uri
                     }
+
+                    processRetention()
                 }
 
                 success = !captureFailed
@@ -233,6 +241,50 @@ class RecorderThread(
             }
         } finally {
             tryMoveToUserDir(outputFile)
+        }
+    }
+
+    /**
+     * Delete files older than the specified retention period.
+     *
+     * The "current time" is [callTimestamp], not the actual current time and the timestamp of past
+     * recordings is based on the filename, not the file modification time. Incorrectly-named files
+     * are ignored.
+     */
+    private fun processRetention() {
+        val directory = prefs.outputDir?.let {
+            // Only returns null on API <21
+            DocumentFile.fromTreeUri(context, it)!!
+        } ?: DocumentFile.fromFile(prefs.defaultOutputDir)
+
+        val keepDays = Retention.fromPreferences(prefs)
+        if (keepDays == 0u) {
+            // Keep everything
+            Log.i(tag, "Keeping all existing files")
+            return
+        }
+
+        val retention = Duration.ofDays(keepDays.toLong())
+        Log.i(tag, "Retention period is $retention")
+
+        for (item in directory.listFiles()) {
+            val filename = item.name ?: continue
+            val redacted = redactTruncate(filename)
+
+            val timestamp = timestampFromFilename(filename)
+            if (timestamp == null) {
+                Log.w(tag, "Ignoring unrecognized filename: $redacted")
+                continue
+            }
+
+            val diff = Duration.between(timestamp, callTimestamp)
+
+            if (diff > retention) {
+                Log.i(tag, "Deleting $redacted ($timestamp)")
+                if (!item.delete()) {
+                    Log.w(tag, "Failed to delete: $redacted")
+                }
+            }
         }
     }
 
@@ -490,6 +542,39 @@ class RecorderThread(
             .appendFraction(ChronoField.NANO_OF_SECOND, 0, 9, true)
             .appendOffset("+HHMMss", "+0000")
             .toFormatter()
+
+        private fun timestampFromFilename(name: String): ZonedDateTime? {
+            try {
+                // Date is before first separator
+                val first = name.indexOf('_')
+                if (first < 0 || first == name.length - 1) {
+                    return null
+                }
+
+                val second = name.indexOf('_', first + 1)
+                if (second < 0) {
+                    return null
+                }
+
+                return ZonedDateTime.parse(name.substring(0, second), FORMATTER)
+            } catch (e: DateTimeParseException) {
+                // Ignore
+            }
+
+            return null
+        }
+
+        private fun redactTruncate(msg: String): String = buildString {
+            val n = 2
+
+            if (msg.length > 2 * n) {
+                append(msg.substring(0, n))
+            }
+            append("<...>")
+            if (msg.length > 2 * n) {
+                append(msg.substring(msg.length - n))
+            }
+        }
     }
 
     interface OnRecordingCompletedListener {
