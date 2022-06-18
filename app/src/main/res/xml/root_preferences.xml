@@ -9,7 +9,7 @@
             app:summary="@string/pref_call_recording_desc"
             app:iconSpaceReserved="false" />
 
-        <com.chiller3.bcr.LongClickablePreference
+        <Preference
             app:dependency="call_recording"
             app:key="output_dir"
             app:persistent="false"

@@ -1,6 +1,5 @@
 package com.chiller3.bcr
 
-import android.content.ContentResolver
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -34,8 +33,9 @@ class SettingsActivity : AppCompatActivity() {
     class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChangeListener,
         Preference.OnPreferenceClickListener, LongClickablePreference.OnPreferenceLongClickListener,
         SharedPreferences.OnSharedPreferenceChangeListener {
+        private lateinit var prefs: Preferences
         private lateinit var prefCallRecording: SwitchPreferenceCompat
-        private lateinit var prefOutputDir: LongClickablePreference
+        private lateinit var prefOutputDir: Preference
         private lateinit var prefOutputFormat: Preference
         private lateinit var prefInhibitBatteryOpt: SwitchPreferenceCompat
         private lateinit var prefVersion: LongClickablePreference
@@ -49,11 +49,6 @@ class SettingsActivity : AppCompatActivity() {
                     startActivity(Permissions.getAppInfoIntent(requireContext()))
                 }
             }
-        private val requestSafOutputDir =
-            registerForActivityResult(OpenPersistentDocumentTree()) { uri ->
-                Preferences.setOutputDir(requireContext(), uri)
-                refreshOutputDir()
-            }
         private val requestInhibitBatteryOpt =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 refreshInhibitBatteryOptState()
@@ -63,6 +58,8 @@ class SettingsActivity : AppCompatActivity() {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
             val context = requireContext()
+
+            prefs = Preferences(context)
 
             // If the desired state is enabled, set to disabled if runtime permissions have been
             // denied. The user will have to grant permissions again to re-enable the features.
@@ -75,7 +72,6 @@ class SettingsActivity : AppCompatActivity() {
 
             prefOutputDir = findPreference(Preferences.PREF_OUTPUT_DIR)!!
             prefOutputDir.onPreferenceClickListener = this
-            prefOutputDir.onPreferenceLongClickListener = this
             refreshOutputDir()
 
             prefOutputFormat = findPreference(Preferences.PREF_OUTPUT_FORMAT)!!
@@ -91,8 +87,8 @@ class SettingsActivity : AppCompatActivity() {
             refreshVersion()
         }
 
-        override fun onResume() {
-            super.onResume()
+        override fun onStart() {
+            super.onStart()
 
             preferenceScreen.sharedPreferences!!.registerOnSharedPreferenceChangeListener(this)
 
@@ -100,56 +96,36 @@ class SettingsActivity : AppCompatActivity() {
             refreshInhibitBatteryOptState()
         }
 
-        override fun onPause() {
-            super.onPause()
+        override fun onStop() {
+            super.onStop()
 
             preferenceScreen.sharedPreferences!!.unregisterOnSharedPreferenceChangeListener(this)
         }
 
         private fun refreshOutputDir() {
             val context = requireContext()
-            val outputDirUri = Preferences.getOutputDir(context)
-            val outputDirFormatted = when {
-                outputDirUri.scheme == ContentResolver.SCHEME_FILE -> outputDirUri.path
-                outputDirUri.scheme == ContentResolver.SCHEME_CONTENT
-                        && outputDirUri.authority == "com.android.externalstorage.documents" -> {
-                    // DocumentsContract.findDocumentPath() may sometimes crash with a permission
-                    // error when passed a children document URI after an app upgrade, even though
-                    // the app still has valid persisted URI permissions. Instead, just parse the
-                    // URI manually. The format of SAF URIs hasn't changed across the versions of
-                    // Android that BCR supports.
-                    val segments = outputDirUri.pathSegments
-                    val treeIndex = segments.indexOf("tree")
-
-                    if (treeIndex >= 0 && treeIndex < segments.size - 1) {
-                        segments[treeIndex + 1]
-                    } else {
-                        outputDirUri.toString()
-                    }
-                }
-                else -> outputDirUri.toString()
-            }
+            val outputDirUri = prefs.outputDirOrDefault
+            val outputRetention = Retention.format(context, Retention.fromPreferences(prefs))
 
             val summary = getString(R.string.pref_output_dir_desc)
-            prefOutputDir.summary = "${summary}\n\n${outputDirFormatted}"
+            prefOutputDir.summary = "${summary}\n\n${outputDirUri.formattedString} (${outputRetention})"
         }
 
         private fun refreshOutputFormat() {
-            val context = requireContext()
-            val (format, formatParamSaved) = Formats.fromPreferences(context)
+            val (format, formatParamSaved) = Formats.fromPreferences(prefs)
             val formatParam = formatParamSaved ?: format.paramInfo.default
             val summary = getString(R.string.pref_output_format_desc)
             val prefix = when (val info = format.paramInfo) {
                 is RangedParamInfo -> "${info.format(formatParam)}, "
                 NoParamInfo -> ""
             }
-            val sampleRate = SampleRates.format(SampleRates.fromPreferences(context))
+            val sampleRate = SampleRates.format(SampleRates.fromPreferences(prefs))
 
             prefOutputFormat.summary = "${summary}\n\n${format.name} (${prefix}${sampleRate})"
         }
 
         private fun refreshVersion() {
-            val suffix = if (!BuildConfig.DEBUG && Preferences.isDebugMode(requireContext())) {
+            val suffix = if (!BuildConfig.DEBUG && prefs.isDebugMode) {
                 "+debugmode"
             } else {
                 ""
@@ -189,12 +165,13 @@ class SettingsActivity : AppCompatActivity() {
         override fun onPreferenceClick(preference: Preference): Boolean {
             when (preference) {
                 prefOutputDir -> {
-                    requestSafOutputDir.launch(null)
+                    OutputDirectoryBottomSheetFragment().show(
+                        childFragmentManager, OutputDirectoryBottomSheetFragment.TAG)
                     return true
                 }
                 prefOutputFormat -> {
-                    FormatBottomSheetFragment().show(
-                        childFragmentManager, FormatBottomSheetFragment.TAG)
+                    OutputFormatBottomSheetFragment().show(
+                        childFragmentManager, OutputFormatBottomSheetFragment.TAG)
                     return true
                 }
                 prefVersion -> {
@@ -209,14 +186,8 @@ class SettingsActivity : AppCompatActivity() {
 
         override fun onPreferenceLongClick(preference: Preference): Boolean {
             when (preference) {
-                prefOutputDir -> {
-                    Preferences.setOutputDir(requireContext(), null)
-                    refreshOutputDir()
-                    return true
-                }
                 prefVersion -> {
-                    val context = requireContext()
-                    Preferences.setDebugMode(context, !Preferences.isDebugMode(context))
+                    prefs.isDebugMode = !prefs.isDebugMode
                     refreshVersion()
                     return true
                 }
@@ -235,6 +206,10 @@ class SettingsActivity : AppCompatActivity() {
                     if (current != expected) {
                         prefCallRecording.isChecked = expected
                     }
+                }
+                // Update the output directory state when it's changed by the bottom sheet
+                key == Preferences.PREF_OUTPUT_DIR || key == Preferences.PREF_OUTPUT_RETENTION -> {
+                    refreshOutputDir()
                 }
                 // Update the output format state when it's changed by the bottom sheet
                 Preferences.isFormatKey(key) || key == Preferences.PREF_SAMPLE_RATE -> {

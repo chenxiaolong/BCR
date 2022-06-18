@@ -11,7 +11,7 @@
     <string name="pref_call_recording_desc">Grabar llamadas telefónicas entrantes y salientes. Se requieren permisos de micrófono y notificación para grabar en segundo plano.</string>
 
     <string name="pref_output_dir_name">Directorio de salida</string>
-    <string name="pref_output_dir_desc">Elija un directorio para almacenar grabaciones. Mantenga pulsado para restablecer el directorio predeterminado.</string>
+    <string name="pref_output_dir_desc">Elija un directorio para almacenar grabaciones.</string>
 
     <string name="pref_output_format_name">Formato de salida</string>
     <string name="pref_output_format_desc">Seleccione un formato de codificación para las grabaciones.</string>
@@ -23,10 +23,10 @@
     <string name="pref_version_name">Versión</string>
 
     <!-- Output format bottom sheet -->
-    <string name="bottom_sheet_output_format">Formato de salida</string>
-    <string name="bottom_sheet_compression_level">Nivel de compresión</string>
-    <string name="bottom_sheet_bitrate">Bitrate</string>
-    <string name="bottom_sheet_sample_rate">Frecuencia de muestreo</string>
+    <string name="output_format_bottom_sheet_output_format">Formato de salida</string>
+    <string name="output_format_bottom_sheet_compression_level">Nivel de compresión</string>
+    <string name="output_format_bottom_sheet_bitrate">Bitrate</string>
+    <string name="output_format_bottom_sheet_sample_rate">Frecuencia de muestreo</string>
     <string name="bottom_sheet_reset">Restablecer los valores predeterminados</string>
 
     <!-- Notifications -->

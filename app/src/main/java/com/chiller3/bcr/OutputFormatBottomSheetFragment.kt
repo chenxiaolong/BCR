@@ -8,18 +8,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import com.chiller3.bcr.databinding.FormatBottomSheetBinding
-import com.chiller3.bcr.databinding.FormatBottomSheetChipBinding
+import com.chiller3.bcr.databinding.BottomSheetChipBinding
+import com.chiller3.bcr.databinding.OutputFormatBottomSheetBinding
 import com.chiller3.bcr.format.*
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.Slider
 
-class FormatBottomSheetFragment : BottomSheetDialogFragment(),
+class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
     ChipGroup.OnCheckedStateChangeListener, Slider.OnChangeListener, View.OnClickListener {
-    private var _binding: FormatBottomSheetBinding? = null
+    private var _binding: OutputFormatBottomSheetBinding? = null
     private val binding
         get() = _binding!!
+
+    private lateinit var prefs: Preferences
 
     private val chipIdToFormat = HashMap<Int, Format>()
     private val formatToChipId = HashMap<Format, Int>()
@@ -33,7 +35,9 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FormatBottomSheetBinding.inflate(inflater, container, false)
+        _binding = OutputFormatBottomSheetBinding.inflate(inflater, container, false)
+
+        prefs = Preferences(requireContext())
 
         binding.paramSlider.setLabelFormatter {
             formatParamInfo.format(it.toUInt())
@@ -70,7 +74,7 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
     }
 
     private fun addFormatChip(inflater: LayoutInflater, format: Format) {
-        val chipBinding = FormatBottomSheetChipBinding.inflate(
+        val chipBinding = BottomSheetChipBinding.inflate(
             inflater, binding.nameGroup, false)
         val id = View.generateViewId()
         chipBinding.root.id = id
@@ -82,7 +86,7 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
     }
 
     private fun addSampleRateChip(inflater: LayoutInflater, sampleRate: UInt) {
-        val chipBinding = FormatBottomSheetChipBinding.inflate(
+        val chipBinding = BottomSheetChipBinding.inflate(
             inflater, binding.sampleRateGroup, false)
         val id = View.generateViewId()
         chipBinding.root.id = id
@@ -99,12 +103,12 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
      * Calls [refreshParam] via [onCheckedChanged].
      */
     private fun refreshFormat() {
-        val (format, _) = Formats.fromPreferences(requireContext())
+        val (format, _) = Formats.fromPreferences(prefs)
         binding.nameGroup.check(formatToChipId[format]!!)
     }
 
     private fun refreshSampleRate() {
-        val sampleRate = SampleRates.fromPreferences(requireContext())
+        val sampleRate = SampleRates.fromPreferences(prefs)
         binding.sampleRateGroup.check(sampleRateToChipId[sampleRate]!!)
     }
 
@@ -112,7 +116,7 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
      * Update parameter title and slider to match format parameter specifications.
      */
     private fun refreshParam() {
-        val (format, param) = Formats.fromPreferences(requireContext())
+        val (format, param) = Formats.fromPreferences(prefs)
         formatParamInfo = format.paramInfo
 
         when (val info = format.paramInfo) {
@@ -120,8 +124,8 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
                 binding.paramGroup.isVisible = true
 
                 binding.paramTitle.setText(when (info.type) {
-                    RangedParamType.CompressionLevel -> R.string.bottom_sheet_compression_level
-                    RangedParamType.Bitrate -> R.string.bottom_sheet_bitrate
+                    RangedParamType.CompressionLevel -> R.string.output_format_bottom_sheet_compression_level
+                    RangedParamType.Bitrate -> R.string.output_format_bottom_sheet_bitrate
                 })
 
                 binding.paramSlider.valueFrom = info.range.first.toFloat()
@@ -144,15 +148,13 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
     }
 
     override fun onCheckedChanged(group: ChipGroup, checkedIds: MutableList<Int>) {
-        val context = requireContext()
-
         when (group) {
             binding.nameGroup -> {
-                Preferences.setFormatName(context, chipIdToFormat[checkedIds.first()]!!.name)
+                prefs.formatName = chipIdToFormat[checkedIds.first()]!!.name
                 refreshParam()
             }
             binding.sampleRateGroup -> {
-                Preferences.setSampleRate(context, chipIdToSampleRate[checkedIds.first()])
+                prefs.sampleRate = chipIdToSampleRate[checkedIds.first()]
             }
         }
     }
@@ -161,7 +163,7 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
         when (slider) {
             binding.paramSlider -> {
                 val format = chipIdToFormat[binding.nameGroup.checkedChipId]!!
-                Preferences.setFormatParam(requireContext(), format.name, value.toUInt())
+                prefs.setFormatParam(format.name, value.toUInt())
             }
         }
     }
@@ -169,9 +171,8 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
     override fun onClick(v: View?) {
         when (v) {
             binding.reset -> {
-                val context = requireContext()
-                Preferences.resetAllFormats(context)
-                Preferences.setSampleRate(context, null)
+                prefs.resetAllFormats()
+                prefs.sampleRate = null
                 refreshFormat()
                 // Need to explicitly refresh the parameter when the default format is already chosen
                 refreshParam()
@@ -181,6 +182,6 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
     }
 
     companion object {
-        val TAG: String = FormatBottomSheetFragment::class.java.simpleName
+        val TAG: String = OutputFormatBottomSheetFragment::class.java.simpleName
     }
 }

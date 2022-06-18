@@ -11,7 +11,7 @@
     <string name="pref_call_recording_desc">Nagrywaj przychodzące i wychodzące rozmowy telefoniczne. Do nagrywania w tle wymagane są uprawnienia do mikrofonu i powiadomień.</string>
 
     <string name="pref_output_dir_name">Katalog wyjściowy</string>
-    <string name="pref_output_dir_desc">Wybierz katalog do przechowywania nagrań. Przytrzymaj, aby zresetować do katalogu domyślnego.</string>
+    <string name="pref_output_dir_desc">Wybierz katalog do przechowywania nagrań.</string>
 
     <string name="pref_output_format_name">Format wyjściowy</string>
     <string name="pref_output_format_desc">Wybierz format kodowania nagrań.</string>
@@ -23,10 +23,10 @@
     <string name="pref_version_name">Wersja</string>
 
     <!-- Output format bottom sheet -->
-    <string name="bottom_sheet_output_format">Format wyjściowy</string>
-    <string name="bottom_sheet_compression_level">Poziom kompresji</string>
-    <string name="bottom_sheet_bitrate">Szybkość transmisji</string>
-    <string name="bottom_sheet_sample_rate">Szybkość próbkowania</string>
+    <string name="output_format_bottom_sheet_output_format">Format wyjściowy</string>
+    <string name="output_format_bottom_sheet_compression_level">Poziom kompresji</string>
+    <string name="output_format_bottom_sheet_bitrate">Szybkość transmisji</string>
+    <string name="output_format_bottom_sheet_sample_rate">Szybkość próbkowania</string>
     <string name="bottom_sheet_reset">Przywróć domyślne ustawienia</string>
 
     <!-- Notifications -->

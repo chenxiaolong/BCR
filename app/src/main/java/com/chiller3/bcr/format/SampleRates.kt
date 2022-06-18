@@ -3,7 +3,6 @@
 
 package com.chiller3.bcr.format
 
-import android.content.Context
 import com.chiller3.bcr.Preferences
 
 object SampleRates {
@@ -29,8 +28,8 @@ object SampleRates {
      * If the saved sample rate is no longer valid or no sample rate is selected, then [default]
      * is returned.
      */
-    fun fromPreferences(context: Context): UInt {
-        val savedSampleRate = Preferences.getSampleRate(context)
+    fun fromPreferences(prefs: Preferences): UInt {
+        val savedSampleRate = prefs.sampleRate
 
         if (savedSampleRate != null && all.contains(savedSampleRate)) {
             return savedSampleRate
