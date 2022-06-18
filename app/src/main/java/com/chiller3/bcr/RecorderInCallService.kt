@@ -17,6 +17,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         private val TAG = RecorderInCallService::class.java.simpleName
     }
 
+    private lateinit var prefs: Preferences
     private val handler = Handler(Looper.getMainLooper())
 
     /**
@@ -47,6 +48,12 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
 
             handleDetailsChange(call, details)
         }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+
+        prefs = Preferences(this)
     }
 
     override fun onCallAdded(call: Call) {
@@ -81,7 +88,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         }
 
         if (state == Call.STATE_ACTIVE) {
-            if (!Preferences.isCallRecordingEnabled(this)) {
+            if (!prefs.isCallRecordingEnabled) {
                 Log.v(TAG, "Call recording is disabled")
             } else if (!Permissions.haveRequired(this)) {
                 Log.v(TAG, "Required permissions have not been granted")

@@ -48,7 +48,8 @@ class RecorderThread(
     call: Call,
 ) : Thread(RecorderThread::class.java.simpleName) {
     private val tag = "${RecorderThread::class.java.simpleName}/${id}"
-    private val isDebug = BuildConfig.DEBUG || Preferences.isDebugMode(context)
+    private val prefs = Preferences(context)
+    private val isDebug = BuildConfig.DEBUG || prefs.isDebugMode
 
     // Thread state
     @Volatile private var isCancelled = false
@@ -62,14 +63,14 @@ class RecorderThread(
     // Format
     private val format: Format
     private val formatParam: UInt?
-    private val sampleRate = SampleRates.fromPreferences(context)
+    private val sampleRate = SampleRates.fromPreferences(prefs)
 
     init {
         Log.i(tag, "Created thread for call: $call")
 
         onCallDetailsChanged(call.details)
 
-        val savedFormat = Formats.fromPreferences(context)
+        val savedFormat = Formats.fromPreferences(prefs)
         format = savedFormat.first
         formatParam = savedFormat.second
     }
@@ -241,7 +242,7 @@ class RecorderThread(
      * @return Whether the user output directory is set and the file was successfully moved
      */
     private fun tryMoveToUserDir(sourceFile: DocumentFile): DocumentFile? {
-        val userDir = Preferences.getSavedOutputDir(context)?.let {
+        val userDir = prefs.outputDir?.let {
             // Only returns null on API <21
             DocumentFile.fromTreeUri(context, it)!!
         } ?: return null
@@ -308,7 +309,7 @@ class RecorderThread(
      * @throws IOException if the file could not be created in the default directory
      */
     private fun createFileInDefaultDir(name: String, mimeType: String): DocumentFile {
-        val defaultDir = DocumentFile.fromFile(Preferences.getDefaultOutputDir(context))
+        val defaultDir = DocumentFile.fromFile(prefs.defaultOutputDir)
         return createFileInDir(defaultDir, name, mimeType)
     }
 

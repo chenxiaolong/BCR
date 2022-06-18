@@ -33,6 +33,7 @@ class SettingsActivity : AppCompatActivity() {
     class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChangeListener,
         Preference.OnPreferenceClickListener, LongClickablePreference.OnPreferenceLongClickListener,
         SharedPreferences.OnSharedPreferenceChangeListener {
+        private lateinit var prefs: Preferences
         private lateinit var prefCallRecording: SwitchPreferenceCompat
         private lateinit var prefOutputDir: Preference
         private lateinit var prefOutputFormat: Preference
@@ -57,6 +58,8 @@ class SettingsActivity : AppCompatActivity() {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
             val context = requireContext()
+
+            prefs = Preferences(context)
 
             // If the desired state is enabled, set to disabled if runtime permissions have been
             // denied. The user will have to grant permissions again to re-enable the features.
@@ -101,29 +104,28 @@ class SettingsActivity : AppCompatActivity() {
 
         private fun refreshOutputDir() {
             val context = requireContext()
-            val outputDirUri = Preferences.getOutputDir(context)
-            val outputRetention = Retention.format(context, Retention.fromPreferences(context))
+            val outputDirUri = prefs.outputDirOrDefault
+            val outputRetention = Retention.format(context, Retention.fromPreferences(prefs))
 
             val summary = getString(R.string.pref_output_dir_desc)
             prefOutputDir.summary = "${summary}\n\n${outputDirUri.formattedString} (${outputRetention})"
         }
 
         private fun refreshOutputFormat() {
-            val context = requireContext()
-            val (format, formatParamSaved) = Formats.fromPreferences(context)
+            val (format, formatParamSaved) = Formats.fromPreferences(prefs)
             val formatParam = formatParamSaved ?: format.paramInfo.default
             val summary = getString(R.string.pref_output_format_desc)
             val prefix = when (val info = format.paramInfo) {
                 is RangedParamInfo -> "${info.format(formatParam)}, "
                 NoParamInfo -> ""
             }
-            val sampleRate = SampleRates.format(SampleRates.fromPreferences(context))
+            val sampleRate = SampleRates.format(SampleRates.fromPreferences(prefs))
 
             prefOutputFormat.summary = "${summary}\n\n${format.name} (${prefix}${sampleRate})"
         }
 
         private fun refreshVersion() {
-            val suffix = if (!BuildConfig.DEBUG && Preferences.isDebugMode(requireContext())) {
+            val suffix = if (!BuildConfig.DEBUG && prefs.isDebugMode) {
                 "+debugmode"
             } else {
                 ""
@@ -185,8 +187,7 @@ class SettingsActivity : AppCompatActivity() {
         override fun onPreferenceLongClick(preference: Preference): Boolean {
             when (preference) {
                 prefVersion -> {
-                    val context = requireContext()
-                    Preferences.setDebugMode(context, !Preferences.isDebugMode(context))
+                    prefs.isDebugMode = !prefs.isDebugMode
                     refreshVersion()
                     return true
                 }

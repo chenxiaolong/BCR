@@ -24,8 +24,8 @@ object Retention {
      * If the saved sample rate is no longer valid or no sample rate is selected, then [default]
      * is returned.
      */
-    fun fromPreferences(context: Context): UInt {
-        val savedRetention = Preferences.getOutputRetention(context)
+    fun fromPreferences(prefs: Preferences): UInt {
+        val savedRetention = prefs.outputRetention
 
         if (savedRetention != null && all.contains(savedRetention)) {
             return savedRetention

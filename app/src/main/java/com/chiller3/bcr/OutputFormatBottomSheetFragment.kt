@@ -21,6 +21,8 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
     private val binding
         get() = _binding!!
 
+    private lateinit var prefs: Preferences
+
     private val chipIdToFormat = HashMap<Int, Format>()
     private val formatToChipId = HashMap<Format, Int>()
     private lateinit var formatParamInfo: FormatParamInfo
@@ -34,6 +36,8 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
         savedInstanceState: Bundle?
     ): View {
         _binding = OutputFormatBottomSheetBinding.inflate(inflater, container, false)
+
+        prefs = Preferences(requireContext())
 
         binding.paramSlider.setLabelFormatter {
             formatParamInfo.format(it.toUInt())
@@ -99,12 +103,12 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
      * Calls [refreshParam] via [onCheckedChanged].
      */
     private fun refreshFormat() {
-        val (format, _) = Formats.fromPreferences(requireContext())
+        val (format, _) = Formats.fromPreferences(prefs)
         binding.nameGroup.check(formatToChipId[format]!!)
     }
 
     private fun refreshSampleRate() {
-        val sampleRate = SampleRates.fromPreferences(requireContext())
+        val sampleRate = SampleRates.fromPreferences(prefs)
         binding.sampleRateGroup.check(sampleRateToChipId[sampleRate]!!)
     }
 
@@ -112,7 +116,7 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
      * Update parameter title and slider to match format parameter specifications.
      */
     private fun refreshParam() {
-        val (format, param) = Formats.fromPreferences(requireContext())
+        val (format, param) = Formats.fromPreferences(prefs)
         formatParamInfo = format.paramInfo
 
         when (val info = format.paramInfo) {
@@ -144,15 +148,13 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
     }
 
     override fun onCheckedChanged(group: ChipGroup, checkedIds: MutableList<Int>) {
-        val context = requireContext()
-
         when (group) {
             binding.nameGroup -> {
-                Preferences.setFormatName(context, chipIdToFormat[checkedIds.first()]!!.name)
+                prefs.formatName = chipIdToFormat[checkedIds.first()]!!.name
                 refreshParam()
             }
             binding.sampleRateGroup -> {
-                Preferences.setSampleRate(context, chipIdToSampleRate[checkedIds.first()])
+                prefs.sampleRate = chipIdToSampleRate[checkedIds.first()]
             }
         }
     }
@@ -161,7 +163,7 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
         when (slider) {
             binding.paramSlider -> {
                 val format = chipIdToFormat[binding.nameGroup.checkedChipId]!!
-                Preferences.setFormatParam(requireContext(), format.name, value.toUInt())
+                prefs.setFormatParam(format.name, value.toUInt())
             }
         }
     }
@@ -169,9 +171,8 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
     override fun onClick(v: View?) {
         when (v) {
             binding.reset -> {
-                val context = requireContext()
-                Preferences.resetAllFormats(context)
-                Preferences.setSampleRate(context, null)
+                prefs.resetAllFormats()
+                prefs.sampleRate = null
                 refreshFormat()
                 // Need to explicitly refresh the parameter when the default format is already chosen
                 refreshParam()

@@ -7,6 +7,14 @@ import android.service.quicksettings.TileService
 import androidx.preference.PreferenceManager
 
 class RecorderTileService : TileService(), SharedPreferences.OnSharedPreferenceChangeListener {
+    private lateinit var prefs: Preferences
+
+    override fun onCreate() {
+        super.onCreate()
+
+        prefs = Preferences(this)
+    }
+
     override fun onStartListening() {
         super.onStartListening()
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
@@ -29,8 +37,7 @@ class RecorderTileService : TileService(), SharedPreferences.OnSharedPreferenceC
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             startActivityAndCollapse(intent)
         } else {
-            val isEnabled = Preferences.isCallRecordingEnabled(this)
-            Preferences.setCallRecordingEnabled(this, !isEnabled)
+            prefs.isCallRecordingEnabled = !prefs.isCallRecordingEnabled
         }
 
         refreshTileState()
@@ -46,7 +53,7 @@ class RecorderTileService : TileService(), SharedPreferences.OnSharedPreferenceC
         // Tile.STATE_UNAVAILABLE is intentionally not used when permissions haven't been granted.
         // Clicking the tile in that state does not invoke the click handler, so it wouldn't be
         // possible to launch SettingsActivity to grant the permissions.
-        if (Permissions.haveRequired(this) && Preferences.isCallRecordingEnabled(this)) {
+        if (Permissions.haveRequired(this) && prefs.isCallRecordingEnabled) {
             tile.state = Tile.STATE_ACTIVE
         } else {
             tile.state = Tile.STATE_INACTIVE

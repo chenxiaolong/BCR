@@ -16,9 +16,11 @@ class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment(), Slider.O
     private val binding
         get() = _binding!!
 
+    private lateinit var prefs: Preferences
+
     private val requestSafOutputDir =
         registerForActivityResult(OpenPersistentDocumentTree()) { uri ->
-            Preferences.setOutputDir(requireContext(), uri)
+            prefs.outputDir = uri
             refreshOutputDir()
         }
 
@@ -30,6 +32,8 @@ class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment(), Slider.O
         _binding = OutputDirectoryBottomSheetBinding.inflate(inflater, container, false)
 
         val context = requireContext()
+
+        prefs = Preferences(context)
 
         binding.selectNewDir.setOnClickListener {
             requestSafOutputDir.launch(null)
@@ -44,9 +48,9 @@ class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment(), Slider.O
         binding.retentionSlider.addOnChangeListener(this)
 
         binding.reset.setOnClickListener {
-            Preferences.setOutputDir(context, null)
+            prefs.outputDir = null
             refreshOutputDir()
-            Preferences.setOutputRetention(context, null)
+            prefs.outputRetention = null
             refreshOutputRetention()
         }
 
@@ -57,20 +61,19 @@ class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment(), Slider.O
     }
 
     private fun refreshOutputDir() {
-        val outputDirUri = Preferences.getOutputDir(requireContext())
+        val outputDirUri = prefs.outputDirOrDefault
         binding.outputDir.text = outputDirUri.formattedString
     }
 
     private fun refreshOutputRetention() {
-        val days = Retention.fromPreferences(requireContext())
+        val days = Retention.fromPreferences(prefs)
         binding.retentionSlider.value = Retention.all.indexOf(days).toFloat()
     }
 
     override fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
         when (slider) {
             binding.retentionSlider -> {
-                val days = Retention.all[value.toInt()]
-                Preferences.setOutputRetention(requireContext(), days)
+                prefs.outputRetention = Retention.all[value.toInt()]
             }
         }
     }
