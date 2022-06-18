@@ -2,6 +2,9 @@
 
 * Add support for a basic file retention policy (Issue: #25 #81 #88, PR: #90, @chenxiaolong)
 
+Non-user-facing changes:
+* Improve type-safety when loading and saving preferences (PR: #91, @chenxiaolong)
+
 ### Version 1.13
 
 * Add Polish translations (PR: #76, @uvzen)
