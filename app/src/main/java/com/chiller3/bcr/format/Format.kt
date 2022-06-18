@@ -2,6 +2,7 @@ package com.chiller3.bcr.format
 
 import android.media.AudioFormat
 import android.media.MediaFormat
+import com.chiller3.bcr.Preferences
 import com.chiller3.bcr.frameSizeInBytesCompat
 import java.io.FileDescriptor
 
@@ -87,5 +88,32 @@ sealed class Format {
 
     companion object {
         const val KEY_X_FRAME_SIZE_IN_BYTES = "x-frame-size-in-bytes"
+
+        val all: Array<Format> = arrayOf(OpusFormat, AacFormat, FlacFormat, WaveFormat)
+        private val default: Format = all.first { it.supported }
+
+        /** Find output format by name. */
+        fun getByName(name: String): Format? = all.find { it.name == name }
+
+        /**
+         * Get the saved format from the preferences or fall back to the default.
+         *
+         * The parameter, if set, is clamped to the format's allowed parameter range.
+         */
+        fun fromPreferences(prefs: Preferences): Pair<Format, UInt?> {
+            // Use the saved format if it is valid and supported on the current device. Otherwise, fall
+            // back to the default.
+            val format = prefs.format
+                ?.let { if (it.supported) { it } else { null } }
+                ?: default
+
+            // Convert the saved value to the nearest valid value (eg. in case bitrate range or step
+            // size in changed in a future version)
+            val param = prefs.getFormatParam(format)?.let {
+                format.paramInfo.toNearest(it)
+            }
+
+            return Pair(format, param)
+        }
     }
 }

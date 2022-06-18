@@ -9,10 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
-import com.chiller3.bcr.format.Formats
+import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.NoParamInfo
 import com.chiller3.bcr.format.RangedParamInfo
-import com.chiller3.bcr.format.SampleRates
+import com.chiller3.bcr.format.SampleRate
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,21 +105,21 @@ class SettingsActivity : AppCompatActivity() {
         private fun refreshOutputDir() {
             val context = requireContext()
             val outputDirUri = prefs.outputDirOrDefault
-            val outputRetention = Retention.format(context, Retention.fromPreferences(prefs))
+            val outputRetention = Retention.fromPreferences(prefs).toFormattedString(context)
 
             val summary = getString(R.string.pref_output_dir_desc)
             prefOutputDir.summary = "${summary}\n\n${outputDirUri.formattedString} (${outputRetention})"
         }
 
         private fun refreshOutputFormat() {
-            val (format, formatParamSaved) = Formats.fromPreferences(prefs)
+            val (format, formatParamSaved) = Format.fromPreferences(prefs)
             val formatParam = formatParamSaved ?: format.paramInfo.default
             val summary = getString(R.string.pref_output_format_desc)
             val prefix = when (val info = format.paramInfo) {
                 is RangedParamInfo -> "${info.format(formatParam)}, "
                 NoParamInfo -> ""
             }
-            val sampleRate = SampleRates.format(SampleRates.fromPreferences(prefs))
+            val sampleRate = SampleRate.fromPreferences(prefs)
 
             prefOutputFormat.summary = "${summary}\n\n${format.name} (${prefix}${sampleRate})"
         }
