@@ -15,8 +15,7 @@ import android.util.Log
 import androidx.documentfile.provider.DocumentFile
 import com.chiller3.bcr.format.Encoder
 import com.chiller3.bcr.format.Format
-import com.chiller3.bcr.format.Formats
-import com.chiller3.bcr.format.SampleRates
+import com.chiller3.bcr.format.SampleRate
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
@@ -68,14 +67,14 @@ class RecorderThread(
     // Format
     private val format: Format
     private val formatParam: UInt?
-    private val sampleRate = SampleRates.fromPreferences(prefs)
+    private val sampleRate = SampleRate.fromPreferences(prefs)
 
     init {
         Log.i(tag, "Created thread for call: $call")
 
         onCallDetailsChanged(call.details)
 
-        val savedFormat = Formats.fromPreferences(prefs)
+        val savedFormat = Format.fromPreferences(prefs)
         format = savedFormat.first
         formatParam = savedFormat.second
     }
@@ -257,14 +256,13 @@ class RecorderThread(
             DocumentFile.fromTreeUri(context, it)!!
         } ?: DocumentFile.fromFile(prefs.defaultOutputDir)
 
-        val keepDays = Retention.fromPreferences(prefs)
-        if (keepDays == 0u) {
-            // Keep everything
-            Log.i(tag, "Keeping all existing files")
-            return
+        val retention = when (val r = Retention.fromPreferences(prefs)) {
+            NoRetention -> {
+                Log.i(tag, "Keeping all existing files")
+                return
+            }
+            is DaysRetention -> r.toDuration()
         }
-
-        val retention = Duration.ofDays(keepDays.toLong())
         Log.i(tag, "Retention period is $retention")
 
         for (item in directory.listFiles()) {
@@ -399,7 +397,8 @@ class RecorderThread(
     private fun recordUntilCancelled(pfd: ParcelFileDescriptor) {
         AndroidProcess.setThreadPriority(AndroidProcess.THREAD_PRIORITY_URGENT_AUDIO)
 
-        val minBufSize = AudioRecord.getMinBufferSize(sampleRate.toInt(), CHANNEL_CONFIG, ENCODING)
+        val minBufSize = AudioRecord.getMinBufferSize(
+            sampleRate.value.toInt(), CHANNEL_CONFIG, ENCODING)
         if (minBufSize < 0) {
             throw Exception("Failure when querying minimum buffer size: $minBufSize")
         }
@@ -407,7 +406,7 @@ class RecorderThread(
 
         val audioRecord = AudioRecord(
             MediaRecorder.AudioSource.VOICE_CALL,
-            sampleRate.toInt(),
+            sampleRate.value.toInt(),
             CHANNEL_CONFIG,
             ENCODING,
             // On some devices, MediaCodec occasionally has sudden spikes in processing time, so use

@@ -1,6 +1,3 @@
-@file:Suppress("OPT_IN_IS_NOT_ENABLED")
-@file:OptIn(ExperimentalUnsignedTypes::class)
-
 package com.chiller3.bcr
 
 import android.os.Bundle
@@ -43,7 +40,7 @@ class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment(), Slider.O
         binding.retentionSlider.valueTo = (Retention.all.size - 1).toFloat()
         binding.retentionSlider.stepSize = 1f
         binding.retentionSlider.setLabelFormatter {
-            Retention.format(context, Retention.all[it.toInt()])
+            Retention.all[it.toInt()].toFormattedString(context)
         }
         binding.retentionSlider.addOnChangeListener(this)
 

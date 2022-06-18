@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import com.chiller3.bcr.format.Format
+import com.chiller3.bcr.format.SampleRate
 import java.io.File
 
 class Preferences(private val context: Context) {
@@ -128,9 +130,9 @@ class Preferences(private val context: Context) {
      *
      * Must not be [UInt.MAX_VALUE].
      */
-    var outputRetention: UInt?
-        get() = getOptionalUint(PREF_OUTPUT_RETENTION)
-        set(days) = setOptionalUint(PREF_OUTPUT_RETENTION, days)
+    var outputRetention: Retention?
+        get() = getOptionalUint(PREF_OUTPUT_RETENTION)?.let { Retention.fromRawPreferenceValue(it) }
+        set(retention) = setOptionalUint(PREF_OUTPUT_RETENTION, retention?.toRawPreferenceValue())
 
     /**
      * Whether call recording is enabled.
@@ -144,30 +146,31 @@ class Preferences(private val context: Context) {
      *
      * Use [getFormatParam]/[setFormatParam] to get/set the format-specific parameter.
      */
-    var formatName: String?
-        get() = prefs.getString(PREF_FORMAT_NAME, null)
-        set(name) = prefs.edit {
-            if (name == null) {
+    var format: Format?
+        get() = prefs.getString(PREF_FORMAT_NAME, null)?.let { Format.getByName(it) }
+        set(format) = prefs.edit {
+            if (format == null) {
                 remove(PREF_FORMAT_NAME)
             } else {
-                putString(PREF_FORMAT_NAME, name)
+                putString(PREF_FORMAT_NAME, format.name)
             }
         }
 
     /**
-     * Get the format-specific parameter for format [name].
+     * Get the format-specific parameter for [format].
      */
-    fun getFormatParam(name: String): UInt? = getOptionalUint(PREF_FORMAT_PARAM_PREFIX + name)
+    fun getFormatParam(format: Format): UInt? =
+        getOptionalUint(PREF_FORMAT_PARAM_PREFIX + format.name)
 
     /**
-     * Set the format-specific parameter for format [name].
+     * Set the format-specific parameter for [format].
      *
      * @param param Must not be [UInt.MAX_VALUE]
      *
      * @throws IllegalArgumentException if [param] is [UInt.MAX_VALUE]
      */
-    fun setFormatParam(name: String, param: UInt?) =
-        setOptionalUint(PREF_FORMAT_PARAM_PREFIX + name, param)
+    fun setFormatParam(format: Format, param: UInt?) =
+        setOptionalUint(PREF_FORMAT_PARAM_PREFIX + format.name, param)
 
     /**
      * Remove the default format preference and the parameters for all formats.
@@ -186,7 +189,7 @@ class Preferences(private val context: Context) {
      *
      * Must not be [UInt.MAX_VALUE].
      */
-    var sampleRate: UInt?
-        get() = getOptionalUint(PREF_SAMPLE_RATE)
-        set(sampleRate) = setOptionalUint(PREF_SAMPLE_RATE, sampleRate)
+    var sampleRate: SampleRate?
+        get() = getOptionalUint(PREF_SAMPLE_RATE)?.let { SampleRate(it) }
+        set(sampleRate) = setOptionalUint(PREF_SAMPLE_RATE, sampleRate?.value)
 }
