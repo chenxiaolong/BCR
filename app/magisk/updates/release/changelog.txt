@@ -1,3 +1,7 @@
+### Unreleased
+
+* Add support for a basic file retention policy (Issue: #25 #81 #88, PR: #90, @chenxiaolong)
+
 ### Version 1.13
 
 * Add Polish translations (PR: #76, @uvzen)
