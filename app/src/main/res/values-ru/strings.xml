@@ -11,7 +11,7 @@
     <string name="pref_call_recording_desc">Записывать входящие и исходящие вызовы. Разрешение на микрофон и уведомления обязательны для записи в фоновом режиме.</string>
 
     <string name="pref_output_dir_name">Папка для сохранения</string>
-    <string name="pref_output_dir_desc">Выбрать папку для хранения записей вызовов. Длительное нажатие для сброса до значений по умолчанию.</string>
+    <string name="pref_output_dir_desc">Выбрать папку для хранения записей вызовов.</string>
 
     <string name="pref_inhibit_batt_opt_name">Запретить оптимизацию батареи</string>
     <string name="pref_inhibit_batt_opt_desc">Снижает вероятность того, что приложение будет остановлено системой.</string>

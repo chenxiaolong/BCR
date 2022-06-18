@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/bottom_sheet_overall_padding">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
+            android:text="@string/pref_output_dir_name"
+            android:textAppearance="?attr/textAppearanceHeadline6" />
+
+        <TextView
+            android:id="@+id/output_dir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/select_new_dir"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/output_dir_bottom_sheet_change_dir"
+            style="?attr/materialButtonOutlinedStyle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/bottom_sheet_section_separation"
+            android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
+            android:text="@string/output_dir_bottom_sheet_file_retention"
+            android:textAppearance="?attr/textAppearanceHeadline6" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/retention_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:labelBehavior="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/bottom_sheet_section_separation"
+            android:text="@string/bottom_sheet_reset"
+            style="?attr/materialButtonOutlinedStyle" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -11,7 +11,7 @@
     <string name="pref_call_recording_desc">Gelen ve giden çağrıları kaydet. Arka planda kayıt için mikrofon ve bildirim izinleri gereklidir.</string>
 
     <string name="pref_output_dir_name">Kayıt konumu</string>
-    <string name="pref_output_dir_desc">Kayıtlar için bir konum seçin. Konumu sıfırlamak için uzun basın.</string>
+    <string name="pref_output_dir_desc">Kayıtlar için bir konum seçin.</string>
     
     <string name="pref_output_format_name">Çıkış formatı</string>
     <string name="pref_output_format_desc">Kayıtlar için bir kodlama formatı seçin.</string>
@@ -23,10 +23,10 @@
     <string name="pref_version_name">Versiyon</string>
     
     <!-- Output format bottom sheet -->
-    <string name="bottom_sheet_output_format">Çıkış formatı</string>
-    <string name="bottom_sheet_compression_level">Sıkıştırma seviyesi</string>
-    <string name="bottom_sheet_bitrate">Bitrate</string>
-    <string name="bottom_sheet_sample_rate">Örnekleme hızı</string>
+    <string name="output_format_bottom_sheet_output_format">Çıkış formatı</string>
+    <string name="output_format_bottom_sheet_compression_level">Sıkıştırma seviyesi</string>
+    <string name="output_format_bottom_sheet_bitrate">Bitrate</string>
+    <string name="output_format_bottom_sheet_sample_rate">Örnekleme hızı</string>
     <string name="bottom_sheet_reset">Varsayılana döndür</string>
     
     <!-- Notifications -->

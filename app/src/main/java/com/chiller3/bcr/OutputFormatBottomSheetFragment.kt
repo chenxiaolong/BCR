@@ -8,16 +8,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import com.chiller3.bcr.databinding.FormatBottomSheetBinding
-import com.chiller3.bcr.databinding.FormatBottomSheetChipBinding
+import com.chiller3.bcr.databinding.BottomSheetChipBinding
+import com.chiller3.bcr.databinding.OutputFormatBottomSheetBinding
 import com.chiller3.bcr.format.*
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.slider.Slider
 
-class FormatBottomSheetFragment : BottomSheetDialogFragment(),
+class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
     ChipGroup.OnCheckedStateChangeListener, Slider.OnChangeListener, View.OnClickListener {
-    private var _binding: FormatBottomSheetBinding? = null
+    private var _binding: OutputFormatBottomSheetBinding? = null
     private val binding
         get() = _binding!!
 
@@ -33,7 +33,7 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FormatBottomSheetBinding.inflate(inflater, container, false)
+        _binding = OutputFormatBottomSheetBinding.inflate(inflater, container, false)
 
         binding.paramSlider.setLabelFormatter {
             formatParamInfo.format(it.toUInt())
@@ -70,7 +70,7 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
     }
 
     private fun addFormatChip(inflater: LayoutInflater, format: Format) {
-        val chipBinding = FormatBottomSheetChipBinding.inflate(
+        val chipBinding = BottomSheetChipBinding.inflate(
             inflater, binding.nameGroup, false)
         val id = View.generateViewId()
         chipBinding.root.id = id
@@ -82,7 +82,7 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
     }
 
     private fun addSampleRateChip(inflater: LayoutInflater, sampleRate: UInt) {
-        val chipBinding = FormatBottomSheetChipBinding.inflate(
+        val chipBinding = BottomSheetChipBinding.inflate(
             inflater, binding.sampleRateGroup, false)
         val id = View.generateViewId()
         chipBinding.root.id = id
@@ -120,8 +120,8 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
                 binding.paramGroup.isVisible = true
 
                 binding.paramTitle.setText(when (info.type) {
-                    RangedParamType.CompressionLevel -> R.string.bottom_sheet_compression_level
-                    RangedParamType.Bitrate -> R.string.bottom_sheet_bitrate
+                    RangedParamType.CompressionLevel -> R.string.output_format_bottom_sheet_compression_level
+                    RangedParamType.Bitrate -> R.string.output_format_bottom_sheet_bitrate
                 })
 
                 binding.paramSlider.valueFrom = info.range.first.toFloat()
@@ -181,6 +181,6 @@ class FormatBottomSheetFragment : BottomSheetDialogFragment(),
     }
 
     companion object {
-        val TAG: String = FormatBottomSheetFragment::class.java.simpleName
+        val TAG: String = OutputFormatBottomSheetFragment::class.java.simpleName
     }
 }

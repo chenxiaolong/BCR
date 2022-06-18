@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
-            android:text="@string/bottom_sheet_output_format"
+            android:text="@string/output_format_bottom_sheet_output_format"
             android:textAppearance="?attr/textAppearanceHeadline6" />
 
         <com.chiller3.bcr.ChipGroupCentered
@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/bottom_sheet_section_separation"
             android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
-            android:text="@string/bottom_sheet_sample_rate"
+            android:text="@string/output_format_bottom_sheet_sample_rate"
             android:textAppearance="?attr/textAppearanceHeadline6" />
 
         <com.chiller3.bcr.ChipGroupCentered

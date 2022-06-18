@@ -17,6 +17,7 @@ object Preferences {
     private const val PREF_DEBUG_MODE = "debug_mode"
     private const val PREF_FORMAT_NAME = "codec_name"
     private const val PREF_FORMAT_PARAM_PREFIX = "codec_param_"
+    const val PREF_OUTPUT_RETENTION = "output_retention"
     const val PREF_SAMPLE_RATE = "sample_rate"
 
     fun isDebugMode(context: Context): Boolean {
@@ -97,6 +98,46 @@ object Preferences {
                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION
             )
         }
+    }
+
+    /**
+     * Get the saved file retention (in days).
+     */
+    fun getOutputRetention(context: Context): UInt? {
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        // Use a sentinel value because doing contains + getInt results in TOCTOU issues
+        val value = prefs.getInt(PREF_OUTPUT_RETENTION, -1)
+
+        return if (value == -1) {
+            null
+        } else {
+            value.toUInt()
+        }
+    }
+
+    /**
+     * Set the file retention (in days).
+     *
+     * @param days Must not be [UInt.MAX_VALUE]
+     *
+     * @throws IllegalArgumentException if [days] is [UInt.MAX_VALUE]
+     */
+    fun setOutputRetention(context: Context, days: UInt?) {
+        // -1 (when casted to int) is used as a sentinel value
+        if (days == UInt.MAX_VALUE) {
+            throw IllegalArgumentException("Sample rate cannot be ${UInt.MAX_VALUE}")
+        }
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val editor = prefs.edit()
+
+        if (days == null) {
+            editor.remove(PREF_OUTPUT_RETENTION)
+        } else {
+            editor.putInt(PREF_OUTPUT_RETENTION, days.toInt())
+        }
+
+        editor.apply()
     }
 
     fun isCallRecordingEnabled(context: Context): Boolean {
