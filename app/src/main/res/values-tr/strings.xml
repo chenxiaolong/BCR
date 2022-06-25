@@ -21,7 +21,15 @@
 
     <!-- About "preference" -->
     <string name="pref_version_name">Versiyon</string>
-    
+
+    <!-- Output directory bottom sheet -->
+    <string name="output_dir_bottom_sheet_change_dir">Çıkış klasörünü değiştir</string>
+    <string name="output_dir_bottom_sheet_file_retention">Dosyaları sakla</string>
+    <string name="retention_keep_all">Hepsini sakla</string>
+    <plurals name="retention_days">
+        <item quantity="other">%d gün sakla</item>
+    </plurals>
+
     <!-- Output format bottom sheet -->
     <string name="output_format_bottom_sheet_output_format">Çıkış formatı</string>
     <string name="output_format_bottom_sheet_compression_level">Sıkıştırma seviyesi</string>
