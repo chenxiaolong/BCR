@@ -1,3 +1,8 @@
+### Unreleased
+
+* Update Spanish translations (PR: #92, @nmayorga092)
+* Update Turkish translations (PR: #97, @EleoXDA)
+
 ### Version 1.14
 
 * Add support for a basic file retention policy (Issue: #25 #81 #88, PR: #90, @chenxiaolong)
