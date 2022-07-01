@@ -43,9 +43,10 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
 
 2. Install BCR as a system app.
 
-    **For devices rooted with Magisk**, simply flash the zip as a Magisk module from within the Magisk app.
+    * **For devices rooted with Magisk**, simply flash the zip as a Magisk module from within the Magisk app.
+        * **For OnePlus devices running the stock firmware (or custom firmware based on the stock firmware)**, also extract the `.apk` from the zip and install it manually before rebooting. This is necessary to work around a bug in the firmware where the app data directory does not get created, causing BCR to open up to a blank screen.
 
-    **For unrooted custom firmware**, the files from the `system/` folder in the zip will need to be baked into the system image (or otherwise made available on the actual `/system` volume).
+    * **For unrooted custom firmware**, the files from the `system/` folder in the zip will need to be baked into the system image (or otherwise made available on the actual `/system` volume).
 
 3. Reboot and open BCR.
 
