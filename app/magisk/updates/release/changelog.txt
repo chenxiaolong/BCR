@@ -1,3 +1,8 @@
+### Unreleased
+
+* Update Turkish translations (PR: #106, @EleoXDA)
+* Update Russian translations (PR: #107, @EleoXDA)
+
 ### Version 1.15
 
 * Update Spanish translations (PR: #92, @nmayorga092)
