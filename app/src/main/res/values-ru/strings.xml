@@ -12,7 +12,7 @@
 
     <string name="pref_output_dir_name">Папка для сохранения</string>
     <string name="pref_output_dir_desc">Выбрать папку для хранения записей вызовов.</string>
-    
+
     <string name="pref_output_format_name">Выходной формат</string>
     <string name="pref_output_format_desc">Выберите формат для записей.</string>
 
@@ -21,7 +21,7 @@
 
     <!-- About "preference" -->
     <string name="pref_version_name">Версия</string>
-    
+
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Изменить папку</string>
     <string name="output_dir_bottom_sheet_file_retention">Хранение файлов</string>
