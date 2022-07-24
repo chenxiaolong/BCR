@@ -36,7 +36,7 @@
     <string name="output_format_bottom_sheet_compression_level">Уровень сжатия</string>
     <string name="output_format_bottom_sheet_bitrate">Битрейт</string>
     <string name="output_format_bottom_sheet_sample_rate">Частота дискретизации</string>
-    <string name="bottom_sheet_reset">Reset to defaults</string>
+    <string name="bottom_sheet_reset">Восстановить параметры по умолчанию</string>
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Фоновые сервисы</string>
