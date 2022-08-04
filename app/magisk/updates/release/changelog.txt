@@ -1,4 +1,4 @@
-### Unreleased
+### Version 1.17
 
 * Update dependencies and gradle wrapper (PR: #112, @PatrykMis)
 * Update Polish translations (PR: #112, @PatrykMis)
