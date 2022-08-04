@@ -17,7 +17,6 @@ BCR is a simple Android call recording app for rooted devices or devices running
   * M4A/AAC - Lossy, smaller files, default on Android 9
   * FLAC - Lossless, larger files
   * WAV/PCM - Lossless, largest files, least CPU usage
-* Records at the device's native sample rate
 * Supports Android's Storage Access Framework (can record to SD cards, USB devices, etc.)
 * Quick settings toggle
 * Material You dynamic theming
@@ -75,7 +74,7 @@ BCR relies heavily on system app permissions in order to function properly. This
 
     This permission is used to record from the `VOICE_CALL` audio stream. This stream, along with some others, like `VOICE_DOWNLINK` and `VOICE_UPLINK`, cannot be accessed without this system permission.
 
-With these two permissions, BCR can reliably detect phone calls and record from the call's audio stream. The recording process pulls PCM s16le raw audio at the device's native sample rate and uses Android's built-in encoders to produce the compressed output file.
+With these two permissions, BCR can reliably detect phone calls and record from the call's audio stream. The recording process pulls PCM s16le raw audio and uses Android's built-in encoders to produce the compressed output file.
 
 ### Verifying digital signatures
 
