@@ -10,7 +10,7 @@ plugins {
 
 buildscript {
     dependencies {
-        classpath("org.eclipse.jgit:org.eclipse.jgit:6.1.0.202203080745-r")
+        classpath("org.eclipse.jgit:org.eclipse.jgit:6.2.0.202206071550-r")
         classpath("org.json:json:20220320")
     }
 }
@@ -129,11 +129,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility(JavaVersion.VERSION_1_8)
-        targetCompatibility(JavaVersion.VERSION_1_8)
+        sourceCompatibility(JavaVersion.VERSION_11)
+        targetCompatibility(JavaVersion.VERSION_11)
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     buildFeatures {
         viewBinding = true
@@ -141,11 +141,11 @@ android {
 }
 
 dependencies {
-    implementation("androidx.activity:activity-ktx:1.4.0")
+    implementation("androidx.activity:activity-ktx:1.5.1")
     implementation("androidx.appcompat:appcompat:1.4.2")
     implementation("androidx.core:core-ktx:1.8.0")
     implementation("androidx.documentfile:documentfile:1.0.1")
-    implementation("androidx.fragment:fragment-ktx:1.4.1")
+    implementation("androidx.fragment:fragment-ktx:1.5.1")
     implementation("androidx.preference:preference-ktx:1.2.0")
     implementation("com.google.android.material:material:1.6.1")
     testImplementation("junit:junit:4.13.2")

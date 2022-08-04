@@ -22,6 +22,17 @@
     <!-- About "preference" -->
     <string name="pref_version_name">Wersja</string>
 
+    <!-- Output directory bottom sheet -->
+    <string name="output_dir_bottom_sheet_change_dir">Zmień katalog</string>
+    <string name="output_dir_bottom_sheet_file_retention">Przechowywanie plików</string>
+    <string name="retention_keep_all">Pozostaw wszystkie</string>
+    <plurals name="retention_days">
+        <item quantity="one">Pozostaw z %d dnia</item>
+        <item quantity="few">Pozostaw z %d dni</item>
+        <item quantity="many">Pozostaw z %d dni</item>
+        <item quantity="other">Pozostaw z %d dni</item>
+    </plurals>
+
     <!-- Output format bottom sheet -->
     <string name="output_format_bottom_sheet_output_format">Format wyjściowy</string>
     <string name="output_format_bottom_sheet_compression_level">Poziom kompresji</string>
