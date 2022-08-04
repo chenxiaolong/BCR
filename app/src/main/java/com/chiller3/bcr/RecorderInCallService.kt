@@ -93,7 +93,12 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
             } else if (!Permissions.haveRequired(this)) {
                 Log.v(TAG, "Required permissions have not been granted")
             } else if (!recorders.containsKey(call)) {
-                val recorder = RecorderThread(this, this, call)
+                val recorder = try {
+                    RecorderThread(this, this, call)
+                } catch (e: Exception) {
+                    notifyError(e.message, null)
+                    throw e
+                }
                 recorders[call] = recorder
 
                 updateForegroundState()
@@ -184,6 +189,13 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
             build()
         }
 
+    private fun notifyError(errorMsg: String?, uri: Uri?) {
+        val notification = createRecordingFailedNotification(errorMsg, uri)
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.notify(failedNotificationId, notification)
+        ++failedNotificationId
+    }
+
     private fun onThreadExited() {
         --pendingExit
         updateForegroundState()
@@ -201,10 +213,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         handler.post {
             onThreadExited()
 
-            val notification = createRecordingFailedNotification(errorMsg, uri)
-            val notificationManager = getSystemService(NotificationManager::class.java)
-            notificationManager.notify(failedNotificationId, notification)
-            ++failedNotificationId
+            notifyError(errorMsg, uri)
         }
     }
 }

@@ -115,7 +115,7 @@ class RecorderThread(
                     }
                 }
 
-                if (details.handle.scheme == PhoneAccount.SCHEME_TEL) {
+                if (details.handle?.scheme == PhoneAccount.SCHEME_TEL) {
                     append('_')
                     append(details.handle.schemeSpecificPart)
 
