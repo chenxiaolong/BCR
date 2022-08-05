@@ -2,7 +2,7 @@
 
 * Update dependencies and gradle wrapper (PR: #112, @PatrykMis)
 * Update Polish translations (PR: #112, @PatrykMis)
-* Fix silent crash when receiving a call from a private number (PR: #114, @chenxiaolong)
+* Fix silent crash when receiving a call from a private number (Issue: #111, PR: #114, @chenxiaolong)
 
 ### Version 1.16
 
