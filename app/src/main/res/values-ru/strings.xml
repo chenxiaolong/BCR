@@ -28,7 +28,8 @@
     <string name="retention_keep_all">Сохранить все</string>
     <plurals name="retention_days">
         <item quantity="one">Держите %d день</item>
-        <item quantity="other">Держите %d дня</item>
+        <item quantity="few">Держите %d дня</item>
+        <item quantity="many">Держите %d дней</item>
     </plurals>
 
     <!-- Output format bottom sheet -->
