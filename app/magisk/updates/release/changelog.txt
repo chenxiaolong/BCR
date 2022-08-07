@@ -1,3 +1,7 @@
+### Unreleased
+
+* Fix plurals in Russian translations (PR: #117, @EleoXDA)
+
 ### Version 1.17
 
 * Update dependencies and gradle wrapper (PR: #112, @PatrykMis)
