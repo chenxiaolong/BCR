@@ -1,4 +1,4 @@
-### Unreleased
+### Version 1.18
 
 * Update gradle wrapper to 7.5.1 (PR: #116, @PatrykMis)
 * Fix plurals in Russian translations (PR: #117, @EleoXDA)
