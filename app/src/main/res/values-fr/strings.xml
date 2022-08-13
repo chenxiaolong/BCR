@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">BCR</string>
+    <string name="app_name_full">Basic Call Recorder</string>
+
+    <!-- Preference headers -->
+    <string name="pref_header_general">Général</string>
+    <string name="pref_header_about">À propos</string>
+
+    <!-- General preferences -->
+    <string name="pref_call_recording_name">Enregistrement d'appel</string>
+    <string name="pref_call_recording_desc">Enregistre les appels entrants et sortants. Les permissions microphone et notification sont nécessaires pour l'enregistrement en arrière plan.</string>
+
+    <string name="pref_output_dir_name">Dossier des enregistrements</string>
+    <string name="pref_output_dir_desc">Choisir un dossier pour stocker les enregistrements.</string>
+
+    <string name="pref_output_format_name">Format des enregistrements</string>
+    <string name="pref_output_format_desc">Choisir un encodage pour stocker les enregistrements.</string>
+
+    <string name="pref_inhibit_batt_opt_name">Désactiver l'optimisation de la batterie</string>
+    <string name="pref_inhibit_batt_opt_desc">Réduit les chances que l'application soit arrêtée par le système.</string>
+
+    <!-- About "preference" -->
+    <string name="pref_version_name">Version</string>
+
+    <!-- Output directory bottom sheet -->
+    <string name="output_dir_bottom_sheet_change_dir">Changer le dossier</string>
+    <string name="output_dir_bottom_sheet_file_retention">Conserver les fichiers</string>
+    <string name="retention_keep_all">Garder tout</string>
+    <plurals name="retention_days">
+        <item quantity="one">Garder %d jour</item>
+        <item quantity="other">Garder %d jours</item>
+    </plurals>
+
+    <!-- Output format bottom sheet -->
+    <string name="output_format_bottom_sheet_output_format">Format des enregistrements</string>
+    <string name="output_format_bottom_sheet_compression_level">Niveau de compression</string>
+    <string name="output_format_bottom_sheet_bitrate">Débit binaire</string>
+    <string name="output_format_bottom_sheet_sample_rate">Fréquence d'échantillonnage</string>
+
+    <string name="bottom_sheet_reset">Remettre par défaut</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_persistent_name">Service d'arrière-plan</string>
+    <string name="notification_channel_persistent_desc">Notification persistante pour l'enregistrement en arrière-plan</string>
+    <string name="notification_channel_alerts_name">Alertes</string>
+    <string name="notification_channel_alerts_desc">Alertes d'erreurs pendant l'enregistrement</string>
+    <string name="notification_recording_in_progress">Enregistrement d'appel en cours</string>
+    <string name="notification_recording_failed">Enregistrement d'appel échoué</string>
+
+    <!-- Quick settings tile -->
+    <string name="quick_settings_label">Enregsitrement d'appel</string>
+</resources>
