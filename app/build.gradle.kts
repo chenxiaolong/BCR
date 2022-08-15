@@ -142,10 +142,10 @@ android {
 
 dependencies {
     implementation("androidx.activity:activity-ktx:1.5.1")
-    implementation("androidx.appcompat:appcompat:1.4.2")
+    implementation("androidx.appcompat:appcompat:1.5.0")
     implementation("androidx.core:core-ktx:1.8.0")
     implementation("androidx.documentfile:documentfile:1.0.1")
-    implementation("androidx.fragment:fragment-ktx:1.5.1")
+    implementation("androidx.fragment:fragment-ktx:1.5.2")
     implementation("androidx.preference:preference-ktx:1.2.0")
     implementation("com.google.android.material:material:1.6.1")
     testImplementation("junit:junit:4.13.2")
