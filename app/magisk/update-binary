@@ -1,33 +1,40 @@
 #!/sbin/sh
 
-#################
-# Initialization
-#################
+OUTFD=${2}
+ZIPFILE=${3}
 
 umask 022
 
-# echo before loading util_functions
-ui_print() { echo "$1"; }
-
-require_new_magisk() {
-  ui_print "*******************************"
-  ui_print " Please install Magisk v20.4+! "
-  ui_print "*******************************"
-  exit 1
+ui_print() {
+    printf "ui_print %s\nui_print\n" "${*}" > /proc/self/fd/"${OUTFD}"
 }
 
-#########################
-# Load util_functions.sh
-#########################
+if [ -f /sbin/recovery ]; then
+    # Installing via recovery. Always do a direct install.
+    set -exu
 
-OUTFD=$2
-ZIPFILE=$3
+    ui_print 'Mounting system'
+    if mount /system_root; then
+        root_dir=/system_root
+    else
+        mount /system
+        root_dir=/
+    fi
 
-mount /data 2>/dev/null
+    ui_print 'Extracting files'
 
-[ -f /data/adb/magisk/util_functions.sh ] || require_new_magisk
-. /data/adb/magisk/util_functions.sh
-[ $MAGISK_VER_CODE -lt 20400 ] && require_new_magisk
+    # Just overwriting isn't sufficient because the apk filenames are different
+    # between debug and release builds
+    app_id=$(unzip -p "${ZIPFILE}" module.prop | grep '^id=' | cut -d= -f2)
+    rm -rf "${root_dir}/system/priv-app/${app_id}"
 
-install_module
-exit 0
+    unzip -o "${ZIPFILE}" 'system/*' -d "${root_dir}"
+
+    ui_print 'Done!'
+else
+    # Installing via Magisk Manager.
+
+    . /data/adb/magisk/util_functions.sh
+
+    install_module
+fi
