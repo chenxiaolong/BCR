@@ -1,4 +1,4 @@
-### Unreleased
+### Version 1.19
 
 * Add support for flashing via recovery (Issue: #128, PR: #130, @chenxiaolong)
   * This is for unrooted (non-Magisk) installs only. BCR will be installed to the system partition directly when flashed via recovery.
