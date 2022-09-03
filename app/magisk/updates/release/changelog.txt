@@ -1,3 +1,8 @@
+### Unreleased
+
+* Add support for flashing via recovery (Issue: #128, PR: #130, @chenxiaolong)
+  * This is for unrooted (non-Magisk) installs only. BCR will be installed to the system partition directly when flashed via recovery.
+
 ### Version 1.18
 
 * Update gradle wrapper to 7.5.1 (PR: #116, @PatrykMis)
