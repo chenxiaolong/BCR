@@ -1,3 +1,7 @@
+### Unreleased
+
+* Update dependencies (PR: #121, @PatrykMis)
+
 ### Version 1.19
 
 * Add support for flashing via recovery (Issue: #128, PR: #130, @chenxiaolong)
