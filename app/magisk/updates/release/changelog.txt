@@ -1,6 +1,6 @@
 ### Unreleased
 
-* Update dependencies (PR: #121, @PatrykMis)
+* Update dependencies (PR: #121, #132, @PatrykMis)
 
 ### Version 1.19
 
