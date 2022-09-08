@@ -9,7 +9,7 @@ ui_print() {
     printf "ui_print %s\nui_print\n" "${*}" > /proc/self/fd/"${OUTFD}"
 }
 
-if [ -f /sbin/recovery ]; then
+if [ -f /sbin/recovery ] || [ -f /system/bin/recovery ]; then
     # Installing via recovery. Always do a direct install.
     set -exu
 
