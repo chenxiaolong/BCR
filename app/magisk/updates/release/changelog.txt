@@ -1,6 +1,8 @@
 ### Unreleased
 
 * Update dependencies (PR: #121, #132, @PatrykMis)
+* Perform a direct install if `/system/bin/recovery` exists in the environment (Issue: #131, PR: #133, @chenxiaolong)
+  * Previously, only `/sbin/recovery` was used to detect if booted into recovery
 
 ### Version 1.19
 
