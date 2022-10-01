@@ -26,7 +26,9 @@ if [ -f /sbin/recovery ] || [ -f /system/bin/recovery ]; then
     # Just overwriting isn't sufficient because the apk filenames are different
     # between debug and release builds
     app_id=$(unzip -p "${ZIPFILE}" module.prop | grep '^id=' | cut -d= -f2)
-    rm -rf "${root_dir}/system/priv-app/${app_id}"
+
+    # rm on some custom recoveries doesn't exit with 0 on ENOENT, even with -f
+    rm -rf "${root_dir}/system/priv-app/${app_id}" || :
 
     unzip -o "${ZIPFILE}" 'system/*' -d "${root_dir}"
 
