@@ -15,9 +15,11 @@ if [ -f /sbin/recovery ] || [ -f /system/bin/recovery ]; then
 
     ui_print 'Mounting system'
     if mount /system_root; then
+        mount -o remount,rw /system_root
         root_dir=/system_root
     else
         mount /system
+        mount -o remount,rw /system
         root_dir=/
     fi
 
