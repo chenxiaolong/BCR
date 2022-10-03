@@ -1,6 +1,7 @@
 ### Unreleased
 
 * (Direct installs only) Explicitly remount system as writable and ignore `ENOENT` errors during cleanup (Issue: #108, #138, PR: #139, @chenxiaolong)
+* Updated all dependencies (PR: #140, @chenxiaolong)
 
 ### Version 1.20
 
