@@ -1,3 +1,8 @@
+### Unreleased
+
+* (Direct installs only) Add `/system/addon.d/` script to persist installation across OS updates (Issue: #142, PR: #144, @chenxiaolong)
+    * Only applies to LineageOS-based firmware
+
 ### Version 1.21
 
 * (Direct installs only) Explicitly remount system as writable and ignore `ENOENT` errors during cleanup (Issue: #108, #138, PR: #139, @chenxiaolong)
