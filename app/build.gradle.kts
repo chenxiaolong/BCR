@@ -206,6 +206,41 @@ android.applicationVariants.all {
         }
     }
 
+    val addonD = tasks.register("addonD${capitalized}") {
+        inputs.property("variant.applicationId", variant.applicationId)
+
+        // To get output apk filename
+        dependsOn.add(variant.assembleProvider)
+
+        val outputFile = File(variantDir, "51-${variant.applicationId}.sh")
+        outputs.file(outputFile)
+
+        val backupFiles = variant.outputs.map {
+            "priv-app/${variant.applicationId}/${it.outputFile.name}"
+        } + listOf(
+            "etc/permissions/privapp-permissions-${variant.applicationId}.xml"
+        )
+
+        doLast {
+            outputFile.writeText("""
+                #!/sbin/sh
+                # ADDOND_VERSION=2
+
+                . /tmp/backuptool.functions
+
+                files="${backupFiles.joinToString(" ")}"
+
+                case "${'$'}{1}" in
+                backup|restore)
+                    for f in ${'$'}{files}; do
+                        "${'$'}{1}_file" "${'$'}{S}/${'$'}{f}"
+                    done
+                    ;;
+                esac
+            """.trimIndent())
+        }
+    }
+
     tasks.register<Zip>("zip${capitalized}") {
         inputs.property("variant.applicationId", variant.applicationId)
         inputs.property("variant.name", variant.name)
@@ -221,6 +256,10 @@ android.applicationVariants.all {
         dependsOn.add(variant.assembleProvider)
 
         from(moduleProp.get().outputs)
+        from(addonD.get().outputs) {
+            fileMode = 0b111_101_101 // 0o755; kotlin doesn't support octal literals
+            into("system/addon.d")
+        }
         from(permissionsXml.get().outputs) {
             into("system/etc/permissions")
         }
