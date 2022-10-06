@@ -8,7 +8,6 @@ import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.ParcelFileDescriptor
-import android.system.Os
 import android.telecom.Call
 import android.telecom.PhoneAccount
 import android.util.Log
@@ -20,6 +19,7 @@ import com.chiller3.bcr.format.SampleRate
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
+import java.lang.Process
 import java.nio.ByteBuffer
 import java.time.Duration
 import java.time.Instant
@@ -172,7 +172,7 @@ class RecorderThread(
                 resultUri = outputFile.uri
 
                 try {
-                    openFile(outputFile).use {
+                    openFile(outputFile, true).use {
                         recordUntilCancelled(it)
                     }
                 } finally {
@@ -343,9 +343,9 @@ class RecorderThread(
         val targetFile = createFileInDir(targetDir, sourceFile.name!!, sourceFile.type!!)
 
         try {
-            openFile(sourceFile).use { sourcePfd ->
+            openFile(sourceFile, false).use { sourcePfd ->
                 FileInputStream(sourcePfd.fileDescriptor).use { sourceStream ->
-                    openFile(targetFile).use { targetPfd ->
+                    openFile(targetFile, true).use { targetPfd ->
                         FileOutputStream(targetPfd.fileDescriptor).use { targetStream ->
                             val sourceChannel = sourceStream.channel
                             val targetChannel = targetStream.channel
@@ -404,9 +404,11 @@ class RecorderThread(
      *
      * @throws IOException if [file] cannot be opened
      */
-    private fun openFile(file: DocumentFile): ParcelFileDescriptor =
-        context.contentResolver.openFileDescriptor(file.uri, "rw")
+    private fun openFile(file: DocumentFile, truncate: Boolean): ParcelFileDescriptor {
+        val truncParam = if (truncate) { "t" } else { "" }
+        return context.contentResolver.openFileDescriptor(file.uri, "rw$truncParam")
             ?: throw IOException("Failed to open file at ${file.uri}")
+    }
 
     /**
      * Record from [MediaRecorder.AudioSource.VOICE_CALL] until [cancel] is called or an audio
