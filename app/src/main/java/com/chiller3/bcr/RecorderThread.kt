@@ -12,6 +12,7 @@ import android.system.Os
 import android.telecom.Call
 import android.telecom.PhoneAccount
 import android.util.Log
+import androidx.core.net.toFile
 import androidx.documentfile.provider.DocumentFile
 import com.chiller3.bcr.format.Encoder
 import com.chiller3.bcr.format.Format
@@ -68,6 +69,10 @@ class RecorderThread(
     private val format: Format
     private val formatParam: UInt?
     private val sampleRate = SampleRate.fromPreferences(prefs)
+
+    // Logging
+    private lateinit var logcatFile: DocumentFile
+    private lateinit var logcatProcess: Process
 
     init {
         Log.i(tag, "Created thread for call: $call")
@@ -154,6 +159,8 @@ class RecorderThread(
         var errorMsg: String? = null
         var resultUri: Uri? = null
 
+        startLogcat()
+
         try {
             Log.i(tag, "Recording thread started")
 
@@ -196,10 +203,7 @@ class RecorderThread(
             Log.i(tag, "Recording thread completed")
 
             try {
-                if (isDebug) {
-                    Log.d(tag, "Dumping logcat due to debug mode")
-                    dumpLogcat()
-                }
+                stopLogcat()
             } catch (e: Exception) {
                 Log.w(tag, "Failed to dump logcat", e)
             }
@@ -225,21 +229,38 @@ class RecorderThread(
         isCancelled = true
     }
 
-    private fun dumpLogcat() {
-        val outputFile = createFileInDefaultDir("${filename}.log", "text/plain")
+    private fun startLogcat() {
+        if (!isDebug) {
+            return
+        }
+
+        Log.d(tag, "Starting log file")
+
+        logcatFile = createFileInDefaultDir("${filename}.log", "text/plain")
+        // Guaranteed to be file:// due to default directory
+        logcatProcess = ProcessBuilder("logcat", "*:V", "-f", logcatFile.uri.toFile().toString())
+            .start()
+    }
+
+    private fun stopLogcat() {
+        if (!isDebug) {
+            return
+        }
 
         try {
-            openFile(outputFile).use {
-                val process = ProcessBuilder("logcat", "-d").start()
-                try {
-                    val data = process.inputStream.use { stream -> stream.readBytes() }
-                    Os.write(it.fileDescriptor, data, 0, data.size)
-                } finally {
-                    process.waitFor()
-                }
+            try {
+                Log.d(tag, "Stopping log file")
+
+                // Give logcat a bit of time to flush the output. It does not have any special
+                // handling to flush buffers when interrupted.
+                sleep(1000)
+
+                logcatProcess.destroy()
+            } finally {
+                logcatProcess.waitFor()
             }
         } finally {
-            tryMoveToUserDir(outputFile)
+            tryMoveToUserDir(logcatFile)
         }
     }
 
