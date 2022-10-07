@@ -4,6 +4,7 @@
   * Only applies to LineageOS-based firmware
 * In debug mode, run `logcat` for the entire duration of the call (Issue: #143, PR: #145, @chenxiaolong)
   * Fixes missing log messages due to logcat overflow
+* Improve output file writing reliability (Issue: #143, PR: #146, @chenxiaolong)
 
 ### Version 1.21
 
