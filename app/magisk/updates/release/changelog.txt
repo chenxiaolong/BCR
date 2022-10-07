@@ -1,7 +1,9 @@
 ### Unreleased
 
 * (Direct installs only) Add `/system/addon.d/` script to persist installation across OS updates (Issue: #142, PR: #144, @chenxiaolong)
-    * Only applies to LineageOS-based firmware
+  * Only applies to LineageOS-based firmware
+* In debug mode, run `logcat` for the entire duration of the call (Issue: #143, PR: #145, @chenxiaolong)
+  * Fixes missing log messages due to logcat overflow
 
 ### Version 1.21
 
