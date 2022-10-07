@@ -237,8 +237,12 @@ class RecorderThread(
         Log.d(tag, "Starting log file")
 
         logcatFile = createFileInDefaultDir("${filename}.log", "text/plain")
-        // Guaranteed to be file:// due to default directory
-        logcatProcess = ProcessBuilder("logcat", "*:V", "-f", logcatFile.uri.toFile().toString())
+        logcatProcess = ProcessBuilder("logcat", "*:V")
+            // This is better than -f because the logcat implementation calls fflush() when the
+            // output stream is stdout. logcatFile is guaranteed to have file:// scheme because it's
+            // created in the default output directory.
+            .redirectOutput(logcatFile.uri.toFile())
+            .redirectErrorStream(true)
             .start()
     }
 
