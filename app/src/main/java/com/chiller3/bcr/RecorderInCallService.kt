@@ -39,7 +39,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
             super.onStateChanged(call, state)
             Log.d(TAG, "onStateChanged: $call, $state")
 
-            handleStateChange(call)
+            handleStateChange(call, state)
         }
 
         override fun onDetailsChanged(call: Call, details: Call.Details) {
@@ -47,6 +47,17 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
             Log.d(TAG, "onDetailsChanged: $call, $details")
 
             handleDetailsChange(call, details)
+
+            // Due to firmware bugs, on older Samsung firmware, this callback (with the DISCONNECTED
+            // state) is the only notification we receive that a call ended
+            handleStateChange(call, null)
+        }
+
+        override fun onCallDestroyed(call: Call) {
+            super.onCallDestroyed(call)
+            Log.d(TAG, "onCallDestroyed: $call")
+
+            requestStopRecording(call)
         }
     }
 
@@ -56,74 +67,130 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         prefs = Preferences(this)
     }
 
+    /**
+     * Always called when the telephony framework becomes aware of a new call.
+     *
+     * This is the entry point for a new call. [callback] is always registered to keep track of
+     * state changes.
+     */
     override fun onCallAdded(call: Call) {
         super.onCallAdded(call)
         Log.d(TAG, "onCallAdded: $call")
 
+        // The callback is unregistered in requestStopRecording()
         call.registerCallback(callback)
-        handleStateChange(call)
+
+        // In case the call is already in the active state
+        handleStateChange(call, null)
     }
 
+    /**
+     * Called when the telephony framework destroys a call.
+     *
+     * This will request the cancellation of the recording, even if [call] happens to not be in one
+     * of the disconnecting states.
+     *
+     * This is NOT guaranteed to be called, notably on older Samsung firmware, due to bugs in the
+     * telephony framework. As a result, [handleStateChange] stop the recording if the call enters a
+     * disconnecting state.
+     */
     override fun onCallRemoved(call: Call) {
         super.onCallRemoved(call)
         Log.d(TAG, "onCallRemoved: $call")
 
-        call.unregisterCallback(callback)
-        handleStateChange(call)
+        // Unconditionally request the recording to stop, even if it's not in a disconnecting state
+        // since no further events will be received for the call.
+        requestStopRecording(call)
     }
 
     /**
-     * Start a new recording thread when a call becomes active and cancel it when it disconnects.
+     * Start or stop recording based on the [call] state.
      *
-     * When a call disconnects, the call is removed from [recorders] and [pendingExit] is
-     * incremented. [pendingExit] gets decremented when the thread actually completes, which may be
-     * before the call disconnects if an error occurred.
+     * If the state is [Call.STATE_ACTIVE], then recording will begin. If the state is either
+     * [Call.STATE_DISCONNECTING] or [Call.STATE_DISCONNECTED], then the cancellation of the active
+     * recording will be requested. If [state] is null, then the call state is queried from [call].
      */
-    private fun handleStateChange(call: Call) {
-        val state = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+    private fun handleStateChange(call: Call, state: Int?) {
+        val callState = state ?: if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             call.details.state
         } else {
             @Suppress("DEPRECATION")
             call.state
         }
 
-        if (state == Call.STATE_ACTIVE) {
-            if (!prefs.isCallRecordingEnabled) {
-                Log.v(TAG, "Call recording is disabled")
-            } else if (!Permissions.haveRequired(this)) {
-                Log.v(TAG, "Required permissions have not been granted")
-            } else if (!recorders.containsKey(call)) {
-                val recorder = try {
-                    RecorderThread(this, this, call)
-                } catch (e: Exception) {
-                    notifyError(e.message, null)
-                    throw e
-                }
-                recorders[call] = recorder
+        Log.d(TAG, "handleStateChange: $call, $state, $callState")
 
-                updateForegroundState()
-                recorder.start()
-            }
-        } else if (state == Call.STATE_DISCONNECTING || state == Call.STATE_DISCONNECTED) {
-            val recorder = recorders[call]
-            if (recorder != null) {
-                recorder.cancel()
-
-                recorders.remove(call)
-
-                // Don't change the foreground state until the thread has exited
-                ++pendingExit
-            }
+        if (callState == Call.STATE_ACTIVE) {
+            startRecording(call)
+        } else if (callState == Call.STATE_DISCONNECTING || callState == Call.STATE_DISCONNECTED) {
+            // This is necessary because onCallRemoved() might not be called due to firmware bugs
+            requestStopRecording(call)
         }
     }
 
     /**
-     * Notify recording thread of call details changes.
+     * Start a [RecorderThread] for [call].
+     *
+     * If call recording is disabled or the required permissions aren't granted, then no
+     * [RecorderThread] will be created.
+     *
+     * This function is idempotent.
+     */
+    private fun startRecording(call: Call) {
+        if (!prefs.isCallRecordingEnabled) {
+            Log.v(TAG, "Call recording is disabled")
+        } else if (!Permissions.haveRequired(this)) {
+            Log.v(TAG, "Required permissions have not been granted")
+        } else if (!recorders.containsKey(call)) {
+            val recorder = try {
+                RecorderThread(this, this, call)
+            } catch (e: Exception) {
+                notifyError(e.message, null)
+                throw e
+            }
+            recorders[call] = recorder
+
+            updateForegroundState()
+            recorder.start()
+        }
+    }
+
+    /**
+     * Request the cancellation of the [RecorderThread].
+     *
+     * The [RecorderThread] is immediately removed from [recorders], but [pendingExit] will be
+     * incremented to keep the foreground notification alive until the [RecorderThread] exits and
+     * reports its status. The thread may exit, decrementing [pendingExit], before this function is
+     * called if an error occurs during recording.
+     *
+     * This function will also unregister [callback] from the call since it's no longer necessary to
+     * track further state changes.
+     *
+     * This function is idempotent.
+     */
+    private fun requestStopRecording(call: Call) {
+        // This is safe to call multiple times in the AOSP implementation and also in heavily
+        // modified builds, like Samsung's firmware. If this ever becomes a problem, we can keep
+        // track of which calls have callbacks registered.
+        call.unregisterCallback(callback)
+
+        val recorder = recorders[call]
+        if (recorder != null) {
+            recorder.cancel()
+
+            recorders.remove(call)
+
+            // Don't change the foreground state until the thread has exited
+            ++pendingExit
+        }
+    }
+
+    /**
+     * Notify the recording thread of call details changes.
      *
      * The recording thread uses call details for generating filenames.
      */
     private fun handleDetailsChange(call: Call, details: Call.Details) {
-        // The call may not exist if this is called after handleStateChange with STATE_DISCONNECTING
         recorders[call]?.onCallDetailsChanged(details)
     }
 
