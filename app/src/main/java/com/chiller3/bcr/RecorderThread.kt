@@ -175,6 +175,7 @@ class RecorderThread(
                 try {
                     openFile(outputFile, true).use {
                         recordUntilCancelled(it)
+                        Os.fsync(it.fileDescriptor)
                     }
                 } finally {
                     val finalFilename = synchronized(filenameLock) { filename }
@@ -362,6 +363,8 @@ class RecorderThread(
 
                         remain -= ret
                     }
+
+                    Os.fsync(targetPfd.fileDescriptor)
                 }
             }
 
