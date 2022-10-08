@@ -8,6 +8,9 @@ import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.ParcelFileDescriptor
+import android.system.Int64Ref
+import android.system.Os
+import android.system.OsConstants
 import android.telecom.Call
 import android.telecom.PhoneAccount
 import android.util.Log
@@ -16,8 +19,6 @@ import androidx.documentfile.provider.DocumentFile
 import com.chiller3.bcr.format.Encoder
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.SampleRate
-import java.io.FileInputStream
-import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.Process
 import java.nio.ByteBuffer
@@ -348,21 +349,18 @@ class RecorderThread(
 
         try {
             openFile(sourceFile, false).use { sourcePfd ->
-                FileInputStream(sourcePfd.fileDescriptor).use { sourceStream ->
-                    openFile(targetFile, true).use { targetPfd ->
-                        FileOutputStream(targetPfd.fileDescriptor).use { targetStream ->
-                            val sourceChannel = sourceStream.channel
-                            val targetChannel = targetStream.channel
+                openFile(targetFile, true).use { targetPfd ->
+                    var remain = Os.lseek(sourcePfd.fileDescriptor, 0, OsConstants.SEEK_END)
+                    val offset = Int64Ref(0)
 
-                            var offset = 0L
-                            var remain = sourceChannel.size()
-
-                            while (remain > 0) {
-                                val n = targetChannel.transferFrom(sourceChannel, offset, remain)
-                                offset += n
-                                remain -= n
-                            }
+                    while (remain > 0) {
+                        val ret = Os.sendfile(
+                            targetPfd.fileDescriptor, sourcePfd.fileDescriptor, offset, remain)
+                        if (ret == 0L) {
+                            throw IOException("Unexpected EOF in sendfile()")
                         }
+
+                        remain -= ret
                     }
                 }
             }
