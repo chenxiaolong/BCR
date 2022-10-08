@@ -234,7 +234,7 @@ class RecorderThread(
             return
         }
 
-        Log.d(tag, "Starting log file")
+        Log.d(tag, "Starting log file (${BuildConfig.VERSION_NAME})")
 
         logcatFile = createFileInDefaultDir("${filename}.log", "text/plain")
         logcatProcess = ProcessBuilder("logcat", "*:V")
