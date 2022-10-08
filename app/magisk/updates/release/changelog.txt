@@ -2,8 +2,9 @@
 
 * (Direct installs only) Add `/system/addon.d/` script to persist installation across OS updates (Issue: #142, PR: #144, @chenxiaolong)
   * Only applies to LineageOS-based firmware
-* In debug mode, run `logcat` for the entire duration of the call (Issue: #143, PR: #145, #147, @chenxiaolong)
-  * Fixes missing log messages due to logcat overflow
+* Improve logging in debug mode (Issue: #143, PR: #145, #147, #148, @chenxiaolong)
+  * Run logcat interactively for the duration of the call to ensure no lost log messages due to logcat overflow
+  * Include BCR version number in the logs
 * Improve output file writing reliability (Issue: #143, PR: #146, @chenxiaolong)
 
 ### Version 1.21
