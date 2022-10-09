@@ -228,6 +228,7 @@ class RecorderThread(
      * [Uri].
      */
     fun cancel() {
+        Log.d(tag, "Requested cancellation")
         isCancelled = true
     }
 
