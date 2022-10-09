@@ -6,6 +6,8 @@
   * Run logcat interactively for the duration of the call to ensure no lost log messages due to logcat overflow
   * Include BCR version number in the logs
 * Improve output file writing reliability (Issue: #143, PR: #146, #149, #150, @chenxiaolong)
+* Improve call disconnection detection on buggy firmware (Issue: #143, PR: #151, @chenxiaolong)
+  * Works around Samsung OneUI's telephony framework bug where Android does not notify apps (including their own) when a call disconnects
 
 ### Version 1.21
 
