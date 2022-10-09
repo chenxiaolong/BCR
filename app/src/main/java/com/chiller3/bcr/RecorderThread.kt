@@ -496,7 +496,7 @@ class RecorderThread(
      *
      * @param audioRecord [AudioRecord.startRecording] must have been called
      * @param encoder [Encoder.start] must have been called
-     * @param bufSize Size of buffer to use for each [AudioRecord.read] operation
+     * @param bufSize Minimum buffer size for each [AudioRecord.read] operation
      *
      * @throws Exception if the audio recorder or encoder encounters an error
      */
@@ -505,13 +505,18 @@ class RecorderThread(
         val frameSize = audioRecord.format.frameSizeInBytesCompat
 
         // Use a slightly larger buffer to reduce the chance of problems under load
-        val buffer = ByteBuffer.allocateDirect(bufSize * 2)
+        val factor = 2
+        val buffer = ByteBuffer.allocateDirect(bufSize * factor)
         val bufferFrames = buffer.capacity().toLong() / frameSize
         val bufferNs = bufferFrames * 1_000_000_000L / audioRecord.sampleRate
+        Log.d(tag, "Buffer is ${buffer.capacity()} bytes, $bufferFrames frames, ${bufferNs}ns")
 
         while (!isCancelled) {
             val begin = System.nanoTime()
-            val n = audioRecord.read(buffer, buffer.remaining())
+            // We do a non-blocking read because on Samsung devices, when the call ends, the audio
+            // device immediately stops producing data and blocks forever until the next call is
+            // active.
+            val n = audioRecord.read(buffer, buffer.remaining(), AudioRecord.READ_NON_BLOCKING)
             val recordElapsed = System.nanoTime() - begin
             var encodeElapsed = 0L
 
@@ -520,8 +525,9 @@ class RecorderThread(
                 isCancelled = true
                 captureFailed = true
             } else if (n == 0) {
-                Log.e(tag,  "Unexpected EOF from AudioRecord")
-                isCancelled = true
+                // Wait for the wall clock equivalent of the minimum buffer size
+                sleep(bufferNs / 1_000_000L / factor)
+                continue
             } else {
                 buffer.limit(n)
 
