@@ -1,4 +1,4 @@
-### Unreleased
+### Version 1.22
 
 * (Direct installs only) Add `/system/addon.d/` script to persist installation across OS updates (Issue: #142, PR: #144, @chenxiaolong)
   * Only applies to LineageOS-based firmware
