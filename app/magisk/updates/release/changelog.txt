@@ -8,6 +8,8 @@
 * Improve output file writing reliability (Issue: #143, PR: #146, #149, #150, @chenxiaolong)
 * Improve call disconnection detection on buggy firmware (Issue: #143, PR: #151, @chenxiaolong)
   * Works around Samsung OneUI's telephony framework bug where Android does not notify apps (including their own) when a call disconnects
+* Use non-blocking reads from call audio stream (Issue: #143, PR: #152, @chenxiaolong)
+  * Fixes recordings not stopping until another call becomes active on Samsung OneUI because `AudioRecord.read()` blocks forever as soon as a call disconnects
 
 ### Version 1.21
 
