@@ -27,6 +27,7 @@
     <string name="output_dir_bottom_sheet_file_retention">Dosyaları sakla</string>
     <string name="retention_keep_all">Hepsini sakla</string>
     <plurals name="retention_days">
+        <item quantity="one">%d gün sakla</item>
         <item quantity="other">%d gün sakla</item>
     </plurals>
 
