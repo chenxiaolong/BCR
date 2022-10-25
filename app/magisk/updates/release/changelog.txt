@@ -1,3 +1,7 @@
+### Unreleased
+
+* Update all dependencies and fix build system lint issues (PR: #155, @PatrykMis)
+
 ### Version 1.22
 
 * (Direct installs only) Add `/system/addon.d/` script to persist installation across OS updates (Issue: #142, PR: #144, @chenxiaolong)
