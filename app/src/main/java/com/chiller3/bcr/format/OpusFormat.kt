@@ -20,7 +20,7 @@ object OpusFormat : Format() {
     override val mimeTypeContainer: String = "audio/ogg"
     override val mimeTypeAudio: String = MediaFormat.MIMETYPE_AUDIO_OPUS
     override val passthrough: Boolean = false
-    override val supported: Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+    override val supported: Boolean = true
 
     override fun updateMediaFormat(mediaFormat: MediaFormat, param: UInt) {
         mediaFormat.apply {
@@ -29,7 +29,6 @@ object OpusFormat : Format() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     override fun getContainer(fd: FileDescriptor): Container =
         MediaMuxerContainer(fd, MediaMuxer.OutputFormat.MUXER_OUTPUT_OGG)
 }
