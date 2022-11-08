@@ -1,6 +1,7 @@
 ### Unreleased
 
 * Update all dependencies and fix build system lint issues (PR: #155, @PatrykMis)
+* Add Slovak translation (PR: #161, @pvagner)
 
 ### Version 1.22
 
