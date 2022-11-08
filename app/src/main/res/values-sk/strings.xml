@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">BCR</string>
+    <string name="app_name_full">Základný nahrávač hovorov</string>
+
+    <!-- Preference headers -->
+    <string name="pref_header_general">Všeobecné</string>
+    <string name="pref_header_about">O aplikácii</string>
+
+    <!-- General preferences -->
+    <string name="pref_call_recording_name">Nahrávanie hovorov</string>
+    <string name="pref_call_recording_desc">Nahráva prichádzajúce a odchádzajúce telefonické hovory. Aby fungovalo nahrávanie na pozadí, je potrebné povoliť prístup k mikrofónu a upozorneniam.</string>
+
+    <string name="pref_output_dir_name">Priečinok s nahrávkami</string>
+    <string name="pref_output_dir_desc">Vyberte priečinok, kde sa budú ukladať nahrávky.</string>
+
+    <string name="pref_output_format_name">Formát súborov</string>
+    <string name="pref_output_format_desc">Vyberte formát kódovania nahrávok.</string>
+
+    <string name="pref_inhibit_batt_opt_name">Zakázať optimalizáciu batérie</string>
+    <string name="pref_inhibit_batt_opt_desc">Znižuje ryziko ukončenia aplikácie systémom</string>
+
+    <!-- About "preference" -->
+    <string name="pref_version_name">Verzia</string>
+
+    <!-- Output directory bottom sheet -->
+    <string name="output_dir_bottom_sheet_change_dir">Zmeniť priečinok</string>
+    <string name="output_dir_bottom_sheet_file_retention">Platnosť nahrávok</string>
+    <string name="retention_keep_all">Ponechať všetky</string>
+    <plurals name="retention_days">
+        <item quantity="one">Ponechať %d deň</item>
+        <item quantity="few">Ponechať %d dni</item>
+        <item quantity="other">Ponechať %d dní</item>
+    </plurals>
+
+    <!-- Output format bottom sheet -->
+    <string name="output_format_bottom_sheet_output_format">Formát súborov</string>
+    <string name="output_format_bottom_sheet_compression_level">Úroveň kompresie</string>
+    <string name="output_format_bottom_sheet_bitrate">Bitová rýchlosť</string>
+    <string name="output_format_bottom_sheet_sample_rate">Rýchlosť vzorkovania</string>
+
+    <string name="bottom_sheet_reset">Obnoviť predvolené</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_persistent_name">Služby na pozadí</string>
+    <string name="notification_channel_persistent_desc">Trvalé upozornenie na nahrávanie hovorov</string>
+    <string name="notification_channel_alerts_name">Upozornenia</string>
+    <string name="notification_channel_alerts_desc">Upozornenia na chyby počas nahrávania</string>
+    <string name="notification_recording_in_progress">Nahrávanie telefonického hovoru</string>
+    <string name="notification_recording_failed">Nahrávanie hovoru zlyhalo</string>
+
+    <!-- Quick settings tile -->
+    <string name="quick_settings_label">Nahrávanie hovorov</string>
+</resources>
