@@ -1,4 +1,4 @@
-### Unreleased
+### Version 1.23
 
 * Update all dependencies and fix build system lint issues (PR: #155, @PatrykMis)
 * Add Slovak translation (PR: #161, @pvagner)
