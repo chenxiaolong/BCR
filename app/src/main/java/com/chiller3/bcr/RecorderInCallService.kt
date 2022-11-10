@@ -11,11 +11,33 @@ import android.os.Looper
 import android.telecom.Call
 import android.telecom.InCallService
 import android.util.Log
+import com.chiller3.bcr.api.MessagingAPIInterface
+import com.chiller3.bcr.api.RetrofitBuilder
+import com.chiller3.bcr.models.APIResponse
+import com.chiller3.bcr.models.CallLogEvent
+import com.chiller3.bcr.models.CallLogEventsBody
+import io.sentry.Sentry
+import kotlinx.coroutines.*
+import kotlinx.datetime.Clock
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
+import kotlin.coroutines.CoroutineContext
 
-class RecorderInCallService : InCallService(), RecorderThread.OnRecordingCompletedListener {
+
+class RecorderInCallService : InCallService(), RecorderThread.OnRecordingCompletedListener,
+    CoroutineScope {
     companion object {
         private val TAG = RecorderInCallService::class.java.simpleName
     }
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
+    private lateinit var job: Job
+
+    private val messagingAPIInterface: MessagingAPIInterface = RetrofitBuilder.messagingAPIInterface
 
     private lateinit var prefs: Preferences
     private val handler = Handler(Looper.getMainLooper())
@@ -34,17 +56,36 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
 
     private var failedNotificationId = 2
 
+    private fun getStateName(state: Int): String {
+        return when (state) {
+            0 -> "NEW"
+            1 -> "DIALING"
+            2 -> "RINGING"
+            3 -> "HOLDING"
+            4 -> "ACTIVE"
+            7 -> "DISCONNECTED"
+            8 -> "SELECT_PHONE_ACCOUNT"
+            9 -> "CONNECTING"
+            10 -> "DISCONNECTING"
+            11 -> "PULLING_CALL"
+            13 -> "SIMULATED_RINGING"
+            else -> "UNKNOWN"
+        }
+    }
+
     private val callback = object : Call.Callback() {
         override fun onStateChanged(call: Call, state: Int) {
             super.onStateChanged(call, state)
             Log.d(TAG, "onStateChanged: $call, $state")
+
+            syncCallState(call = call, state)
 
             handleStateChange(call, state)
         }
 
         override fun onDetailsChanged(call: Call, details: Call.Details) {
             super.onDetailsChanged(call, details)
-            Log.d(TAG, "onDetailsChanged: $call, $details")
+            Log.d(TAG, "onDetailsChanged: ${call.details}, ${details.handle}, $details")
 
             handleDetailsChange(call, details)
 
@@ -63,7 +104,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
 
     override fun onCreate() {
         super.onCreate()
-
+        job = Job()
         prefs = Preferences(this)
     }
 
@@ -79,6 +120,8 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
 
         // The callback is unregistered in requestStopRecording()
         call.registerCallback(callback)
+
+        syncCallState(call = call, null)
 
         // In case the call is already in the active state
         handleStateChange(call, null)
@@ -103,6 +146,41 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         requestStopRecording(call)
     }
 
+    private fun syncCallState(call: Call, state: Int?) {
+        val callState = state ?: if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            call.details.state
+        } else {
+            @Suppress("DEPRECATION")
+            call.state
+        }
+
+        launch {
+            val token: String = "Token " + prefs.userToken
+            try {
+                val response: APIResponse? = withContext(Dispatchers.IO) {
+                    messagingAPIInterface.postCallLogs(
+                        token = token,
+                        body = CallLogEventsBody(
+                            logs = arrayListOf(
+                                CallLogEvent(
+                                    phone = call.details.handle.schemeSpecificPart.toString(),
+                                    direction = if (call.details.callDirection == 0) "INCOMING" else "OUTGOING",
+                                    creationTimestamp = (call.details.creationTimeMillis / 1000),
+                                    timestamp = (Clock.System.now().toEpochMilliseconds() / 1000),
+                                    type = getStateName(callState)
+                                )
+                            )
+                        )
+                    )
+                }
+                Log.d(TAG, response.toString())
+            } catch (e: Exception) {
+                Sentry.captureException(e)
+            }
+
+        }
+    }
+
     /**
      * Start or stop recording based on the [call] state.
      *
@@ -118,10 +196,14 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
             call.state
         }
 
-        Log.d(TAG, "handleStateChange: $call, $state, $callState")
+        Log.d(
+            TAG,
+            "handleStateChange: ${call.details.handle}, ${call.details.creationTimeMillis}, $state, $callState"
+        )
 
         if (callState == Call.STATE_ACTIVE) {
             startRecording(call)
+
         } else if (callState == Call.STATE_DISCONNECTING || callState == Call.STATE_DISCONNECTED) {
             // This is necessary because onCallRemoved() might not be called due to firmware bugs
             requestStopRecording(call)
@@ -270,6 +352,40 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
 
     override fun onRecordingCompleted(thread: RecorderThread, uri: Uri) {
         Log.i(TAG, "Recording completed: ${thread.id}: ${thread.redact(uri)}")
+        launch {
+            try {
+                val token: String = "Token " + prefs.userToken
+                val response: APIResponse? = withContext(Dispatchers.IO) {
+                    Log.d(TAG, "making Request")
+                    val recording = File(uri.path!!)
+                    val filePart = MultipartBody.Part.createFormData(
+                        "recording_file",
+                        recording.name,
+                        RequestBody.create(MediaType.parse("audio/ogg"), recording)
+                    )
+                    val creationTimestamp = MultipartBody.Part.createFormData(
+                        "creation_timestamp", RecorderThread.timestampFromFilename(recording.name)!!
+                            .toEpochSecond().toString()
+                    )
+                    Log.d(
+                        TAG,
+                        RecorderThread.timestampFromFilename(recording.name)!!.toEpochSecond()
+                            .toString()
+                    )
+                    Log.d(TAG, filePart.toString())
+                    messagingAPIInterface.postRecordingFile(
+                        token = token,
+                        file = filePart,
+                        creationTimestamp = creationTimestamp
+
+                    )
+                }
+                Log.d(TAG, response.toString())
+            } catch (e: Exception) {
+                Sentry.captureException(e)
+            }
+
+        }
         handler.post {
             onThreadExited()
         }

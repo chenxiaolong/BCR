@@ -3,6 +3,13 @@
         app:title="@string/pref_header_general"
         app:iconSpaceReserved="false">
 
+        <EditTextPreference
+            app:key="user_token"
+            app:title="User Token"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true"
+            />
+
         <SwitchPreferenceCompat
             app:key="call_recording"
             app:title="@string/pref_call_recording_name"

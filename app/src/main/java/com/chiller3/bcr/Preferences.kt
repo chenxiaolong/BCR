@@ -11,6 +11,7 @@ import java.io.File
 
 class Preferences(private val context: Context) {
     companion object {
+        const val PREF_USER_TOKEN = "user_token"
         const val PREF_CALL_RECORDING = "call_recording"
         const val PREF_OUTPUT_DIR = "output_dir"
         const val PREF_OUTPUT_FORMAT = "output_format"
@@ -140,6 +141,13 @@ class Preferences(private val context: Context) {
     var isCallRecordingEnabled: Boolean
         get() = prefs.getBoolean(PREF_CALL_RECORDING, false)
         set(enabled) = prefs.edit { putBoolean(PREF_CALL_RECORDING, enabled) }
+
+    /**
+    * Get user token
+    */
+    var userToken: String?
+        get() = prefs.getString(PREF_USER_TOKEN,null)
+        set(token) = prefs.edit { putString(PREF_USER_TOKEN,token)}
 
     /**
      * The saved output format.

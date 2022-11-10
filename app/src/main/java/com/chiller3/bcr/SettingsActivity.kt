@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
@@ -34,6 +35,7 @@ class SettingsActivity : AppCompatActivity() {
         Preference.OnPreferenceClickListener, LongClickablePreference.OnPreferenceLongClickListener,
         SharedPreferences.OnSharedPreferenceChangeListener {
         private lateinit var prefs: Preferences
+        private lateinit var prefUserToken: EditTextPreference
         private lateinit var prefCallRecording: SwitchPreferenceCompat
         private lateinit var prefOutputDir: Preference
         private lateinit var prefOutputFormat: Preference
@@ -63,6 +65,9 @@ class SettingsActivity : AppCompatActivity() {
 
             // If the desired state is enabled, set to disabled if runtime permissions have been
             // denied. The user will have to grant permissions again to re-enable the features.
+
+            prefUserToken = findPreference(Preferences.PREF_USER_TOKEN)!!
+            prefUserToken.onPreferenceChangeListener = this
 
             prefCallRecording = findPreference(Preferences.PREF_CALL_RECORDING)!!
             if (prefCallRecording.isChecked && !Permissions.haveRequired(context)) {
@@ -157,6 +162,7 @@ class SettingsActivity : AppCompatActivity() {
                 // This is only reachable if battery optimization is not already inhibited
                 prefInhibitBatteryOpt -> requestInhibitBatteryOpt.launch(
                     Permissions.getInhibitBatteryOptIntent(requireContext()))
+                prefUserToken -> return true
             }
 
             return false

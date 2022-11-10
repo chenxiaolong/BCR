@@ -577,7 +577,7 @@ class RecorderThread(
             .appendOffset("+HHMMss", "+0000")
             .toFormatter()
 
-        private fun timestampFromFilename(name: String): ZonedDateTime? {
+        fun timestampFromFilename(name: String): ZonedDateTime? {
             try {
                 // Date is before first separator
                 val first = name.indexOf('_')
