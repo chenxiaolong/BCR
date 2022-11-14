@@ -43,7 +43,7 @@
         app:title="@string/pref_header_about"
         app:iconSpaceReserved="false">
 
-        <com.chiller3.bcr.LongClickablePreference
+        <link.cure.recorder.LongClickablePreference
             app:key="version"
             app:persistent="false"
             app:title="@string/pref_version_name"
