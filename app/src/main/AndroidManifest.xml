@@ -41,7 +41,7 @@
         <meta-data android:name="io.sentry.traces.user-interaction.enable" android:value="true" />
 
         <service
-            android:name=".RecorderInCallService"
+            android:name=".services.RecorderInCallService"
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="microphone"
@@ -52,7 +52,7 @@
         </service>
 
         <service
-            android:name=".RecorderTileService"
+            android:name=".services.RecorderTileService"
             android:enabled="true"
             android:exported="true"
             android:icon="@drawable/ic_launcher_quick_settings"
@@ -64,7 +64,7 @@
         </service>
 
         <activity
-            android:name=".SettingsActivity"
+            android:name=".ui.SettingsActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

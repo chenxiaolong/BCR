@@ -49,4 +49,5 @@
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Call recording</string>
+    <string name="reset_queue" translatable="false">Reset Queue</string>
 </resources>

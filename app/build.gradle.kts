@@ -144,10 +144,18 @@ android {
 
 dependencies {
 
+    //Gson
+    implementation("com.google.code.gson:gson:2.9.0")
+
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.google.code.gson:gson:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.5.0")
+
+    //Tape
+    implementation("com.squareup:tape:1.2.3")
+
+    //WorkManager
+    implementation("androidx.work:work-runtime-ktx:2.7.1")
 
     implementation("androidx.activity:activity-ktx:1.6.1")
     implementation("androidx.appcompat:appcompat:1.5.1")

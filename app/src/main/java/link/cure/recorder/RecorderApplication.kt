@@ -3,12 +3,16 @@ package link.cure.recorder
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.util.Log
 import com.google.android.material.color.DynamicColors
+import link.cure.recorder.data.queue.CallEventUploadTaskQueue
 
 class RecorderApplication : Application() {
     companion object {
         const val CHANNEL_ID_PERSISTENT = "persistent"
         const val CHANNEL_ID_ALERTS = "alerts"
+
+        private const val TAG = "RecorderApplication"
     }
 
     override fun onCreate() {

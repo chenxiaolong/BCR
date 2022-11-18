@@ -43,7 +43,7 @@
         app:title="@string/pref_header_about"
         app:iconSpaceReserved="false">
 
-        <link.cure.recorder.LongClickablePreference
+        <link.cure.recorder.utils.LongClickablePreference
             app:key="version"
             app:persistent="false"
             app:title="@string/pref_version_name"

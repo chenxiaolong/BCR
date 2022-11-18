@@ -4,3 +4,4 @@ export RELEASE_KEYSTORE_PASSPHRASE=doc@play
 export RELEASE_KEY_PASSPHRASE=doc@play
 
 ./gradlew zipRelease
+adb push ./app/build/distributions/release/* /storage/emulated/0/Download

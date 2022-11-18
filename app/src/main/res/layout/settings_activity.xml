@@ -8,8 +8,22 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize" />
 
+    <Button
+        android:id="@+id/btn_event_queue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reset_queue" />
+
+    <Button
+        android:id="@+id/btn_recording_queue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reset_queue" />
+
     <FrameLayout
         android:id="@+id/settings"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
+
+    </FrameLayout>
 </LinearLayout>
