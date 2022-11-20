@@ -40,23 +40,25 @@ import android.os.Process as AndroidProcess
  * Captures call audio and encodes it into an output file in the user's selected directory or the
  * fallback/default directory.
  *
- * @constructor Create a thread for recording a call. Note that the system only has a single
- * [MediaRecorder.AudioSource.VOICE_CALL] stream. If multiple calls are being recorded, the recorded
- * audio for each call may not be as expected.
+ * @constructor Create a thread for recording a call or the mic. Note that the system only has a
+ * single [MediaRecorder.AudioSource.VOICE_CALL] stream. If multiple calls are being recorded, the
+ * recorded audio for each call may not be as expected.
  * @param context Used for querying shared preferences and accessing files via SAF. A reference is
  * kept in the object.
  * @param listener Used for sending completion notifications. The listener is called from this
  * thread, not the main thread.
- * @param call Used only for determining the output filename and is not saved.
+ * @param call Used only for determining the output filename and is not saved. If null, then this
+ * thread records from the mic, not from a call.
  */
 class RecorderThread(
     private val context: Context,
     private val listener: OnRecordingCompletedListener,
-    call: Call,
+    call: Call?,
 ) : Thread(RecorderThread::class.java.simpleName) {
     private val tag = "${RecorderThread::class.java.simpleName}/${id}"
     private val prefs = Preferences(context)
     private val isDebug = BuildConfig.DEBUG || prefs.isDebugMode
+    private val isMic = call == null
 
     // Thread state
     @Volatile private var isCancelled = false
@@ -67,7 +69,7 @@ class RecorderThread(
 
     // Filename
     private val filenameLock = Object()
-    private var pendingCallDetails: Call.Details? = null
+    private var pendingCallDetails = call?.details
     private lateinit var filenameTemplate: FilenameTemplate
     private lateinit var filename: String
     private val redactions = HashMap<String, String>()
@@ -83,8 +85,6 @@ class RecorderThread(
 
     init {
         Log.i(tag, "Created thread for call: $call")
-
-        onCallDetailsChanged(call.details)
 
         val savedFormat = Format.fromPreferences(prefs)
         format = savedFormat.first
@@ -104,6 +104,35 @@ class RecorderThread(
     }
 
     private fun redact(uri: Uri): String = redact(Uri.decode(uri.toString()))
+
+    /**
+     * Update [filename] for mic recording.
+     *
+     * This function holds a lock on [filenameLock] until it returns.
+     */
+    private fun setFilenameForMic() {
+        synchronized(filenameLock) {
+            redactions.clear()
+
+            filename = filenameTemplate.evaluate {
+                when (it) {
+                    "date" -> {
+                        callTimestamp = ZonedDateTime.now()
+                        return@evaluate FORMATTER.format(callTimestamp)
+                    }
+                    else -> {
+                        Log.w(tag, "Unknown filename template variable: $it")
+                    }
+                }
+
+                null
+            }
+                // AOSP's SAF automatically replaces invalid characters with underscores, but just in
+                // case an OEM fork breaks that, do the replacement ourselves to prevent directory
+                // traversal attacks.
+                .replace('/', '_').trim()
+        }
+    }
 
     /**
      * Update [filename] with information from [details].
@@ -209,10 +238,18 @@ class RecorderThread(
                 Log.i(tag, "Recording cancelled before it began")
             } else {
                 val initialFilename = synchronized(filenameLock) {
-                    filenameTemplate = FilenameTemplate.load(context)
+                    val details = pendingCallDetails
 
-                    onCallDetailsChanged(pendingCallDetails!!)
-                    pendingCallDetails = null
+                    if (details == null) {
+                        filenameTemplate = FilenameTemplate.load(context, "filename_mic")
+
+                        setFilenameForMic()
+                    } else {
+                        filenameTemplate = FilenameTemplate.load(context, "filename")
+
+                        onCallDetailsChanged(details)
+                        pendingCallDetails = null
+                    }
 
                     filename
                 }
@@ -466,8 +503,7 @@ class RecorderThread(
     }
 
     /**
-     * Record from [MediaRecorder.AudioSource.VOICE_CALL] until [cancel] is called or an audio
-     * capture or encoding error occurs.
+     * Record until [cancel] is called or an audio capture or encoding error occurs.
      *
      * [pfd] does not get closed by this method.
      */
@@ -483,7 +519,11 @@ class RecorderThread(
         Log.d(tag, "AudioRecord minimum buffer size: $minBufSize")
 
         val audioRecord = AudioRecord(
-            MediaRecorder.AudioSource.VOICE_CALL,
+            if (isMic) {
+                MediaRecorder.AudioSource.MIC
+            } else {
+                MediaRecorder.AudioSource.VOICE_CALL
+            },
             sampleRate.value.toInt(),
             CHANNEL_CONFIG,
             ENCODING,
