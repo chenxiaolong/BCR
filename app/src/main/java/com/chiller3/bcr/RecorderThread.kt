@@ -36,23 +36,25 @@ import android.os.Process as AndroidProcess
  * Captures call audio and encodes it into an output file in the user's selected directory or the
  * fallback/default directory.
  *
- * @constructor Create a thread for recording a call. Note that the system only has a single
- * [MediaRecorder.AudioSource.VOICE_CALL] stream. If multiple calls are being recorded, the recorded
- * audio for each call may not be as expected.
+ * @constructor Create a thread for recording a call or the mic. Note that the system only has a
+ * single [MediaRecorder.AudioSource.VOICE_CALL] stream. If multiple calls are being recorded, the
+ * recorded audio for each call may not be as expected.
  * @param context Used for querying shared preferences and accessing files via SAF. A reference is
  * kept in the object.
  * @param listener Used for sending completion notifications. The listener is called from this
  * thread, not the main thread.
- * @param call Used only for determining the output filename and is not saved.
+ * @param call Used only for determining the output filename and is not saved. If null, then this
+ * thread records from the mic, not from a call.
  */
 class RecorderThread(
     private val context: Context,
     private val listener: OnRecordingCompletedListener,
-    call: Call,
+    call: Call?,
 ) : Thread(RecorderThread::class.java.simpleName) {
     private val tag = "${RecorderThread::class.java.simpleName}/${id}"
     private val prefs = Preferences(context)
     private val isDebug = BuildConfig.DEBUG || prefs.isDebugMode
+    private val isMic = call == null
 
     // Thread state
     @Volatile private var isCancelled = false
@@ -76,8 +78,8 @@ class RecorderThread(
 
     // Filename
     private val filenameLock = Object()
-    private var pendingCallDetails: Call.Details? = null
-    private lateinit var lastCallDetails: Call.Details
+    private var pendingCallDetails = call?.details
+    private var lastCallDetails: Call.Details? = null
     private lateinit var filenameTemplate: FilenameTemplate
     private lateinit var filename: String
     private val redactions = HashMap<String, String>()
@@ -112,11 +114,67 @@ class RecorderThread(
         Log.i(tag, "Created thread for call: $call")
         Log.i(tag, "Initially paused: $isPaused")
 
-        onCallDetailsChanged(call.details)
-
         val savedFormat = Format.fromPreferences(prefs)
         format = savedFormat.first
         formatParam = savedFormat.second
+    }
+
+    /**
+     * Format [callTimestamp] based on the date variable [varName].
+     *
+     * This has a side effect of updating [formatter] with the new custom formatter if one is
+     * specified via [varName].
+     */
+    private fun handleDateFormat(varName: String): String {
+        require(varName == "date" || varName.startsWith("date:")) {
+            "Not a date variable: $varName"
+        }
+
+        val colon = varName.indexOf(":")
+        if (colon >= 0) {
+            val pattern = varName.substring(colon + 1)
+            Log.d(tag, "Using custom datetime pattern: $pattern")
+
+            try {
+                formatter = DateTimeFormatterBuilder()
+                    .appendPattern(pattern)
+                    .toFormatter()
+            } catch (e: Exception) {
+                Log.w(tag, "Invalid custom datetime pattern: $pattern; using default", e)
+            }
+        }
+
+        return formatter.format(callTimestamp)
+    }
+
+    /**
+     * Update [filename] for mic recording.
+     *
+     * This function holds a lock on [filenameLock] until it returns.
+     */
+    private fun setFilenameForMic() {
+        synchronized(filenameLock) {
+            filename = filenameTemplate.evaluate {
+                when {
+                    it == "date" || it.startsWith("date:") -> {
+                        if (!this::callTimestamp.isInitialized) {
+                            callTimestamp = ZonedDateTime.now()
+                        }
+
+                        return@evaluate handleDateFormat(it)
+                    }
+                    else -> {
+                        Log.w(tag, "Unknown filename template variable: $it")
+                    }
+                }
+
+                null
+            }
+                // AOSP's SAF automatically replaces invalid characters with underscores, but just in
+                // case an OEM fork breaks that, do the replacement ourselves to prevent directory
+                // traversal attacks.
+                .replace('/', '_').trim()
+        }
     }
 
     /**
@@ -124,7 +182,12 @@ class RecorderThread(
      *
      * This function holds a lock on [filenameLock] until it returns.
      */
-    fun onCallDetailsChanged(details: Call.Details) {
+    fun onCallDetailsChanged(details: Call.Details?) {
+        if (details == null) {
+            setFilenameForMic()
+            return
+        }
+
         synchronized(filenameLock) {
             if (!this::filenameTemplate.isInitialized) {
                 // Thread hasn't started yet, so we haven't loaded the filename template
@@ -140,21 +203,7 @@ class RecorderThread(
                         val instant = Instant.ofEpochMilli(details.creationTimeMillis)
                         callTimestamp = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
 
-                        val colon = it.indexOf(":")
-                        if (colon >= 0) {
-                            val pattern = it.substring(colon + 1)
-                            Log.d(tag, "Using custom datetime pattern: $pattern")
-
-                            try {
-                                formatter = DateTimeFormatterBuilder()
-                                    .appendPattern(pattern)
-                                    .toFormatter()
-                            } catch (e: Exception) {
-                                Log.w(tag, "Invalid custom datetime pattern: $pattern; using default", e)
-                            }
-                        }
-
-                        return@evaluate formatter.format(callTimestamp)
+                        return@evaluate handleDateFormat(it)
                     }
                     it == "direction" -> {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -229,13 +278,15 @@ class RecorderThread(
         var errorMsg: String? = null
         var resultUri: Uri? = null
 
+        val templateKey = if (pendingCallDetails == null) { "filename_mic" } else { "filename" }
+
         synchronized(filenameLock) {
             // We initially do not allow custom filename templates because SAF is extraordinarily
             // slow on some devices. Even with the our custom findFileFast() implementation, simply
             // checking for the existence of the template may take >500ms.
-            filenameTemplate = FilenameTemplate.load(context, false)
+            filenameTemplate = FilenameTemplate.load(context, templateKey, false)
 
-            onCallDetailsChanged(pendingCallDetails!!)
+            onCallDetailsChanged(pendingCallDetails)
             pendingCallDetails = null
         }
 
@@ -258,7 +309,7 @@ class RecorderThread(
                     }
                 } finally {
                     val finalFilename = synchronized(filenameLock) {
-                        filenameTemplate = FilenameTemplate.load(context, true)
+                        filenameTemplate = FilenameTemplate.load(context, templateKey, true)
 
                         onCallDetailsChanged(lastCallDetails)
                         filename
@@ -462,8 +513,7 @@ class RecorderThread(
     }
 
     /**
-     * Record from [MediaRecorder.AudioSource.VOICE_CALL] until [cancel] is called or an audio
-     * capture or encoding error occurs.
+     * Record until [cancel] is called or an audio capture or encoding error occurs.
      *
      * [pfd] does not get closed by this method.
      */
@@ -479,7 +529,11 @@ class RecorderThread(
         Log.d(tag, "AudioRecord minimum buffer size: $minBufSize")
 
         val audioRecord = AudioRecord(
-            MediaRecorder.AudioSource.VOICE_CALL,
+            if (isMic) {
+                MediaRecorder.AudioSource.MIC
+            } else {
+                MediaRecorder.AudioSource.VOICE_CALL
+            },
             sampleRate.value.toInt(),
             CHANNEL_CONFIG,
             ENCODING,

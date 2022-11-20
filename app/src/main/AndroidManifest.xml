@@ -48,6 +48,19 @@
         </service>
 
         <service
+            android:name=".RecorderMicTileService"
+            android:enabled="true"
+            android:exported="true"
+            android:icon="@drawable/ic_launcher_quick_settings"
+            android:label="@string/quick_settings_mic_label"
+            android:foregroundServiceType="microphone"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
             android:name=".RecorderTileService"
             android:enabled="true"
             android:exported="true"
