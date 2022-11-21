@@ -23,7 +23,6 @@ import link.cure.recorder.data.queue.CallRecordingUploadTaskQueue
 import link.cure.recorder.ui.SettingsActivity
 import link.cure.recorder.utils.Permissions
 import link.cure.recorder.utils.Preferences
-import link.cure.recorder.utils.toPhoneString
 import kotlin.coroutines.CoroutineContext
 
 
@@ -167,7 +166,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         }
 
         val callEvent = CallLogEvent(
-            phone = call.details.handle.schemeSpecificPart.toString().toPhoneString(),
+            phone = call.details.handle.schemeSpecificPart.toString(),
             direction = if (call.details.callDirection == 0) "INCOMING" else "OUTGOING",
             creationTimestamp = (call.details.creationTimeMillis),
             timestamp = (System.currentTimeMillis()),

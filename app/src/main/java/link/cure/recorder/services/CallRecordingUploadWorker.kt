@@ -6,19 +6,15 @@ import android.util.Log
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import io.sentry.Sentry
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import link.cure.recorder.data.api.MessagingAPIInterface
 import link.cure.recorder.data.api.RetrofitBuilder
 import link.cure.recorder.data.models.APIResponse
 import link.cure.recorder.data.queue.CallRecordingUploadTaskQueue
 import link.cure.recorder.utils.Preferences
-import link.cure.recorder.utils.toPhoneString
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
-import java.net.URI
 
 class CallRecordingUploadWorker(context: Context, workerParameters: WorkerParameters) :
     CoroutineWorker(context, workerParameters) {
@@ -61,7 +57,7 @@ class CallRecordingUploadWorker(context: Context, workerParameters: WorkerParame
                 )
                 val phone = MultipartBody.Part.createFormData(
                     "user_phone",
-                    RecorderThread.phoneFromFilename(recording.name)?.toPhoneString() ?: "unknown"
+                    RecorderThread.phoneFromFilename(recording.name) ?: "unknown"
                 )
                 Log.d(
                     TAG,
