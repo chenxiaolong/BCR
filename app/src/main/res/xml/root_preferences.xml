@@ -9,6 +9,12 @@
             app:summary="@string/pref_call_recording_desc"
             app:iconSpaceReserved="false" />
 
+        <SwitchPreferenceCompat
+            app:key="vibrate"
+            app:title="@string/pref_vibrate_name"
+            app:summary="@string/pref_vibrate_desc"
+            app:iconSpaceReserved="false" />
+
         <Preference
             app:dependency="call_recording"
             app:key="output_dir"

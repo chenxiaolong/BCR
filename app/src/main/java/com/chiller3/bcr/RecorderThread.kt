@@ -2,18 +2,22 @@ package com.chiller3.bcr
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.ParcelFileDescriptor
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.system.Int64Ref
 import android.system.Os
 import android.system.OsConstants
 import android.telecom.Call
 import android.telecom.PhoneAccount
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toFile
 import androidx.documentfile.provider.DocumentFile
 import com.chiller3.bcr.format.Encoder
@@ -165,6 +169,8 @@ class RecorderThread(
         try {
             Log.i(tag, "Recording thread started")
 
+            vibrate()
+
             if (isCancelled) {
                 Log.i(tag, "Recording cancelled before it began")
             } else {
@@ -206,6 +212,7 @@ class RecorderThread(
 
             try {
                 stopLogcat()
+                vibrate()
             } catch (e: Exception) {
                 Log.w(tag, "Failed to dump logcat", e)
             }
@@ -214,6 +221,27 @@ class RecorderThread(
                 listener.onRecordingCompleted(this, resultUri!!)
             } else {
                 listener.onRecordingFailed(this, errorMsg, resultUri)
+            }
+        }
+    }
+
+    private fun vibrate() {
+        if (!prefs.isVibrateEnabled) return;
+        val vibrator = context.getSystemService(AppCompatActivity.VIBRATOR_SERVICE) as Vibrator;
+        if (vibrator.hasVibrator()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(
+                    VibrationEffect.createOneShot(
+                        200,
+                        100
+                    ),
+                    AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .setUsage(AudioAttributes.USAGE_ALARM)
+                        .build(),
+                )
+            } else {
+                vibrator.vibrate(200)
             }
         }
     }

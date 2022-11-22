@@ -10,6 +10,9 @@
     <string name="pref_call_recording_name">Grabacion de llamada</string>
     <string name="pref_call_recording_desc">Grabar llamadas telefónicas entrantes y salientes. Se requieren permisos de micrófono y notificación para grabar en segundo plano.</string>
 
+    <string name="pref_vibrate_name">Vibrar</string>
+    <string name="pref_vibrate_desc">Vibrar al iniciar y detener la grabación</string>
+
     <string name="pref_output_dir_name">Directorio de salida</string>
     <string name="pref_output_dir_desc">Elija un directorio para almacenar grabaciones.</string>
 

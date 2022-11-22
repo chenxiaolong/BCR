@@ -10,6 +10,9 @@
     <string name="pref_call_recording_name">Nahrávanie hovorov</string>
     <string name="pref_call_recording_desc">Nahráva prichádzajúce a odchádzajúce telefonické hovory. Aby fungovalo nahrávanie na pozadí, je potrebné povoliť prístup k mikrofónu a upozorneniam.</string>
 
+    <string name="pref_vibrate_name">Vibrovať</string>
+    <string name="pref_vibrate_desc">Vibrovať pri spustení a zastavení nahrávania</string>
+
     <string name="pref_output_dir_name">Priečinok s nahrávkami</string>
     <string name="pref_output_dir_desc">Vyberte priečinok, kde sa budú ukladať nahrávky.</string>
 

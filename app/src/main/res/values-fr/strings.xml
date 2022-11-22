@@ -10,6 +10,9 @@
     <string name="pref_call_recording_name">Enregistrement d\'appel</string>
     <string name="pref_call_recording_desc">Enregistre les appels entrants et sortants. Les permissions microphone et notification sont nécessaires pour l\'enregistrement en arrière plan.</string>
 
+    <string name="pref_vibrate_name">Vibrer</string>
+    <string name="pref_vibrate_desc">Vibrer au démarrage et à l\'arrêt de l\'enregistrement</string>
+
     <string name="pref_output_dir_name">Dossier des enregistrements</string>
     <string name="pref_output_dir_desc">Choisir un dossier pour stocker les enregistrements.</string>
 

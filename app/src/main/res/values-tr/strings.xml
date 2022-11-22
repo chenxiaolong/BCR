@@ -10,6 +10,9 @@
     <string name="pref_call_recording_name">Çağrı kaydı</string>
     <string name="pref_call_recording_desc">Gelen ve giden çağrıları kaydet. Arka planda kayıt için mikrofon ve bildirim izinleri gereklidir.</string>
 
+    <string name="pref_vibrate_name">Titreşim</string>
+    <string name="pref_vibrate_desc">Kaydı başlatırken titret ve durdur</string>
+
     <string name="pref_output_dir_name">Kayıt konumu</string>
     <string name="pref_output_dir_desc">Kayıtlar için bir konum seçin.</string>
 

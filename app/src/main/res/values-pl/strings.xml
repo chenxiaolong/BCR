@@ -10,6 +10,9 @@
     <string name="pref_call_recording_name">Nagrywanie rozmów</string>
     <string name="pref_call_recording_desc">Nagrywaj przychodzące i wychodzące rozmowy telefoniczne. Do nagrywania w tle wymagane są uprawnienia do mikrofonu i powiadomień.</string>
 
+    <string name="pref_vibrate_name">Wibrować</string>
+    <string name="pref_vibrate_desc">Wibracje przy rozpoczęciu i zatrzymaniu nagrywania</string>
+
     <string name="pref_output_dir_name">Katalog wyjściowy</string>
     <string name="pref_output_dir_desc">Wybierz katalog do przechowywania nagrań.</string>
 

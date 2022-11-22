@@ -10,6 +10,9 @@
     <string name="pref_call_recording_name">Запись звонков</string>
     <string name="pref_call_recording_desc">Записывать входящие и исходящие вызовы. Разрешение на микрофон и уведомления обязательны для записи в фоновом режиме.</string>
 
+    <string name="pref_vibrate_name">вибрировать</string>
+    <string name="pref_vibrate_desc">Вибрация при запуске и остановке записи</string>
+
     <string name="pref_output_dir_name">Папка для сохранения</string>
     <string name="pref_output_dir_desc">Выбрать папку для хранения записей вызовов.</string>
 
