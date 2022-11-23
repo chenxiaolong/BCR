@@ -43,8 +43,7 @@
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Služby na pozadí</string>
     <string name="notification_channel_persistent_desc">Trvalé upozornenie na nahrávanie hovorov</string>
-    <string name="notification_channel_alerts_name">Upozornenia</string>
-    <string name="notification_channel_alerts_desc">Upozornenia na chyby počas nahrávania</string>
+    <string name="notification_channel_failure_desc">Upozornenia na chyby počas nahrávania</string>
     <string name="notification_recording_in_progress">Nahrávanie telefonického hovoru</string>
     <string name="notification_recording_failed">Nahrávanie hovoru zlyhalo</string>
 

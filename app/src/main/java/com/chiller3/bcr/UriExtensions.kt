@@ -16,7 +16,15 @@ val Uri.formattedString: String
             val treeIndex = segments.indexOf("tree")
 
             if (treeIndex >= 0 && treeIndex < segments.size - 1) {
-                segments[treeIndex + 1]
+                // The URI might have /document/<path> appended if it refers to a document instead
+                // of a tree
+                val docIndex = treeIndex + 2
+
+                if (docIndex < segments.size - 1 && segments[docIndex] == "document") {
+                    segments[docIndex + 1]
+                } else {
+                    segments[treeIndex + 1]
+                }
             } else {
                 toString()
             }

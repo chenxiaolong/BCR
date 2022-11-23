@@ -43,8 +43,7 @@
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Usługi w tle</string>
     <string name="notification_channel_persistent_desc">Stałe powiadomienie o nagrywaniu rozmów w tle</string>
-    <string name="notification_channel_alerts_name">Alerty</string>
-    <string name="notification_channel_alerts_desc">Alerty o błędach podczas nagrywania rozmów</string>
+    <string name="notification_channel_failure_desc">Alerty o błędach podczas nagrywania rozmów</string>
     <string name="notification_recording_in_progress">Trwa nagrywanie rozmowy</string>
     <string name="notification_recording_failed">Nie udało się nagrać rozmowy</string>
 

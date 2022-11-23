@@ -42,10 +42,15 @@
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Background services</string>
     <string name="notification_channel_persistent_desc">Persistent notification for background call recording</string>
-    <string name="notification_channel_alerts_name">Alerts</string>
-    <string name="notification_channel_alerts_desc">Alerts for errors during call recording</string>
+    <string name="notification_channel_failure_name">Failure alerts</string>
+    <string name="notification_channel_failure_desc">Alerts for errors during call recording</string>
+    <string name="notification_channel_success_name">Success alerts</string>
+    <string name="notification_channel_success_desc">Alerts for successful call recordings</string>
     <string name="notification_recording_in_progress">Call recording in progress</string>
     <string name="notification_recording_failed">Failed to record call</string>
+    <string name="notification_recording_succeeded">Successfully recorded call</string>
+    <string name="notification_action_open">Open</string>
+    <string name="notification_action_share">Share</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Call recording</string>

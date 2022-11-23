@@ -42,8 +42,7 @@
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Service d\'arrière-plan</string>
     <string name="notification_channel_persistent_desc">Notification persistante pour l\'enregistrement en arrière-plan</string>
-    <string name="notification_channel_alerts_name">Alertes</string>
-    <string name="notification_channel_alerts_desc">Alertes d\'erreurs pendant l\'enregistrement</string>
+    <string name="notification_channel_failure_desc">Alertes d\'erreurs pendant l\'enregistrement</string>
     <string name="notification_recording_in_progress">Enregistrement d\'appel en cours</string>
     <string name="notification_recording_failed">Enregistrement d\'appel échoué</string>
 

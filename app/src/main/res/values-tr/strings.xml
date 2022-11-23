@@ -41,8 +41,7 @@
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Arka plan servisleri</string>
     <string name="notification_channel_persistent_desc">Arka plan çağrı kaydı için kalıcı bildirim</string>
-    <string name="notification_channel_alerts_name">Uyarılar</string>
-    <string name="notification_channel_alerts_desc">Kayıt esnasındaki hatalar için uyarılar</string>
+    <string name="notification_channel_failure_desc">Kayıt esnasındaki hatalar için uyarılar</string>
     <string name="notification_recording_in_progress">Çağrı kaydediliyor</string>
     <string name="notification_recording_failed">Çağrı kaydı başarısız</string>
 
