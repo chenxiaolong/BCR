@@ -1,6 +1,7 @@
 ### Unreleased
 
 Non-user-facing changes:
+* Updated all dependencies (PR: #160, @PatrykMis)
 * Fixed Gradle non-laziness, causing the execution of specific tasks to be slower (PR: #168, @chenxiaolong)
 
 ### Version 1.23
