@@ -116,6 +116,10 @@ android {
 
         buildConfigField("String", "PROJECT_URL_AT_COMMIT",
             "\"${projectUrl}/tree/${gitVersionTriple.third.name}\"")
+
+        buildConfigField("String", "PROVIDER_AUTHORITY",
+            "APPLICATION_ID + \".provider\"")
+        resValue("string", "provider_authority", "$applicationId.provider")
     }
     sourceSets {
         getByName("main") {

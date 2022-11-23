@@ -100,7 +100,8 @@ class Preferences(private val context: Context) {
                     // Persist permissions for the new URI first
                     context.contentResolver.takePersistableUriPermission(
                         uri,
-                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                     )
                     putString(PREF_OUTPUT_DIR, uri.toString())
                 } else {
@@ -113,9 +114,14 @@ class Preferences(private val context: Context) {
             if (oldUri != null) {
                 context.contentResolver.releasePersistableUriPermission(
                     oldUri,
-                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                 )
             }
+
+            // Clear all alert notifications. Having them disappear is a better user experience than
+            // having the open/share actions use a no-longer-valid URI.
+            Notifications(context).dismissAll()
         }
 
     /**

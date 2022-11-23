@@ -210,10 +210,12 @@ class RecorderThread(
                 Log.w(tag, "Failed to dump logcat", e)
             }
 
+            val outputFile = resultUri?.let { OutputFile(it, format.mimeTypeContainer) }
+
             if (success) {
-                listener.onRecordingCompleted(this, resultUri!!)
+                listener.onRecordingCompleted(this, outputFile!!)
             } else {
-                listener.onRecordingFailed(this, errorMsg, resultUri)
+                listener.onRecordingFailed(this, errorMsg, outputFile)
             }
         }
     }
@@ -613,15 +615,15 @@ class RecorderThread(
 
     interface OnRecordingCompletedListener {
         /**
-         * Called when the recording completes successfully. [uri] is the output file.
+         * Called when the recording completes successfully. [file] is the output file.
          */
-        fun onRecordingCompleted(thread: RecorderThread, uri: Uri)
+        fun onRecordingCompleted(thread: RecorderThread, file: OutputFile)
 
         /**
-         * Called when an error occurs during recording. If [uri] is not null, it points to the
-         * output file containing partially recorded audio. If [uri] is null, then either the output
-         * file could not be created or the thread was cancelled before it was started.
+         * Called when an error occurs during recording. If [file] is not null, it points to the
+         * output file containing partially recorded audio. If [file] is null, then either the
+         * output file could not be created or the thread was cancelled before it was started.
          */
-        fun onRecordingFailed(thread: RecorderThread, errorMsg: String?, uri: Uri?)
+        fun onRecordingFailed(thread: RecorderThread, errorMsg: String?, file: OutputFile?)
     }
 }

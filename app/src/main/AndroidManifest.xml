@@ -53,6 +53,13 @@
             </intent-filter>
         </service>
 
+        <provider
+            android:authorities="@string/provider_authority"
+            android:name=".RecorderProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+        </provider>
+
         <activity
             android:name=".SettingsActivity"
             android:exported="true">

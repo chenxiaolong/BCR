@@ -42,8 +42,7 @@
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Servicios en segundo plano</string>
     <string name="notification_channel_persistent_desc">Notificación persistente para grabación de llamadas en segundo plano</string>
-    <string name="notification_channel_alerts_name">Alertas</string>
-    <string name="notification_channel_alerts_desc">Alertas de errores durante la grabación de llamadas</string>
+    <string name="notification_channel_failure_desc">Alertas de errores durante la grabación de llamadas</string>
     <string name="notification_recording_in_progress">Grabación de llamadas en curso</string>
     <string name="notification_recording_failed">No se pudo grabar la llamada</string>
 
