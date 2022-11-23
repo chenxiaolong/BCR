@@ -1,5 +1,11 @@
 ### Unreleased
 
+* Notification improvements (PR: #169, @chenxiaolong)
+  * A notification is now shown when a recording completes, with options for opening or sharing the recording in a 3rd party app.
+    * **NOTE: Manual action required.** For opening/sharing recordings to work, reset the output directory to the default and then select the output directory again. This is required because BCR previously only requested write access to the output directory, but not read access.
+    * These new notifications can be disabled in Android's settings by turning off the `Success alerts` notification channel.
+  * The file path in error notifications is now human readable instead of a URL-encoded `content://...`.
+
 Non-user-facing changes:
 * Updated all dependencies (PR: #160, @PatrykMis)
 * Fixed Gradle non-laziness, causing the execution of specific tasks to be slower (PR: #168, @chenxiaolong)
