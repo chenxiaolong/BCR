@@ -201,6 +201,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
                 R.string.notification_recording_in_progress,
                 R.drawable.ic_launcher_quick_settings,
             ))
+            notifications.vibrateIfEnabled(Notifications.CHANNEL_ID_PERSISTENT)
         }
     }
 

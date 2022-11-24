@@ -1,26 +1,73 @@
 package com.chiller3.bcr
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import java.util.*
 
 class Notifications(
     private val context: Context,
 ) {
     companion object {
+        private val TAG = Notifications::class.java.simpleName
+
         const val CHANNEL_ID_PERSISTENT = "persistent"
         const val CHANNEL_ID_FAILURE = "failure"
         const val CHANNEL_ID_SUCCESS = "success"
 
         private val LEGACY_CHANNEL_IDS = arrayOf("alerts")
 
+        /** Incremented for each new alert (non-persistent) notification. */
         private var notificationId = 2
+
+        /** For access to system/internal resource values. */
+        private val systemRes = Resources.getSystem()
+
+        /**
+         * Hardcoded fallback vibration pattern.
+         *
+         * This is the same as what AOSP defines in VibratorHelper (newer versions) or
+         * NotificationManagerService (older versions). In practice, unless an OEM completely
+         * removes the config_defaultNotificationVibePattern array resource, this is never used.
+         */
+        private val DEFAULT_VIBRATE_PATTERN = longArrayOf(0, 250, 250, 250)
+
+        /** Get resource integer array as a long array. */
+        @Suppress("SameParameterValue")
+        private fun getLongArray(resources: Resources, resId: Int): LongArray {
+            val array = resources.getIntArray(resId)
+            val result = LongArray(array.size)
+            for (i in array.indices) {
+                result[i] = array[i].toLong()
+            }
+            return result
+        }
+
+        /**
+         * Get the default notification pattern from the system internal resources.
+         *
+         * This is the pattern that is used by default for notifications.
+         */
+        @SuppressLint("DiscouragedApi")
+        private val defaultPattern = try {
+            getLongArray(systemRes, systemRes.getIdentifier(
+                "config_defaultNotificationVibePattern", "array", "android"))
+        } catch (e: Exception) {
+            Log.w(TAG, "System vibration pattern not found; using hardcoded default", e)
+            DEFAULT_VIBRATE_PATTERN
+        }
     }
 
     private val notificationManager = context.getSystemService(NotificationManager::class.java)
@@ -59,7 +106,9 @@ class Notifications(
     }
 
     /**
-     * Ensure up-to-date notification channels exist, deleting legacy channels.
+     * Ensure notification channels are up-to-date.
+     *
+     * Legacy notification channels are deleted without migrating settings.
      */
     fun updateChannels() {
         notificationManager.createNotificationChannels(listOf(
@@ -95,6 +144,16 @@ class Notifications(
         }
     }
 
+    /**
+     * Create an alert notification with the given [title] and [icon].
+     *
+     * * If [errorMsg] is not null, then it is appended to the text with a black line before it.
+     * * If [file] is not null, the human-readable URI path is appended to the text with a blank
+     *   line before it if needed. In addition, two actions, open and share, are added to the
+     *   notification. Neither will dismiss the notification when clicked. Clicking on the
+     *   notification itself will behave like the open action, except the notification will be
+     *   dismissed.
+     */
     private fun createAlertNotification(
         channel: String,
         @StringRes title: Int,
@@ -169,19 +228,35 @@ class Notifications(
             build()
         }
 
+    /** Send [notification] without overwriting prior alert notifications. */
     private fun notify(notification: Notification) {
         notificationManager.notify(notificationId, notification)
         ++notificationId
     }
 
+    /**
+     * Send a success alert notification.
+     *
+     * This will explicitly vibrate the device if the user enabled vibration for
+     * [CHANNEL_ID_SUCCESS]. This is necessary because Android itself will not vibrate for a
+     * notification during a phone call.
+     */
     fun notifySuccess(
         @StringRes title: Int,
         @DrawableRes icon: Int,
         file: OutputFile,
     ) {
         notify(createAlertNotification(CHANNEL_ID_SUCCESS, title, icon, null, file))
+        vibrateIfEnabled(CHANNEL_ID_SUCCESS)
     }
 
+    /**
+     * Send a failure alert notification.
+     *
+     * This will explicitly vibrate the device if the user enabled vibration for
+     * [CHANNEL_ID_FAILURE]. This is necessary because Android itself will not vibrate for a
+     * notification during a phone call.
+     */
     fun notifyFailure(
         @StringRes title: Int,
         @DrawableRes icon: Int,
@@ -189,11 +264,49 @@ class Notifications(
         file: OutputFile?,
     ) {
         notify(createAlertNotification(CHANNEL_ID_FAILURE, title, icon, errorMsg, file))
+        vibrateIfEnabled(CHANNEL_ID_FAILURE)
     }
 
+    /** Dismiss all alert (non-persistent) notifications. */
     fun dismissAll() {
         // This is safe to run at any time because it doesn't dismiss notifications belonging to
         // foreground services.
         notificationManager.cancelAll()
+    }
+
+    /**
+     * Explicitly vibrate device if the user enabled vibration for the [channelId] channel.
+     *
+     * If the notification channel has a specific vibration pattern associated with it, that
+     * vibration pattern will be used. Otherwise, this function tries to mimic the system vibration
+     * pattern as much as possible. The system default vibration pattern is queried from Android's
+     * internal resources and will fall back to a hardcoded default (same as AOSP) if the query
+     * fails.
+     *
+     * This function does not try to play PWLE waveforms. The API did not end up stabilizing in the
+     * Android 13 release and it's not worth the effort to use reflection when no devices support it
+     * yet.
+     *
+     * Ideally, using NotificationRecord.getVibration() would be best for ensuring the vibration
+     * pattern is identical to what the system would generate, but that class is not available in
+     * regular apps' classpath.
+     */
+    fun vibrateIfEnabled(channelId: String) {
+        val channel = notificationManager.getNotificationChannel(channelId)
+        if (channel.shouldVibrate()) {
+            val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                val vibratorManager = context.getSystemService(VibratorManager::class.java)
+                vibratorManager.defaultVibrator
+            } else {
+                context.getSystemService(Vibrator::class.java)
+            }
+
+            if (vibrator.hasVibrator()) {
+                val pattern = channel.vibrationPattern ?: defaultPattern
+                val effect = VibrationEffect.createWaveform(pattern, -1)
+
+                vibrator.vibrate(effect)
+            }
+        }
     }
 }
