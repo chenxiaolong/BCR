@@ -5,6 +5,8 @@
     * **NOTE: Manual action required.** For opening/sharing recordings to work, reset the output directory to the default and then select the output directory again. This is required because BCR previously only requested write access to the output directory, but not read access.
     * These new notifications can be disabled in Android's settings by turning off the `Success alerts` notification channel.
   * The file path in error notifications is now human readable instead of a URL-encoded `content://...`.
+* BCR will explicitly vibrate if vibration is enabled for its notification channels (PR: #167, #171, @quyenvsp, @chenxiaolong)
+  * This is needed because Android will not respect the notification vibration option during a phone call.
 
 Non-user-facing changes:
 * Updated all dependencies (PR: #160, @PatrykMis)
