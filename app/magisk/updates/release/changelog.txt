@@ -1,4 +1,4 @@
-### Unreleased
+### Version 1.24
 
 * Notification improvements (PR: #169, @chenxiaolong)
   * A notification is now shown when a recording completes, with options for opening or sharing the recording in a 3rd party app.
