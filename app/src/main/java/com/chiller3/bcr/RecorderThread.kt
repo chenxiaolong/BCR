@@ -1,7 +1,9 @@
 package com.chiller3.bcr
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
@@ -13,6 +15,8 @@ import android.system.Os
 import android.system.OsConstants
 import android.telecom.Call
 import android.telecom.PhoneAccount
+import android.telephony.SubscriptionManager
+import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.core.net.toFile
 import androidx.documentfile.provider.DocumentFile
@@ -118,6 +122,24 @@ class RecorderThread(
                         Call.Details.DIRECTION_INCOMING -> append("_in")
                         Call.Details.DIRECTION_OUTGOING -> append("_out")
                         Call.Details.DIRECTION_UNKNOWN -> {}
+                    }
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+                    && context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
+                        == PackageManager.PERMISSION_GRANTED
+                    && context.packageManager.hasSystemFeature(
+                        PackageManager.FEATURE_TELEPHONY_SUBSCRIPTION)) {
+                    val subscriptionManager = context.getSystemService(SubscriptionManager::class.java)
+
+                    // Only append SIM slot ID if the device has multiple active SIMs
+                    if (subscriptionManager.activeSubscriptionInfoCount > 1) {
+                        val telephonyManager = context.getSystemService(TelephonyManager::class.java)
+                        val subscriptionId = telephonyManager.getSubscriptionId(details.accountHandle)
+                        val subscriptionInfo = subscriptionManager.getActiveSubscriptionInfo(subscriptionId)
+
+                        append("_sim")
+                        append(subscriptionInfo.simSlotIndex + 1)
                     }
                 }
 
