@@ -10,7 +10,6 @@
             app:iconSpaceReserved="false" />
 
         <Preference
-            app:dependency="call_recording"
             app:key="output_dir"
             app:persistent="false"
             app:title="@string/pref_output_dir_name"
@@ -18,7 +17,6 @@
             app:iconSpaceReserved="false" />
 
         <Preference
-            app:dependency="call_recording"
             app:key="output_format"
             app:persistent="false"
             app:title="@string/pref_output_format_name"
