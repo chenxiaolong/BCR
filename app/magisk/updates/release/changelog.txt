@@ -1,4 +1,4 @@
-### Unreleased
+### Version 1.25
 
 * Add SIM slot ID to the filename if there are multiple active SIMs (Issue: #177, PR: #178, @chenxiaolong)
 * Fix share action in recording complete notification always referencing an old recording (PR: #181, @chenxiaolong)
