@@ -1,7 +1,7 @@
 ### Version 1.25
 
 * Add SIM slot ID to the filename if there are multiple active SIMs (Issue: #177, PR: #178, @chenxiaolong)
-* Fix share action in recording complete notification always referencing an old recording (PR: #181, @chenxiaolong)
+* Fix share action in the recording complete notification always referencing an old recording (PR: #181, @chenxiaolong)
 * Add a new Delete action alongside Open and Share in the notifications (Issue: #179, PR: #182, @chenxiaolong)
 * Allow changing output settings when call recording is disabled (PR: #183, @chenxiaolong)
 
