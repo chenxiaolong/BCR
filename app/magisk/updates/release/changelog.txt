@@ -2,6 +2,9 @@
 
 * Add SIM slot ID to the filename if there are multiple active SIMs (Issue: #177, PR: #178, @chenxiaolong)
 
+Documentation changes:
+* README.md: Explain what every permission is used for (PR: #180, @chenxiaolong)
+
 Non-user-facing changes:
 * Update gradle wrapper to 7.6.0 (PR: #174, @PatrykMis)
 
