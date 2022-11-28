@@ -53,14 +53,40 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
 
 4. Enable call recording and pick an output directory. If no output directory is selected or if the output directory is no longer accessible, then recordings will be saved to `/sdcard/Android/data/com.chiller3.bcr/files`.
 
-    When enabling call recording the first time, BCR will prompt for microphone, notification (Android 13+), and contacts permissions. Microphone and notification permissions are required for BCR to be able to record phone calls in the background.
+    When enabling call recording the first time, BCR will prompt for microphone, notification (Android 13+), contacts, and phone permissions. Only microphone and notification permissions are required basic call recording functionality. If additional permissions are granted, more information is added to the output filename. For example, the contacts permission will cause the contact name to be added to the filename and the phone permission will cause the SIM slot (if multiple SIMs are active) to be added to the filename.
 
-    The contacts permission is optional, but if allowed, contact names will be added to the recordings' filenames. BCR never sends contact information anywhere. In fact, it does not even have the `INTERNET` permission. However, other third party applications may be able to see the contact names if they can access the output directory.
+    See the [permissions section](#permissions) below for more details about the permissions.
 
 5. To install future updates, there are a couple methods:
 
     * If installed via Magisk, the module can be updated right from Magisk Manager's modules tab. Flashing the new version in Magisk manually also works just as well.
     * The `.apk` can also be extracted from the zip and be directly installed. With this method, the old version exists as a system app and the new version exists as a user-installed update to the system app. This method is more convenient if BCR is baked into the Android firmware image.
+
+### Permissions
+
+* `CAPTURE_AUDIO_OUTPUT` (**automatically granted by system app permissions**)
+  * Needed to capture the call audio stream.
+* `CONTROL_INCALL_EXPERIENCE` (**automatically granted by system app permissions**)
+  * Needed to monitor the phone call state for starting and stopping the recording and gathering call information for the output filename.
+* `RECORD_AUDIO` (**must be granted by the user**)
+  * Needed to capture the call audio stream.
+* `FOREGROUND_SERVICE` (**automatically granted at install time**)
+  * Needed to run the call recording service.
+* `POST_NOTIFICATIONS` (**must be granted by the user on Android 13+**)
+  * Needed to show notifications.
+  * A notification is required for running the call recording service in foreground mode or else Android will not allow access to the call audio stream.
+* `READ_CONTACTS` (**optional**)
+  * If allowed, the contact name is added to the output filename.
+* `READ_PHONE_STATE` (**optional**)
+  * If allowed, the SIM slot for devices with multiple active SIMs is added to the output filename.
+* `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` (**optional**)
+  * If allowed, request Android to disable battery optimizations (app killing) for BCR.
+  * This is usually not needed. The way BCR hooks into the telephony system makes it unlikely to be killed.
+  * OEM Android builds that stray further from AOSP may ignore this.
+* `VIBRATE` (**automatically granted at install time**)
+  * If vibration is enabled for BCR's notifications in Android's settings, BCR will perform the vibration. Android itself does not respect the vibration option when a phone call is active.
+
+Note that `INTERNET` is _not_ in the list. BCR does not and will never access the network. BCR will never communicate with other apps either, except if the user explicitly taps on the `Open` or `Share` buttons in the notification shown when a recording completes. In that scenario, the target app is granted access to that single recording only.
 
 ### How it works
 
