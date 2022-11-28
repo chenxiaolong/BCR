@@ -228,7 +228,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
     }
 
     override fun onRecordingCompleted(thread: RecorderThread, file: OutputFile) {
-        Log.i(TAG, "Recording completed: ${thread.id}: ${thread.redact(file.uri)}")
+        Log.i(TAG, "Recording completed: ${thread.id}: ${file.redacted}")
         handler.post {
             onThreadExited()
 
@@ -237,7 +237,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
     }
 
     override fun onRecordingFailed(thread: RecorderThread, errorMsg: String?, file: OutputFile?) {
-        Log.w(TAG, "Recording failed: ${thread.id}: ${file?.uri?.let { thread.redact(it) }}")
+        Log.w(TAG, "Recording failed: ${thread.id}: ${file?.redacted}")
         handler.post {
             onThreadExited()
 

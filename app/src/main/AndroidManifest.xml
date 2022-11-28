@@ -33,6 +33,10 @@
         android:theme="@style/Theme.BCR">
 
         <service
+            android:name=".NotificationActionService"
+            android:exported="false" />
+
+        <service
             android:name=".RecorderInCallService"
             android:enabled="true"
             android:exported="true"
