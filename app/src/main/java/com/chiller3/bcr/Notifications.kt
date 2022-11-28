@@ -145,23 +145,23 @@ class Notifications(
     }
 
     /**
-     * Create an alert notification with the given [title] and [icon].
+     * Send an alert notification with the given [title] and [icon].
      *
      * * If [errorMsg] is not null, then it is appended to the text with a black line before it.
      * * If [file] is not null, the human-readable URI path is appended to the text with a blank
-     *   line before it if needed. In addition, two actions, open and share, are added to the
-     *   notification. Neither will dismiss the notification when clicked. Clicking on the
-     *   notification itself will behave like the open action, except the notification will be
-     *   dismissed.
+     *   line before it if needed. In addition, three actions, open/share/delete, are added to the
+     *   notification. The delete action dismisses the notification, but open and share do not.
+     *   Clicking on the notification itself will behave like the open action, except the
+     *   notification will be dismissed.
      */
-    private fun createAlertNotification(
+    private fun sendAlertNotification(
         channel: String,
         @StringRes title: Int,
         @DrawableRes icon: Int,
         errorMsg: String?,
         file: OutputFile?,
-    ): Notification =
-        Notification.Builder(context, channel).run {
+    ) {
+        val notification = Notification.Builder(context, channel).run {
             val text = buildString {
                 val errorMsgTrimmed = errorMsg?.trim()
                 if (!errorMsgTrimmed.isNullOrBlank()) {
@@ -208,6 +208,12 @@ class Notifications(
                     },
                     PendingIntent.FLAG_IMMUTABLE,
                 )
+                val deleteIntent = PendingIntent.getService(
+                    context,
+                    0,
+                    NotificationActionService.createDeleteUriIntent(context, file, notificationId),
+                    PendingIntent.FLAG_IMMUTABLE,
+                )
 
                 addAction(Notification.Action.Builder(
                     null,
@@ -221,6 +227,12 @@ class Notifications(
                     shareIntent,
                 ).build())
 
+                addAction(Notification.Action.Builder(
+                    null,
+                    context.getString(R.string.notification_action_delete),
+                    deleteIntent,
+                ).build())
+
                 // Clicking on the notification behaves like the open action, except the
                 // notification gets dismissed. The open and share actions do not dismiss the
                 // notification.
@@ -231,8 +243,6 @@ class Notifications(
             build()
         }
 
-    /** Send [notification] without overwriting prior alert notifications. */
-    private fun notify(notification: Notification) {
         notificationManager.notify(notificationId, notification)
         ++notificationId
     }
@@ -249,7 +259,7 @@ class Notifications(
         @DrawableRes icon: Int,
         file: OutputFile,
     ) {
-        notify(createAlertNotification(CHANNEL_ID_SUCCESS, title, icon, null, file))
+        sendAlertNotification(CHANNEL_ID_SUCCESS, title, icon, null, file)
         vibrateIfEnabled(CHANNEL_ID_SUCCESS)
     }
 
@@ -266,7 +276,7 @@ class Notifications(
         errorMsg: String?,
         file: OutputFile?,
     ) {
-        notify(createAlertNotification(CHANNEL_ID_FAILURE, title, icon, errorMsg, file))
+        sendAlertNotification(CHANNEL_ID_FAILURE, title, icon, errorMsg, file)
         vibrateIfEnabled(CHANNEL_ID_FAILURE)
     }
 

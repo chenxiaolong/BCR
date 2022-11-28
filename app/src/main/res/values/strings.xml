@@ -51,6 +51,7 @@
     <string name="notification_recording_succeeded">Successfully recorded call</string>
     <string name="notification_action_open">Open</string>
     <string name="notification_action_share">Share</string>
+    <string name="notification_action_delete">Delete</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Call recording</string>

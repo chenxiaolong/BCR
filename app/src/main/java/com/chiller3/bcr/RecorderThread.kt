@@ -101,7 +101,7 @@ class RecorderThread(
         }
     }
 
-    fun redact(uri: Uri): String = redact(Uri.decode(uri.toString()))
+    private fun redact(uri: Uri): String = redact(Uri.decode(uri.toString()))
 
     /**
      * Update [filename] with information from [details].
@@ -232,7 +232,7 @@ class RecorderThread(
                 Log.w(tag, "Failed to dump logcat", e)
             }
 
-            val outputFile = resultUri?.let { OutputFile(it, format.mimeTypeContainer) }
+            val outputFile = resultUri?.let { OutputFile(it, redact(it), format.mimeTypeContainer) }
 
             if (success) {
                 listener.onRecordingCompleted(this, outputFile!!)
