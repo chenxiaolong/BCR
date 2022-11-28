@@ -75,7 +75,7 @@ class NotificationActionService : Service() {
                         }
                     }.start()
                 }
-                else -> throw IllegalArgumentException("Invalid action: ${intent.action}")
+                else -> throw IllegalArgumentException("Invalid action: ${intent?.action}")
             }
 
             START_REDELIVER_INTENT
