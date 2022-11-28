@@ -199,7 +199,10 @@ class Notifications(
                     context,
                     0,
                     Intent(Intent.ACTION_SEND).apply {
-                        type = file.mimeType
+                        // The data is not used for ACTION_SEND, but it makes Intent.filterEquals()
+                        // return false and prevents the same PendingIntent being used when multiple
+                        // notifications are shown.
+                        setDataAndType(wrappedUri, file.mimeType)
                         putExtra(Intent.EXTRA_STREAM, wrappedUri)
                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     },
