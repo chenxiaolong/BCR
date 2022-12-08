@@ -1,6 +1,9 @@
 ### Unreleased
 
 * Update Turkish and Russian translations (PR: #188, @EleoXDA)
+* Add hidden feature to customize the output filename (PR: #189, @chenxiaolong)
+  * To avoid complicating BCR's code, there is no UI option for this
+  * To customize the output filenames, copy [./app/src/main/res/raw/filename_template.properties](the default template) to `bcr.properties` in the output directory and edit the file
 
 ### Version 1.25
 
