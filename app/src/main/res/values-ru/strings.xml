@@ -45,6 +45,10 @@
     <string name="notification_recording_in_progress">Происходит запись вызова</string>
     <string name="notification_channel_failure_desc">Оповещение об ошибках во время записи разговора</string>
     <string name="notification_recording_failed">Не удалось записать звонок</string>
+    <string name="notification_action_open">Открыть</string> 
+    <string name="notification_action_share">Поделиться</string> 
+    <string name="notification_action_delete">Удалить</string> 
+
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Запись звонка</string>
