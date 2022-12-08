@@ -1,3 +1,7 @@
+### Unreleased
+
+* Update Turkish and Russian translations (PR: #188, @EleoXDA)
+
 ### Version 1.25
 
 * Add SIM slot ID to the filename if there are multiple active SIMs (Issue: #177, PR: #178, @chenxiaolong)
