@@ -67,6 +67,8 @@ class RecorderThread(
 
     // Filename
     private val filenameLock = Object()
+    private var pendingCallDetails: Call.Details? = null
+    private lateinit var filenameTemplate: FilenameTemplate
     private lateinit var filename: String
     private val redactions = HashMap<String, String>()
 
@@ -110,67 +112,83 @@ class RecorderThread(
      */
     fun onCallDetailsChanged(details: Call.Details) {
         synchronized(filenameLock) {
+            if (!this::filenameTemplate.isInitialized) {
+                // Thread hasn't started yet, so we haven't loaded the filename template
+                pendingCallDetails = details
+                return
+            }
+
             redactions.clear()
 
-            filename = buildString {
-                val instant = Instant.ofEpochMilli(details.creationTimeMillis)
-                callTimestamp = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
-                append(FORMATTER.format(callTimestamp))
+            filename = filenameTemplate.evaluate {
+                when (it) {
+                    "date" -> {
+                        val instant = Instant.ofEpochMilli(details.creationTimeMillis)
+                        callTimestamp = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
+                        return@evaluate FORMATTER.format(callTimestamp)
+                    }
+                    "direction" -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            when (details.callDirection) {
+                                Call.Details.DIRECTION_INCOMING -> return@evaluate "in"
+                                Call.Details.DIRECTION_OUTGOING -> return@evaluate "out"
+                                Call.Details.DIRECTION_UNKNOWN -> {}
+                            }
+                        }
+                    }
+                    "sim_slot" -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+                            && context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
+                            == PackageManager.PERMISSION_GRANTED
+                            && context.packageManager.hasSystemFeature(
+                                PackageManager.FEATURE_TELEPHONY_SUBSCRIPTION)) {
+                            val subscriptionManager = context.getSystemService(SubscriptionManager::class.java)
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    when (details.callDirection) {
-                        Call.Details.DIRECTION_INCOMING -> append("_in")
-                        Call.Details.DIRECTION_OUTGOING -> append("_out")
-                        Call.Details.DIRECTION_UNKNOWN -> {}
+                            // Only append SIM slot ID if the device has multiple active SIMs
+                            if (subscriptionManager.activeSubscriptionInfoCount > 1) {
+                                val telephonyManager = context.getSystemService(TelephonyManager::class.java)
+                                val subscriptionId = telephonyManager.getSubscriptionId(details.accountHandle)
+                                val subscriptionInfo = subscriptionManager.getActiveSubscriptionInfo(subscriptionId)
+
+                                return@evaluate "${subscriptionInfo.simSlotIndex + 1}"
+                            }
+                        }
+                    }
+                    "phone_number" -> {
+                        if (details.handle?.scheme == PhoneAccount.SCHEME_TEL) {
+                            redactions[details.handle.schemeSpecificPart] = "<phone number>"
+
+                            return@evaluate details.handle.schemeSpecificPart
+                        }
+                    }
+                    "caller_name" -> {
+                        val callerName = details.callerDisplayName?.trim()
+                        if (!callerName.isNullOrBlank()) {
+                            redactions[callerName] = "<caller name>"
+
+                            return@evaluate callerName
+                        }
+                    }
+                    "contact_name" -> {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            val contactName = details.contactDisplayName?.trim()
+                            if (!contactName.isNullOrBlank()) {
+                                redactions[contactName] = "<contact name>"
+
+                                return@evaluate contactName
+                            }
+                        }
+                    }
+                    else -> {
+                        Log.w(tag, "Unknown filename template variable: $it")
                     }
                 }
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
-                    && context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
-                        == PackageManager.PERMISSION_GRANTED
-                    && context.packageManager.hasSystemFeature(
-                        PackageManager.FEATURE_TELEPHONY_SUBSCRIPTION)) {
-                    val subscriptionManager = context.getSystemService(SubscriptionManager::class.java)
-
-                    // Only append SIM slot ID if the device has multiple active SIMs
-                    if (subscriptionManager.activeSubscriptionInfoCount > 1) {
-                        val telephonyManager = context.getSystemService(TelephonyManager::class.java)
-                        val subscriptionId = telephonyManager.getSubscriptionId(details.accountHandle)
-                        val subscriptionInfo = subscriptionManager.getActiveSubscriptionInfo(subscriptionId)
-
-                        append("_sim")
-                        append(subscriptionInfo.simSlotIndex + 1)
-                    }
-                }
-
-                if (details.handle?.scheme == PhoneAccount.SCHEME_TEL) {
-                    append('_')
-                    append(details.handle.schemeSpecificPart)
-
-                    redactions[details.handle.schemeSpecificPart] = "<phone number>"
-                }
-
-                val callerName = details.callerDisplayName?.trim()
-                if (!callerName.isNullOrBlank()) {
-                    append('_')
-                    append(callerName)
-
-                    redactions[callerName] = "<caller name>"
-                }
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    val contactName = details.contactDisplayName?.trim()
-                    if (!contactName.isNullOrBlank()) {
-                        append('_')
-                        append(contactName)
-
-                        redactions[contactName] = "<contact name>"
-                    }
-                }
+                null
             }
-            // AOSP's SAF automatically replaces invalid characters with underscores, but just
-            // in case an OEM fork breaks that, do the replacement ourselves to prevent
-            // directory traversal attacks.
+            // AOSP's SAF automatically replaces invalid characters with underscores, but just in
+            // case an OEM fork breaks that, do the replacement ourselves to prevent directory
+            // traversal attacks.
                 .replace('/', '_').trim()
 
             Log.i(tag, "Updated filename due to call details change: ${redact(filename)}")
@@ -190,7 +208,14 @@ class RecorderThread(
             if (isCancelled) {
                 Log.i(tag, "Recording cancelled before it began")
             } else {
-                val initialFilename = synchronized(filenameLock) { filename }
+                val initialFilename = synchronized(filenameLock) {
+                    filenameTemplate = FilenameTemplate.load(context)
+
+                    onCallDetailsChanged(pendingCallDetails!!)
+                    pendingCallDetails = null
+
+                    filename
+                }
                 val outputFile = createFileInDefaultDir(initialFilename, format.mimeTypeContainer)
                 resultUri = outputFile.uri
 
@@ -609,9 +634,19 @@ class RecorderThread(
                     return null
                 }
 
-                val second = name.indexOf('_', first + 1)
+                // The user might not have a delimiter in the template, but we know for sure the
+                // date ends at least 4 digits after the +/- in the date offset
+                var second = name.indexOfAny(charArrayOf('-', '+'), first + 1)
                 if (second < 0) {
                     return null
+                }
+                second += 5
+
+                // If there are two additional digits, then assume they are part of the offset
+                if (second + 2 <= name.length
+                    && name[second].isDigit()
+                    && name[second + 1].isDigit()) {
+                    second += 2
                 }
 
                 return ZonedDateTime.parse(name.substring(0, second), FORMATTER)
