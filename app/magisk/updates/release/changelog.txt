@@ -1,4 +1,4 @@
-### Unreleased
+### Version 1.26
 
 * Update Turkish and Russian translations (PR: #188, @EleoXDA)
 * Add hidden feature to customize the output filename (PR: #189, @chenxiaolong)
