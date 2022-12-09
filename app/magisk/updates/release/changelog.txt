@@ -1,3 +1,7 @@
+### Unreleased
+
+* Update Polish translations (PR: #192, @Twoomatch)
+
 ### Version 1.26
 
 * Update Turkish and Russian translations (PR: #188, @EleoXDA)
