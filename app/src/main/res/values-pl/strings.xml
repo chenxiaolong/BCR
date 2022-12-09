@@ -24,7 +24,7 @@
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Zmień katalog</string>
-    <string name="output_dir_bottom_sheet_file_retention">Przechowywanie plików</string>
+    <string name="output_dir_bottom_sheet_file_retention">Okres przechowywania plików</string>
     <string name="retention_keep_all">Pozostaw wszystkie</string>
     <plurals name="retention_days">
         <item quantity="one">Pozostaw z %d dnia</item>
@@ -37,15 +37,23 @@
     <string name="output_format_bottom_sheet_output_format">Format wyjściowy</string>
     <string name="output_format_bottom_sheet_compression_level">Poziom kompresji</string>
     <string name="output_format_bottom_sheet_bitrate">Szybkość transmisji</string>
-    <string name="output_format_bottom_sheet_sample_rate">Szybkość próbkowania</string>
+    <string name="output_format_bottom_sheet_sample_rate">Częstotliwość próbkowania</string>
+    
     <string name="bottom_sheet_reset">Przywróć domyślne ustawienia</string>
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Usługi w tle</string>
     <string name="notification_channel_persistent_desc">Stałe powiadomienie o nagrywaniu rozmów w tle</string>
-    <string name="notification_channel_failure_desc">Alerty o błędach podczas nagrywania rozmów</string>
+    <string name="notification_channel_failure_name">Błędy</string>
+    <string name="notification_channel_failure_desc">Informacje o błędach podczas nagrywania rozmów</string>
+    <string name="notification_channel_success_name">Zakończone nagrywanie</string>
+    <string name="notification_channel_success_desc">Informacje o pomyślnym nagraniu rozmowy</string>
     <string name="notification_recording_in_progress">Trwa nagrywanie rozmowy</string>
     <string name="notification_recording_failed">Nie udało się nagrać rozmowy</string>
+    <string name="notification_recording_succeeded">Pomyślnie nagrano rozmowę</string>
+    <string name="notification_action_open">Otwórz</string>
+    <string name="notification_action_share">Udostępnij</string>
+    <string name="notification_action_delete">Usuń</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Nagrywanie rozmów</string>
