@@ -471,29 +471,10 @@ class RecorderThread(
      *
      * [pfd] does not get closed by this method.
      */
-    @SuppressLint("MissingPermission")
     private fun recordUntilCancelled(pfd: ParcelFileDescriptor) {
         AndroidProcess.setThreadPriority(AndroidProcess.THREAD_PRIORITY_URGENT_AUDIO)
 
-        val minBufSize = AudioRecord.getMinBufferSize(
-            sampleRate.value.toInt(), CHANNEL_CONFIG, ENCODING)
-        if (minBufSize < 0) {
-            throw Exception("Failure when querying minimum buffer size: $minBufSize")
-        }
-        Log.d(tag, "AudioRecord minimum buffer size: $minBufSize")
-
-        val audioRecord = AudioRecord(
-            MediaRecorder.AudioSource.VOICE_CALL,
-            sampleRate.value.toInt(),
-            CHANNEL_CONFIG,
-            ENCODING,
-            // On some devices, MediaCodec occasionally has sudden spikes in processing time, so use
-            // a larger internal buffer to reduce the chance of overrun on the recording side.
-            minBufSize * 6,
-        )
-        val initialBufSize = audioRecord.bufferSizeInFrames *
-                audioRecord.format.frameSizeInBytesCompat
-        Log.d(tag, "AudioRecord initial buffer size: $initialBufSize")
+        val (audioRecord, bufSize) = createAudioRecord()
 
         Log.d(tag, "AudioRecord format: ${audioRecord.format}")
 
@@ -513,7 +494,7 @@ class RecorderThread(
                         encoder.start()
 
                         try {
-                            encodeLoop(audioRecord, encoder, minBufSize)
+                            encodeLoop(audioRecord, encoder, bufSize)
                         } finally {
                             encoder.stop()
                         }
@@ -532,6 +513,73 @@ class RecorderThread(
     }
 
     /**
+     * Create an [AudioRecord] instance for capturing the raw audio.
+     *
+     * This attempts to create an [AudioRecord] instance with the largest possible buffer size at
+     * 6 times the minimum buffer size for the given sample rate. If initialization fails, smaller
+     * buffer sizes will be attempted until reaching the minimum buffer size. A larger buffer is
+     * useful for reducing the chance of buffer overrun and the increased latency is not relevant
+     * for audio recording purposes.
+     *
+     * @return The [AudioRecord] instance and the size of the buffer for [AudioRecord.read] calls
+     *
+     * @throws Exception if the [AudioRecord] initialization fails with every attempted buffer size
+     */
+    @SuppressLint("MissingPermission")
+    private fun createAudioRecord(): Pair<AudioRecord, Int> {
+        val minBufSize = AudioRecord.getMinBufferSize(
+            sampleRate.value.toInt(), CHANNEL_CONFIG, ENCODING)
+        if (minBufSize < 0) {
+            throw Exception("Failure to query minimum buffer size: $minBufSize")
+        }
+        Log.d(tag, "AudioRecord minimum buffer size: $minBufSize")
+
+        // The last thrown exception is reported to the caller if every initialization attempt fails
+        lateinit var lastException: Exception
+
+        // On some devices, MediaCodec occasionally has sudden spikes in processing time, so use a
+        // larger internal buffer if possible to reduce the chance of overrun on the recording side.
+        val bufSizes = arrayOf(
+            6 * minBufSize,
+            4 * minBufSize,
+            2 * minBufSize,
+            minBufSize,
+        )
+
+        Log.d(tag, "Buffer sizes to attempt: ${bufSizes.contentToString()}")
+
+        for (bufSize in bufSizes) {
+            try {
+                Log.d(tag, "Attempting to initialize AudioRecord with buffer size $bufSize")
+
+                val audioRecord = AudioRecord(
+                    MediaRecorder.AudioSource.VOICE_CALL,
+                    sampleRate.value.toInt(),
+                    CHANNEL_CONFIG,
+                    ENCODING,
+                    bufSize,
+                )
+                if (audioRecord.state != AudioRecord.STATE_INITIALIZED) {
+                    throw Exception("AudioRecord not initialized")
+                }
+
+                val initialBufSize = audioRecord.bufferSizeInFrames *
+                        audioRecord.format.frameSizeInBytesCompat
+                Log.d(tag, "AudioRecord initial buffer size: $initialBufSize")
+
+                return Pair(audioRecord, minBufSize)
+            } catch (e: Exception) {
+                Log.w(tag, "Failed to create AudioRecord", e)
+                lastException = e
+                continue
+            }
+        }
+
+        // Guaranteed to be initialized by this point
+        throw lastException
+    }
+
+    /**
      * Main loop for encoding captured raw audio into an output file.
      *
      * The loop runs forever until [cancel] is called. At that point, no further data will be read
@@ -545,7 +593,7 @@ class RecorderThread(
      *
      * @param audioRecord [AudioRecord.startRecording] must have been called
      * @param encoder [Encoder.start] must have been called
-     * @param bufSize Minimum buffer size for each [AudioRecord.read] operation
+     * @param bufSize Buffer size for each [AudioRecord.read] operation
      *
      * @throws Exception if the audio recorder or encoder encounters an error
      */
@@ -554,8 +602,7 @@ class RecorderThread(
         val frameSize = audioRecord.format.frameSizeInBytesCompat
 
         // Use a slightly larger buffer to reduce the chance of problems under load
-        val factor = 2
-        val buffer = ByteBuffer.allocateDirect(bufSize * factor)
+        val buffer = ByteBuffer.allocateDirect(bufSize)
         val bufferFrames = buffer.capacity().toLong() / frameSize
         val bufferNs = bufferFrames * 1_000_000_000L / audioRecord.sampleRate
         Log.d(tag, "Buffer is ${buffer.capacity()} bytes, $bufferFrames frames, ${bufferNs}ns")
@@ -574,8 +621,8 @@ class RecorderThread(
                 isCancelled = true
                 captureFailed = true
             } else if (n == 0) {
-                // Wait for the wall clock equivalent of the minimum buffer size
-                sleep(bufferNs / 1_000_000L / factor)
+                // Wait for the wall clock equivalent of half the buffer size
+                sleep(bufferNs / 1_000_000L / 2)
                 continue
             } else {
                 buffer.limit(n)
