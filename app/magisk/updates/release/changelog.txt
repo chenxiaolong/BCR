@@ -4,6 +4,7 @@
 
 Non-user-facing changes:
 * Update Kotlin and AndroidX (PR: #196, @PatrykMis)
+* Update Build Tools (PR: #199, @PatrykMis)
 
 ### Version 1.26
 
