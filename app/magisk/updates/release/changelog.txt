@@ -1,6 +1,7 @@
 ### Unreleased
 
 * Update Polish translations (PR: #192, @Twoomatch)
+* Update Spanish translations (PR: #201, @nmayorga092)
 
 Non-user-facing changes:
 * Update Kotlin and AndroidX (PR: #196, @PatrykMis)
