@@ -200,6 +200,13 @@ class RecorderThread(
         var errorMsg: String? = null
         var resultUri: Uri? = null
 
+        synchronized(filenameLock) {
+            filenameTemplate = FilenameTemplate.load(context)
+
+            onCallDetailsChanged(pendingCallDetails!!)
+            pendingCallDetails = null
+        }
+
         startLogcat()
 
         try {
@@ -208,14 +215,7 @@ class RecorderThread(
             if (isCancelled) {
                 Log.i(tag, "Recording cancelled before it began")
             } else {
-                val initialFilename = synchronized(filenameLock) {
-                    filenameTemplate = FilenameTemplate.load(context)
-
-                    onCallDetailsChanged(pendingCallDetails!!)
-                    pendingCallDetails = null
-
-                    filename
-                }
+                val initialFilename = synchronized(filenameLock) { filename }
                 val outputFile = createFileInDefaultDir(initialFilename, format.mimeTypeContainer)
                 resultUri = outputFile.uri
 
@@ -288,7 +288,9 @@ class RecorderThread(
 
         Log.d(tag, "Starting log file (${BuildConfig.VERSION_NAME})")
 
-        logcatFile = createFileInDefaultDir("${filename}.log", "text/plain")
+        val logFilename = synchronized(filenameLock) { "${filename}.log" }
+
+        logcatFile = createFileInDefaultDir(logFilename, "text/plain")
         logcatProcess = ProcessBuilder("logcat", "*:V")
             // This is better than -f because the logcat implementation calls fflush() when the
             // output stream is stdout. logcatFile is guaranteed to have file:// scheme because it's
