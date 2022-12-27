@@ -1,6 +1,7 @@
 ### Unreleased
 
 * Inform the user that the device/firmware might not support call recording if an error origates from Android's internal components (PR: #206, @chenxiaolong)
+* Fix crash if any filename template value (eg. caller/contact name) contains \ or $ (Issue: #207, PR: #209, @chenxiaolong)
 
 ### Version 1.27
 
