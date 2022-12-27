@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.documentfile.provider.DocumentFile
 import java.util.*
+import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 class FilenameTemplate private constructor(props: Properties) {
@@ -77,7 +78,7 @@ class FilenameTemplate private constructor(props: Properties) {
                     val name = m.group(1)!!
                     val replacement = getVar(index, name)
 
-                    m.appendReplacement(this, replacement ?: "")
+                    m.appendReplacement(this, Matcher.quoteReplacement(replacement ?: ""))
 
                     ++index
                 }
