@@ -262,7 +262,17 @@ class RecorderThread(
             }
         } catch (e: Exception) {
             Log.e(tag, "Error during recording", e)
-            errorMsg = e.localizedMessage
+
+            errorMsg = buildString {
+                val elem = e.stackTrace.find { it.className.startsWith("android.media.") }
+                if (elem != null) {
+                    append(context.getString(R.string.notification_internal_android_error,
+                        "${elem.className}.${elem.methodName}"))
+                    append("\n\n")
+                }
+
+                append(e.localizedMessage)
+            }
         } finally {
             Log.i(tag, "Recording thread completed")
 
