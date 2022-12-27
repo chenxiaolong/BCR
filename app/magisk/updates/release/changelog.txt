@@ -2,6 +2,8 @@
 
 * Inform the user that the device/firmware might not support call recording if an error origates from Android's internal components (PR: #206, @chenxiaolong)
 * Fix crash if any filename template value (eg. caller/contact name) contains \ or $ (Issue: #207, PR: #209, @chenxiaolong)
+* Add support for pausing/resuming the recording (Issue: #198, PR: #210, @chenxiaolong)
+  * The button is in the `Call recording in progress` notification
 
 ### Version 1.27
 
