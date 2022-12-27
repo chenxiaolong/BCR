@@ -1,15 +1,21 @@
 package com.chiller3.bcr
 
+import android.content.Intent
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.telecom.Call
 import android.telecom.InCallService
 import android.util.Log
+import kotlin.random.Random
 
 class RecorderInCallService : InCallService(), RecorderThread.OnRecordingCompletedListener {
     companion object {
         private val TAG = RecorderInCallService::class.java.simpleName
+
+        private val ACTION_PAUSE = "${RecorderInCallService::class.java.canonicalName}.pause"
+        private val ACTION_RESUME = "${RecorderInCallService::class.java.canonicalName}.resume"
+        private const val EXTRA_TOKEN = "token"
     }
 
     private lateinit var prefs: Preferences
@@ -27,6 +33,16 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
      * the recording thread fails before the call is disconnected.
      */
     private var pendingExit = 0
+
+    /**
+     * Token value for all intents received by this instance of the service.
+     *
+     * For the pause/resume functionality, we cannot use a bound service because [InCallService]
+     * uses its own non-extensible [onBind] implementation. So instead, we rely on [onStartCommand].
+     * However, because this service is required to be exported, the intents could potentially come
+     * from third party apps and we don't want those interfering with the recordings.
+     */
+    private val token = Random.Default.nextBytes(128)
 
     private val callback = object : Call.Callback() {
         override fun onStateChanged(call: Call, state: Int) {
@@ -55,11 +71,52 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         }
     }
 
+    private fun createBaseIntent(): Intent =
+        Intent(this, RecorderInCallService::class.java).apply {
+            putExtra(EXTRA_TOKEN, token)
+        }
+
+    private fun createPauseIntent(): Intent =
+        createBaseIntent().apply {
+            action = ACTION_PAUSE
+        }
+
+    private fun createResumeIntent(): Intent =
+        createBaseIntent().apply {
+            action = ACTION_RESUME
+        }
+
     override fun onCreate() {
         super.onCreate()
 
         prefs = Preferences(this)
         notifications = Notifications(this)
+    }
+
+    /** Handle intents triggered from notification actions for pausing and resuming. */
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        try {
+            val receivedToken = intent?.getByteArrayExtra(EXTRA_TOKEN)
+            if (!receivedToken.contentEquals(token)) {
+                throw IllegalArgumentException("Invalid token")
+            }
+
+            when (val action = intent?.action) {
+                ACTION_PAUSE, ACTION_RESUME -> {
+                    for ((_, recorder) in recorders) {
+                        recorder.isPaused = action == ACTION_PAUSE
+                    }
+                    updateForegroundState()
+                }
+                else -> throw IllegalArgumentException("Invalid action: $action")
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to handle intent: $intent", e)
+        }
+
+        // All actions are oneshot actions that should not be redelivered if a restart occurs
+        stopSelf(startId)
+        return START_NOT_STICKY
     }
 
     /**
@@ -197,10 +254,21 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         if (recorders.isEmpty() && pendingExit == 0) {
             stopForeground(STOP_FOREGROUND_REMOVE)
         } else {
-            startForeground(1, notifications.createPersistentNotification(
-                R.string.notification_recording_in_progress,
-                R.drawable.ic_launcher_quick_settings,
-            ))
+            if (recorders.any { it.value.isPaused }) {
+                startForeground(1, notifications.createPersistentNotification(
+                    R.string.notification_recording_paused,
+                    R.drawable.ic_launcher_quick_settings,
+                    R.string.notification_action_resume,
+                    createResumeIntent(),
+                ))
+            } else {
+                startForeground(1, notifications.createPersistentNotification(
+                    R.string.notification_recording_in_progress,
+                    R.drawable.ic_launcher_quick_settings,
+                    R.string.notification_action_pause,
+                    createPauseIntent(),
+                ))
+            }
             notifications.vibrateIfEnabled(Notifications.CHANNEL_ID_PERSISTENT)
         }
     }

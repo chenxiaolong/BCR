@@ -47,12 +47,15 @@
     <string name="notification_channel_success_name">Success alerts</string>
     <string name="notification_channel_success_desc">Alerts for successful call recordings</string>
     <string name="notification_recording_in_progress">Call recording in progress</string>
+    <string name="notification_recording_paused">Call recording paused</string>
     <string name="notification_recording_failed">Failed to record call</string>
     <string name="notification_recording_succeeded">Successfully recorded call</string>
     <string name="notification_internal_android_error">The recording failed in an internal Android component (%s). This device or firmware might not support call recording.</string>
     <string name="notification_action_open">Open</string>
     <string name="notification_action_share">Share</string>
     <string name="notification_action_delete">Delete</string>
+    <string name="notification_action_pause">Pause</string>
+    <string name="notification_action_resume">Resume</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Call recording</string>

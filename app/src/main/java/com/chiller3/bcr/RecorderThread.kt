@@ -61,6 +61,13 @@ class RecorderThread(
     @Volatile private var isCancelled = false
     private var captureFailed = false
 
+    // Pause state
+    @Volatile var isPaused = false
+        set(result) {
+            Log.d(tag, "Pause state updated: $isPaused")
+            field = result
+        }
+
     // Timestamp
     private lateinit var callTimestamp: ZonedDateTime
     private var formatter = FORMATTER
@@ -603,7 +610,8 @@ class RecorderThread(
      * @throws Exception if the audio recorder or encoder encounters an error
      */
     private fun encodeLoop(audioRecord: AudioRecord, encoder: Encoder, bufSize: Int) {
-        var numFrames = 0L
+        var numFramesTotal = 0L
+        var numFramesEncoded = 0L
         val frameSize = audioRecord.format.frameSizeInBytesCompat
 
         // Use a slightly larger buffer to reduce the chance of problems under load
@@ -634,18 +642,25 @@ class RecorderThread(
                 buffer.limit(n)
 
                 val encodeBegin = System.nanoTime()
-                encoder.encode(buffer, false)
+
+                // If paused, keep recording, but throw away the data
+                if (!isPaused) {
+                    encoder.encode(buffer, false)
+                    numFramesEncoded += n / frameSize
+                }
+
+                numFramesTotal += n / frameSize
+
                 encodeElapsed = System.nanoTime() - encodeBegin
 
                 buffer.clear()
-
-                numFrames += n / frameSize
             }
 
             val totalElapsed = System.nanoTime() - begin
             if (encodeElapsed > bufferNs) {
                 Log.w(tag, "${encoder.javaClass.simpleName} took too long: " +
-                        "timestamp=${numFrames.toDouble() / audioRecord.sampleRate}s, " +
+                        "timestampTotal=${numFramesTotal.toDouble() / audioRecord.sampleRate}s, " +
+                        "timestampEncode=${numFramesEncoded.toDouble() / audioRecord.sampleRate}s, " +
                         "buffer=${bufferNs / 1_000_000.0}ms, " +
                         "total=${totalElapsed / 1_000_000.0}ms, " +
                         "record=${recordElapsed / 1_000_000.0}ms, " +
@@ -658,8 +673,10 @@ class RecorderThread(
         buffer.limit(buffer.position())
         encoder.encode(buffer, true)
 
-        val durationSecs = numFrames.toDouble() / audioRecord.sampleRate
-        Log.d(tag, "Input complete after ${"%.1f".format(durationSecs)}s")
+        val durationSecsTotal = numFramesTotal.toDouble() / audioRecord.sampleRate
+        val durationSecsEncoded = numFramesEncoded.toDouble() / audioRecord.sampleRate
+        Log.d(tag, "Input complete after ${"%.1f".format(durationSecsTotal)}s " +
+                "(${"%.1f".format(durationSecsEncoded)}s encoded)")
     }
 
     companion object {
