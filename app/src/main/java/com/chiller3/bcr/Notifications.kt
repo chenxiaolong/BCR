@@ -124,7 +124,12 @@ class Notifications(
      * fully static and in progress recording is represented by the presence or absence of the
      * notification.
      */
-    fun createPersistentNotification(@StringRes title: Int, @DrawableRes icon: Int): Notification {
+    fun createPersistentNotification(
+        @StringRes title: Int,
+        @DrawableRes icon: Int,
+        @StringRes actionText: Int,
+        actionIntent: Intent,
+    ): Notification {
         val notificationIntent = Intent(context, SettingsActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
@@ -135,6 +140,19 @@ class Notifications(
             setSmallIcon(icon)
             setContentIntent(pendingIntent)
             setOngoing(true)
+
+            val actionPendingIntent = PendingIntent.getService(
+                context,
+                0,
+                actionIntent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+            )
+
+            addAction(Notification.Action.Builder(
+                null,
+                context.getString(actionText),
+                actionPendingIntent,
+            ).build())
 
             // Inhibit 10-second delay when showing persistent notification
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
