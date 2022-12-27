@@ -4,6 +4,8 @@
 * Update Spanish translations (PR: #201, @nmayorga092)
 * Fix silent crash causing recording to not happen when debug mode is enabled (Issue: #195, PR: #203, @chenxiaolong)
   * The bug was introduced in version 1.26
+* Add support for changing the filename timestamp format (Issue: #204, PR: #205, @chenxiaolong)
+  * Similar to the existing output filename options, this can only be done via the `bcr.properties` config file
 
 Non-user-facing changes:
 * Update Kotlin and AndroidX (PR: #196, @PatrykMis)
