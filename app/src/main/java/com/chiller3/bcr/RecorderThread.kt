@@ -26,14 +26,13 @@ import com.chiller3.bcr.format.SampleRate
 import java.io.IOException
 import java.lang.Process
 import java.nio.ByteBuffer
-import java.time.Duration
-import java.time.Instant
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import java.text.ParsePosition
+import java.time.*
 import java.time.format.DateTimeFormatterBuilder
 import java.time.format.DateTimeParseException
 import java.time.format.SignStyle
 import java.time.temporal.ChronoField
+import java.time.temporal.Temporal
 import android.os.Process as AndroidProcess
 
 /**
@@ -64,6 +63,7 @@ class RecorderThread(
 
     // Timestamp
     private lateinit var callTimestamp: ZonedDateTime
+    private var formatter = FORMATTER
 
     // Filename
     private val filenameLock = Object()
@@ -121,13 +121,28 @@ class RecorderThread(
             redactions.clear()
 
             filename = filenameTemplate.evaluate {
-                when (it) {
-                    "date" -> {
+                when {
+                    it == "date" || it.startsWith("date:") -> {
                         val instant = Instant.ofEpochMilli(details.creationTimeMillis)
                         callTimestamp = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
-                        return@evaluate FORMATTER.format(callTimestamp)
+
+                        val colon = it.indexOf(":")
+                        if (colon >= 0) {
+                            val pattern = it.substring(colon + 1)
+                            Log.d(tag, "Using custom datetime pattern: $pattern")
+
+                            try {
+                                formatter = DateTimeFormatterBuilder()
+                                    .appendPattern(pattern)
+                                    .toFormatter()
+                            } catch (e: Exception) {
+                                Log.w(tag, "Invalid custom datetime pattern: $pattern; using default", e)
+                            }
+                        }
+
+                        return@evaluate formatter.format(callTimestamp)
                     }
-                    "direction" -> {
+                    it == "direction" -> {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                             when (details.callDirection) {
                                 Call.Details.DIRECTION_INCOMING -> return@evaluate "in"
@@ -136,7 +151,7 @@ class RecorderThread(
                             }
                         }
                     }
-                    "sim_slot" -> {
+                    it == "sim_slot" -> {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
                             && context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
                             == PackageManager.PERMISSION_GRANTED
@@ -154,14 +169,14 @@ class RecorderThread(
                             }
                         }
                     }
-                    "phone_number" -> {
+                    it == "phone_number" -> {
                         if (details.handle?.scheme == PhoneAccount.SCHEME_TEL) {
                             redactions[details.handle.schemeSpecificPart] = "<phone number>"
 
                             return@evaluate details.handle.schemeSpecificPart
                         }
                     }
-                    "caller_name" -> {
+                    it == "caller_name" -> {
                         val callerName = details.callerDisplayName?.trim()
                         if (!callerName.isNullOrBlank()) {
                             redactions[callerName] = "<caller name>"
@@ -169,7 +184,7 @@ class RecorderThread(
                             return@evaluate callerName
                         }
                     }
-                    "contact_name" -> {
+                    it == "contact_name" -> {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                             val contactName = details.contactDisplayName?.trim()
                             if (!contactName.isNullOrBlank()) {
@@ -320,6 +335,32 @@ class RecorderThread(
         } finally {
             tryMoveToUserDir(logcatFile)
         }
+    }
+
+    private fun timestampFromFilename(name: String): Temporal? {
+        try {
+            val redacted = redactTruncate(name)
+
+            // The date is guaranteed to be at the beginning of the filename. Try to parse it,
+            // ignoring unparsed text at the end.
+            val pos = ParsePosition(0)
+            val parsed = formatter.parse(name, pos)
+
+            val timestamp = try {
+                parsed.query(ZonedDateTime::from)
+            } catch (e: DateTimeException) {
+                // A custom pattern might not specify the time zone
+                parsed.query(LocalDateTime::from)
+            }
+
+            Log.d(tag, "Parsed $timestamp from $redacted; length=${name.length}; parsed=${pos.index}")
+
+            return timestamp
+        } catch (e: DateTimeParseException) {
+            // Ignore
+        }
+
+        return null
     }
 
     /**
@@ -627,37 +668,6 @@ class RecorderThread(
             .appendFraction(ChronoField.NANO_OF_SECOND, 0, 9, true)
             .appendOffset("+HHMMss", "+0000")
             .toFormatter()
-
-        private fun timestampFromFilename(name: String): ZonedDateTime? {
-            try {
-                // Date is before first separator
-                val first = name.indexOf('_')
-                if (first < 0 || first == name.length - 1) {
-                    return null
-                }
-
-                // The user might not have a delimiter in the template, but we know for sure the
-                // date ends at least 4 digits after the +/- in the date offset
-                var second = name.indexOfAny(charArrayOf('-', '+'), first + 1)
-                if (second < 0) {
-                    return null
-                }
-                second += 5
-
-                // If there are two additional digits, then assume they are part of the offset
-                if (second + 2 <= name.length
-                    && name[second].isDigit()
-                    && name[second + 1].isDigit()) {
-                    second += 2
-                }
-
-                return ZonedDateTime.parse(name.substring(0, second), FORMATTER)
-            } catch (e: DateTimeParseException) {
-                // Ignore
-            }
-
-            return null
-        }
 
         private fun redactTruncate(msg: String): String = buildString {
             val n = 2

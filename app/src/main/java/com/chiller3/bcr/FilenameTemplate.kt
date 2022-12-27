@@ -22,8 +22,8 @@ class FilenameTemplate private constructor(props: Properties) {
             components.add(Component(text, default, prefix, suffix))
         }
 
-        if (components.isEmpty() || !components[0].text.startsWith(VAR_DATE)) {
-            throw IllegalArgumentException("The first filename component must begin with $VAR_DATE")
+        if (components.isEmpty() || !isDate(components[0].text)) {
+            throw IllegalArgumentException("The first filename component must be ${'$'}{date}")
         }
 
         Log.d(TAG, "Loaded filename components: $components")
@@ -66,24 +66,39 @@ class FilenameTemplate private constructor(props: Properties) {
     companion object {
         private val TAG = FilenameTemplate::class.java.simpleName
 
-        private val VAR_PATTERN = Pattern.compile("""\${'$'}\{(\w+)\}""")
-        private val VAR_DATE = "${'$'}{date}"
+        private val VAR_PATTERN = Pattern.compile("""\${'$'}\{([^\}]+)\}""")
 
-        private fun evalVars(input: String, getVar: (String) -> String?): String =
+        private fun evalVarsIndexed(input: String, getVar: (Int, String) -> String?): String =
             StringBuffer().run {
                 val m = VAR_PATTERN.matcher(input)
+                var index = 0
 
                 while (m.find()) {
                     val name = m.group(1)!!
-                    val replacement = getVar(name)
+                    val replacement = getVar(index, name)
 
                     m.appendReplacement(this, replacement ?: "")
+
+                    ++index
                 }
 
                 m.appendTail(this)
 
                 toString()
             }
+
+        private fun evalVars(input: String, getVar: (String) -> String?): String =
+            evalVarsIndexed(input) { _, name ->
+                getVar(name)
+            }
+
+        private fun isDate(input: String): Boolean =
+            evalVarsIndexed(input) { index, name ->
+                when {
+                    index == 0 && (name == "date" || name.startsWith("date:")) -> "ok"
+                    else -> null
+                }
+            }.isNotEmpty()
 
         fun load(context: Context): FilenameTemplate {
             val props = Properties()
