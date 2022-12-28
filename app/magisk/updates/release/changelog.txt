@@ -1,4 +1,4 @@
-### Unreleased
+### Version 1.29
 
 * Add a new option for starting the recording in the paused state (Issue: #198, PR: #211, @chenxiaolong)
   * If enabled, this allows the user to choose whether a call is recorded. If a recording starts in the paused state and is never resumed, then the empty output file is not saved.
