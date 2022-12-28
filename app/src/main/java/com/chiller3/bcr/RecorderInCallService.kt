@@ -295,12 +295,16 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         updateForegroundState()
     }
 
-    override fun onRecordingCompleted(thread: RecorderThread, file: OutputFile) {
-        Log.i(TAG, "Recording completed: ${thread.id}: ${file.redacted}")
+    override fun onRecordingCompleted(thread: RecorderThread, file: OutputFile?) {
+        Log.i(TAG, "Recording completed: ${thread.id}: ${file?.redacted}")
         handler.post {
             onThreadExited()
 
-            notifySuccess(file)
+            // If the recording was initially paused and the user never resumed it, there's no
+            // output file, so nothing needs to be shown.
+            if (file != null) {
+                notifySuccess(file)
+            }
         }
     }
 
