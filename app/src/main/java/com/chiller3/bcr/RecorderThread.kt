@@ -62,11 +62,16 @@ class RecorderThread(
     private var captureFailed = false
 
     // Pause state
-    @Volatile var isPaused = false
-        set(result) {
-            Log.d(tag, "Pause state updated: $isPaused")
-            field = result
+    @Volatile var isPaused = prefs.initiallyPaused
+        set(value) {
+            field = value
+            if (!value) {
+                wasEverResumed = true
+            }
+
+            Log.d(tag, "Pause state updated: $value")
         }
+    private var wasEverResumed = !isPaused
 
     // Timestamp
     private lateinit var callTimestamp: ZonedDateTime
@@ -90,6 +95,7 @@ class RecorderThread(
 
     init {
         Log.i(tag, "Created thread for call: $call")
+        Log.i(tag, "Initially paused: $isPaused")
 
         onCallDetailsChanged(call.details)
 
@@ -258,8 +264,14 @@ class RecorderThread(
                         }
                     }
 
-                    tryMoveToUserDir(outputFile)?.let {
-                        resultUri = it.uri
+                    if (wasEverResumed) {
+                        tryMoveToUserDir(outputFile)?.let {
+                            resultUri = it.uri
+                        }
+                    } else {
+                        Log.i(tag, "Deleting because recording was never resumed: ${redact(finalFilename)}")
+                        outputFile.delete()
+                        resultUri = null
                     }
 
                     processRetention()
@@ -292,7 +304,7 @@ class RecorderThread(
             val outputFile = resultUri?.let { OutputFile(it, redact(it), format.mimeTypeContainer) }
 
             if (success) {
-                listener.onRecordingCompleted(this, outputFile!!)
+                listener.onRecordingCompleted(this, outputFile)
             } else {
                 listener.onRecordingFailed(this, errorMsg, outputFile)
             }
@@ -711,9 +723,11 @@ class RecorderThread(
 
     interface OnRecordingCompletedListener {
         /**
-         * Called when the recording completes successfully. [file] is the output file.
+         * Called when the recording completes successfully. [file] is the output file. If [file] is
+         * null, then the recording was started in the paused state and the output file was deleted
+         * because the user never resumed it.
          */
-        fun onRecordingCompleted(thread: RecorderThread, file: OutputFile)
+        fun onRecordingCompleted(thread: RecorderThread, file: OutputFile?)
 
         /**
          * Called when an error occurs during recording. If [file] is not null, it points to the

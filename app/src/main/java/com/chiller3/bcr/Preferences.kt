@@ -12,6 +12,7 @@ import java.io.File
 class Preferences(private val context: Context) {
     companion object {
         const val PREF_CALL_RECORDING = "call_recording"
+        const val PREF_INITIALLY_PAUSED = "initially_paused"
         const val PREF_OUTPUT_DIR = "output_dir"
         const val PREF_OUTPUT_FORMAT = "output_format"
         const val PREF_INHIBIT_BATT_OPT = "inhibit_batt_opt"
@@ -146,6 +147,13 @@ class Preferences(private val context: Context) {
     var isCallRecordingEnabled: Boolean
         get() = prefs.getBoolean(PREF_CALL_RECORDING, false)
         set(enabled) = prefs.edit { putBoolean(PREF_CALL_RECORDING, enabled) }
+
+    /**
+     * Whether the recording should initially start in the paused state.
+     */
+    var initiallyPaused: Boolean
+        get() = prefs.getBoolean(PREF_INITIALLY_PAUSED, false)
+        set(enabled) = prefs.edit { putBoolean(PREF_INITIALLY_PAUSED, enabled) }
 
     /**
      * The saved output format.
