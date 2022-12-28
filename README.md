@@ -87,6 +87,43 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
 
 Note that `INTERNET` is _not_ in the list. BCR does not and will never access the network. BCR will never communicate with other apps either, except if the user explicitly taps on the `Open` or `Share` buttons in the notification shown when a recording completes. In that scenario, the target app is granted access to that single recording only.
 
+### Advanced features
+
+This section describes BCR's advanced features that are hidden or only accessible via a config file.
+
+#### Debug mode
+
+BCR has a hidden debug mode that can be enabled or disabled by long pressing the version number.
+
+When debug mode is enabled, BCR will write a log file to the output directory after a call recording completes. It is named the same way as the audio file. The log file contains the same messages as what `adb logcat` would show, except messages not relevant to BCR are filtered out (BCR does not have permission to access those messages anyway).
+
+Within the log file, BCR aims to never log any sensitive information. Information about the current call, like the phone number, are replaced with placeholders instead, like `<phone number>`. However, other information can't be easily redacted this way will be truncated instead. For example, when the file rentention feature cleans up old files, filenames, like `20230101_010203.456+0000_out_1234567890_John_Doe.oga`, are logged as `20<...>ga`.
+
+When reporting bugs, please include the log file as it is extremely helpful for identifying what might be wrong. (But please double check the log file to ensure there's no sensitive information!)
+
+#### Customizing the output filename
+
+By default, BCR uses a filename template that includes the call timestamp, call direction, SIM slot, phone number, caller ID, and contact name. This can be customized, but only by editing a config file. To do so, the easiest way is to copy [the default config](./app/src/main/res/raw/filename_template.properties) to `bcr.properties` in the output directory and then edit it to your liking. Details about the available fields are documented in the default config file.
+
+For example, to customize the filename template to `<date as yyyyMMdd_HHmmss>_<phone number>_<caller ID>`, use the following config:
+
+```properties
+filename.0.text = ${date:yyyyMMdd_HHmmss}
+
+filename.1.text = ${phone_number}
+filename.1.prefix = _
+
+filename.2.text = ${caller_name}
+filename.2.prefix = _
+```
+
+The are a couple limitations to note:
+
+* The date must always be at the beginning of the filename. This is required for the file rentention feature to work.
+* If the date format is changed (eg. from the default to `yyyyMMdd_HHmmss`), then you must manually rename the old recordings to use the new date format or they may be handled incorrectly by the file rentention feature. To be safe, move the old recordings to a different folder while testing (or set the file rentention to `Keep all`).
+
+If the config file has any error, BCR will use the default configuration. This ensures that recordings won't fail if the configuration is incorrect. To troubleshoot issues with the filename template, [enable debug mode](#debug-mode), and make a call. Then, search the log file for `FilenameTemplate`.
+
 ### How it works
 
 BCR relies heavily on system app permissions in order to function properly. This is primarily because of two permissions:
