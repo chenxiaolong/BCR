@@ -12,7 +12,7 @@
 
     <string name="pref_initially_paused_name">Initially paused</string>
     <string name="pref_initially_paused_desc_on">Recording will be paused after starting. If you don't resume it using the button in the notification, the empty output file won\'t be saved.</string>
-    <string name="pref_initially_paused_desc_off">Call will be recorded immediately after connecting. To pause or resume, tap on the button in the notification displayed during a call.</string>
+    <string name="pref_initially_paused_desc_off">Call will be recorded immediately after connecting. To pause and resume, tap on the button in the notification displayed during a call.</string>
 
     <string name="pref_output_dir_name">Output directory</string>
     <string name="pref_output_dir_desc">Pick a directory to store recordings.</string>
