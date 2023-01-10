@@ -97,7 +97,7 @@ BCR has a hidden debug mode that can be enabled or disabled by long pressing the
 
 When debug mode is enabled, BCR will write a log file to the output directory after a call recording completes. It is named the same way as the audio file. The log file contains the same messages as what `adb logcat` would show, except messages not relevant to BCR are filtered out (BCR does not have permission to access those messages anyway).
 
-Within the log file, BCR aims to never log any sensitive information. Information about the current call, like the phone number, are replaced with placeholders instead, like `<phone number>`. However, other information can't be easily redacted this way will be truncated instead. For example, when the file rentention feature cleans up old files, filenames, like `20230101_010203.456+0000_out_1234567890_John_Doe.oga`, are logged as `20<...>ga`.
+Within the log file, BCR aims to never log any sensitive information. Information about the current call, like the phone number, are replaced with placeholders instead, like `<phone number>`. However, other information can't be easily redacted this way will be truncated instead. For example, when the file retention feature cleans up old files, filenames like `20230101_010203.456+0000_out_1234567890_John_Doe.oga` are logged as `20<...>ga`.
 
 When reporting bugs, please include the log file as it is extremely helpful for identifying what might be wrong. (But please double check the log file to ensure there's no sensitive information!)
 
@@ -119,8 +119,8 @@ filename.2.prefix = _
 
 The are a couple limitations to note:
 
-* The date must always be at the beginning of the filename. This is required for the file rentention feature to work.
-* If the date format is changed (eg. from the default to `yyyyMMdd_HHmmss`), then you must manually rename the old recordings to use the new date format or they may be handled incorrectly by the file rentention feature. To be safe, move the old recordings to a different folder while testing (or set the file rentention to `Keep all`).
+* The date must always be at the beginning of the filename. This is required for the file retention feature to work.
+* If the date format is changed (eg. from the default to `yyyyMMdd_HHmmss`), then you must manually rename the old recordings to use the new date format or they may be handled incorrectly by the file retention feature. To be safe, move the old recordings to a different folder while testing (or set the file retention to `Keep all`).
 
 If the config file has any error, BCR will use the default configuration. This ensures that recordings won't fail if the configuration is incorrect. To troubleshoot issues with the filename template, [enable debug mode](#debug-mode), and make a call. Then, search the log file for `FilenameTemplate`.
 
