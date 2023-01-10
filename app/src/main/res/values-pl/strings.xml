@@ -10,6 +10,10 @@
     <string name="pref_call_recording_name">Nagrywanie rozmów</string>
     <string name="pref_call_recording_desc">Nagrywaj przychodzące i wychodzące rozmowy telefoniczne. Do nagrywania w tle wymagane są uprawnienia do mikrofonu i powiadomień.</string>
 
+    <string name="pref_initially_paused_name">Domyślnie wstrzymane</string>
+    <string name="pref_initially_paused_desc_on">Nagrywanie zostanie wstrzymane po uruchomieniu. Jeżeli nie wznowisz go przyciskiem w powiadomieniu wyświetlanym w trakcie rozmowy, pusty plik wyjściowy nie zostanie zapisany.</string>
+    <string name="pref_initially_paused_desc_off">Rozmowa będzie nagrywana natychmiast po rozpoczęciu. Możesz wstrzymać i wznowić nagrywanie przyciskiem w powiadomieniu wyświetlanym w trakcie rozmowy.</string>
+    
     <string name="pref_output_dir_name">Katalog wyjściowy</string>
     <string name="pref_output_dir_desc">Wybierz katalog do przechowywania nagrań.</string>
 
@@ -49,11 +53,15 @@
     <string name="notification_channel_success_name">Zakończone nagrywanie</string>
     <string name="notification_channel_success_desc">Informacje o pomyślnym nagraniu rozmowy</string>
     <string name="notification_recording_in_progress">Trwa nagrywanie rozmowy</string>
+    <string name="notification_recording_paused">Nagrywanie rozmowy wstrzymane</string>
     <string name="notification_recording_failed">Nie udało się nagrać rozmowy</string>
     <string name="notification_recording_succeeded">Pomyślnie nagrano rozmowę</string>
+    <string name="notification_internal_android_error">Podczas nagrywania wystąpił błąd w wewnętrznym komponencie Androida (%s). To urządzenie lub system może nie obsługiwać nagrywania rozmów.</string>
     <string name="notification_action_open">Otwórz</string>
     <string name="notification_action_share">Udostępnij</string>
     <string name="notification_action_delete">Usuń</string>
+    <string name="notification_action_pause">Wstrzymaj</string>
+    <string name="notification_action_resume">Wznów</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Nagrywanie rozmów</string>
