@@ -1,5 +1,7 @@
 ### Unreleased
 
+* Update Polish translations (PR: #219, @Twoomatch)
+
 Documentation changes:
 * README.md: Fix typos (PR: #221, @Twoomatch)
 
