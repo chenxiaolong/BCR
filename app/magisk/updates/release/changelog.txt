@@ -1,3 +1,8 @@
+### Unreleased
+
+Documentation changes:
+* README.md: Fix typos (PR: #221, @Twoomatch)
+
 ### Version 1.29
 
 * Add a new option for starting the recording in the paused state (Issue: #198, PR: #211, @chenxiaolong)
