@@ -55,7 +55,7 @@
     <string name="notification_recording_paused">Nahrávanie hovoru pozastavené</string>
     <string name="notification_recording_failed">Nahrávanie hovoru zlyhalo</string>
     <string name="notification_recording_succeeded">Hovor úspešne nahratý</string>
-    <string name="notification_internal_android_error">Nahrávanie zlyhalo: interný komponent systému android (%s). Toto zariadenie pravdepodobne nepodporuje nahrávanie hovorov.</string>
+    <string name="notification_internal_android_error">Nahrávanie zlyhalo: interný komponent systému Android (%s). Toto zariadenie pravdepodobne nepodporuje nahrávanie hovorov.</string>
     <string name="notification_action_open">Otvoriť</string>
     <string name="notification_action_share">Zdieľať</string>
     <string name="notification_action_delete">Vymazať</string>
