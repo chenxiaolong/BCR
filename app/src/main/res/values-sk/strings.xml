@@ -8,7 +8,11 @@
 
     <!-- General preferences -->
     <string name="pref_call_recording_name">Nahrávanie hovorov</string>
-    <string name="pref_call_recording_desc">Nahráva prichádzajúce a odchádzajúce telefonické hovory. Aby fungovalo nahrávanie na pozadí, je potrebné povoliť prístup k mikrofónu a upozorneniam.</string>
+    <string name="pref_call_recording_desc">Nahráva prichádzajúce a odchádzajúce hovory. Aby nahrávanie fungovalo na pozadí, je potrebné povoliť prístup k mikrofónu a upozorneniam.</string>
+
+    <string name="pref_initially_paused_name">Pôvodne pozastavené</string>
+    <string name="pref_initially_paused_desc_on">Nahrávanie hovorov bude po spojení hovoru pozastavené. Ak nahrávanie nikdy nespustíte, prázdny súbor nebude uložený.</string>
+    <string name="pref_initially_paused_desc_off">Nahrávanie sa automaticky spustí hneď po spojení hovoru. Pozastaviť a pokračovať v nahrávaní môžete klepnutím na tlačidlo v oznamovacej oblasti počas hovoru.</string>
 
     <string name="pref_output_dir_name">Priečinok s nahrávkami</string>
     <string name="pref_output_dir_desc">Vyberte priečinok, kde sa budú ukladať nahrávky.</string>
@@ -43,9 +47,20 @@
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Služby na pozadí</string>
     <string name="notification_channel_persistent_desc">Trvalé upozornenie na nahrávanie hovorov</string>
+    <string name="notification_channel_failure_name">Neúspešné upozornenia</string>
     <string name="notification_channel_failure_desc">Upozornenia na chyby počas nahrávania</string>
-    <string name="notification_recording_in_progress">Nahrávanie telefonického hovoru</string>
+    <string name="notification_channel_success_name">Úspešné upozornenia</string>
+    <string name="notification_channel_success_desc">Upozornenia na úspešne dokončené nahrávky hovorov</string>
+    <string name="notification_recording_in_progress">Nahrávanie hovoru</string>
+    <string name="notification_recording_paused">Nahrávanie hovoru pozastavené</string>
     <string name="notification_recording_failed">Nahrávanie hovoru zlyhalo</string>
+    <string name="notification_recording_succeeded">Hovor úspešne nahratý</string>
+    <string name="notification_internal_android_error">Nahrávanie zlyhalo: interný komponent systému Android (%s). Toto zariadenie pravdepodobne nepodporuje nahrávanie hovorov.</string>
+    <string name="notification_action_open">Otvoriť</string>
+    <string name="notification_action_share">Zdieľať</string>
+    <string name="notification_action_delete">Vymazať</string>
+    <string name="notification_action_pause">Pozastaviť</string>
+    <string name="notification_action_resume">Pokračovať</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Nahrávanie hovorov</string>
