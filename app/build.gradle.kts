@@ -328,7 +328,6 @@ android.applicationVariants.all {
     tasks.register("updateJson${capitalized}") {
         inputs.property("gitVersionTriple.first", gitVersionTriple.first)
         inputs.property("projectUrl", projectUrl)
-        inputs.property("releaseMetadataBranch", releaseMetadataBranch)
         inputs.property("variant.name", variant.name)
         inputs.property("variant.versionCode", variant.versionCode)
         inputs.property("variant.versionName", variant.versionName)
@@ -349,7 +348,7 @@ android.applicationVariants.all {
             root.put("version", variant.versionName)
             root.put("versionCode", variant.versionCode)
             root.put("zipUrl", "${projectUrl}/releases/download/${gitVersionTriple.first}/BCR-${variant.versionName}-release.zip")
-            root.put("changelog", "${projectUrl}/raw/${releaseMetadataBranch}/app/magisk/updates/${variant.name}/changelog.txt")
+            root.put("changelog", "${projectUrl}/raw/${gitVersionTriple.first}/app/magisk/updates/${variant.name}/changelog.txt")
 
             jsonFile.writer().use {
                 root.write(it, 4, 0)
