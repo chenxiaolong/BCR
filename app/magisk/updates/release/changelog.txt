@@ -3,6 +3,7 @@
 * Update Slovak translations (PR: #217, @pvagner)
 * Update Polish translations (PR: #219, @Twoomatch)
 * Improve English description of `initially paused` preference (PR: #220, @Twoomatch)
+* Update Spanish translations (PR: #222, @nmayorga092)
 
 Magisk module updater changes:
 * Show changelog for the correct version, excluding unreleased changes (PR: #223, @chenxiaolong)
