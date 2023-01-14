@@ -356,3 +356,53 @@ android.applicationVariants.all {
         }
     }
 }
+
+fun updateChangelog(version: String?, replaceFirst: Boolean) {
+    val file = File(rootDir, "CHANGELOG.md")
+    val expected = if (version != null) { "### Version $version" } else { "### Unreleased" }
+
+    val changelog = mutableListOf<String>().apply {
+        // This preserves a trailing newline, unlike File.readLines()
+        addAll(file.readText().lineSequence())
+    }
+
+    if (changelog.firstOrNull() != expected) {
+        if (replaceFirst) {
+            changelog[0] = expected
+        } else {
+            changelog.addAll(0, listOf(expected, ""))
+        }
+    }
+
+    file.writeText(changelog.joinToString("\n"))
+}
+
+fun updateMagiskChangelog(gitRef: String) {
+    File(File(File(File(projectDir, "magisk"), "updates"), "release"), "changelog.txt")
+        .writeText("The changelog can be found at: $projectUrl/blob/$gitRef/CHANGELOG.md\n")
+}
+
+tasks.register("changelogPreRelease") {
+    doLast {
+        val version = project.property("releaseVersion")
+
+        updateChangelog(version.toString(), true)
+        updateMagiskChangelog("v$version")
+    }
+}
+
+tasks.register("changelogPostRelease") {
+    doLast {
+        updateChangelog(null, false)
+        updateMagiskChangelog(releaseMetadataBranch)
+    }
+}
+
+tasks.register("preRelease") {
+    dependsOn("changelogPreRelease")
+}
+
+tasks.register("postRelease") {
+    dependsOn("updateJsonRelease")
+    dependsOn("changelogPostRelease")
+}
