@@ -10,6 +10,10 @@
     <string name="pref_call_recording_name">Grabacion de llamada</string>
     <string name="pref_call_recording_desc">Grabar llamadas telefónicas entrantes y salientes. Se requieren permisos de micrófono y notificación para grabar en segundo plano.</string>
 
+    <string name="pref_initially_paused_name">Iniciar pausado</string>
+    <string name="pref_initially_paused_desc_on">La grabación se pausará después de comenzar. Si no lo reanuda con el botón en la notificación, el archivo de salida vacío no se guardará.</string>
+    <string name="pref_initially_paused_desc_off">La llamada se grabará inmediatamente después de conectarse. Para pausar y reanudar, toque el botón en la notificación que se muestra durante una llamada.</string>
+    
     <string name="pref_output_dir_name">Directorio de salida</string>
     <string name="pref_output_dir_desc">Elija un directorio para almacenar grabaciones.</string>
 
@@ -47,11 +51,15 @@
     <string name="notification_channel_success_name">Alertas de éxito</string>
     <string name="notification_channel_success_desc">Alertas para grabaciones de llamadas exitosas</string>
     <string name="notification_recording_in_progress">Grabación de llamadas en curso</string>
+    <string name="notification_recording_paused">Grabación de llamadas en pausa</string>
     <string name="notification_recording_failed">No se pudo grabar la llamada</string>
     <string name="notification_recording_succeeded">Llamada grabada con éxito</string>
+    <string name="notification_internal_android_error">La grabación falló en un componente interno de Android (%s). Es posible que este dispositivo o firmware no admita la grabación de llamadas.</string>
     <string name="notification_action_open">Abrir</string>
     <string name="notification_action_share">Compartir</string>
     <string name="notification_action_delete">Eliminar</string>
+    <string name="notification_action_pause">Pausar</string>
+    <string name="notification_action_resume">Reanudar</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Grabación de llamada</string>
