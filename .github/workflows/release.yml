@@ -1,0 +1,37 @@
+---
+on:
+  push:
+    # Uncomment to test against a branch
+    #branches:
+    #  - ci
+    tags:
+      - 'v*'
+jobs:
+  create_release:
+    name: Create Github release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Get version from tag
+        id: get_version
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+              version=${GITHUB_REF#refs/tags/v}
+          else
+              version=0.0.0.${GITHUB_REF#refs/heads/}
+          fi
+          echo "version=${version}" >> "${GITHUB_OUTPUT}"
+
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: v${{ steps.get_version.outputs.version }}
+          name: Version ${{ steps.get_version.outputs.version }}
+          body_path: RELEASE.md
+          draft: true
+          prerelease: false
