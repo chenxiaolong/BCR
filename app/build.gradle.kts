@@ -379,7 +379,7 @@ fun updateChangelog(version: String?, replaceFirst: Boolean) {
 
 fun updateMagiskChangelog(gitRef: String) {
     File(File(File(File(projectDir, "magisk"), "updates"), "release"), "changelog.txt")
-        .writeText("The changelog can be found at: $projectUrl/blob/$gitRef/CHANGELOG.md\n")
+        .writeText("The changelog can be found at: [`CHANGELOG.md`]($projectUrl/blob/$gitRef/CHANGELOG.md).\n")
 }
 
 tasks.register("changelogPreRelease") {
