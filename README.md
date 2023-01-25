@@ -142,29 +142,37 @@ With these two permissions, BCR can reliably detect phone calls and record from 
 
 ### Verifying digital signatures
 
-Both the zip file and the APK contained within are digitally signed.
+Both the zip file and the APK contained within are digitally signed. **NOTE**: The zip file signing mechanism switched from GPG to SSH as of version 1.31. To verify signatures for old versions, see version 1.30's [`README.md`](https://github.com/chenxiaolong/BCR/blob/v1.30/README.md#verifying-digital-signatures).
 
-To verify the signature of the zip file, first retrieve the public key: `2233C479609BDCEC43BE9232F6A3B19090EFF32C`. This is the same key used to sign the git tags in this repository.
+#### Verifying zip file signature
 
-```bash
-gpg --recv-key 2233C479609BDCEC43BE9232F6A3B19090EFF32C
-```
-
-Then, verify the signature of the zip file.
+First save the public key to a file that lists which keys should be trusted.
 
 ```bash
-gpg --verify BCR-<version>-release.zip.asc BCR-<version>-release.zip
+echo 'bcr ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDOe6/tBnO7xZhAWXRj3ApUYgn+XZ0wnQiXM8B7tPgv4' > bcr_trusted_keys
 ```
 
-The command output should include both `Good signature` and the GPG fingerprint listed above.
+Then, verify the signature of the zip file using the list of trusted keys.
 
-To verify the signature of the APK, extract it from the zip and then run:
+```bash
+ssh-keygen -Y verify -f bcr_trusted_keys -I bcr -n file -s BCR-<version>-release.zip.sig < BCR-<version>-release.zip
+```
+
+If the file is successfully verified, the output will be:
+
+```
+Good "file" signature for bcr with ED25519 key SHA256:Ct0HoRyrFLrnF9W+A/BKEiJmwx7yWkgaW/JvghKrboA
+```
+
+#### Verifying apk signature
+
+First, extract the apk from the zip and then run:
 
 ```
 apksigner verify --print-certs system/priv-app/com.chiller3.bcr/app-release.apk
 ```
 
-The SHA-256 digest of the APK signing certificate is:
+Then, check that the SHA-256 digest of the APK signing certificate is:
 
 ```
 d16f9b375df668c58ef4bb855eae959713d6d02e45f7f2c05ce2c27ae944f4f9
