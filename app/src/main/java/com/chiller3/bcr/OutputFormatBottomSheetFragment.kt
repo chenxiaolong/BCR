@@ -132,14 +132,6 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
             }
             NoParamInfo -> {
                 binding.paramGroup.isVisible = false
-
-                // Needed due to a bug in the material3 library where the slider label does not disappear
-                // when the slider visibility is set to View.GONE
-                // https://github.com/material-components/material-components-android/issues/2726
-                val ensureLabelsRemoved = binding.paramSlider.javaClass.superclass
-                    .getDeclaredMethod("ensureLabelsRemoved")
-                ensureLabelsRemoved.isAccessible = true
-                ensureLabelsRemoved.invoke(binding.paramSlider)
             }
         }
     }
