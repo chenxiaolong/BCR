@@ -1,3 +1,7 @@
+### Unreleased
+
+* Add Hebrew translations (PR: #232, @Mosheh65)
+
 ### Version 1.31
 
 * For the OGG/Opus bitrate option, reduce the number of steps between 6 kbps and 510 kbps from 253 to 25 (Issue: #237, PR: #239, @chenxiaolong)
