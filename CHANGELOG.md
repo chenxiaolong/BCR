@@ -1,4 +1,4 @@
-### Unreleased
+### Version 1.33
 
 * Fix crash caused by a workaround for a old material3 library bug that has since been fixed (Issue: #240, PR: #241, @chenxiaolong)
 
