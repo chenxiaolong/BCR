@@ -1,3 +1,7 @@
+### Unreleased
+
+* Fix crash caused by a workaround for a old material3 library bug that has since been fixed (Issue: #240, PR: #241, @chenxiaolong)
+
 ### Version 1.32
 
 * Add Hebrew translations (PR: #232, @Mosheh65)
