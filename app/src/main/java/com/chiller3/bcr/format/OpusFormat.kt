@@ -11,7 +11,7 @@ object OpusFormat : Format() {
     override val paramInfo: FormatParamInfo = RangedParamInfo(
         RangedParamType.Bitrate,
         6_000u..510_000u,
-        2_000u,
+        21_000u,
         // "Essentially transparent mono or stereo speech, reasonable music"
         // https://wiki.hydrogenaud.io/index.php?title=Opus
         48_000u,
