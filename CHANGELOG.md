@@ -8,7 +8,7 @@ Non-user-facing changes:
 
 Signing changes:
 
-* Switch from signing new release zips, as well as git commits and tags, with GPG to SSH (PR: #229, @chenxiaolong)
+* Switch from GPG signing to SSH signing for new release zips, git commits, and git tags (PR: #229, @chenxiaolong)
   * The goal is to switch to stronger cryptography and rely on a simpler tool that everybody already has installed (including on Windows). For folks who were previously verifying signatures using GPG, please see the updated documentation for how to verify signatures with SSH.
   * For folks who want to verify that this change is legitimate, see commit 0bc3935fe2a1b6e3d56049503db521877501edc1. That commit, which introduced this change, was signed using the original GPG key.
   * The APK signing key remains unchanged.
