@@ -1,4 +1,4 @@
-### Unreleased
+### Version 1.32
 
 * Add Hebrew translations (PR: #232, @Mosheh65)
 
