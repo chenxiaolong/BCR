@@ -1,5 +1,9 @@
 ### Unreleased
 
+Non-user-facing changes:
+
+* Updated all dependencies (PR: #238, @chenxiaolong)
+
 Signing changes:
 
 * Switch from signing new release zips, as well as git commits and tags, with GPG to SSH (PR: #229, @chenxiaolong)
