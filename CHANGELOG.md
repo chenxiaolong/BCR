@@ -1,3 +1,7 @@
+### Unreleased
+
+* Write `crash.log` to output directory if BCR crashes outside of the scope of a phone call (Issue: #243, PR: #245, @chenxiaolong)
+
 ### Version 1.33
 
 * Fix crash caused by a workaround for a old material3 library bug that has since been fixed (Issue: #240, PR: #241, @chenxiaolong)
