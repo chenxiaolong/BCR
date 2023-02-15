@@ -10,9 +10,7 @@ import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.ParcelFileDescriptor
-import android.system.Int64Ref
 import android.system.Os
-import android.system.OsConstants
 import android.telecom.Call
 import android.telecom.PhoneAccount
 import android.telephony.SubscriptionManager
@@ -23,7 +21,6 @@ import androidx.documentfile.provider.DocumentFile
 import com.chiller3.bcr.format.Encoder
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.SampleRate
-import java.io.IOException
 import java.lang.Process
 import java.nio.ByteBuffer
 import java.text.ParsePosition
@@ -83,6 +80,22 @@ class RecorderThread(
     private lateinit var filenameTemplate: FilenameTemplate
     private lateinit var filename: String
     private val redactions = HashMap<String, String>()
+    private val redactor = object : OutputDirUtils.Redactor {
+        override fun redact(msg: String): String {
+            synchronized(filenameLock) {
+                var result = msg
+
+                for ((source, target) in redactions) {
+                    result = result.replace(source, target)
+                }
+
+                return result
+            }
+        }
+
+        override fun redact(uri: Uri): String = redact(Uri.decode(uri.toString()))
+    }
+    private val dirUtils = OutputDirUtils(context, redactor)
 
     // Format
     private val format: Format
@@ -103,20 +116,6 @@ class RecorderThread(
         format = savedFormat.first
         formatParam = savedFormat.second
     }
-
-    private fun redact(msg: String): String {
-        synchronized(filenameLock) {
-            var result = msg
-
-            for ((source, target) in redactions) {
-                result = result.replace(source, target)
-            }
-
-            return result
-        }
-    }
-
-    private fun redact(uri: Uri): String = redact(Uri.decode(uri.toString()))
 
     /**
      * Update [filename] with information from [details].
@@ -219,7 +218,7 @@ class RecorderThread(
             // traversal attacks.
                 .replace('/', '_').trim()
 
-            Log.i(tag, "Updated filename due to call details change: ${redact(filename)}")
+            Log.i(tag, "Updated filename due to call details change: ${redactor.redact(filename)}")
         }
     }
 
@@ -244,32 +243,32 @@ class RecorderThread(
                 Log.i(tag, "Recording cancelled before it began")
             } else {
                 val initialFilename = synchronized(filenameLock) { filename }
-                val outputFile = createFileInDefaultDir(initialFilename, format.mimeTypeContainer)
+                val outputFile = dirUtils.createFileInDefaultDir(initialFilename, format.mimeTypeContainer)
                 resultUri = outputFile.uri
 
                 try {
-                    openFile(outputFile, true).use {
+                    dirUtils.openFile(outputFile, true).use {
                         recordUntilCancelled(it)
                         Os.fsync(it.fileDescriptor)
                     }
                 } finally {
                     val finalFilename = synchronized(filenameLock) { filename }
                     if (finalFilename != initialFilename) {
-                        Log.i(tag, "Renaming ${redact(initialFilename)} to ${redact(finalFilename)}")
+                        Log.i(tag, "Renaming ${redactor.redact(initialFilename)} to ${redactor.redact(finalFilename)}")
 
                         if (outputFile.renameTo(finalFilename)) {
                             resultUri = outputFile.uri
                         } else {
-                            Log.w(tag, "Failed to rename to final filename: ${redact(finalFilename)}")
+                            Log.w(tag, "Failed to rename to final filename: ${redactor.redact(finalFilename)}")
                         }
                     }
 
                     if (wasEverResumed) {
-                        tryMoveToUserDir(outputFile)?.let {
+                        dirUtils.tryMoveToUserDir(outputFile)?.let {
                             resultUri = it.uri
                         }
                     } else {
-                        Log.i(tag, "Deleting because recording was never resumed: ${redact(finalFilename)}")
+                        Log.i(tag, "Deleting because recording was never resumed: ${redactor.redact(finalFilename)}")
                         outputFile.delete()
                         resultUri = null
                     }
@@ -301,7 +300,9 @@ class RecorderThread(
                 Log.w(tag, "Failed to dump logcat", e)
             }
 
-            val outputFile = resultUri?.let { OutputFile(it, redact(it), format.mimeTypeContainer) }
+            val outputFile = resultUri?.let {
+                OutputFile(it, redactor.redact(it), format.mimeTypeContainer)
+            }
 
             if (success) {
                 listener.onRecordingCompleted(this, outputFile)
@@ -334,7 +335,7 @@ class RecorderThread(
 
         val logFilename = synchronized(filenameLock) { "${filename}.log" }
 
-        logcatFile = createFileInDefaultDir(logFilename, "text/plain")
+        logcatFile = dirUtils.createFileInDefaultDir(logFilename, "text/plain")
         logcatProcess = ProcessBuilder("logcat", "*:V")
             // This is better than -f because the logcat implementation calls fflush() when the
             // output stream is stdout. logcatFile is guaranteed to have file:// scheme because it's
@@ -362,7 +363,7 @@ class RecorderThread(
                 logcatProcess.waitFor()
             }
         } finally {
-            tryMoveToUserDir(logcatFile)
+            dirUtils.tryMoveToUserDir(logcatFile)
         }
     }
 
@@ -433,108 +434,6 @@ class RecorderThread(
                 }
             }
         }
-    }
-
-    /**
-     * Try to move [sourceFile] to the user output directory.
-     *
-     * @return Whether the user output directory is set and the file was successfully moved
-     */
-    private fun tryMoveToUserDir(sourceFile: DocumentFile): DocumentFile? {
-        val userDir = prefs.outputDir?.let {
-            // Only returns null on API <21
-            DocumentFile.fromTreeUri(context, it)!!
-        } ?: return null
-
-        val redactedSource = redact(sourceFile.uri)
-
-        return try {
-            val targetFile = moveFileToDir(sourceFile, userDir)
-            val redactedTarget = redact(targetFile.uri)
-
-            Log.i(tag, "Successfully moved $redactedSource to $redactedTarget")
-            sourceFile.delete()
-
-            targetFile
-        } catch (e: Exception) {
-            Log.e(tag, "Failed to move $redactedSource to $userDir", e)
-            null
-        }
-    }
-
-    /**
-     * Move [sourceFile] to [targetDir].
-     *
-     * @return The [DocumentFile] for the newly moved file.
-     */
-    private fun moveFileToDir(sourceFile: DocumentFile, targetDir: DocumentFile): DocumentFile {
-        val targetFile = createFileInDir(targetDir, sourceFile.name!!, sourceFile.type!!)
-
-        try {
-            openFile(sourceFile, false).use { sourcePfd ->
-                openFile(targetFile, true).use { targetPfd ->
-                    var remain = Os.lseek(sourcePfd.fileDescriptor, 0, OsConstants.SEEK_END)
-                    val offset = Int64Ref(0)
-
-                    while (remain > 0) {
-                        val ret = Os.sendfile(
-                            targetPfd.fileDescriptor, sourcePfd.fileDescriptor, offset, remain)
-                        if (ret == 0L) {
-                            throw IOException("Unexpected EOF in sendfile()")
-                        }
-
-                        remain -= ret
-                    }
-
-                    Os.fsync(targetPfd.fileDescriptor)
-                }
-            }
-
-            sourceFile.delete()
-            return targetFile
-        } catch (e: Exception) {
-            targetFile.delete()
-            throw e
-        }
-    }
-
-    /**
-     * Create [name] in the default output directory.
-     *
-     * @param name Should not contain a file extension
-     * @param mimeType Determines the file extension
-     *
-     * @throws IOException if the file could not be created in the default directory
-     */
-    private fun createFileInDefaultDir(name: String, mimeType: String): DocumentFile {
-        val defaultDir = DocumentFile.fromFile(prefs.defaultOutputDir)
-        return createFileInDir(defaultDir, name, mimeType)
-    }
-
-    /**
-     * Create a new file with name [name] inside [dir].
-     *
-     * @param name Should not contain a file extension
-     * @param mimeType Determines the file extension
-     *
-     * @throws IOException if file creation fails
-     */
-    private fun createFileInDir(dir: DocumentFile, name: String, mimeType: String): DocumentFile {
-        Log.d(tag, "Creating ${redact(name)} with MIME type $mimeType in ${dir.uri}")
-
-        return dir.createFile(mimeType, name)
-            ?: throw IOException("Failed to create file in ${dir.uri}")
-    }
-
-    /**
-     * Open seekable file descriptor to [file].
-     *
-     * @throws IOException if [file] cannot be opened
-     */
-    private fun openFile(file: DocumentFile, truncate: Boolean): ParcelFileDescriptor {
-        val truncParam = if (truncate) { "t" } else { "" }
-        return context.contentResolver.openFileDescriptor(file.uri, "rw$truncParam")
-            ?: throw IOException("Failed to open file at ${file.uri}")
     }
 
     /**
