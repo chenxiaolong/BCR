@@ -1,6 +1,9 @@
 ### Unreleased
 
 * Write `crash.log` to output directory if BCR crashes outside of the scope of a phone call (Issue: #243, PR: #245, @chenxiaolong)
+* Set default notification importance to high for the persistent notification during a all (Issue: #248, PR: #249, @chenxiaolong)
+  * This makes it easier to access the pause/resume button in the notification.
+  * This change only affects new installs and the user's notification preferences in Android's settings will always take precedence.
 
 ### Version 1.33
 
