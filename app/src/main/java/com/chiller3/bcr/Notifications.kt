@@ -73,12 +73,12 @@ class Notifications(
     private val notificationManager = context.getSystemService(NotificationManager::class.java)
 
     /**
-     * Create a low priority notification channel for the persistent notification.
+     * Create a high priority notification channel for the persistent notification.
      */
     private fun createPersistentChannel() = NotificationChannel(
         CHANNEL_ID_PERSISTENT,
         context.getString(R.string.notification_channel_persistent_name),
-        NotificationManager.IMPORTANCE_LOW,
+        NotificationManager.IMPORTANCE_HIGH,
     ).apply {
         description = context.getString(R.string.notification_channel_persistent_desc)
     }
