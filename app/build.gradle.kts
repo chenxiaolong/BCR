@@ -304,13 +304,13 @@ android.applicationVariants.all {
         from(moduleProp.map { it.outputs })
         from(addonD.map { it.outputs }) {
             fileMode = 0b111_101_101 // 0o755; kotlin doesn't support octal literals
-            into("system/addon.d")
+            into("overlay/addon.d")
         }
         from(permissionsXml.map { it.outputs }) {
-            into("system/etc/permissions")
+            into("overlay/etc/permissions")
         }
         from(variant.outputs.map { it.outputFile }) {
-            into("system/priv-app/${variant.applicationId}")
+            into("overlay/priv-app/${variant.applicationId}")
         }
 
         val magiskDir = File(projectDir, "magisk")
@@ -320,6 +320,8 @@ android.applicationVariants.all {
                 into("META-INF/com/google/android")
             }
         }
+
+        from(File(magiskDir, "customize.sh"))
 
         from(File(rootDir, "LICENSE"))
         from(File(rootDir, "README.md"))
