@@ -4,6 +4,8 @@
 * Set default notification importance to high for the persistent notification during a all (Issue: #248, PR: #249, @chenxiaolong)
   * This makes it easier to access the pause/resume button in the notification.
   * This change only affects new installs and the user's notification preferences in Android's settings will always take precedence.
+* Work around broken NFC and possible bootloops on MIUI when `/system` contains overlayfs mount points (Issue: #242, #246, PR: #250, @chenxiaolong)
+  * This is only a workaround for a bug in Magisk's mount logic. The actual Magisk bug will be fixed by: https://github.com/topjohnwu/Magisk/pull/6588.
 
 ### Version 1.33
 
