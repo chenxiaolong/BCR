@@ -8,16 +8,9 @@ has_overlays() {
     [ "${count}" -gt 0 ]
 }
 
-module_overlay_dir=
+target=
 
-for candidate in \
-    /system::system \
-    /product::system/product \
-    /system_ext::system/system_ext \
-    /vendor::system/vendor
-do
-    mountpoint=${candidate%::*}
-
+for mountpoint in /system /product /system_ext /vendor; do
     if has_overlays "^${mountpoint}"; then
         echo "Cannot use ${mountpoint}: contains overlayfs mounts"
     # Magisk fails to mount files when the parent directory does not exist
@@ -27,22 +20,24 @@ do
         echo "Cannot use ${mountpoint}: priv-app/ does not exist"
     else
         echo "Using ${mountpoint} as the installation target"
-        module_overlay_dir=${candidate#*::}
+        target=${mountpoint}
         break
     fi
 done
 
-if [ -z "${module_overlay_dir}" ]; then
+if [ -z "${target}" ]; then
     echo 'No suitable installation target found'
     echo 'This OS is not supported'
     rm -rv "${MODPATH}" 2>&1
     exit 1
 fi
 
-if [ "${module_overlay_dir}" != system ]; then
+if [ "${target}" != /system ]; then
     echo 'Removing addon.d script since installation target is not /system'
-    rm -rv "${MODPATH}/overlay/addon.d" 2>&1 || exit 1
-fi
+    rm -rv "${MODPATH}/system/addon.d" 2>&1 || exit 1
 
-mkdir -vp "$(dirname "${MODPATH}/${module_overlay_dir}")" 2>&1 || exit 1
-mv -v "${MODPATH}/overlay" "${MODPATH}/${module_overlay_dir}" 2>&1 || exit 1
+    echo "Adjusting overlay for installation to ${target}"
+    mv -v "${MODPATH}/system" "${MODPATH}/${target#/}" 2>&1 || exit 1
+    mkdir -v "${MODPATH}/system" 2>&1 || exit 1
+    mv -v "${MODPATH}/${target#/}" "${MODPATH}/system/${target#/}" 2>&1 || exit 1
+fi
