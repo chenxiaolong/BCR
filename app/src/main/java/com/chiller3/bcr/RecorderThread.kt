@@ -415,11 +415,13 @@ class RecorderThread(
         }
         Log.i(tag, "Retention period is $retention")
 
-        for (item in directory.listFiles()) {
-            val filename = item.name ?: continue
-            val redacted = redactTruncate(filename)
+        for ((item, name) in directory.listFilesWithNames()) {
+            if (name == null) {
+                continue
+            }
+            val redacted = redactTruncate(name)
 
-            val timestamp = timestampFromFilename(filename)
+            val timestamp = timestampFromFilename(name)
             if (timestamp == null) {
                 Log.w(tag, "Ignoring unrecognized filename: $redacted")
                 continue

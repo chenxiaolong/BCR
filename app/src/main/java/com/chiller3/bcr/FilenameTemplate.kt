@@ -110,7 +110,7 @@ class FilenameTemplate private constructor(props: Properties) {
                 DocumentFile.fromTreeUri(context, it)!!
             } ?: DocumentFile.fromFile(prefs.defaultOutputDir)
 
-            val templateFile = outputDir.findFile("bcr.properties")
+            val templateFile = outputDir.findFileFast("bcr.properties")
             if (templateFile != null) {
                 try {
                     Log.d(TAG, "Loading custom filename template: ${templateFile.uri}")
