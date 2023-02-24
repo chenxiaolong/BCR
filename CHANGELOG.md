@@ -1,5 +1,8 @@
 ### Unreleased
 
+* Fix missing BCR app when doing a direct (non-Magisk module) installation (Issue: #253, PR: #254, @chenxiaolong)
+  * This bug was introduced in version 1.34 and was caused by an oversight when adding the workaround for overlayfs.
+
 ### Version 1.34
 
 * Write `crash.log` to output directory if BCR crashes outside of the scope of a phone call (Issue: #243, PR: #245, @chenxiaolong)
