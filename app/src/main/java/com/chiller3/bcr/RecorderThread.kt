@@ -134,8 +134,6 @@ class RecorderThread(
 
             lastCallDetails = details
 
-            redactions.clear()
-
             filename = filenameTemplate.evaluate {
                 when {
                     it == "date" || it.startsWith("date:") -> {
