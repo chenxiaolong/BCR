@@ -1,9 +1,11 @@
 package com.chiller3.bcr
 
+import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.provider.DocumentsContract
 import android.util.Log
+import android.webkit.MimeTypeMap
 import androidx.documentfile.provider.DocumentFile
 
 private const val TAG = "DocumentFileExtensions"
@@ -97,4 +99,28 @@ fun DocumentFile.findFileFast(displayName: String): DocumentFile? {
     }
 
     return null
+}
+
+/**
+ * Like [DocumentFile.renameTo], but preserves the extension for file URIs.
+ *
+ * This fixes [DocumentFile.renameTo]'s behavior so it is the same for both SAF and file URIs.
+ */
+fun DocumentFile.renameToPreserveExt(displayName: String): Boolean {
+    val newName = when (uri.scheme) {
+        ContentResolver.SCHEME_FILE -> {
+            buildString {
+                append(displayName)
+
+                val ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
+                if (ext != null) {
+                    append('.')
+                    append(ext)
+                }
+            }
+        }
+        else -> displayName
+    }
+
+    return renameTo(newName)
 }
