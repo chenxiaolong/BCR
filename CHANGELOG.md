@@ -1,4 +1,4 @@
-### Unreleased
+### Version 1.35
 
 * Fix missing BCR app when doing a direct (non-Magisk module) installation (Issue: #253, PR: #254, @chenxiaolong)
   * This bug was introduced in version 1.34 and was caused by an oversight when adding the workaround for overlayfs.
