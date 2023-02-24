@@ -266,7 +266,7 @@ class RecorderThread(
                     if (finalFilename != initialFilename) {
                         Log.i(tag, "Renaming ${redactor.redact(initialFilename)} to ${redactor.redact(finalFilename)}")
 
-                        if (outputFile.renameTo(finalFilename)) {
+                        if (outputFile.renameToPreserveExt(finalFilename)) {
                             resultUri = outputFile.uri
                         } else {
                             Log.w(tag, "Failed to rename to final filename: ${redactor.redact(finalFilename)}")
@@ -381,7 +381,7 @@ class RecorderThread(
             if (finalLogcatFilename != logcatFilename) {
                 Log.i(tag, "Renaming ${redactor.redact(logcatFilename)} to ${redactor.redact(finalLogcatFilename)}")
 
-                if (!logcatFile.renameTo(finalLogcatFilename)) {
+                if (!logcatFile.renameToPreserveExt(finalLogcatFilename)) {
                     Log.w(tag, "Failed to rename to final filename: ${redactor.redact(finalLogcatFilename)}")
                 }
             }
