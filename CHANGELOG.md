@@ -2,6 +2,9 @@
 
 * Fix missing BCR app when doing a direct (non-Magisk module) installation (Issue: #253, PR: #254, @chenxiaolong)
   * This bug was introduced in version 1.34 and was caused by an oversight when adding the workaround for overlayfs.
+* Work around absurdly slow SAF (Android Storage Access Framework) on some devices (Issue: #252, PR: #257, @chenxiaolong)
+  * This fixes audio being chopped off the beginning of the call recording. Some devices' SAF implementations are slow to the point where checking the existence of a file may take upwards of 8 seconds (vs. 2ms with native file access).
+  * This only affected users who picked a custom output directory. The default output directory uses native file access instead of SAF.
 
 ### Version 1.34
 
