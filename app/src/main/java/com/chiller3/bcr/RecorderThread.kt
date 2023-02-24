@@ -77,6 +77,7 @@ class RecorderThread(
     // Filename
     private val filenameLock = Object()
     private var pendingCallDetails: Call.Details? = null
+    private lateinit var lastCallDetails: Call.Details
     private lateinit var filenameTemplate: FilenameTemplate
     private lateinit var filename: String
     private val redactions = HashMap<String, String>()
@@ -103,6 +104,7 @@ class RecorderThread(
     private val sampleRate = SampleRate.fromPreferences(prefs)
 
     // Logging
+    private lateinit var logcatFilename: String
     private lateinit var logcatFile: DocumentFile
     private lateinit var logcatProcess: Process
 
@@ -129,6 +131,8 @@ class RecorderThread(
                 pendingCallDetails = details
                 return
             }
+
+            lastCallDetails = details
 
             redactions.clear()
 
@@ -228,7 +232,10 @@ class RecorderThread(
         var resultUri: Uri? = null
 
         synchronized(filenameLock) {
-            filenameTemplate = FilenameTemplate.load(context)
+            // We initially do not allow custom filename templates because SAF is extraordinarily
+            // slow on some devices. Even with the our custom findFileFast() implementation, simply
+            // checking for the existence of the template may take >500ms.
+            filenameTemplate = FilenameTemplate.load(context, false)
 
             onCallDetailsChanged(pendingCallDetails!!)
             pendingCallDetails = null
@@ -252,7 +259,12 @@ class RecorderThread(
                         Os.fsync(it.fileDescriptor)
                     }
                 } finally {
-                    val finalFilename = synchronized(filenameLock) { filename }
+                    val finalFilename = synchronized(filenameLock) {
+                        filenameTemplate = FilenameTemplate.load(context, true)
+
+                        onCallDetailsChanged(lastCallDetails)
+                        filename
+                    }
                     if (finalFilename != initialFilename) {
                         Log.i(tag, "Renaming ${redactor.redact(initialFilename)} to ${redactor.redact(finalFilename)}")
 
@@ -331,11 +343,12 @@ class RecorderThread(
             return
         }
 
+        assert(!this::logcatProcess.isInitialized) { "logcat already started" }
+
         Log.d(tag, "Starting log file (${BuildConfig.VERSION_NAME})")
 
-        val logFilename = synchronized(filenameLock) { "${filename}.log" }
-
-        logcatFile = dirUtils.createFileInDefaultDir(logFilename, "text/plain")
+        logcatFilename = synchronized(filenameLock) { "${filename}.log" }
+        logcatFile = dirUtils.createFileInDefaultDir(logcatFilename, "text/plain")
         logcatProcess = ProcessBuilder("logcat", "*:V")
             // This is better than -f because the logcat implementation calls fflush() when the
             // output stream is stdout. logcatFile is guaranteed to have file:// scheme because it's
@@ -350,6 +363,8 @@ class RecorderThread(
             return
         }
 
+        assert(this::logcatProcess.isInitialized) { "logcat not started" }
+
         try {
             try {
                 Log.d(tag, "Stopping log file")
@@ -363,6 +378,16 @@ class RecorderThread(
                 logcatProcess.waitFor()
             }
         } finally {
+            val finalLogcatFilename = synchronized(filenameLock) { "${filename}.log" }
+
+            if (finalLogcatFilename != logcatFilename) {
+                Log.i(tag, "Renaming ${redactor.redact(logcatFilename)} to ${redactor.redact(finalLogcatFilename)}")
+
+                if (!logcatFile.renameTo(finalLogcatFilename)) {
+                    Log.w(tag, "Failed to rename to final filename: ${redactor.redact(finalLogcatFilename)}")
+                }
+            }
+
             dirUtils.tryMoveToUserDir(logcatFile)
         }
     }
@@ -415,11 +440,13 @@ class RecorderThread(
         }
         Log.i(tag, "Retention period is $retention")
 
-        for (item in directory.listFiles()) {
-            val filename = item.name ?: continue
-            val redacted = redactTruncate(filename)
+        for ((item, name) in directory.listFilesWithNames()) {
+            if (name == null) {
+                continue
+            }
+            val redacted = redactTruncate(name)
 
-            val timestamp = timestampFromFilename(filename)
+            val timestamp = timestampFromFilename(name)
             if (timestamp == null) {
                 Log.w(tag, "Ignoring unrecognized filename: $redacted")
                 continue

@@ -101,27 +101,33 @@ class FilenameTemplate private constructor(props: Properties) {
                 }
             }.isNotEmpty()
 
-        fun load(context: Context): FilenameTemplate {
+        fun load(context: Context, allowCustom: Boolean): FilenameTemplate {
             val props = Properties()
 
-            val prefs = Preferences(context)
-            val outputDir = prefs.outputDir?.let {
-                // Only returns null on API <21
-                DocumentFile.fromTreeUri(context, it)!!
-            } ?: DocumentFile.fromFile(prefs.defaultOutputDir)
+            if (allowCustom) {
+                val prefs = Preferences(context)
+                val outputDir = prefs.outputDir?.let {
+                    // Only returns null on API <21
+                    DocumentFile.fromTreeUri(context, it)!!
+                } ?: DocumentFile.fromFile(prefs.defaultOutputDir)
 
-            val templateFile = outputDir.findFile("bcr.properties")
-            if (templateFile != null) {
-                try {
-                    Log.d(TAG, "Loading custom filename template: ${templateFile.uri}")
+                Log.d(TAG, "Looking for custom filename template in: ${outputDir.uri}")
 
-                    context.contentResolver.openInputStream(templateFile.uri)?.use {
-                        props.load(it)
-                        return FilenameTemplate(props)
+                val templateFile = outputDir.findFileFast("bcr.properties")
+                if (templateFile != null) {
+                    try {
+                        Log.d(TAG, "Loading custom filename template: ${templateFile.uri}")
+
+                        context.contentResolver.openInputStream(templateFile.uri)?.use {
+                            props.load(it)
+                            return FilenameTemplate(props)
+                        }
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Failed to load custom filename template", e)
                     }
-                } catch (e: Exception) {
-                    Log.w(TAG, "Failed to load custom filename template", e)
                 }
+            } else {
+                Log.d(TAG, "Inhibited loading of custom filename template")
             }
 
             Log.d(TAG, "Loading default filename template")
