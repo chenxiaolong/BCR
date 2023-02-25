@@ -7,7 +7,7 @@ import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
-class FilenameTemplate private constructor(props: Properties) {
+class FilenameTemplate private constructor(props: Properties, key: String) {
     private val components = arrayListOf<Component>()
 
     init {
@@ -15,10 +15,10 @@ class FilenameTemplate private constructor(props: Properties) {
 
         while (true) {
             val index = components.size
-            val text = props.getProperty("filename.$index.text") ?: break
-            val default = props.getProperty("filename.$index.default")
-            val prefix = props.getProperty("filename.$index.prefix")
-            val suffix = props.getProperty("filename.$index.suffix")
+            val text = props.getProperty("$key.$index.text") ?: break
+            val default = props.getProperty("$key.$index.default")
+            val prefix = props.getProperty("$key.$index.prefix")
+            val suffix = props.getProperty("$key.$index.suffix")
 
             components.add(Component(text, default, prefix, suffix))
         }
@@ -101,7 +101,7 @@ class FilenameTemplate private constructor(props: Properties) {
                 }
             }.isNotEmpty()
 
-        fun load(context: Context, allowCustom: Boolean): FilenameTemplate {
+        fun load(context: Context, key: String, allowCustom: Boolean): FilenameTemplate {
             val props = Properties()
 
             if (allowCustom) {
@@ -120,7 +120,7 @@ class FilenameTemplate private constructor(props: Properties) {
 
                         context.contentResolver.openInputStream(templateFile.uri)?.use {
                             props.load(it)
-                            return FilenameTemplate(props)
+                            return FilenameTemplate(props, key)
                         }
                     } catch (e: Exception) {
                         Log.w(TAG, "Failed to load custom filename template", e)
@@ -134,7 +134,7 @@ class FilenameTemplate private constructor(props: Properties) {
 
             context.resources.openRawResource(R.raw.filename_template).use {
                 props.load(it)
-                return FilenameTemplate(props)
+                return FilenameTemplate(props, key)
             }
         }
     }

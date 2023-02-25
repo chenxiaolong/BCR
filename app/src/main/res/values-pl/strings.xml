@@ -53,9 +53,12 @@
     <string name="notification_channel_success_name">Zakończone nagrywanie</string>
     <string name="notification_channel_success_desc">Informacje o pomyślnym nagraniu rozmowy</string>
     <string name="notification_recording_in_progress">Trwa nagrywanie rozmowy</string>
+    <string name="notification_recording_mic_in_progress">Trwa nagrywanie dźwięku</string>
     <string name="notification_recording_paused">Nagrywanie rozmowy wstrzymane</string>
     <string name="notification_recording_failed">Nie udało się nagrać rozmowy</string>
+    <string name="notification_recording_mic_failed">Nie udało się nagrać dźwięku</string>
     <string name="notification_recording_succeeded">Pomyślnie nagrano rozmowę</string>
+    <string name="notification_recording_mic_succeeded">Pomyślnie nagrano dźwięk</string>
     <string name="notification_internal_android_error">Podczas nagrywania wystąpił błąd w wewnętrznym komponencie Androida (%s). To urządzenie lub system może nie obsługiwać nagrywania rozmów.</string>
     <string name="notification_action_open">Otwórz</string>
     <string name="notification_action_share">Udostępnij</string>
@@ -65,4 +68,5 @@
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Nagrywanie rozmów</string>
+    <string name="quick_settings_mic_label">Nagrywanie dźwięku</string>
 </resources>
