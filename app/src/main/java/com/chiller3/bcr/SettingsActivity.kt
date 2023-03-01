@@ -125,7 +125,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         private fun refreshVersion() {
-            val suffix = if (!BuildConfig.DEBUG && prefs.isDebugMode) {
+            val suffix = if (prefs.isDebugMode) {
                 "+debugmode"
             } else {
                 ""

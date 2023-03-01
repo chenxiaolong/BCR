@@ -70,7 +70,7 @@ class Preferences(private val context: Context) {
     }
 
     var isDebugMode: Boolean
-        get() = prefs.getBoolean(PREF_DEBUG_MODE, false)
+        get() = BuildConfig.FORCE_DEBUG_MODE || prefs.getBoolean(PREF_DEBUG_MODE, false)
         set(enabled) = prefs.edit { putBoolean(PREF_DEBUG_MODE, enabled) }
 
     /**

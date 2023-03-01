@@ -52,7 +52,7 @@ class RecorderThread(
 ) : Thread(RecorderThread::class.java.simpleName) {
     private val tag = "${RecorderThread::class.java.simpleName}/${id}"
     private val prefs = Preferences(context)
-    private val isDebug = BuildConfig.DEBUG || prefs.isDebugMode
+    private val isDebug = prefs.isDebugMode
 
     // Thread state
     @Volatile private var isCancelled = false

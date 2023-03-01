@@ -138,7 +138,23 @@ android {
         }
     }
     buildTypes {
+        getByName("debug") {
+            buildConfigField("boolean", "FORCE_DEBUG_MODE", "true")
+        }
+
+        create("debugOpt") {
+            buildConfigField("boolean", "FORCE_DEBUG_MODE", "true")
+
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
+            signingConfig = signingConfigs.getByName("debug")
+        }
+
         getByName("release") {
+            buildConfigField("boolean", "FORCE_DEBUG_MODE", "false")
+
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
