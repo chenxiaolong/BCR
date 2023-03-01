@@ -1,5 +1,7 @@
 ### Unreleased
 
+* Fix custom filename templates breaking after version 1.35 in release builds (Issue: #260, PR: #261, @chenxiaolong)
+
 ### Version 1.36
 
 * Fix loss of file extension when the output file needs to be renamed (PR: #259, @chenxiaolong)
