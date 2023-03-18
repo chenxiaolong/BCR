@@ -12,9 +12,9 @@ plugins {
 
 buildscript {
     dependencies {
-        classpath("org.eclipse.jgit:org.eclipse.jgit:6.3.0.202209071007-r")
-        classpath("org.eclipse.jgit:org.eclipse.jgit.archive:6.3.0.202209071007-r")
-        classpath("org.json:json:20220320")
+        classpath("org.eclipse.jgit:org.eclipse.jgit:6.5.0.202303070854-r")
+        classpath("org.eclipse.jgit:org.eclipse.jgit.archive:6.5.0.202303070854-r")
+        classpath("org.json:json:20230227")
     }
 }
 
@@ -103,7 +103,7 @@ android {
     namespace = "com.chiller3.bcr"
 
     compileSdk = 33
-    buildToolsVersion = "33.0.1"
+    buildToolsVersion = "33.0.2"
 
     defaultConfig {
         applicationId = "com.chiller3.bcr"
