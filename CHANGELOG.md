@@ -1,7 +1,7 @@
 ### Unreleased
 
 * Update all dependencies (PR: #266, @PatrykMis)
-* Mark quick settings tile as toggleable for accessibility (PR: #269, #270, @PatrykMis)
+* Mark quick settings tile as toggleable for accessibility (PR: #270, @PatrykMis)
 
 ### Version 1.37
 
