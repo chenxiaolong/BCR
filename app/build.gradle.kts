@@ -111,6 +111,16 @@ android {
         targetSdk = 33
         versionCode = gitVersionCode
         versionName = gitVersionName
+        resourceConfigurations.addAll(listOf(
+            "en",
+            "es",
+            "fr",
+            "iw",
+            "pl",
+            "ru",
+            "sk",
+            "tr"
+        ))
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
