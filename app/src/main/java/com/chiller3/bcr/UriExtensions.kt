@@ -4,27 +4,23 @@ import android.content.ContentResolver
 import android.net.Uri
 
 val Uri.formattedString: String
-    get() = when {
-        scheme == ContentResolver.SCHEME_FILE -> path!!
-        scheme == ContentResolver.SCHEME_CONTENT
-                && authority == "com.android.externalstorage.documents" -> {
-            // DocumentsContract.findDocumentPath() may sometimes crash with a permission error
-            // when passed a children document URI after an app upgrade, even though the app still
-            // has valid persisted URI permissions. Instead, just parse the URI manually. The format
-            // of SAF URIs hasn't changed across the versions of Android that BCR supports.
+    get() = when (scheme) {
+        ContentResolver.SCHEME_FILE -> path!!
+        ContentResolver.SCHEME_CONTENT -> {
+            val prefix = when (authority) {
+                "com.android.externalstorage.documents" -> ""
+                // Include the authority to reduce ambiguity when this isn't a SAF URI provided by
+                // Android's local filesystem document provider
+                else -> "[$authority] "
+            }
             val segments = pathSegments
-            val treeIndex = segments.indexOf("tree")
 
-            if (treeIndex >= 0 && treeIndex < segments.size - 1) {
-                // The URI might have /document/<path> appended if it refers to a document instead
-                // of a tree
-                val docIndex = treeIndex + 2
-
-                if (docIndex < segments.size - 1 && segments[docIndex] == "document") {
-                    segments[docIndex + 1]
-                } else {
-                    segments[treeIndex + 1]
-                }
+            // If this looks like a SAF tree/document URI, then try and show the document ID. This
+            // cannot be implemented in a way that prevents all false positives.
+            if (segments.size == 4 && segments[0] == "tree" && segments[2] == "document") {
+                prefix + segments[3]
+            } else if (segments.size == 2 && segments[0] == "tree") {
+                prefix + segments[1]
             } else {
                 toString()
             }
