@@ -4,6 +4,7 @@
 * Mark quick settings tile as toggleable for accessibility (PR: #270, @PatrykMis)
 * Add support for Android 13's per-app language preferences (PR: #271, @PatrykMis)
 * Fix crash when changing the output directory if the previous output directory was associated with a cloud provider app that is no longer installed (PR: #273, @chenxiaolong)
+* Show friendly path name instead of `content://` when the output directory points to a cloud provider app (PR: #274, @chenxiaolong)
 
 ### Version 1.37
 
