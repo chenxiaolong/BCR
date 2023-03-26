@@ -3,6 +3,7 @@ package com.chiller3.bcr
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.chiller3.bcr.format.Format
@@ -11,6 +12,8 @@ import java.io.File
 
 class Preferences(private val context: Context) {
     companion object {
+        private val TAG = Preferences::class.java.simpleName
+
         const val PREF_CALL_RECORDING = "call_recording"
         const val PREF_INITIALLY_PAUSED = "initially_paused"
         const val PREF_OUTPUT_DIR = "output_dir"
@@ -113,11 +116,17 @@ class Preferences(private val context: Context) {
             // Release persisted permissions on the old directory only after the new URI is set to
             // guarantee atomicity
             if (oldUri != null) {
-                context.contentResolver.releasePersistableUriPermission(
-                    oldUri,
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION
-                            or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                )
+                // It's not documented, but this can throw an exception when trying to release a
+                // previously persisted URI that's associated with an app that's no longer installed
+                try {
+                    context.contentResolver.releasePersistableUriPermission(
+                        oldUri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                    )
+                } catch (e: Exception) {
+                    Log.w(TAG, "Error when releasing persisted URI permission for: $oldUri", e)
+                }
             }
 
             // Clear all alert notifications. Having them disappear is a better user experience than
