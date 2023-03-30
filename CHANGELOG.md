@@ -1,5 +1,7 @@
 ### Unreleased
 
+* Update Russian translations (PR: #277, @bogachenko)
+
 ### Version 1.38
 
 * Update all dependencies (PR: #266, #272, @PatrykMis)
