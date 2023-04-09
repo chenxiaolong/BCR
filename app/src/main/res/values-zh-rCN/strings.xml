@@ -1,0 +1,66 @@
+<resources>
+    <string name="app_name">BCR</string>
+
+    <!-- Preference headers -->
+    <string name="app_name_full">通话录音配置</string>
+    <string name="pref_header_general">通用</string>
+    <string name="pref_header_about">关于</string>
+
+    <!-- General preferences -->
+    <string name="pref_call_recording_name">通话录音</string>
+
+    <string name="pref_call_recording_desc">对来电和去电进行通话录音，录音时候需要麦克风和通知权限。</string>
+    <string name="pref_initially_paused_name">初始暂停</string>
+    <string name="pref_initially_paused_desc_on">电话接通后不会启用录音功能，需要手动点击通知中心录音按钮才能开启录音。</string>
+
+    <string name="pref_initially_paused_desc_off">电话接通后自动开启录音，如果需要暂停或者恢复录音，需要点击通知中心对应按钮。</string>
+    <string name="pref_output_dir_name">保存目录</string>
+
+    <string name="pref_output_dir_desc">选择一个目录用来保存录音文件。</string>
+    <string name="pref_output_format_name">保存格式</string>
+
+    <string name="pref_output_format_desc">选择录音存储编码格式</string>
+    <string name="pref_inhibit_batt_opt_name">禁用电池优化</string>
+
+    <!-- About "preference" -->
+    <string name="pref_inhibit_batt_opt_desc">禁用电池优化可以避免软件在后台被杀死</string>
+    <string name="pref_version_name">软件版本</string>
+
+    <!-- Output directory bottom sheet -->
+    <string name="output_dir_bottom_sheet_change_dir">修改目录</string>
+    <string name="output_dir_bottom_sheet_file_retention">保留时间</string>
+    <plurals name="retention_days">
+        <item quantity="one">保留 %d 天</item>
+        <item quantity="other">保留 %d 天</item>
+    </plurals>
+
+    <!-- Output format bottom sheet -->
+    <string name="retention_keep_all">永久保存</string>
+    <string name="output_format_bottom_sheet_output_format">输出格式</string>
+    <string name="output_format_bottom_sheet_compression_level">压缩等级</string>
+    <string name="output_format_bottom_sheet_bitrate">比特率</string>
+
+    <string name="output_format_bottom_sheet_sample_rate">采样率</string>
+
+    <!-- Notifications -->
+    <string name="bottom_sheet_reset">恢复默认</string>
+    <string name="notification_channel_persistent_name">后台服务</string>
+    <string name="notification_channel_persistent_desc">通话录音期间通知</string>
+    <string name="notification_channel_failure_name">失败警告</string>
+    <string name="notification_channel_failure_desc">录音发生错误通知</string>
+    <string name="notification_channel_success_name">成功警告</string>
+    <string name="notification_channel_success_desc">通话录音完成通知</string>
+    <string name="notification_recording_in_progress">通话录音中</string>
+    <string name="notification_recording_paused">录音已暂停</string>
+    <string name="notification_recording_failed">通话录音失败</string>
+    <string name="notification_recording_succeeded">通话录音完成</string>
+    <string name="notification_internal_android_error">通话录音在 Android 内部组件（%s）中失败。此设备或固件可能不支持通话录音。 </string>
+    <string name="notification_action_open">打开</string>
+    <string name="notification_action_share">分享</string>
+    <string name="notification_action_delete">删除</string>
+    <string name="notification_action_pause">暂停</string>
+
+    <!-- Quick settings tile -->
+    <string name="notification_action_resume">继续</string>
+    <string name="quick_settings_label">通话录音</string>
+</resources>
