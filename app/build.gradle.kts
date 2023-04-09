@@ -119,7 +119,8 @@ android {
             "pl",
             "ru",
             "sk",
-            "tr"
+            "tr",
+            "zh-rCN"
         ))
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

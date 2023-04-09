@@ -8,4 +8,5 @@
     <locale android:name="ru" />
     <locale android:name="sk" />
     <locale android:name="tr" />
+    <locale android:name="zh-rCN" />
 </locale-config>
