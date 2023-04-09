@@ -1,6 +1,7 @@
 ### Unreleased
 
 * Update Russian translations (PR: #277, @bogachenko)
+* Add Simplified Chinese translations (PR: #283, @Yee2)
 
 ### Version 1.38
 
