@@ -10,6 +10,10 @@
     <string name="pref_call_recording_name">Çağrı kaydı</string>
     <string name="pref_call_recording_desc">Gelen ve giden çağrıları kaydet. Arka planda kayıt için mikrofon ve bildirim izinleri gereklidir.</string>
 
+    <string name="pref_initially_paused_name">Başlangıçta duraklatılmış</string>
+    <string name="pref_initially_paused_desc_on">Kayıt başladıktan sonra duraklatılacaktır. Bildirimdeki düğmeyi kullanarak devam ettirmezseniz, boş çıktı dosyası kaydedilmez.</string>
+    <string name="pref_initially_paused_desc_off">Bağlandıktan hemen sonra çağrı kaydedilecektir. Duraklatmak ve devam ettirmek için, arama sırasında görüntülenen bildirimdeki düğmeye basın</string>
+    
     <string name="pref_output_dir_name">Kayıt konumu</string>
     <string name="pref_output_dir_desc">Kayıtlar için bir konum seçin.</string>
 
@@ -36,17 +40,25 @@
     <string name="output_format_bottom_sheet_compression_level">Sıkıştırma seviyesi</string>
     <string name="output_format_bottom_sheet_bitrate">Bit hızı</string>
     <string name="output_format_bottom_sheet_sample_rate">Örnekleme hızı</string>
+    
     <string name="bottom_sheet_reset">Varsayılana döndür</string>
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Arka plan servisleri</string>
     <string name="notification_channel_persistent_desc">Arka plan çağrı kaydı için kalıcı bildirim</string>
+    <string name="notification_channel_failure_name">Hata uyarıları</string>
     <string name="notification_channel_failure_desc">Kayıt esnasındaki hatalar için uyarılar</string>
+    <string name="notification_channel_success_name">Başarı uyarları</string>
+    <string name="notification_channel_success_desc">Başarılı çağrı kayıtları için uyarılar</string>
     <string name="notification_recording_in_progress">Çağrı kaydediliyor</string>
+    <string name="notification_recording_paused">Çağrı kaydı duraklatıldı</string>
     <string name="notification_recording_failed">Çağrı kaydı başarısız</string>
+    <string name="notification_recording_succeeded">Çağrı kaydı başarılı</string>
     <string name="notification_action_open">Aç</string> 
     <string name="notification_action_share">Paylaş</string> 
     <string name="notification_action_delete">Sil</string> 
+    <string name="notification_action_pause">Duraklat</string>
+    <string name="notification_action_resume">Devam ettir</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Çağrı kaydı</string>
