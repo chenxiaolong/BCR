@@ -25,7 +25,7 @@ object Permissions {
         Manifest.permission.READ_PHONE_STATE,
     )
 
-    private fun isGranted(context: Context, permission: String) =
+    fun isGranted(context: Context, permission: String) =
         ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
 
     /**

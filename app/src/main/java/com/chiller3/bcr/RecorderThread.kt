@@ -10,12 +10,14 @@ import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
 import android.os.ParcelFileDescriptor
+import android.provider.ContactsContract.PhoneLookup
 import android.system.Os
 import android.telecom.Call
 import android.telecom.PhoneAccount
 import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
 import android.util.Log
+import androidx.core.database.getStringOrNull
 import androidx.core.net.toFile
 import androidx.documentfile.provider.DocumentFile
 import com.chiller3.bcr.format.Encoder
@@ -43,12 +45,13 @@ import android.os.Process as AndroidProcess
  * kept in the object.
  * @param listener Used for sending completion notifications. The listener is called from this
  * thread, not the main thread.
- * @param call Used only for determining the output filename and is not saved.
+ * @param parentCall Used for determining the output filename. References to it and its children are
+ * kept in the object.
  */
 class RecorderThread(
     private val context: Context,
     private val listener: OnRecordingCompletedListener,
-    call: Call,
+    private val parentCall: Call,
 ) : Thread(RecorderThread::class.java.simpleName) {
     private val tag = "${RecorderThread::class.java.simpleName}/${id}"
     private val prefs = Preferences(context)
@@ -70,23 +73,27 @@ class RecorderThread(
         }
     private var wasEverResumed = !isPaused
 
+    // Call state
+    @Volatile var isHolding = false
+    private val isConference = parentCall.details.hasProperty(Call.Details.PROPERTY_CONFERENCE)
+
     // Timestamp
     private lateinit var callTimestamp: ZonedDateTime
     private var formatter = FORMATTER
 
     // Filename
     private val filenameLock = Object()
-    private var pendingCallDetails: Call.Details? = null
-    private lateinit var lastCallDetails: Call.Details
+    private var callDetails = mutableMapOf<Call, Call.Details>()
     private lateinit var filenameTemplate: FilenameTemplate
     private lateinit var filename: String
     private val redactions = HashMap<String, String>()
+    private var redactionsSorted = emptyList<Pair<String, String>>()
     private val redactor = object : OutputDirUtils.Redactor {
         override fun redact(msg: String): String {
             synchronized(filenameLock) {
                 var result = msg
 
-                for ((source, target) in redactions) {
+                for ((source, target) in redactionsSorted) {
                     result = result.replace(source, target)
                 }
 
@@ -109,10 +116,15 @@ class RecorderThread(
     private lateinit var logcatProcess: Process
 
     init {
-        Log.i(tag, "Created thread for call: $call")
+        Log.i(tag, "Created thread for call: $parentCall")
         Log.i(tag, "Initially paused: $isPaused")
 
-        onCallDetailsChanged(call.details)
+        callDetails[parentCall] = parentCall.details
+        if (isConference) {
+            for (childCall in parentCall.children) {
+                callDetails[childCall] = childCall.details
+            }
+        }
 
         val savedFormat = Format.fromPreferences(prefs)
         format = savedFormat.first
@@ -123,21 +135,123 @@ class RecorderThread(
      * Update [filename] with information from [details].
      *
      * This function holds a lock on [filenameLock] until it returns.
+     *
+     * @param call Either the parent call or a child of the parent (for conference calls)
+     * @param details The updated call details belonging to [call]
      */
-    fun onCallDetailsChanged(details: Call.Details) {
+    fun onCallDetailsChanged(call: Call, details: Call.Details) {
+        if (call !== parentCall && call.parent !== parentCall) {
+            throw IllegalStateException("Not the parent call nor one of its children: $call")
+        }
+
+        synchronized(filenameLock) {
+            callDetails[call] = details
+
+            updateFilename(false)
+        }
+    }
+
+    private fun addRedaction(source: String, target: String) {
+        synchronized(filenameLock) {
+            redactions[source] = target
+
+            // Keyword-based redaction with arbitrary filenames can never be 100% foolproof, but we
+            // can improve the odds by replacing the longest strings first
+            redactionsSorted = redactions.entries
+                .map { it.key to it.value }
+                .sortedByDescending { it.first.length }
+        }
+    }
+
+    private fun getPhoneNumber(details: Call.Details): String? {
+        val uri = details.handle
+
+        return if (uri?.scheme == PhoneAccount.SCHEME_TEL) {
+            uri.schemeSpecificPart
+        } else {
+            null
+        }
+    }
+
+    private fun getContactDisplayName(details: Call.Details, allowManualLookup: Boolean): String? {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val name = details.contactDisplayName
+            if (name != null) {
+                return name
+            }
+        }
+
+        // In conference calls, the telephony framework sometimes doesn't return the contact display
+        // name for every party in the call, so do the lookup ourselves. This is similar to what
+        // InCallUI does, except it doesn't even try to look at contactDisplayName.
+        if (isConference) {
+            Log.w(tag, "Contact display name missing in conference child call")
+        }
+
+        // This is disabled until the very last filename update because it's synchronous.
+        if (!allowManualLookup) {
+            Log.d(tag, "Manual lookup is disabled for this invocation")
+            return null
+        }
+
+        if (!Permissions.isGranted(context, Manifest.permission.READ_CONTACTS)) {
+            Log.w(tag, "Permissions not granted for looking up contacts")
+            return null
+        }
+
+        Log.d(tag, "Performing manual contact lookup")
+
+        val number = getPhoneNumber(details)
+        if (number == null) {
+            Log.w(tag, "Cannot determine phone number from call")
+            return null
+        }
+
+        // Same heuristic as InCallUI's PhoneNumberHelper.isUriNumber()
+        val numberIsSip = number.contains("@") || number.contains("%40")
+
+        val uri = PhoneLookup.ENTERPRISE_CONTENT_FILTER_URI.buildUpon()
+            .appendPath(number)
+            .appendQueryParameter(PhoneLookup.QUERY_PARAMETER_SIP_ADDRESS,
+                numberIsSip.toString())
+            .build()
+
+        context.contentResolver.query(
+            uri, arrayOf(PhoneLookup.DISPLAY_NAME), null, null, null)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val index = cursor.getColumnIndex(PhoneLookup.DISPLAY_NAME)
+                if (index != -1) {
+                    Log.d(tag, "Found contact display name via manual lookup")
+                    return cursor.getStringOrNull(index)
+                }
+            }
+        }
+
+        Log.d(tag, "Contact not found via manual lookup")
+        return null
+    }
+
+    private fun updateFilename(allowManualContactLookup: Boolean) {
         synchronized(filenameLock) {
             if (!this::filenameTemplate.isInitialized) {
                 // Thread hasn't started yet, so we haven't loaded the filename template
-                pendingCallDetails = details
                 return
             }
 
-            lastCallDetails = details
+            val parentDetails = callDetails[parentCall]!!
+            val displayDetails = if (isConference) {
+                callDetails.entries.asSequence()
+                    .filter { it.key != parentCall }
+                    .map { it.value }
+                    .toList()
+            } else {
+                listOf(parentDetails)
+            }
 
             filename = filenameTemplate.evaluate {
                 when {
                     it == "date" || it.startsWith("date:") -> {
-                        val instant = Instant.ofEpochMilli(details.creationTimeMillis)
+                        val instant = Instant.ofEpochMilli(parentDetails.creationTimeMillis)
                         callTimestamp = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
 
                         val colon = it.indexOf(":")
@@ -157,8 +271,15 @@ class RecorderThread(
                         return@evaluate formatter.format(callTimestamp)
                     }
                     it == "direction" -> {
+                        // AOSP's telephony framework has internal documentation that specifies that
+                        // the call direction is meaningless for conference calls until enough
+                        // participants hang up that it becomes an emulated one-on-one call.
+                        if (isConference) {
+                            return@evaluate "conference"
+                        }
+
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                            when (details.callDirection) {
+                            when (parentDetails.callDirection) {
                                 Call.Details.DIRECTION_INCOMING -> return@evaluate "in"
                                 Call.Details.DIRECTION_OUTGOING -> return@evaluate "out"
                                 Call.Details.DIRECTION_UNKNOWN -> {}
@@ -176,7 +297,7 @@ class RecorderThread(
                             // Only append SIM slot ID if the device has multiple active SIMs
                             if (subscriptionManager.activeSubscriptionInfoCount > 1) {
                                 val telephonyManager = context.getSystemService(TelephonyManager::class.java)
-                                val subscriptionId = telephonyManager.getSubscriptionId(details.accountHandle)
+                                val subscriptionId = telephonyManager.getSubscriptionId(parentDetails.accountHandle)
                                 val subscriptionInfo = subscriptionManager.getActiveSubscriptionInfo(subscriptionId)
 
                                 return@evaluate "${subscriptionInfo.simSlotIndex + 1}"
@@ -184,28 +305,48 @@ class RecorderThread(
                         }
                     }
                     it == "phone_number" -> {
-                        if (details.handle?.scheme == PhoneAccount.SCHEME_TEL) {
-                            redactions[details.handle.schemeSpecificPart] = "<phone number>"
+                        val joined = displayDetails.asSequence()
+                            .map { d -> getPhoneNumber(d) }
+                            .filterNotNull()
+                            .joinToString(",")
+                        if (joined.isNotEmpty()) {
+                            addRedaction(joined, if (isConference) {
+                                "<conference phone numbers>"
+                            } else {
+                                "<phone number>"
+                            })
 
-                            return@evaluate details.handle.schemeSpecificPart
+                            return@evaluate joined
                         }
                     }
                     it == "caller_name" -> {
-                        val callerName = details.callerDisplayName?.trim()
-                        if (!callerName.isNullOrBlank()) {
-                            redactions[callerName] = "<caller name>"
+                        val joined = displayDetails.asSequence()
+                            .map { d -> d.callerDisplayName?.trim() }
+                            .filter { n -> !n.isNullOrEmpty() }
+                            .joinToString(",")
+                        if (joined.isNotEmpty()) {
+                            addRedaction(joined, if (isConference) {
+                                "<conference caller names>"
+                            } else {
+                                "<caller name>"
+                            })
 
-                            return@evaluate callerName
+                            return@evaluate joined
                         }
                     }
                     it == "contact_name" -> {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            val contactName = details.contactDisplayName?.trim()
-                            if (!contactName.isNullOrBlank()) {
-                                redactions[contactName] = "<contact name>"
+                        val joined = displayDetails.asSequence()
+                            .map { d -> getContactDisplayName(d, allowManualContactLookup)?.trim() }
+                            .filter { n -> !n.isNullOrEmpty() }
+                            .joinToString(",")
+                        if (joined.isNotEmpty()) {
+                            addRedaction(joined, if (isConference) {
+                                "<conference contact names>"
+                            } else {
+                                "<contact name>"
+                            })
 
-                                return@evaluate contactName
-                            }
+                            return@evaluate joined
                         }
                     }
                     else -> {
@@ -235,8 +376,7 @@ class RecorderThread(
             // checking for the existence of the template may take >500ms.
             filenameTemplate = FilenameTemplate.load(context, false)
 
-            onCallDetailsChanged(pendingCallDetails!!)
-            pendingCallDetails = null
+            updateFilename(false)
         }
 
         startLogcat()
@@ -260,7 +400,7 @@ class RecorderThread(
                     val finalFilename = synchronized(filenameLock) {
                         filenameTemplate = FilenameTemplate.load(context, true)
 
-                        onCallDetailsChanged(lastCallDetails)
+                        updateFilename(true)
                         filename
                     }
                     if (finalFilename != initialFilename) {
@@ -579,8 +719,8 @@ class RecorderThread(
 
                 val encodeBegin = System.nanoTime()
 
-                // If paused, keep recording, but throw away the data
-                if (!isPaused) {
+                // If paused by the user or holding, keep recording, but throw away the data
+                if (!isPaused && !isHolding) {
                     encoder.encode(buffer, false)
                     numFramesEncoded += n / frameSize
                 }
