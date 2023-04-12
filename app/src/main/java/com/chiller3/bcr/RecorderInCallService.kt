@@ -172,12 +172,16 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
 
         Log.d(TAG, "handleStateChange: $call, $state, $callState")
 
-        if (callState == Call.STATE_ACTIVE) {
+        if (call.parent != null) {
+            Log.v(TAG, "Ignoring state change of conference call child")
+        } else if (callState == Call.STATE_ACTIVE) {
             startRecording(call)
         } else if (callState == Call.STATE_DISCONNECTING || callState == Call.STATE_DISCONNECTED) {
             // This is necessary because onCallRemoved() might not be called due to firmware bugs
             requestStopRecording(call)
         }
+
+        recorders[call]?.isHolding = callState == Call.STATE_HOLDING
     }
 
     /**
@@ -243,7 +247,14 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
      * The recording thread uses call details for generating filenames.
      */
     private fun handleDetailsChange(call: Call, details: Call.Details) {
-        recorders[call]?.onCallDetailsChanged(details)
+        val parentCall = call.parent
+        val recorder = if (parentCall != null) {
+            recorders[parentCall]
+        } else {
+            recorders[call]
+        }
+
+        recorder?.onCallDetailsChanged(call, details)
     }
 
     /**
