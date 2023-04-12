@@ -1,5 +1,10 @@
 ### Unreleased
 
+* Improve conference call handling (PR: #285, @chenxiaolong)
+  * Recording a conference call will no longer incorrectly produce extra files for each participant in the call.
+  * When using call waiting, the recording is paused for the inactive call so that it doesn't capture the audio for the wrong call.
+  * BCR will manually look up the contact name due to an AOSP bug where the call's contact name field is sometimes null for conference calls. As a result of this change, adding the contact name to the output filename is now supported in Android <11.
+
 ### Version 1.39
 
 * Update Russian translations (PR: #277, @bogachenko)
