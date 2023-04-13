@@ -188,7 +188,7 @@ android {
 dependencies {
     implementation("androidx.activity:activity-ktx:1.7.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.core:core-ktx:1.10.0")
     implementation("androidx.documentfile:documentfile:1.0.1")
     implementation("androidx.fragment:fragment-ktx:1.5.6")
     implementation("androidx.preference:preference-ktx:1.2.0")
