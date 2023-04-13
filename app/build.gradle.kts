@@ -224,7 +224,7 @@ val archive = tasks.register("archive") {
 
 android.applicationVariants.all {
     val variant = this
-    val capitalized = variant.name.capitalize()
+    val capitalized = variant.name.replaceFirstChar { it.uppercase() }
     val variantDir = File(extraDir, variant.name)
 
     variant.preBuildProvider.configure {
