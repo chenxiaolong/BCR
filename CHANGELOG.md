@@ -1,5 +1,6 @@
 ### Unreleased
 
+* Update all dependencies (PR: #289, @PatrykMis)
 * Improve conference call handling (PR: #285, @chenxiaolong)
   * Recording a conference call will no longer incorrectly produce extra files for each participant in the call.
   * When using call waiting, the recording is paused for the inactive call so that it doesn't capture the audio for the wrong call.

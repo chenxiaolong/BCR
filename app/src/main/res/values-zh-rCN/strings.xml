@@ -30,7 +30,6 @@
     <string name="output_dir_bottom_sheet_change_dir">修改目录</string>
     <string name="output_dir_bottom_sheet_file_retention">保留时间</string>
     <plurals name="retention_days">
-        <item quantity="one">保留 %d 天</item>
         <item quantity="other">保留 %d 天</item>
     </plurals>
 
