@@ -5,7 +5,6 @@ import android.content.Context
 import android.net.Uri
 import android.provider.DocumentsContract
 import android.util.Log
-import android.webkit.MimeTypeMap
 import androidx.documentfile.provider.DocumentFile
 
 private const val TAG = "DocumentFileExtensions"
@@ -112,8 +111,12 @@ fun DocumentFile.renameToPreserveExt(displayName: String): Boolean {
             buildString {
                 append(displayName)
 
-                val ext = MimeTypeMap.getSingleton().getExtensionFromMimeType(type)
-                if (ext != null) {
+                // This intentionally just does simple string operations because MimeTypeMap's
+                // getExtensionFromMimeType() and getMimeTypeFromExtension() are not consistent with
+                // each other. Eg. audio/mp4 -> m4a -> audio/mpeg -> mp3.
+
+                val ext = name!!.substringAfterLast('.', "")
+                if (ext.isNotEmpty()) {
                     append('.')
                     append(ext)
                 }
