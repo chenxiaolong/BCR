@@ -5,6 +5,7 @@
   * When using call waiting, the recording is paused for the inactive call so that it doesn't capture the audio for the wrong call.
   * BCR will manually look up the contact name due to an AOSP bug where the call's contact name field is sometimes null for conference calls. As a result of this change, adding the contact name to the output filename is now supported in Android <11.
 * Update Turkish translations (PR: #286, @symbuzzer)
+* Fix M4A/AAC output files sometimes getting an incorrect `.mp3` file extension due to an Android bug (Issue: #292, PR: #293, @chenxiaolong)
 
 ### Version 1.39
 
