@@ -5,10 +5,12 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.edit
+import androidx.documentfile.provider.DocumentFile
 import androidx.preference.PreferenceManager
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.SampleRate
 import java.io.File
+import java.util.*
 
 class Preferences(private val context: Context) {
     companion object {
@@ -17,6 +19,7 @@ class Preferences(private val context: Context) {
         const val PREF_CALL_RECORDING = "call_recording"
         const val PREF_INITIALLY_PAUSED = "initially_paused"
         const val PREF_OUTPUT_DIR = "output_dir"
+        const val PREF_FILENAME_TEMPLATE = "filename_template"
         const val PREF_OUTPUT_FORMAT = "output_format"
         const val PREF_INHIBIT_BATT_OPT = "inhibit_batt_opt"
         const val PREF_VERSION = "version"
@@ -27,6 +30,16 @@ class Preferences(private val context: Context) {
         private const val PREF_FORMAT_PARAM_PREFIX = "codec_param_"
         const val PREF_OUTPUT_RETENTION = "output_retention"
         const val PREF_SAMPLE_RATE = "sample_rate"
+
+        // Defaults
+        val DEFAULT_FILENAME_TEMPLATE = Template(
+            "{date}" +
+                    "[_{direction}|]" +
+                    "[_sim{sim_slot}|]" +
+                    "[_{phone_number}|]" +
+                    "[_{caller_name}|]" +
+                    "[_{contact_name}|]"
+        )
 
         fun isFormatKey(key: String): Boolean =
             key == PREF_FORMAT_NAME || key.startsWith(PREF_FORMAT_PARAM_PREFIX)
@@ -140,6 +153,41 @@ class Preferences(private val context: Context) {
      */
     val outputDirOrDefault: Uri
         get() = outputDir ?: Uri.fromFile(defaultOutputDir)
+
+    /** The user-specified filename template. */
+    var filenameTemplate: Template?
+        get() = prefs.getString(PREF_FILENAME_TEMPLATE, null)?.let { Template(it) }
+        set(template) = prefs.edit { putString(PREF_FILENAME_TEMPLATE, template.toString()) }
+
+    /** Migrate legacy properties file based filename template to [Template]. */
+    fun migrateLegacyProperties() {
+        val outputDir = outputDir?.let {
+            // Only returns null on API <21
+            DocumentFile.fromTreeUri(context, it)!!
+        } ?: DocumentFile.fromFile(defaultOutputDir)
+
+        Log.d(TAG, "Looking for legacy filename template in: ${outputDir.uri}")
+
+        val templateFile = outputDir.findFileFast("bcr.properties")
+        if (templateFile != null) {
+            try {
+                Log.d(TAG, "Migrating legacy filename template: ${templateFile.uri}")
+
+                val props = Properties()
+
+                context.contentResolver.openInputStream(templateFile.uri)?.use {
+                    props.load(it)
+                }
+
+                filenameTemplate = Template.fromLegacyProperties(props)
+                templateFile.renameTo("bcr.properties.migrated")
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed to migrate legacy filename template", e)
+            }
+        } else {
+            Log.d(TAG, "No legacy filename template to migrate")
+        }
+    }
 
     /**
      * The saved file retention (in days).

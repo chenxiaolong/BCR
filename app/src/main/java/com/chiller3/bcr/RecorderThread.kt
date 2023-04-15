@@ -82,9 +82,10 @@ class RecorderThread(
     private var formatter = FORMATTER
 
     // Filename
+    private val filenameTemplate = prefs.filenameTemplate ?: Preferences.DEFAULT_FILENAME_TEMPLATE
+    private val dateVarLocations = filenameTemplate.findVariableRef("date")?.third
     private val filenameLock = Object()
     private var callDetails = mutableMapOf<Call, Call.Details>()
-    private lateinit var filenameTemplate: FilenameTemplate
     private lateinit var filename: String
     private val redactions = HashMap<String, String>()
     private var redactionsSorted = emptyList<Pair<String, String>>()
@@ -118,6 +119,7 @@ class RecorderThread(
     init {
         Log.i(tag, "Created thread for call: $parentCall")
         Log.i(tag, "Initially paused: $isPaused")
+        Log.i(tag, "Filename template: $filenameTemplate")
 
         callDetails[parentCall] = parentCall.details
         if (isConference) {
@@ -125,6 +127,8 @@ class RecorderThread(
                 callDetails[childCall] = childCall.details
             }
         }
+
+        updateFilename(false)
 
         val savedFormat = Format.fromPreferences(prefs)
         format = savedFormat.first
@@ -233,11 +237,6 @@ class RecorderThread(
 
     private fun updateFilename(allowManualContactLookup: Boolean) {
         synchronized(filenameLock) {
-            if (!this::filenameTemplate.isInitialized) {
-                // Thread hasn't started yet, so we haven't loaded the filename template
-                return
-            }
-
             val parentDetails = callDetails[parentCall]!!
             val displayDetails = if (isConference) {
                 callDetails.entries.asSequence()
@@ -248,29 +247,27 @@ class RecorderThread(
                 listOf(parentDetails)
             }
 
-            filename = filenameTemplate.evaluate {
-                when {
-                    it == "date" || it.startsWith("date:") -> {
+            filename = filenameTemplate.evaluate { name, arg ->
+                when (name) {
+                    "date" -> {
                         val instant = Instant.ofEpochMilli(parentDetails.creationTimeMillis)
                         callTimestamp = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
 
-                        val colon = it.indexOf(":")
-                        if (colon >= 0) {
-                            val pattern = it.substring(colon + 1)
-                            Log.d(tag, "Using custom datetime pattern: $pattern")
+                        if (arg != null) {
+                            Log.d(tag, "Using custom datetime pattern: $arg")
 
                             try {
                                 formatter = DateTimeFormatterBuilder()
-                                    .appendPattern(pattern)
+                                    .appendPattern(arg)
                                     .toFormatter()
                             } catch (e: Exception) {
-                                Log.w(tag, "Invalid custom datetime pattern: $pattern; using default", e)
+                                Log.w(tag, "Invalid custom datetime pattern: $arg; using default", e)
                             }
                         }
 
                         return@evaluate formatter.format(callTimestamp)
                     }
-                    it == "direction" -> {
+                    "direction" -> {
                         // AOSP's telephony framework has internal documentation that specifies that
                         // the call direction is meaningless for conference calls until enough
                         // participants hang up that it becomes an emulated one-on-one call.
@@ -286,7 +283,7 @@ class RecorderThread(
                             }
                         }
                     }
-                    it == "sim_slot" -> {
+                    "sim_slot" -> {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
                             && context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
                             == PackageManager.PERMISSION_GRANTED
@@ -304,7 +301,7 @@ class RecorderThread(
                             }
                         }
                     }
-                    it == "phone_number" -> {
+                    "phone_number" -> {
                         val joined = displayDetails.asSequence()
                             .map { d -> getPhoneNumber(d) }
                             .filterNotNull()
@@ -319,7 +316,7 @@ class RecorderThread(
                             return@evaluate joined
                         }
                     }
-                    it == "caller_name" -> {
+                    "caller_name" -> {
                         val joined = displayDetails.asSequence()
                             .map { d -> d.callerDisplayName?.trim() }
                             .filter { n -> !n.isNullOrEmpty() }
@@ -334,7 +331,7 @@ class RecorderThread(
                             return@evaluate joined
                         }
                     }
-                    it == "contact_name" -> {
+                    "contact_name" -> {
                         val joined = displayDetails.asSequence()
                             .map { d -> getContactDisplayName(d, allowManualContactLookup)?.trim() }
                             .filter { n -> !n.isNullOrEmpty() }
@@ -350,7 +347,7 @@ class RecorderThread(
                         }
                     }
                     else -> {
-                        Log.w(tag, "Unknown filename template variable: $it")
+                        Log.w(tag, "Unknown filename template variable: $name")
                     }
                 }
 
@@ -369,15 +366,6 @@ class RecorderThread(
         var success = false
         var errorMsg: String? = null
         var resultUri: Uri? = null
-
-        synchronized(filenameLock) {
-            // We initially do not allow custom filename templates because SAF is extraordinarily
-            // slow on some devices. Even with the our custom findFileFast() implementation, simply
-            // checking for the existence of the template may take >500ms.
-            filenameTemplate = FilenameTemplate.load(context, false)
-
-            updateFilename(false)
-        }
 
         startLogcat()
 
@@ -398,8 +386,6 @@ class RecorderThread(
                     }
                 } finally {
                     val finalFilename = synchronized(filenameLock) {
-                        filenameTemplate = FilenameTemplate.load(context, true)
-
                         updateFilename(true)
                         filename
                     }
@@ -530,30 +516,66 @@ class RecorderThread(
         }
     }
 
-    private fun timestampFromFilename(name: String): Temporal? {
-        try {
-            val redacted = redactTruncate(name)
+    private fun parseTimestamp(input: String, startPos: Int): Temporal? {
+        val pos = ParsePosition(startPos)
+        val parsed = formatter.parse(input, pos)
 
-            // The date is guaranteed to be at the beginning of the filename. Try to parse it,
-            // ignoring unparsed text at the end.
-            val pos = ParsePosition(0)
-            val parsed = formatter.parse(name, pos)
+        return try {
+            parsed.query(ZonedDateTime::from)
+        } catch (e: DateTimeException) {
+            // A custom pattern might not specify the time zone
+            parsed.query(LocalDateTime::from)
+        }
+    }
 
-            val timestamp = try {
-                parsed.query(ZonedDateTime::from)
-            } catch (e: DateTimeException) {
-                // A custom pattern might not specify the time zone
-                parsed.query(LocalDateTime::from)
+    private fun parseTimestamp(input: String): Temporal? {
+        if (dateVarLocations != null) {
+            for (location in dateVarLocations) {
+                when (location) {
+                    is Template.VariableRefLocation.AfterPrefix -> {
+                        var searchIndex = 0
+
+                        while (true) {
+                            val literalPos = input.indexOf(location.literal, searchIndex)
+                            if (literalPos < 0) {
+                                break
+                            }
+
+                            val timestampPos = literalPos + location.literal.length
+
+                            try {
+                                return parseTimestamp(input, timestampPos)
+                            } catch (e: DateTimeParseException) {
+                                // Ignore
+                            } catch (e: DateTimeException) {
+                                Log.w(tag, "Unexpected non-DateTimeParseException error", e)
+                            }
+
+                            if (location.atStart) {
+                                break
+                            } else {
+                                searchIndex = timestampPos
+                            }
+                        }
+                    }
+                    Template.VariableRefLocation.Arbitrary -> {
+                        Log.d(tag, "Date might be at an arbitrary location")
+                    }
+                }
             }
-
-            Log.d(tag, "Parsed $timestamp from $redacted; length=${name.length}; parsed=${pos.index}")
-
-            return timestamp
-        } catch (e: DateTimeParseException) {
-            // Ignore
         }
 
         return null
+    }
+
+
+    private fun timestampFromFilename(name: String): Temporal? {
+        val redacted = redactTruncate(name)
+        val timestamp = parseTimestamp(name)
+
+        Log.d(tag, "Parsed $timestamp from $redacted")
+
+        return timestamp
     }
 
     /**
