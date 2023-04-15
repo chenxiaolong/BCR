@@ -523,8 +523,13 @@ class RecorderThread(
         return try {
             parsed.query(ZonedDateTime::from)
         } catch (e: DateTimeException) {
-            // A custom pattern might not specify the time zone
-            parsed.query(LocalDateTime::from)
+            try {
+                // A custom pattern might not specify the time zone
+                parsed.query(LocalDateTime::from)
+            } catch (e: DateTimeException) {
+                // A custom pattern might only specify a date with no time
+                parsed.query(LocalDate::from).atStartOfDay()
+            }
         }
     }
 

@@ -380,6 +380,9 @@ class Template(template: String) {
         data class MissingVariable(var name: String) : EvalResult
     }
 
+    class MissingVariableException(val name: String, cause: Throwable? = null)
+        : Exception("Unknown variable: $name", cause)
+
     private val parsed = parser.parse(ParserContext.fromString(template))
 
     override fun toString(): String = parsed.first.value.toTemplate()
@@ -433,8 +436,7 @@ class Template(template: String) {
 
         when (val result = recurse(parsed.first.value)) {
             is EvalResult.Success -> return result.value
-            is EvalResult.MissingVariable ->
-                throw IllegalArgumentException("Unknown variable: ${result.name}")
+            is EvalResult.MissingVariable -> throw MissingVariableException(result.name)
         }
     }
 

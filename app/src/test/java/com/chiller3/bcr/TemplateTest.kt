@@ -247,10 +247,10 @@ class TemplateTest {
             "d",
             evaluate("[[[{a}|{b}]|{c}]|d]", ::getVar),
         )
-        assertThrows(IllegalArgumentException::class.java) {
+        assertThrows(Template.MissingVariableException::class.java) {
             evaluate("{arg}", ::getVar)
         }
-        assertThrows(IllegalArgumentException::class.java) {
+        assertThrows(Template.MissingVariableException::class.java) {
             evaluate("[{arg}]", ::getVar)
         }
     }

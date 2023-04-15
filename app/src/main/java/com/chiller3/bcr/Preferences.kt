@@ -157,7 +157,13 @@ class Preferences(private val context: Context) {
     /** The user-specified filename template. */
     var filenameTemplate: Template?
         get() = prefs.getString(PREF_FILENAME_TEMPLATE, null)?.let { Template(it) }
-        set(template) = prefs.edit { putString(PREF_FILENAME_TEMPLATE, template.toString()) }
+        set(template) = prefs.edit {
+            if (template == null) {
+                remove(PREF_FILENAME_TEMPLATE)
+            } else {
+                putString(PREF_FILENAME_TEMPLATE, template.toString())
+            }
+        }
 
     /** Migrate legacy properties file based filename template to [Template]. */
     fun migrateLegacyProperties() {
