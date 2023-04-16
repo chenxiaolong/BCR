@@ -37,8 +37,7 @@ class Preferences(private val context: Context) {
                     "[_{direction}|]" +
                     "[_sim{sim_slot}|]" +
                     "[_{phone_number}|]" +
-                    "[_{caller_name}|]" +
-                    "[_{contact_name}|]"
+                    "[_[{contact_name}|{caller_name}]|]"
         )
 
         fun isFormatKey(key: String): Boolean =
