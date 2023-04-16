@@ -2,13 +2,18 @@ package com.chiller3.bcr
 
 import android.app.Dialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Typeface
+import android.net.Uri
 import android.os.Bundle
 import android.text.Annotation
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannedString
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.text.style.TypefaceSpan
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
@@ -43,10 +48,10 @@ class FilenameTemplateDialogFragment : DialogFragment() {
         val message = SpannableString(origMessage)
 
         for (annotation in annotations) {
-            if (annotation.key == "type" && annotation.value == "template") {
-                val start = message.getSpanStart(annotation)
-                val end = message.getSpanEnd(annotation)
+            val start = message.getSpanStart(annotation)
+            val end = message.getSpanEnd(annotation)
 
+            if (annotation.key == "type" && annotation.value == "template") {
                 message.setSpan(
                     TypefaceSpan(Typeface.MONOSPACE),
                     start,
@@ -55,11 +60,25 @@ class FilenameTemplateDialogFragment : DialogFragment() {
                 )
 
                 highlighter.highlight(message, start, end)
+            } else if (annotation.key == "type" && annotation.value == "template_docs") {
+                message.setSpan(
+                    object : ClickableSpan() {
+                        override fun onClick(widget: View) {
+                            val uri = Uri.parse(BuildConfig.PROJECT_URL_AT_COMMIT +
+                                    "#filename-template")
+                            startActivity(Intent(Intent.ACTION_VIEW, uri))
+                        }
+                    },
+                    start,
+                    end,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+                )
             } else {
                 throw IllegalStateException("Invalid annotation: $annotation")
             }
         }
 
+        binding.message.movementMethod = LinkMovementMethod.getInstance()
         binding.message.text = message
 
         // Make this non-multiline text box look like one
