@@ -36,6 +36,29 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/bottom_sheet_section_separation"
             android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
+            android:text="@string/output_dir_bottom_sheet_filename_template"
+            android:textAppearance="?attr/textAppearanceHeadline6" />
+
+        <TextView
+            android:id="@+id/filename_template"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
+            android:typeface="monospace"
+            android:textAlignment="center" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/edit_template"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/output_dir_bottom_sheet_edit_template"
+            style="?attr/materialButtonOutlinedStyle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/bottom_sheet_section_separation"
+            android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
             android:text="@string/output_dir_bottom_sheet_file_retention"
             android:textAppearance="?attr/textAppearanceHeadline6" />
 

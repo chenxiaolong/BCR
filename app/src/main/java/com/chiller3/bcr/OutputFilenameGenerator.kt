@@ -399,6 +399,15 @@ class OutputFilenameGenerator(
     companion object {
         private val TAG = OutputFilenameGenerator::class.java.simpleName
 
+        val KNOWN_VARS = arrayOf(
+            "date",
+            "direction",
+            "sim_slot",
+            "phone_number",
+            "caller_name",
+            "contact_name",
+        )
+
         // Eg. 20220429_180249.123-0400
         private val FORMATTER = DateTimeFormatterBuilder()
             .appendValue(ChronoField.YEAR, 4, 10, SignStyle.EXCEEDS_PAD)
