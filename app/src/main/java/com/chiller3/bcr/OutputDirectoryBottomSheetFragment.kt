@@ -64,6 +64,7 @@ class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment(), Slider.O
 
         setFragmentResultListener(FilenameTemplateDialogFragment.TAG) { _, _ ->
             refreshFilenameTemplate()
+            refreshOutputRetention()
         }
 
         refreshFilenameTemplate()
@@ -89,6 +90,12 @@ class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment(), Slider.O
     private fun refreshOutputRetention() {
         val days = Retention.fromPreferences(prefs)
         binding.retentionSlider.value = Retention.all.indexOf(days).toFloat()
+
+        // Disable retention options if the template makes it impossible for the feature to work
+        val template = prefs.filenameTemplate ?: Preferences.DEFAULT_FILENAME_TEMPLATE
+        val locations = template.findVariableRef(OutputFilenameGenerator.DATE_VAR)
+        binding.retentionSlider.isEnabled = locations != null &&
+                locations.third != setOf(Template.VariableRefLocation.Arbitrary)
     }
 
     override fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {

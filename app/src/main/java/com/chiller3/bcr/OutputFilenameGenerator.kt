@@ -42,7 +42,7 @@ class OutputFilenameGenerator(
     // Templates
     private val filenameTemplate = Preferences(context).filenameTemplate
         ?: Preferences.DEFAULT_FILENAME_TEMPLATE
-    private val dateVarLocations = filenameTemplate.findVariableRef("date")?.third
+    private val dateVarLocations = filenameTemplate.findVariableRef(DATE_VAR)?.third
 
     // Call information
     private val callDetails = mutableMapOf<Call, Call.Details>()
@@ -399,8 +399,9 @@ class OutputFilenameGenerator(
     companion object {
         private val TAG = OutputFilenameGenerator::class.java.simpleName
 
+        val DATE_VAR = "date"
         val KNOWN_VARS = arrayOf(
-            "date",
+            DATE_VAR,
             "direction",
             "sim_slot",
             "phone_number",
