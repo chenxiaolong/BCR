@@ -47,7 +47,8 @@
 
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">Filename template</string>
-    <string name="filename_template_dialog_message">Enter a custom template for the output filename. Variables are specified with curly braces (eg. <annotation type="template">{var}</annotation>). Fallbacks are specified with square brackets (eg. <annotation type="template">[{contact_name}|Unknown]</annotation>). See <annotation type="template_docs">the documentation</annotation> for a complete description of the syntax.</string>
+    <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
+    <string name="filename_template_dialog_message">Enter a custom template for the output filename. Variables are specified with curly braces (eg. <annotation type="template">{var}</annotation>). Fallbacks are specified with square brackets (eg. <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nSupported variables: <annotation type="supported_vars">PLACEHOLDER</annotation>. See <annotation type="template_docs">the documentation</annotation> for a complete description of the syntax.</string>
     <string name="filename_template_dialog_error_empty">Template cannot be empty</string>
     <string name="filename_template_dialog_error_unknown_var">Unknown template variable: %s</string>
     <string name="filename_template_dialog_error_invalid">Template syntax is invalid</string>

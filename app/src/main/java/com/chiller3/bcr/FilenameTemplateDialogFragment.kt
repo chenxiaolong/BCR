@@ -8,7 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Annotation
 import android.text.Spannable
-import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import android.text.SpannedString
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
@@ -43,43 +43,8 @@ class FilenameTemplateDialogFragment : DialogFragment() {
 
         binding = DialogFilenameTemplateBinding.inflate(layoutInflater)
 
-        val origMessage = getText(R.string.filename_template_dialog_message) as SpannedString
-        val annotations = origMessage.getSpans(0, origMessage.length, Annotation::class.java)
-        val message = SpannableString(origMessage)
-
-        for (annotation in annotations) {
-            val start = message.getSpanStart(annotation)
-            val end = message.getSpanEnd(annotation)
-
-            if (annotation.key == "type" && annotation.value == "template") {
-                message.setSpan(
-                    TypefaceSpan(Typeface.MONOSPACE),
-                    start,
-                    end,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
-                )
-
-                highlighter.highlight(message, start, end)
-            } else if (annotation.key == "type" && annotation.value == "template_docs") {
-                message.setSpan(
-                    object : ClickableSpan() {
-                        override fun onClick(widget: View) {
-                            val uri = Uri.parse(BuildConfig.PROJECT_URL_AT_COMMIT +
-                                    "#filename-template")
-                            startActivity(Intent(Intent.ACTION_VIEW, uri))
-                        }
-                    },
-                    start,
-                    end,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
-                )
-            } else {
-                throw IllegalStateException("Invalid annotation: $annotation")
-            }
-        }
-
         binding.message.movementMethod = LinkMovementMethod.getInstance()
-        binding.message.text = message
+        binding.message.text = buildMessage()
 
         // Make this non-multiline text box look like one
         binding.text.setHorizontallyScrolling(false)
@@ -145,6 +110,65 @@ class FilenameTemplateDialogFragment : DialogFragment() {
         super.onDismiss(dialog)
 
         setFragmentResult(tag!!, bundleOf(RESULT_SUCCESS to success))
+    }
+
+    private fun buildMessage(): SpannableStringBuilder {
+        val origMessage = getText(R.string.filename_template_dialog_message) as SpannedString
+        val message = SpannableStringBuilder(origMessage)
+        val annotations = message.getSpans(0, origMessage.length, Annotation::class.java)
+
+        for (annotation in annotations) {
+            val start = message.getSpanStart(annotation)
+            val end = message.getSpanEnd(annotation)
+
+            if (annotation.key == "type" && annotation.value == "supported_vars") {
+                val separator = ", "
+                var nextOffset = start
+
+                for ((i, v) in OutputFilenameGenerator.KNOWN_VARS.withIndex()) {
+                    val text = "{$v}"
+
+                    if (i == 0) {
+                        message.replace(start, end, text)
+                        nextOffset += text.length
+                    } else {
+                        message.insert(nextOffset, separator)
+                        nextOffset += separator.length
+
+                        message.insert(nextOffset, text)
+                        nextOffset += text.length
+                    }
+
+                    highlighter.highlight(message, start, nextOffset)
+                }
+            } else if (annotation.key == "type" && annotation.value == "template") {
+                message.setSpan(
+                    TypefaceSpan(Typeface.MONOSPACE),
+                    start,
+                    end,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+                )
+
+                highlighter.highlight(message, start, end)
+            } else if (annotation.key == "type" && annotation.value == "template_docs") {
+                message.setSpan(
+                    object : ClickableSpan() {
+                        override fun onClick(widget: View) {
+                            val uri = Uri.parse(BuildConfig.PROJECT_URL_AT_COMMIT +
+                                    "#filename-template")
+                            startActivity(Intent(Intent.ACTION_VIEW, uri))
+                        }
+                    },
+                    start,
+                    end,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+                )
+            } else {
+                throw IllegalStateException("Invalid annotation: $annotation")
+            }
+        }
+
+        return message
     }
 
     private fun refreshOkButtonEnabledState() {

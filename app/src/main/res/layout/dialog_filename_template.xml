@@ -1,28 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingStart="?attr/dialogPreferredPadding"
-    android:paddingEnd="?attr/dialogPreferredPadding">
+    android:paddingTop="@dimen/abc_dialog_padding_top_material">
 
-    <TextView
-        android:id="@+id/message"
-        style="?attr/materialAlertDialogBodyTextStyle"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/abc_dialog_padding_top_material" />
+        android:orientation="vertical"
+        android:paddingStart="?attr/dialogPreferredPadding"
+        android:paddingEnd="?attr/dialogPreferredPadding">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/abc_dialog_title_divider_material">
+        <TextView
+            android:id="@+id/message"
+            style="?attr/materialAlertDialogBodyTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/text"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textNoSuggestions" />
-    </com.google.android.material.textfield.TextInputLayout>
-</LinearLayout>
+            android:layout_marginTop="@dimen/abc_dialog_title_divider_material">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textNoSuggestions" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+</ScrollView>
