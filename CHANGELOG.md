@@ -10,6 +10,8 @@
 * Introduce new output filename templating engine (Issue: #288, PR: #296, @chenxiaolong)
   * See [the documentation](./README.md#filename-template) for details.
   * This completely replaces the old hidden `bcr.properties` templates. For folks who previously used the old templates, the configuration will be automatically migrated to the new template system.
+* Add support for querying the name from the call log (Issue: #291, PR: #298, @chenxiaolong)
+  * This requires the optional `READ_CALL_LOGS` permission to be granted.
 
 Non-user-facing changes:
 
