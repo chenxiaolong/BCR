@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.provider.CallLog
 import android.provider.ContactsContract
 import android.telecom.Call
 import android.telecom.PhoneAccount
@@ -142,7 +143,7 @@ class OutputFilenameGenerator(
 
         // This is disabled until the very last filename update because it's synchronous.
         if (!allowManualLookup) {
-            Log.d(TAG, "Manual lookup is disabled for this invocation")
+            Log.d(TAG, "Manual contact lookup is disabled for this invocation")
             return null
         }
 
@@ -181,6 +182,76 @@ class OutputFilenameGenerator(
         }
 
         Log.d(TAG, "Contact not found via manual lookup")
+        return null
+    }
+
+    private fun getCallLogCachedName(
+        parentDetails: Call.Details,
+        allowBlockingCalls: Boolean,
+    ): String? {
+        // This is disabled until the very last filename update because it's synchronous.
+        if (!allowBlockingCalls) {
+            Log.d(TAG, "Call log lookup is disabled for this invocation")
+            return null
+        }
+
+        if (!Permissions.isGranted(context, Manifest.permission.READ_CALL_LOG)) {
+            Log.w(TAG, "Permissions not granted for looking up call log")
+            return null
+        }
+
+        // The call log does not show all participants in a conference call
+        if (isConference) {
+            Log.w(TAG, "Skipping call log lookup due to conference call")
+            return null
+        }
+
+        val uri = CallLog.Calls.CONTENT_URI.buildUpon()
+            .appendQueryParameter(CallLog.Calls.LIMIT_PARAM_KEY, "1")
+            .build()
+
+        // System.nanoTime() is more likely to be monotonic than Instant.now()
+        val start = System.nanoTime()
+        var attempt = 1
+
+        while (true) {
+            val now = System.nanoTime()
+            if (now >= start + CALL_LOG_QUERY_TIMEOUT_NANOS) {
+                break
+            }
+
+            val prefix = "[Attempt #$attempt @ ${(now - start) / 1_000_000}ms] "
+
+            context.contentResolver.query(
+                uri,
+                arrayOf(CallLog.Calls.CACHED_NAME),
+                "${CallLog.Calls.DATE} = ?",
+                arrayOf(parentDetails.creationTimeMillis.toString()),
+                "${CallLog.Calls._ID} DESC",
+            )?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    Log.d(TAG, "${prefix}Found call log entry")
+
+                    val index = cursor.getColumnIndex(CallLog.Calls.CACHED_NAME)
+                    if (index != -1) {
+                        val name = cursor.getStringOrNull(index)
+                        if (name != null) {
+                            Log.d(TAG, "${prefix}Found call log cached name")
+                            return name
+                        }
+                    }
+
+                    Log.d(TAG, "${prefix}Call log entry has no cached name")
+                } else {
+                    Log.d(TAG, "${prefix}Call log entry not found")
+                }
+            }
+
+            attempt += 1
+            Thread.sleep(CALL_LOG_QUERY_RETRY_DELAY_MILLIS)
+        }
+
+        Log.d(TAG, "Call log cached name not found after all ${attempt - 1} attempts")
         return null
     }
 
@@ -295,6 +366,13 @@ class OutputFilenameGenerator(
                             return@evaluate joined
                         }
                     }
+                    "call_log_name" -> {
+                        val cachedName = getCallLogCachedName(parentDetails, allowBlockingCalls)?.trim()
+                        if (!cachedName.isNullOrEmpty()) {
+                            addRedaction(cachedName, "<call log name>")
+                            return@evaluate cachedName
+                        }
+                    }
                     else -> {
                         Log.w(TAG, "Unknown filename template variable: $name")
                     }
@@ -399,7 +477,7 @@ class OutputFilenameGenerator(
     companion object {
         private val TAG = OutputFilenameGenerator::class.java.simpleName
 
-        val DATE_VAR = "date"
+        const val DATE_VAR = "date"
         val KNOWN_VARS = arrayOf(
             DATE_VAR,
             "direction",
@@ -407,6 +485,7 @@ class OutputFilenameGenerator(
             "phone_number",
             "caller_name",
             "contact_name",
+            "call_log_name",
         )
 
         // Eg. 20220429_180249.123-0400
@@ -421,6 +500,9 @@ class OutputFilenameGenerator(
             .appendFraction(ChronoField.NANO_OF_SECOND, 0, 9, true)
             .appendOffset("+HHMMss", "+0000")
             .toFormatter()
+
+        private const val CALL_LOG_QUERY_TIMEOUT_NANOS = 2_000_000_000L
+        private const val CALL_LOG_QUERY_RETRY_DELAY_MILLIS = 100L
 
         private fun getPhoneNumber(details: Call.Details): String? {
             val uri = details.handle

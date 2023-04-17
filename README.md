@@ -51,7 +51,7 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
 
 4. Enable call recording and pick an output directory. If no output directory is selected or if the output directory is no longer accessible, then recordings will be saved to `/sdcard/Android/data/com.chiller3.bcr/files`.
 
-    When enabling call recording the first time, BCR will prompt for microphone, notification (Android 13+), contacts, and phone permissions. Only microphone and notification permissions are required basic call recording functionality. If additional permissions are granted, more information is added to the output filename. For example, the contacts permission will cause the contact name to be added to the filename and the phone permission will cause the SIM slot (if multiple SIMs are active) to be added to the filename.
+    When enabling call recording the first time, BCR will prompt for microphone, notification (Android 13+), call log, contacts, and phone permissions. Only microphone and notification permissions are required basic call recording functionality. If additional permissions are granted, more information is added to the output filename. For example, the contacts permission will allow the contact name to be added to the filename.
 
     See the [permissions section](#permissions) below for more details about the permissions.
 
@@ -73,8 +73,10 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
 * `POST_NOTIFICATIONS` (**must be granted by the user on Android 13+**)
   * Needed to show notifications.
   * A notification is required for running the call recording service in foreground mode or else Android will not allow access to the call audio stream.
+* `READ_CALL_LOG` (**optional**)
+  * If allowed, the name as shown in the call log can be added to the output filename.
 * `READ_CONTACTS` (**optional**)
-  * If allowed, the contact name is added to the output filename.
+  * If allowed, the contact name can be added to the output filename.
 * `READ_PHONE_STATE` (**optional**)
   * If allowed, the SIM slot for devices with multiple active SIMs is added to the output filename.
 * `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` (**optional**)
@@ -91,7 +93,7 @@ Note that `INTERNET` is _not_ in the list. BCR does not and will never access th
 BCR supports customizing the template used for determining the output filenames of recordings. The default template is:
 
 ```
-{date}[_{direction}|][_sim{sim_slot}|][_{phone_number}|][_[{contact_name}|{caller_name}]|]
+{date}[_{direction}|][_sim{sim_slot}|][_{phone_number}|][_[{contact_name}|{caller_name}|{call_log_name}]|]
 ```
 
 ### Template syntax
@@ -109,6 +111,7 @@ BCR supports customizing the template used for determining the output filenames 
 * `{phone_number}`: The phone number for the call. This is undefined for private calls.
 * `{caller_name}`: The caller ID as provided by CNAP from the carrier.
 * `{contact_name}` The name of the (first) contact associated with the phone number. This is only defined if BCR is granted the Contacts permission.
+* `{call_log_name}`: The name shown in the call log. This may include more information, like the name of the business, if the system dialer performs reverse lookups. This is only defined if BCR is granted the Read Call Logs permission.
 
 ## Advanced features
 
