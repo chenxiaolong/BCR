@@ -207,7 +207,7 @@ val archive = tasks.register("archive") {
     outputs.file(outputFile)
 
     doLast {
-        val format = "tar_${Thread.currentThread().id}"
+        val format = "tar_for_task_$name"
 
         ArchiveCommand.registerFormat(format, TarFormat())
         try {
