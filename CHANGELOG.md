@@ -11,6 +11,10 @@
   * See [the documentation](./README.md#filename-template) for details.
   * This completely replaces the old hidden `bcr.properties` templates. For folks who previously used the old templates, the configuration will be automatically migrated to the new template system.
 
+Non-user-facing changes:
+
+* Remove use of deprecated method in gradle build script (Issue: #294, PR: #297, @chenxiaolong)
+
 ### Version 1.39
 
 * Update Russian translations (PR: #277, @bogachenko)
