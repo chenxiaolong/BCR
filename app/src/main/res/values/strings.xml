@@ -28,6 +28,8 @@
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Change directory</string>
+    <string name="output_dir_bottom_sheet_filename_template">Filename template</string>
+    <string name="output_dir_bottom_sheet_edit_template">Edit template</string>
     <string name="output_dir_bottom_sheet_file_retention">File retention</string>
     <string name="retention_keep_all">Keep all</string>
     <plurals name="retention_days">
@@ -42,6 +44,19 @@
     <string name="output_format_bottom_sheet_sample_rate">Sample rate</string>
 
     <string name="bottom_sheet_reset">Reset to defaults</string>
+
+    <!-- Filename template dialog -->
+    <string name="filename_template_dialog_title">Filename template</string>
+    <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
+    <string name="filename_template_dialog_message">Enter a custom template for the output filename. Variables are specified with curly braces (eg. <annotation type="template">{var}</annotation>). Fallbacks are specified with square brackets (eg. <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nSupported variables: <annotation type="supported_vars">PLACEHOLDER</annotation>. See <annotation type="template_docs">the documentation</annotation> for a complete description of the syntax.</string>
+    <string name="filename_template_dialog_error_empty">Template cannot be empty</string>
+    <string name="filename_template_dialog_error_unknown_var">Unknown template variable: %s</string>
+    <string name="filename_template_dialog_error_invalid">Template syntax is invalid</string>
+    <string name="filename_template_dialog_action_reset_to_default">Reset to default</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_action_ok">OK</string>
+    <string name="dialog_action_cancel">Cancel</string>
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Background services</string>

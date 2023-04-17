@@ -9,7 +9,7 @@ BCR is a simple Android call recording app for rooted devices or devices running
 
 <img src="app/images/light.png" alt="light mode screenshot" width="200" /> <img src="app/images/dark.png" alt="dark mode screenshot" width="200" />
 
-### Features
+## Features
 
 * Supports Android 9 through 13
 * Supports output in various formats:
@@ -22,10 +22,9 @@ BCR is a simple Android call recording app for rooted devices or devices running
 * Material You dynamic theming
 * No persistent notification unless a recording is in progress
 * No network access permission
-* No third party dependencies
 * Works with call screening on Pixel devices (records the caller, but not the automated system)
 
-### Non-features
+## Non-features
 
 As the name alludes, BCR intends to be a basic as possible. The project will have succeeded at its goal if the only updates it ever needs are for compatibility with new Android versions. Thus, many potentially useful features will never be implemented, such as:
 
@@ -35,7 +34,7 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
 * Support for direct boot mode (the state before the device is initially unlocked after reboot)
 * Support for stock, unrooted firmware
 
-### Usage
+## Usage
 
 1. Download the latest version from the [releases page](https://github.com/chenxiaolong/BCR/releases). To verify the digital signature, see the [verifying digital signatures](#verifying-digital-signatures) section.
 
@@ -61,7 +60,7 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
     * If installed via Magisk, the module can be updated right from Magisk Manager's modules tab. Flashing the new version in Magisk manually also works just as well.
     * The `.apk` can also be extracted from the zip and be directly installed. With this method, the old version exists as a system app and the new version exists as a user-installed update to the system app. This method is more convenient if BCR is baked into the Android firmware image.
 
-### Permissions
+## Permissions
 
 * `CAPTURE_AUDIO_OUTPUT` (**automatically granted by system app permissions**)
   * Needed to capture the call audio stream.
@@ -87,11 +86,35 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
 
 Note that `INTERNET` is _not_ in the list. BCR does not and will never access the network. BCR will never communicate with other apps either, except if the user explicitly taps on the `Open` or `Share` buttons in the notification shown when a recording completes. In that scenario, the target app is granted access to that single recording only.
 
-### Advanced features
+## Filename template
 
-This section describes BCR's advanced features that are hidden or only accessible via a config file.
+BCR supports customizing the template used for determining the output filenames of recordings. The default template is:
 
-#### Debug mode
+```
+{date}[_{direction}|][_sim{sim_slot}|][_{phone_number}|][_[{contact_name}|{caller_name}]|]
+```
+
+### Template syntax
+
+* Curly braces (`{var}`) are used to refer to variables. Variables are replaced by the value they represent. For example, `{phone_number}` is replaced by the actual phone number of the call.
+* Square brackets (`[{var}|default]`) are used for specifying fallbacks. For example, `[{contact_name}|{caller_name}|Unknown]` will insert the contact name if the number is in the contacts. Otherwise, it'll fall back to the caller ID or `Unknown` if neither the contact name nor caller ID exist. Falling back to an empty string is perfectly valid too. For example, `[{contact_name}|]` evaluates to either the contact name or nothing.
+
+### Template variables
+
+* `{date}`: The timestamp of the call. The default timestamp format tries to be as unambiguous as possible and is in the form: `20230414_215701.088-0400`. A custom timestamp format can be specified with `{date:<format string>}`. For example, `{date:yyyy-MM-dd @ h.mm.ss a}` would produce `2023-04-14 @ 9.57.01 PM`. A full list of timestamp formatting characters can be found at: https://developer.android.com/reference/java/time/format/DateTimeFormatterBuilder#appendPattern(java.lang.String).
+  * For the file retention feature to work, the date must not immediately follow another variable. For example, `{phone_number}{date}` will cause file retention to be disabled, but `{phone_number} ({date})` works because there's some text ` (` between the two variables.
+  * If the date format is changed, the old recordings should be manually renamed or moved to another directory to ensure that they won't inadvertently be deleted. For example, if `yyMMdd_HHmmss` was changed to `HHmmss_yyMMdd`, the timestamps from the old recording's filenames would be parsed incorrectly and may get deleted.
+* `{direction}`: For 1-on-1 calls, either `in` or `out` depending on if the call is an incoming or outgoing call. If the call is a conference call, then `conference` is used instead.
+* `{sim_slot}`: **[Android 11+ only]** The SIM slot number for the call (counting from 1). This is only defined for multi-SIM devices that have multiple SIMs active.
+* `{phone_number}`: The phone number for the call. This is undefined for private calls.
+* `{caller_name}`: The caller ID as provided by CNAP from the carrier.
+* `{contact_name}` The name of the (first) contact associated with the phone number. This is only defined if BCR is granted the Contacts permission.
+
+## Advanced features
+
+This section describes BCR's hidden advanced features.
+
+### Debug mode
 
 BCR has a hidden debug mode that can be enabled or disabled by long pressing the version number.
 
@@ -101,30 +124,7 @@ Within the log file, BCR aims to never log any sensitive information. Informatio
 
 When reporting bugs, please include the log file as it is extremely helpful for identifying what might be wrong. (But please double check the log file to ensure there's no sensitive information!)
 
-#### Customizing the output filename
-
-By default, BCR uses a filename template that includes the call timestamp, call direction, SIM slot, phone number, caller ID, and contact name. This can be customized, but only by editing a config file. To do so, the easiest way is to copy [the default config](./app/src/main/res/raw/filename_template.properties) to `bcr.properties` in the output directory and then edit it to your liking. Details about the available fields are documented in the default config file.
-
-For example, to customize the filename template to `<date as yyyyMMdd_HHmmss>_<phone number>_<caller ID>`, use the following config:
-
-```properties
-filename.0.text = ${date:yyyyMMdd_HHmmss}
-
-filename.1.text = ${phone_number}
-filename.1.prefix = _
-
-filename.2.text = ${caller_name}
-filename.2.prefix = _
-```
-
-The are a couple limitations to note:
-
-* The date must always be at the beginning of the filename. This is required for the file retention feature to work.
-* If the date format is changed (eg. from the default to `yyyyMMdd_HHmmss`), then you must manually rename the old recordings to use the new date format or they may be handled incorrectly by the file retention feature. To be safe, move the old recordings to a different folder while testing (or set the file retention to `Keep all`).
-
-If the config file has any error, BCR will use the default configuration. This ensures that recordings won't fail if the configuration is incorrect. To troubleshoot issues with the filename template, [enable debug mode](#debug-mode), and make a call. Then, search the log file for `FilenameTemplate`.
-
-### How it works
+## How it works
 
 BCR relies heavily on system app permissions in order to function properly. This is primarily because of two permissions:
 
@@ -140,11 +140,11 @@ BCR relies heavily on system app permissions in order to function properly. This
 
 With these two permissions, BCR can reliably detect phone calls and record from the call's audio stream. The recording process pulls PCM s16le raw audio and uses Android's built-in encoders to produce the compressed output file.
 
-### Verifying digital signatures
+## Verifying digital signatures
 
 Both the zip file and the APK contained within are digitally signed. **NOTE**: The zip file signing mechanism switched from GPG to SSH as of version 1.31. To verify signatures for old versions, see version 1.30's [`README.md`](https://github.com/chenxiaolong/BCR/blob/v1.30/README.md#verifying-digital-signatures).
 
-#### Verifying zip file signature
+### Verifying zip file signature
 
 First save the public key to a file that lists which keys should be trusted.
 
@@ -164,7 +164,7 @@ If the file is successfully verified, the output will be:
 Good "file" signature for bcr with ED25519 key SHA256:Ct0HoRyrFLrnF9W+A/BKEiJmwx7yWkgaW/JvghKrboA
 ```
 
-#### Verifying apk signature
+### Verifying apk signature
 
 First, extract the apk from the zip and then run:
 
@@ -178,7 +178,7 @@ Then, check that the SHA-256 digest of the APK signing certificate is:
 d16f9b375df668c58ef4bb855eae959713d6d02e45f7f2c05ce2c27ae944f4f9
 ```
 
-### Building from source
+## Building from source
 
 BCR can be built like most other Android apps using Android Studio or the gradle command line.
 
@@ -214,12 +214,12 @@ and then build the release zip:
 ./gradlew zipRelease
 ```
 
-### Contributing
+## Contributing
 
 Bug fix and translation pull requests are welcome and much appreciated!
 
 If you are interested in implementing a new feature and would like to see it included in BCR, please open an issue to discuss it first. I intend for BCR to be as simple and low-maintenance as possible, so I am not too inclined to add any new features, but I could be convinced otherwise.
 
-### License
+## License
 
 BCR is licensed under GPLv3. Please see [`LICENSE`](./LICENSE) for the full license text.

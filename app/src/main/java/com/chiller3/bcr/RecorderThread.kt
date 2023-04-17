@@ -1,23 +1,15 @@
 package com.chiller3.bcr
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.net.Uri
-import android.os.Build
 import android.os.ParcelFileDescriptor
-import android.provider.ContactsContract.PhoneLookup
 import android.system.Os
 import android.telecom.Call
-import android.telecom.PhoneAccount
-import android.telephony.SubscriptionManager
-import android.telephony.TelephonyManager
 import android.util.Log
-import androidx.core.database.getStringOrNull
 import androidx.core.net.toFile
 import androidx.documentfile.provider.DocumentFile
 import com.chiller3.bcr.format.Encoder
@@ -25,13 +17,7 @@ import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.SampleRate
 import java.lang.Process
 import java.nio.ByteBuffer
-import java.text.ParsePosition
 import java.time.*
-import java.time.format.DateTimeFormatterBuilder
-import java.time.format.DateTimeParseException
-import java.time.format.SignStyle
-import java.time.temporal.ChronoField
-import java.time.temporal.Temporal
 import android.os.Process as AndroidProcess
 
 /**
@@ -75,35 +61,10 @@ class RecorderThread(
 
     // Call state
     @Volatile var isHolding = false
-    private val isConference = parentCall.details.hasProperty(Call.Details.PROPERTY_CONFERENCE)
-
-    // Timestamp
-    private lateinit var callTimestamp: ZonedDateTime
-    private var formatter = FORMATTER
 
     // Filename
-    private val filenameLock = Object()
-    private var callDetails = mutableMapOf<Call, Call.Details>()
-    private lateinit var filenameTemplate: FilenameTemplate
-    private lateinit var filename: String
-    private val redactions = HashMap<String, String>()
-    private var redactionsSorted = emptyList<Pair<String, String>>()
-    private val redactor = object : OutputDirUtils.Redactor {
-        override fun redact(msg: String): String {
-            synchronized(filenameLock) {
-                var result = msg
-
-                for ((source, target) in redactionsSorted) {
-                    result = result.replace(source, target)
-                }
-
-                return result
-            }
-        }
-
-        override fun redact(uri: Uri): String = redact(Uri.decode(uri.toString()))
-    }
-    private val dirUtils = OutputDirUtils(context, redactor)
+    private val outputFilenameGenerator = OutputFilenameGenerator(context, parentCall)
+    private val dirUtils = OutputDirUtils(context, outputFilenameGenerator.redactor)
 
     // Format
     private val format: Format
@@ -111,7 +72,7 @@ class RecorderThread(
     private val sampleRate = SampleRate.fromPreferences(prefs)
 
     // Logging
-    private lateinit var logcatFilename: String
+    private lateinit var logcatFilename: OutputFilename
     private lateinit var logcatFile: DocumentFile
     private lateinit var logcatProcess: Process
 
@@ -119,265 +80,19 @@ class RecorderThread(
         Log.i(tag, "Created thread for call: $parentCall")
         Log.i(tag, "Initially paused: $isPaused")
 
-        callDetails[parentCall] = parentCall.details
-        if (isConference) {
-            for (childCall in parentCall.children) {
-                callDetails[childCall] = childCall.details
-            }
-        }
-
         val savedFormat = Format.fromPreferences(prefs)
         format = savedFormat.first
         formatParam = savedFormat.second
     }
 
-    /**
-     * Update [filename] with information from [details].
-     *
-     * This function holds a lock on [filenameLock] until it returns.
-     *
-     * @param call Either the parent call or a child of the parent (for conference calls)
-     * @param details The updated call details belonging to [call]
-     */
     fun onCallDetailsChanged(call: Call, details: Call.Details) {
-        if (call !== parentCall && call.parent !== parentCall) {
-            throw IllegalStateException("Not the parent call nor one of its children: $call")
-        }
-
-        synchronized(filenameLock) {
-            callDetails[call] = details
-
-            updateFilename(false)
-        }
-    }
-
-    private fun addRedaction(source: String, target: String) {
-        synchronized(filenameLock) {
-            redactions[source] = target
-
-            // Keyword-based redaction with arbitrary filenames can never be 100% foolproof, but we
-            // can improve the odds by replacing the longest strings first
-            redactionsSorted = redactions.entries
-                .map { it.key to it.value }
-                .sortedByDescending { it.first.length }
-        }
-    }
-
-    private fun getPhoneNumber(details: Call.Details): String? {
-        val uri = details.handle
-
-        return if (uri?.scheme == PhoneAccount.SCHEME_TEL) {
-            uri.schemeSpecificPart
-        } else {
-            null
-        }
-    }
-
-    private fun getContactDisplayName(details: Call.Details, allowManualLookup: Boolean): String? {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val name = details.contactDisplayName
-            if (name != null) {
-                return name
-            }
-        }
-
-        // In conference calls, the telephony framework sometimes doesn't return the contact display
-        // name for every party in the call, so do the lookup ourselves. This is similar to what
-        // InCallUI does, except it doesn't even try to look at contactDisplayName.
-        if (isConference) {
-            Log.w(tag, "Contact display name missing in conference child call")
-        }
-
-        // This is disabled until the very last filename update because it's synchronous.
-        if (!allowManualLookup) {
-            Log.d(tag, "Manual lookup is disabled for this invocation")
-            return null
-        }
-
-        if (!Permissions.isGranted(context, Manifest.permission.READ_CONTACTS)) {
-            Log.w(tag, "Permissions not granted for looking up contacts")
-            return null
-        }
-
-        Log.d(tag, "Performing manual contact lookup")
-
-        val number = getPhoneNumber(details)
-        if (number == null) {
-            Log.w(tag, "Cannot determine phone number from call")
-            return null
-        }
-
-        // Same heuristic as InCallUI's PhoneNumberHelper.isUriNumber()
-        val numberIsSip = number.contains("@") || number.contains("%40")
-
-        val uri = PhoneLookup.ENTERPRISE_CONTENT_FILTER_URI.buildUpon()
-            .appendPath(number)
-            .appendQueryParameter(PhoneLookup.QUERY_PARAMETER_SIP_ADDRESS,
-                numberIsSip.toString())
-            .build()
-
-        context.contentResolver.query(
-            uri, arrayOf(PhoneLookup.DISPLAY_NAME), null, null, null)?.use { cursor ->
-            if (cursor.moveToFirst()) {
-                val index = cursor.getColumnIndex(PhoneLookup.DISPLAY_NAME)
-                if (index != -1) {
-                    Log.d(tag, "Found contact display name via manual lookup")
-                    return cursor.getStringOrNull(index)
-                }
-            }
-        }
-
-        Log.d(tag, "Contact not found via manual lookup")
-        return null
-    }
-
-    private fun updateFilename(allowManualContactLookup: Boolean) {
-        synchronized(filenameLock) {
-            if (!this::filenameTemplate.isInitialized) {
-                // Thread hasn't started yet, so we haven't loaded the filename template
-                return
-            }
-
-            val parentDetails = callDetails[parentCall]!!
-            val displayDetails = if (isConference) {
-                callDetails.entries.asSequence()
-                    .filter { it.key != parentCall }
-                    .map { it.value }
-                    .toList()
-            } else {
-                listOf(parentDetails)
-            }
-
-            filename = filenameTemplate.evaluate {
-                when {
-                    it == "date" || it.startsWith("date:") -> {
-                        val instant = Instant.ofEpochMilli(parentDetails.creationTimeMillis)
-                        callTimestamp = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
-
-                        val colon = it.indexOf(":")
-                        if (colon >= 0) {
-                            val pattern = it.substring(colon + 1)
-                            Log.d(tag, "Using custom datetime pattern: $pattern")
-
-                            try {
-                                formatter = DateTimeFormatterBuilder()
-                                    .appendPattern(pattern)
-                                    .toFormatter()
-                            } catch (e: Exception) {
-                                Log.w(tag, "Invalid custom datetime pattern: $pattern; using default", e)
-                            }
-                        }
-
-                        return@evaluate formatter.format(callTimestamp)
-                    }
-                    it == "direction" -> {
-                        // AOSP's telephony framework has internal documentation that specifies that
-                        // the call direction is meaningless for conference calls until enough
-                        // participants hang up that it becomes an emulated one-on-one call.
-                        if (isConference) {
-                            return@evaluate "conference"
-                        }
-
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                            when (parentDetails.callDirection) {
-                                Call.Details.DIRECTION_INCOMING -> return@evaluate "in"
-                                Call.Details.DIRECTION_OUTGOING -> return@evaluate "out"
-                                Call.Details.DIRECTION_UNKNOWN -> {}
-                            }
-                        }
-                    }
-                    it == "sim_slot" -> {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
-                            && context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
-                            == PackageManager.PERMISSION_GRANTED
-                            && context.packageManager.hasSystemFeature(
-                                PackageManager.FEATURE_TELEPHONY_SUBSCRIPTION)) {
-                            val subscriptionManager = context.getSystemService(SubscriptionManager::class.java)
-
-                            // Only append SIM slot ID if the device has multiple active SIMs
-                            if (subscriptionManager.activeSubscriptionInfoCount > 1) {
-                                val telephonyManager = context.getSystemService(TelephonyManager::class.java)
-                                val subscriptionId = telephonyManager.getSubscriptionId(parentDetails.accountHandle)
-                                val subscriptionInfo = subscriptionManager.getActiveSubscriptionInfo(subscriptionId)
-
-                                return@evaluate "${subscriptionInfo.simSlotIndex + 1}"
-                            }
-                        }
-                    }
-                    it == "phone_number" -> {
-                        val joined = displayDetails.asSequence()
-                            .map { d -> getPhoneNumber(d) }
-                            .filterNotNull()
-                            .joinToString(",")
-                        if (joined.isNotEmpty()) {
-                            addRedaction(joined, if (isConference) {
-                                "<conference phone numbers>"
-                            } else {
-                                "<phone number>"
-                            })
-
-                            return@evaluate joined
-                        }
-                    }
-                    it == "caller_name" -> {
-                        val joined = displayDetails.asSequence()
-                            .map { d -> d.callerDisplayName?.trim() }
-                            .filter { n -> !n.isNullOrEmpty() }
-                            .joinToString(",")
-                        if (joined.isNotEmpty()) {
-                            addRedaction(joined, if (isConference) {
-                                "<conference caller names>"
-                            } else {
-                                "<caller name>"
-                            })
-
-                            return@evaluate joined
-                        }
-                    }
-                    it == "contact_name" -> {
-                        val joined = displayDetails.asSequence()
-                            .map { d -> getContactDisplayName(d, allowManualContactLookup)?.trim() }
-                            .filter { n -> !n.isNullOrEmpty() }
-                            .joinToString(",")
-                        if (joined.isNotEmpty()) {
-                            addRedaction(joined, if (isConference) {
-                                "<conference contact names>"
-                            } else {
-                                "<contact name>"
-                            })
-
-                            return@evaluate joined
-                        }
-                    }
-                    else -> {
-                        Log.w(tag, "Unknown filename template variable: $it")
-                    }
-                }
-
-                null
-            }
-            // AOSP's SAF automatically replaces invalid characters with underscores, but just in
-            // case an OEM fork breaks that, do the replacement ourselves to prevent directory
-            // traversal attacks.
-                .replace('/', '_').trim()
-
-            Log.i(tag, "Updated filename due to call details change: ${redactor.redact(filename)}")
-        }
+        outputFilenameGenerator.updateCallDetails(call, details)
     }
 
     override fun run() {
         var success = false
         var errorMsg: String? = null
         var resultUri: Uri? = null
-
-        synchronized(filenameLock) {
-            // We initially do not allow custom filename templates because SAF is extraordinarily
-            // slow on some devices. Even with the our custom findFileFast() implementation, simply
-            // checking for the existence of the template may take >500ms.
-            filenameTemplate = FilenameTemplate.load(context, false)
-
-            updateFilename(false)
-        }
 
         startLogcat()
 
@@ -387,8 +102,9 @@ class RecorderThread(
             if (isCancelled) {
                 Log.i(tag, "Recording cancelled before it began")
             } else {
-                val initialFilename = synchronized(filenameLock) { filename }
-                val outputFile = dirUtils.createFileInDefaultDir(initialFilename, format.mimeTypeContainer)
+                val initialFilename = outputFilenameGenerator.filename
+                val outputFile = dirUtils.createFileInDefaultDir(
+                    initialFilename.value, format.mimeTypeContainer)
                 resultUri = outputFile.uri
 
                 try {
@@ -397,19 +113,14 @@ class RecorderThread(
                         Os.fsync(it.fileDescriptor)
                     }
                 } finally {
-                    val finalFilename = synchronized(filenameLock) {
-                        filenameTemplate = FilenameTemplate.load(context, true)
-
-                        updateFilename(true)
-                        filename
-                    }
+                    val finalFilename = outputFilenameGenerator.update(true)
                     if (finalFilename != initialFilename) {
-                        Log.i(tag, "Renaming ${redactor.redact(initialFilename)} to ${redactor.redact(finalFilename)}")
+                        Log.i(tag, "Renaming $initialFilename to $finalFilename")
 
-                        if (outputFile.renameToPreserveExt(finalFilename)) {
+                        if (outputFile.renameToPreserveExt(finalFilename.value)) {
                             resultUri = outputFile.uri
                         } else {
-                            Log.w(tag, "Failed to rename to final filename: ${redactor.redact(finalFilename)}")
+                            Log.w(tag, "Failed to rename to final filename: $finalFilename")
                         }
                     }
 
@@ -418,7 +129,7 @@ class RecorderThread(
                             resultUri = it.uri
                         }
                     } else {
-                        Log.i(tag, "Deleting because recording was never resumed: ${redactor.redact(finalFilename)}")
+                        Log.i(tag, "Deleting because recording was never resumed: $finalFilename")
                         outputFile.delete()
                         resultUri = null
                     }
@@ -451,7 +162,11 @@ class RecorderThread(
             }
 
             val outputFile = resultUri?.let {
-                OutputFile(it, redactor.redact(it), format.mimeTypeContainer)
+                OutputFile(
+                    it,
+                    outputFilenameGenerator.redactor.redact(it),
+                    format.mimeTypeContainer,
+                )
             }
 
             if (success) {
@@ -476,6 +191,12 @@ class RecorderThread(
         isCancelled = true
     }
 
+    private fun getLogcatFilename(): OutputFilename {
+        return outputFilenameGenerator.filename.let {
+            it.copy(value = it.value + ".log", redacted = it.redacted + ".log")
+        }
+    }
+
     private fun startLogcat() {
         if (!isDebug) {
             return
@@ -485,8 +206,8 @@ class RecorderThread(
 
         Log.d(tag, "Starting log file (${BuildConfig.VERSION_NAME})")
 
-        logcatFilename = synchronized(filenameLock) { "${filename}.log" }
-        logcatFile = dirUtils.createFileInDefaultDir(logcatFilename, "text/plain")
+        logcatFilename = getLogcatFilename()
+        logcatFile = dirUtils.createFileInDefaultDir(logcatFilename.value, "text/plain")
         logcatProcess = ProcessBuilder("logcat", "*:V")
             // This is better than -f because the logcat implementation calls fflush() when the
             // output stream is stdout. logcatFile is guaranteed to have file:// scheme because it's
@@ -516,13 +237,12 @@ class RecorderThread(
                 logcatProcess.waitFor()
             }
         } finally {
-            val finalLogcatFilename = synchronized(filenameLock) { "${filename}.log" }
-
+            val finalLogcatFilename = getLogcatFilename()
             if (finalLogcatFilename != logcatFilename) {
-                Log.i(tag, "Renaming ${redactor.redact(logcatFilename)} to ${redactor.redact(finalLogcatFilename)}")
+                Log.i(tag, "Renaming $logcatFilename to $finalLogcatFilename")
 
-                if (!logcatFile.renameToPreserveExt(finalLogcatFilename)) {
-                    Log.w(tag, "Failed to rename to final filename: ${redactor.redact(finalLogcatFilename)}")
+                if (!logcatFile.renameToPreserveExt(finalLogcatFilename.value)) {
+                    Log.w(tag, "Failed to rename to final filename: $finalLogcatFilename")
                 }
             }
 
@@ -530,38 +250,12 @@ class RecorderThread(
         }
     }
 
-    private fun timestampFromFilename(name: String): Temporal? {
-        try {
-            val redacted = redactTruncate(name)
-
-            // The date is guaranteed to be at the beginning of the filename. Try to parse it,
-            // ignoring unparsed text at the end.
-            val pos = ParsePosition(0)
-            val parsed = formatter.parse(name, pos)
-
-            val timestamp = try {
-                parsed.query(ZonedDateTime::from)
-            } catch (e: DateTimeException) {
-                // A custom pattern might not specify the time zone
-                parsed.query(LocalDateTime::from)
-            }
-
-            Log.d(tag, "Parsed $timestamp from $redacted; length=${name.length}; parsed=${pos.index}")
-
-            return timestamp
-        } catch (e: DateTimeParseException) {
-            // Ignore
-        }
-
-        return null
-    }
-
     /**
      * Delete files older than the specified retention period.
      *
-     * The "current time" is [callTimestamp], not the actual current time and the timestamp of past
-     * recordings is based on the filename, not the file modification time. Incorrectly-named files
-     * are ignored.
+     * The "current time" is [OutputFilenameGenerator.callTimestamp], not the actual current time
+     * and the timestamp of past recordings is based on the filename, not the file modification
+     * time. Incorrectly-named files are ignored.
      */
     private fun processRetention() {
         val directory = prefs.outputDir?.let {
@@ -582,15 +276,15 @@ class RecorderThread(
             if (name == null) {
                 continue
             }
-            val redacted = redactTruncate(name)
+            val redacted = OutputFilenameGenerator.redactTruncate(name)
 
-            val timestamp = timestampFromFilename(name)
+            val timestamp = outputFilenameGenerator.parseTimestampFromFilename(name)
             if (timestamp == null) {
                 Log.w(tag, "Ignoring unrecognized filename: $redacted")
                 continue
             }
 
-            val diff = Duration.between(timestamp, callTimestamp)
+            val diff = Duration.between(timestamp, outputFilenameGenerator.callTimestamp)
 
             if (diff > retention) {
                 Log.i(tag, "Deleting $redacted ($timestamp)")
@@ -758,31 +452,6 @@ class RecorderThread(
     companion object {
         private const val CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO
         private const val ENCODING = AudioFormat.ENCODING_PCM_16BIT
-
-        // Eg. 20220429_180249.123-0400
-        private val FORMATTER = DateTimeFormatterBuilder()
-            .appendValue(ChronoField.YEAR, 4, 10, SignStyle.EXCEEDS_PAD)
-            .appendValue(ChronoField.MONTH_OF_YEAR, 2)
-            .appendValue(ChronoField.DAY_OF_MONTH, 2)
-            .appendLiteral('_')
-            .appendValue(ChronoField.HOUR_OF_DAY, 2)
-            .appendValue(ChronoField.MINUTE_OF_HOUR, 2)
-            .appendValue(ChronoField.SECOND_OF_MINUTE, 2)
-            .appendFraction(ChronoField.NANO_OF_SECOND, 0, 9, true)
-            .appendOffset("+HHMMss", "+0000")
-            .toFormatter()
-
-        private fun redactTruncate(msg: String): String = buildString {
-            val n = 2
-
-            if (msg.length > 2 * n) {
-                append(msg.substring(0, n))
-            }
-            append("<...>")
-            if (msg.length > 2 * n) {
-                append(msg.substring(msg.length - n))
-            }
-        }
     }
 
     interface OnRecordingCompletedListener {

@@ -7,6 +7,9 @@
   * BCR will manually look up the contact name due to an AOSP bug where the call's contact name field is sometimes null for conference calls. As a result of this change, adding the contact name to the output filename is now supported in Android <11.
 * Update Turkish translations (PR: #286, @symbuzzer)
 * Fix M4A/AAC output files sometimes getting an incorrect `.mp3` file extension due to an Android bug (Issue: #292, PR: #293, @chenxiaolong)
+* Introduce new output filename templating engine (Issue: #288, PR: #296, @chenxiaolong)
+  * See [the documentation](./README.md#filename-template) for details.
+  * This completely replaces the old hidden `bcr.properties` templates. For folks who previously used the old templates, the configuration will be automatically migrated to the new template system.
 
 ### Version 1.39
 

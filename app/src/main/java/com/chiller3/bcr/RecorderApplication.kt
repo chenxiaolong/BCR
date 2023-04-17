@@ -9,6 +9,10 @@ class RecorderApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        // Migrate the old properties file. This is blocking, but oh well. We can remove the
+        // migration logic after a few more releases.
+        Preferences(this).migrateLegacyProperties()
+
         // Enable Material You colors
         DynamicColors.applyToActivitiesIfAvailable(this)
 

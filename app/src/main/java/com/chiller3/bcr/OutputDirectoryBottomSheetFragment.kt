@@ -1,9 +1,11 @@
 package com.chiller3.bcr
 
 import android.os.Bundle
+import android.text.SpannableString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.setFragmentResultListener
 import com.chiller3.bcr.databinding.OutputDirectoryBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.slider.Slider
@@ -14,6 +16,7 @@ class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment(), Slider.O
         get() = _binding!!
 
     private lateinit var prefs: Preferences
+    private lateinit var highlighter: TemplateSyntaxHighlighter
 
     private val requestSafOutputDir =
         registerForActivityResult(OpenPersistentDocumentTree()) { uri ->
@@ -31,9 +34,15 @@ class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment(), Slider.O
         val context = requireContext()
 
         prefs = Preferences(context)
+        highlighter = TemplateSyntaxHighlighter(context)
 
         binding.selectNewDir.setOnClickListener {
             requestSafOutputDir.launch(null)
+        }
+
+        binding.editTemplate.setOnClickListener {
+            FilenameTemplateDialogFragment().show(
+                parentFragmentManager.beginTransaction(), FilenameTemplateDialogFragment.TAG)
         }
 
         binding.retentionSlider.valueFrom = 0f
@@ -47,10 +56,18 @@ class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment(), Slider.O
         binding.reset.setOnClickListener {
             prefs.outputDir = null
             refreshOutputDir()
+            prefs.filenameTemplate = null
+            refreshFilenameTemplate()
             prefs.outputRetention = null
             refreshOutputRetention()
         }
 
+        setFragmentResultListener(FilenameTemplateDialogFragment.TAG) { _, _ ->
+            refreshFilenameTemplate()
+            refreshOutputRetention()
+        }
+
+        refreshFilenameTemplate()
         refreshOutputDir()
         refreshOutputRetention()
 
@@ -62,9 +79,23 @@ class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment(), Slider.O
         binding.outputDir.text = outputDirUri.formattedString
     }
 
+    private fun refreshFilenameTemplate() {
+        val template = prefs.filenameTemplate ?: Preferences.DEFAULT_FILENAME_TEMPLATE
+        val highlightedTemplate = SpannableString(template.toString())
+        highlighter.highlight(highlightedTemplate)
+
+        binding.filenameTemplate.text = highlightedTemplate
+    }
+
     private fun refreshOutputRetention() {
         val days = Retention.fromPreferences(prefs)
         binding.retentionSlider.value = Retention.all.indexOf(days).toFloat()
+
+        // Disable retention options if the template makes it impossible for the feature to work
+        val template = prefs.filenameTemplate ?: Preferences.DEFAULT_FILENAME_TEMPLATE
+        val locations = template.findVariableRef(OutputFilenameGenerator.DATE_VAR)
+        binding.retentionSlider.isEnabled = locations != null &&
+                locations.third != setOf(Template.VariableRefLocation.Arbitrary)
     }
 
     override fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
