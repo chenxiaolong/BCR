@@ -21,6 +21,7 @@ object Permissions {
 
     val REQUIRED: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO) + NOTIFICATION
     val OPTIONAL: Array<String> = arrayOf(
+        Manifest.permission.READ_CALL_LOG,
         Manifest.permission.READ_CONTACTS,
         Manifest.permission.READ_PHONE_STATE,
     )
