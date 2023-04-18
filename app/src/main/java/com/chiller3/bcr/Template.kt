@@ -482,4 +482,33 @@ class Template(template: String) {
 
         return Triple(varRef.name, varRef.arg, locations)
     }
+
+    /**
+     * Find every variable reference in the template. This includes ones that may not be evaluated
+     * by [evaluate] due to being in later fallback choices.
+     */
+    fun findAllVariableRefs(): List<Pair<String, String?>> {
+        val refs = mutableListOf<Pair<String, String?>>()
+
+        fun recurse(node: AstNode) {
+            when (node) {
+                is StringLiteral -> {}
+                is VariableRef -> refs.add(Pair(node.name, node.arg))
+                is Fallback -> {
+                    for (choice in node.choices) {
+                        recurse(choice)
+                    }
+                }
+                is TemplateString -> {
+                    for (clause in node.clauses) {
+                        recurse(clause)
+                    }
+                }
+            }
+        }
+
+        recurse(parsed.first.value)
+
+        return refs
+    }
 }

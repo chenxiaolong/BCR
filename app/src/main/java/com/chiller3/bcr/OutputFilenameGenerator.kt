@@ -538,6 +538,18 @@ class OutputFilenameGenerator(
         return timestamp
     }
 
+    enum class ValidationErrorType {
+        UNKNOWN_VARIABLE,
+        HAS_ARGUMENT,
+        INVALID_ARGUMENT,
+    }
+
+    data class ValidationError(
+        val type: ValidationErrorType,
+        val name: String,
+        val arg: String?,
+    )
+
     companion object {
         private val TAG = OutputFilenameGenerator::class.java.simpleName
 
@@ -578,6 +590,43 @@ class OutputFilenameGenerator(
             if (msg.length > 2 * n) {
                 append(msg.substring(msg.length - n))
             }
+        }
+
+        fun validate(template: Template): List<ValidationError> {
+            val errors = mutableListOf<ValidationError>()
+
+            for ((name, arg) in template.findAllVariableRefs()) {
+                when (name) {
+                    "date" -> {
+                        if (arg != null) {
+                            try {
+                                DateTimeFormatterBuilder()
+                                    .appendPattern(arg)
+                                    .toFormatter()
+                            } catch (e: Exception) {
+                                errors.add(ValidationError(
+                                    ValidationErrorType.INVALID_ARGUMENT, name, arg))
+                            }
+                        }
+                    }
+                    "phone_number" -> {
+                        if (arg !in arrayOf(null, "E.164", "digits_only", "formatted")) {
+                            errors.add(ValidationError(
+                                ValidationErrorType.INVALID_ARGUMENT, name, arg!!))
+                        }
+                    }
+                    "direction", "sim_slot", "caller_name", "contact_name", "call_log_name" -> {
+                        if (arg != null) {
+                            errors.add(ValidationError(
+                                ValidationErrorType.HAS_ARGUMENT, name, arg))
+                        }
+                    }
+                    else -> errors.add(ValidationError(
+                        ValidationErrorType.UNKNOWN_VARIABLE, name, arg))
+                }
+            }
+
+            return errors
         }
     }
 }
