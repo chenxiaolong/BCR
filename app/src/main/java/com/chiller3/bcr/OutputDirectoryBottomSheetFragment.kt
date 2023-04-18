@@ -95,7 +95,7 @@ class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment(), Slider.O
         val template = prefs.filenameTemplate ?: Preferences.DEFAULT_FILENAME_TEMPLATE
         val locations = template.findVariableRef(OutputFilenameGenerator.DATE_VAR)
         binding.retentionSlider.isEnabled = locations != null &&
-                locations.third != setOf(Template.VariableRefLocation.Arbitrary)
+                locations.second != setOf(Template.VariableRefLocation.Arbitrary)
     }
 
     override fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {

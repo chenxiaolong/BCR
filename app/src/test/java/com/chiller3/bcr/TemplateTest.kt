@@ -350,34 +350,67 @@ class TemplateTest {
     @Test
     fun testFindVariableRef() {
         assertEquals(
-            Triple("var", null, setOf(
-                Template.VariableRefLocation.AfterPrefix("foo", true),
-            )),
+            Pair(
+                Template.VariableRef("var", null),
+                setOf(Template.VariableRefLocation.AfterPrefix("foo", true)),
+            ),
             Template("foo{var}").findVariableRef("var"),
         )
         assertEquals(
-            Triple("var", null, setOf(
-                Template.VariableRefLocation.AfterPrefix("foo", true),
-            )),
+            Pair(
+                Template.VariableRef("var", null),
+                setOf(Template.VariableRefLocation.AfterPrefix("foo", true)),
+            ),
             Template("[]foo{var}").findVariableRef("var"),
         )
         assertEquals(
-            Triple("var", null, setOf(
-                Template.VariableRefLocation.AfterPrefix("foo", true),
-            )),
+            Pair(
+                Template.VariableRef("var", null),
+                setOf(Template.VariableRefLocation.AfterPrefix("foo", true)),
+            ),
             Template("foo[]{var}").findVariableRef("var"),
         )
         assertEquals(
-            Triple("var", "arg", setOf(
-                Template.VariableRefLocation.AfterPrefix("", true),
-            )),
+            Pair(
+                Template.VariableRef("var", "arg"),
+                setOf(Template.VariableRefLocation.AfterPrefix("", true)),
+            ),
             Template("{var:arg}").findVariableRef("var"),
         )
         assertEquals(
-            Triple("date", null, setOf(
-                Template.VariableRefLocation.AfterPrefix("", true),
-            )),
+            Pair(
+                Template.VariableRef("date", null),
+                setOf(Template.VariableRefLocation.AfterPrefix("", true)),
+            ),
             Preferences.DEFAULT_FILENAME_TEMPLATE.findVariableRef("date"),
+        )
+    }
+
+    @Test
+    fun testAllFindVariableRef() {
+        assertEquals(
+            listOf(Template.VariableRef("var", null)),
+            Template("{var}").findAllVariableRefs(),
+        )
+        assertEquals(
+            listOf(
+                Template.VariableRef("a", null),
+                Template.VariableRef("b", null),
+            ),
+            Template("[{a}|{b}]").findAllVariableRefs(),
+        )
+        assertEquals(
+            listOf(
+                Template.VariableRef("a", null),
+                Template.VariableRef("b", null),
+                Template.VariableRef("c", null),
+                Template.VariableRef("d", "arg"),
+            ),
+            Template("[{a}|{b}]{c}[[{d:arg}]]").findAllVariableRefs(),
+        )
+        assertEquals(
+            OutputFilenameGenerator.KNOWN_VARS.map { Template.VariableRef(it, null) },
+            Preferences.DEFAULT_FILENAME_TEMPLATE.findAllVariableRefs(),
         )
     }
 }

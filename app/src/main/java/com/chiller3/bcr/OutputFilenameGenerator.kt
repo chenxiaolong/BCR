@@ -45,7 +45,7 @@ class OutputFilenameGenerator(
     // Templates
     private val filenameTemplate = Preferences(context).filenameTemplate
         ?: Preferences.DEFAULT_FILENAME_TEMPLATE
-    private val dateVarLocations = filenameTemplate.findVariableRef(DATE_VAR)?.third
+    private val dateVarLocations = filenameTemplate.findVariableRef(DATE_VAR)?.second
 
     // Call information
     private val callDetails = mutableMapOf<Call, Call.Details>()
@@ -538,17 +538,34 @@ class OutputFilenameGenerator(
         return timestamp
     }
 
+    enum class ValidationErrorType {
+        UNKNOWN_VARIABLE,
+        HAS_ARGUMENT,
+        INVALID_ARGUMENT,
+    }
+
+    data class ValidationError(
+        val type: ValidationErrorType,
+        val varRef: Template.VariableRef,
+    )
+
     companion object {
         private val TAG = OutputFilenameGenerator::class.java.simpleName
 
         const val DATE_VAR = "date"
+
+        /**
+         * List of supported variables.
+         *
+         * Keep these in the same order as in [Preferences.DEFAULT_FILENAME_TEMPLATE].
+         */
         val KNOWN_VARS = arrayOf(
             DATE_VAR,
             "direction",
             "sim_slot",
             "phone_number",
-            "caller_name",
             "contact_name",
+            "caller_name",
             "call_log_name",
         )
 
@@ -578,6 +595,43 @@ class OutputFilenameGenerator(
             if (msg.length > 2 * n) {
                 append(msg.substring(msg.length - n))
             }
+        }
+
+        fun validate(template: Template): List<ValidationError> {
+            val errors = mutableListOf<ValidationError>()
+
+            for (varRef in template.findAllVariableRefs()) {
+                when (varRef.name) {
+                    "date" -> {
+                        if (varRef.arg != null) {
+                            try {
+                                DateTimeFormatterBuilder()
+                                    .appendPattern(varRef.arg)
+                                    .toFormatter()
+                            } catch (e: Exception) {
+                                errors.add(ValidationError(
+                                    ValidationErrorType.INVALID_ARGUMENT, varRef))
+                            }
+                        }
+                    }
+                    "phone_number" -> {
+                        if (varRef.arg !in arrayOf(null, "E.164", "digits_only", "formatted")) {
+                            errors.add(ValidationError(
+                                ValidationErrorType.INVALID_ARGUMENT, varRef))
+                        }
+                    }
+                    "direction", "sim_slot", "caller_name", "contact_name", "call_log_name" -> {
+                        if (varRef.arg != null) {
+                            errors.add(ValidationError(
+                                ValidationErrorType.HAS_ARGUMENT, varRef))
+                        }
+                    }
+                    else -> errors.add(ValidationError(
+                        ValidationErrorType.UNKNOWN_VARIABLE, varRef))
+                }
+            }
+
+            return errors
         }
     }
 }

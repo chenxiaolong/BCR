@@ -14,6 +14,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.TypefaceSpan
 import android.view.View
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
@@ -57,26 +58,38 @@ class FilenameTemplateDialogFragment : DialogFragment() {
                 binding.textLayout.error = getString(R.string.filename_template_dialog_error_empty)
             } else {
                 try {
-                    template = Template(it.toString()).apply {
-                        evaluate { name, _ ->
-                            if (name in OutputFilenameGenerator.KNOWN_VARS) {
-                                ""
-                            } else {
-                                null
+                    val newTemplate = Template(it.toString())
+                    val errors = OutputFilenameGenerator.validate(newTemplate)
+                    if (errors.isEmpty()) {
+                        template = newTemplate
+
+                        binding.textLayout.error = null
+                        // Don't keep the layout space for the error message reserved
+                        binding.textLayout.isErrorEnabled = false
+                    } else {
+                        template = null
+
+                        // Only show first error due to space constraints
+                        val error = errors.first()
+
+                        val errorResId = when (error.type) {
+                            OutputFilenameGenerator.ValidationErrorType.UNKNOWN_VARIABLE -> {
+                                R.string.filename_template_dialog_error_unknown_variable
+                            }
+                            OutputFilenameGenerator.ValidationErrorType.HAS_ARGUMENT -> {
+                                R.string.filename_template_dialog_error_has_argument
+                            }
+                            OutputFilenameGenerator.ValidationErrorType.INVALID_ARGUMENT -> {
+                                R.string.filename_template_dialog_error_invalid_argument
                             }
                         }
+                        binding.textLayout.error = buildErrorMessageWithTemplate(
+                            errorResId, error.varRef.toTemplate())
                     }
-                    binding.textLayout.error = null
-                    // Don't keep the layout space for the error message reserved
-                    binding.textLayout.isErrorEnabled = false
-                } catch (e: Template.MissingVariableException) {
-                    template = null
-                    binding.textLayout.error =
-                        getString(R.string.filename_template_dialog_error_unknown_var, e.name)
                 } catch (e: Exception) {
                     template = null
                     binding.textLayout.error =
-                        getString(R.string.filename_template_dialog_error_invalid)
+                        getString(R.string.filename_template_dialog_error_invalid_syntax)
                 }
             }
 
@@ -126,7 +139,7 @@ class FilenameTemplateDialogFragment : DialogFragment() {
                 var nextOffset = start
 
                 for ((i, v) in OutputFilenameGenerator.KNOWN_VARS.withIndex()) {
-                    val text = "{$v}"
+                    val text = Template.VariableRef(v, null).toTemplate()
 
                     if (i == 0) {
                         message.replace(start, end, text)
@@ -163,6 +176,39 @@ class FilenameTemplateDialogFragment : DialogFragment() {
                     end,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
                 )
+            } else {
+                throw IllegalStateException("Invalid annotation: $annotation")
+            }
+        }
+
+        return message
+    }
+
+    private fun buildErrorMessageWithTemplate(
+        @StringRes stringResId: Int,
+        template: String,
+    ): SpannableStringBuilder {
+        val origMessage = getText(stringResId) as SpannedString
+        val message = SpannableStringBuilder(origMessage)
+        val annotations = message.getSpans(0, origMessage.length, Annotation::class.java)
+
+        for (annotation in annotations) {
+            val start = message.getSpanStart(annotation)
+            val end = message.getSpanEnd(annotation)
+
+            if (annotation.key == "type" && annotation.value == "template") {
+                message.replace(start, end, template)
+
+                val newEnd = start + template.length
+
+                message.setSpan(
+                    TypefaceSpan(Typeface.MONOSPACE),
+                    start,
+                    newEnd,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+                )
+
+                highlighter.highlight(message, start, newEnd)
             } else {
                 throw IllegalStateException("Invalid annotation: $annotation")
             }
