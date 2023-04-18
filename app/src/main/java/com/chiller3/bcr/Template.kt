@@ -318,23 +318,23 @@ class Template(template: String) {
     }
 
     /** Base type for AST nodes. */
-    internal sealed interface AstNode {
+    sealed interface AstNode {
         fun toTemplate(): String
     }
 
     /** Base type for string clauses. */
-    internal sealed interface Clause : AstNode
+    sealed interface Clause : AstNode
 
     /**
      * AST node representing a literal string with embedded special characters already
      * unescaped.
      */
-    internal data class StringLiteral(val value: String) : Clause {
+    data class StringLiteral(val value: String) : Clause {
         override fun toTemplate(): String = escape(value)
     }
 
     /** AST node representing a variable reference. */
-    internal data class VariableRef(val name: String, val arg: String?) : Clause {
+    data class VariableRef(val name: String, val arg: String?) : Clause {
         override fun toTemplate(): String = buildString {
             append('{')
             append(name)
@@ -350,7 +350,7 @@ class Template(template: String) {
      * AST node representing a fallback clause. This does not include the implicit final empty
      * string choice.
      */
-    internal data class Fallback(val choices: List<TemplateString>) : Clause {
+    data class Fallback(val choices: List<TemplateString>) : Clause {
         override fun toTemplate(): String = buildString {
             append('[')
             for ((i, choice) in choices.withIndex()) {
@@ -367,7 +367,7 @@ class Template(template: String) {
      * AST node representing a complete string template, which can include string literals,
      * variable references, and fallback clauses.
      */
-    internal data class TemplateString(val clauses: List<Clause>) : AstNode {
+    data class TemplateString(val clauses: List<Clause>) : AstNode {
         override fun toTemplate(): String = buildString {
             for (clause in clauses) {
                 append(clause.toTemplate())
@@ -385,7 +385,10 @@ class Template(template: String) {
 
     private val parsed = parser.parse(ParserContext.fromString(template))
 
-    override fun toString(): String = parsed.first.value.toTemplate()
+    val ast: TemplateString
+        get() = parsed.first.value
+
+    override fun toString(): String = ast.toTemplate()
 
     fun evaluate(getVar: (String, String?) -> String?): String {
         val varCache = hashMapOf<Pair<String, String?>, String?>()
@@ -434,7 +437,7 @@ class Template(template: String) {
             }
         }
 
-        when (val result = recurse(parsed.first.value)) {
+        when (val result = recurse(ast)) {
             is EvalResult.Success -> return result.value
             is EvalResult.MissingVariable -> throw MissingVariableException(result.name)
         }
@@ -463,8 +466,8 @@ class Template(template: String) {
      * @return the variable name, argument, and the locations where its value could start in a
      * output string.
      */
-    fun findVariableRef(name: String): Triple<String, String?, Set<VariableRefLocation>>? {
-        val (varRef, prefixes) = findVariableRefInternal(parsed.first.value, name)
+    fun findVariableRef(name: String): Pair<VariableRef, Set<VariableRefLocation>>? {
+        val (varRef, prefixes) = findVariableRefInternal(ast, name)
         if (varRef == null) {
             return null
         }
@@ -480,20 +483,20 @@ class Template(template: String) {
             }
             .toHashSet()
 
-        return Triple(varRef.name, varRef.arg, locations)
+        return Pair(varRef, locations)
     }
 
     /**
      * Find every variable reference in the template. This includes ones that may not be evaluated
      * by [evaluate] due to being in later fallback choices.
      */
-    fun findAllVariableRefs(): List<Pair<String, String?>> {
-        val refs = mutableListOf<Pair<String, String?>>()
+    fun findAllVariableRefs(): List<VariableRef> {
+        val refs = mutableListOf<VariableRef>()
 
         fun recurse(node: AstNode) {
             when (node) {
                 is StringLiteral -> {}
-                is VariableRef -> refs.add(Pair(node.name, node.arg))
+                is VariableRef -> refs.add(node)
                 is Fallback -> {
                     for (choice in node.choices) {
                         recurse(choice)
@@ -507,7 +510,7 @@ class Template(template: String) {
             }
         }
 
-        recurse(parsed.first.value)
+        recurse(ast)
 
         return refs
     }

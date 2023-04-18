@@ -71,15 +71,6 @@ class FilenameTemplateDialogFragment : DialogFragment() {
 
                         // Only show first error due to space constraints
                         val error = errors.first()
-                        val varRefDisplay = buildString {
-                            append('{')
-                            append(error.name)
-                            if (error.arg != null) {
-                                append(':')
-                                append(error.arg)
-                            }
-                            append('}')
-                        }
 
                         val errorResId = when (error.type) {
                             OutputFilenameGenerator.ValidationErrorType.UNKNOWN_VARIABLE -> {
@@ -93,7 +84,7 @@ class FilenameTemplateDialogFragment : DialogFragment() {
                             }
                         }
                         binding.textLayout.error = buildErrorMessageWithTemplate(
-                            errorResId, varRefDisplay)
+                            errorResId, error.varRef.toTemplate())
                     }
                 } catch (e: Exception) {
                     template = null
@@ -148,7 +139,7 @@ class FilenameTemplateDialogFragment : DialogFragment() {
                 var nextOffset = start
 
                 for ((i, v) in OutputFilenameGenerator.KNOWN_VARS.withIndex()) {
-                    val text = "{$v}"
+                    val text = Template.VariableRef(v, null).toTemplate()
 
                     if (i == 0) {
                         message.replace(start, end, text)
