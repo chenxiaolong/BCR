@@ -108,7 +108,10 @@ BCR supports customizing the template used for determining the output filenames 
   * If the date format is changed, the old recordings should be manually renamed or moved to another directory to ensure that they won't inadvertently be deleted. For example, if `yyMMdd_HHmmss` was changed to `HHmmss_yyMMdd`, the timestamps from the old recording's filenames would be parsed incorrectly and may get deleted.
 * `{direction}`: For 1-on-1 calls, either `in` or `out` depending on if the call is an incoming or outgoing call. If the call is a conference call, then `conference` is used instead.
 * `{sim_slot}`: **[Android 11+ only]** The SIM slot number for the call (counting from 1). This is only defined for multi-SIM devices that have multiple SIMs active.
-* `{phone_number}`: The phone number for the call. This is undefined for private calls.
+* `{phone_number}`: The phone number for the call. This is undefined for private calls. Available formatting options:
+  * `{phone_number:E.164}`: Default (same as just `{phone_number}`). Phone number formatted in the international E.164 format (`+<country code><subscriber>`).
+  * `{phone_number:digits_only}`: Phone number with digits only (no `+` or separators).
+  * `{phone_number:formatted}`: Phone number formatted using the country-specific style.
 * `{caller_name}`: The caller ID as provided by CNAP from the carrier.
 * `{contact_name}` The name of the (first) contact associated with the phone number. This is only defined if BCR is granted the Contacts permission.
 * `{call_log_name}`: The name shown in the call log. This may include more information, like the name of the business, if the system dialer performs reverse lookups. This is only defined if BCR is granted the Read Call Logs permission.

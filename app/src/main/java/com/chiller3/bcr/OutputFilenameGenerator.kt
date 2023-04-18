@@ -9,6 +9,7 @@ import android.provider.CallLog
 import android.provider.ContactsContract
 import android.telecom.Call
 import android.telecom.PhoneAccount
+import android.telephony.PhoneNumberUtils
 import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
 import android.util.Log
@@ -25,6 +26,7 @@ import java.time.format.DateTimeParseException
 import java.time.format.SignStyle
 import java.time.temporal.ChronoField
 import java.time.temporal.Temporal
+import java.util.Locale
 
 data class OutputFilename(
     val value: String,
@@ -126,6 +128,68 @@ class OutputFilenameGenerator(
         }
     }
 
+    /**
+     * Get the current ISO country code for phone number formatting.
+     */
+    private fun getIsoCountryCode(): String? {
+        val telephonyManager = context.getSystemService(TelephonyManager::class.java)
+        var result: String? = null
+
+        if (telephonyManager.phoneType == TelephonyManager.PHONE_TYPE_GSM) {
+            result = telephonyManager.networkCountryIso
+        }
+        if (result.isNullOrEmpty()) {
+            result = telephonyManager.simCountryIso
+        }
+        if (result.isNullOrEmpty()) {
+            result = Locale.getDefault().country
+        }
+        if (result.isNullOrEmpty()) {
+            return null
+        }
+        return result.uppercase()
+    }
+
+    private fun getPhoneNumber(details: Call.Details, arg: String?): String? {
+        val uri = details.handle
+
+        val number = if (uri?.scheme == PhoneAccount.SCHEME_TEL) {
+            uri.schemeSpecificPart
+        } else {
+            null
+        } ?: return null
+
+        when (arg) {
+            null, "E.164" -> {
+                // Default is already E.164
+                return number
+            }
+            "digits_only" -> {
+                return number.filter { Character.digit(it, 10) != -1 }
+            }
+            "formatted" -> {
+                val country = getIsoCountryCode()
+                if (country == null) {
+                    Log.w(TAG, "Failed to detect country")
+                    return number
+                }
+
+                val formatted = PhoneNumberUtils.formatNumber(number, country)
+                if (formatted == null) {
+                    Log.w(TAG, "Phone number cannot be formatted for country $country")
+                    // Don't fail since this isn't the user's fault
+                    return number
+                }
+
+                return formatted
+            }
+            else -> {
+                Log.w(TAG, "Unknown phone_number format arg: $arg")
+                return null
+            }
+        }
+    }
+
     private fun getContactDisplayName(details: Call.Details, allowManualLookup: Boolean): String? {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val name = details.contactDisplayName
@@ -154,7 +218,7 @@ class OutputFilenameGenerator(
 
         Log.d(TAG, "Performing manual contact lookup")
 
-        val number = getPhoneNumber(details)
+        val number = getPhoneNumber(details, null)
         if (number == null) {
             Log.w(TAG, "Cannot determine phone number from call")
             return null
@@ -323,7 +387,7 @@ class OutputFilenameGenerator(
                     }
                     "phone_number" -> {
                         val joined = displayDetails.asSequence()
-                            .map { d -> getPhoneNumber(d) }
+                            .map { d -> getPhoneNumber(d, arg) }
                             .filterNotNull()
                             .joinToString(",")
                         if (joined.isNotEmpty()) {
@@ -503,16 +567,6 @@ class OutputFilenameGenerator(
 
         private const val CALL_LOG_QUERY_TIMEOUT_NANOS = 2_000_000_000L
         private const val CALL_LOG_QUERY_RETRY_DELAY_MILLIS = 100L
-
-        private fun getPhoneNumber(details: Call.Details): String? {
-            val uri = details.handle
-
-            return if (uri?.scheme == PhoneAccount.SCHEME_TEL) {
-                uri.schemeSpecificPart
-            } else {
-                null
-            }
-        }
 
         fun redactTruncate(msg: String): String = buildString {
             val n = 2
