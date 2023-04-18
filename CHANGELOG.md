@@ -12,6 +12,7 @@
   * This completely replaces the old hidden `bcr.properties` templates. For folks who previously used the old templates, the configuration will be automatically migrated to the new template system.
 * Add support for querying the name from the call log (Issue: #291, PR: #298, @chenxiaolong)
   * This requires the optional `READ_CALL_LOGS` permission to be granted.
+* Add support for formatting the phone number as digits only or with the country-specific style (Issue: #290, PR: #299, @chenxiaolong)
 
 Non-user-facing changes:
 
