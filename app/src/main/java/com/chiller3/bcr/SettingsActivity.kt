@@ -116,7 +116,7 @@ class SettingsActivity : AppCompatActivity() {
             val formatParam = formatParamSaved ?: format.paramInfo.default
             val summary = getString(R.string.pref_output_format_desc)
             val prefix = when (val info = format.paramInfo) {
-                is RangedParamInfo -> "${info.format(formatParam)}, "
+                is RangedParamInfo -> "${info.format(requireContext(), formatParam)}, "
                 NoParamInfo -> ""
             }
             val sampleRate = SampleRate.fromPreferences(prefs)

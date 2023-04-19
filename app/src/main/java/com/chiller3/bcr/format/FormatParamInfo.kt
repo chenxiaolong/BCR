@@ -2,6 +2,9 @@
 
 package com.chiller3.bcr.format
 
+import android.content.Context
+import com.chiller3.bcr.R
+
 sealed class FormatParamInfo(
     val default: UInt,
     /** Handful of handpicked parameter choices to show in the UI as presets. */
@@ -22,7 +25,7 @@ sealed class FormatParamInfo(
     /**
      * Format [param] to present as a user-facing string.
      */
-    abstract fun format(param: UInt): String
+    abstract fun format(context: Context, param: UInt): String
 }
 
 enum class RangedParamType {
@@ -38,18 +41,20 @@ class RangedParamInfo(
 ) : FormatParamInfo(default, presets) {
     override fun validate(param: UInt) {
         if (param !in range) {
-            throw IllegalArgumentException("Parameter ${format(param)} is not in the range: " +
-                    "[${format(range.first)}, ${format(range.last)}]")
+            throw IllegalArgumentException("Parameter $param is not in the range: " +
+                    "[${range.first}, ${range.last}]")
         }
     }
 
     /** Clamp [param] to [range]. */
     override fun toNearest(param: UInt): UInt = param.coerceIn(range)
 
-    override fun format(param: UInt): String =
+    override fun format(context: Context, param: UInt): String =
         when (type) {
-            RangedParamType.CompressionLevel -> param.toString()
-            RangedParamType.Bitrate -> "${param / 1_000u} kbps"
+            RangedParamType.CompressionLevel ->
+                context.getString(R.string.format_param_compression_level, param.toString())
+            RangedParamType.Bitrate ->
+                context.getString(R.string.format_param_bitrate, (param / 1_000U).toString())
         }
 }
 
@@ -60,5 +65,5 @@ object NoParamInfo : FormatParamInfo(0u, uintArrayOf()) {
 
     override fun toNearest(param: UInt): UInt = param
 
-    override fun format(param: UInt): String = ""
+    override fun format(context: Context, param: UInt): String = ""
 }

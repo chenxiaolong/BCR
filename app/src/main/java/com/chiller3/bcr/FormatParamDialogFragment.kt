@@ -15,6 +15,7 @@ import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.RangedParamInfo
 import com.chiller3.bcr.format.RangedParamType
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.lang.NumberFormatException
 
 class FormatParamDialogFragment : DialogFragment() {
     companion object {
@@ -48,26 +49,46 @@ class FormatParamDialogFragment : DialogFragment() {
 
         binding.message.text = getString(
             R.string.format_param_dialog_message,
-            paramInfo.format(paramInfo.range.first),
-            paramInfo.format(paramInfo.range.last),
+            paramInfo.format(context, paramInfo.range.first),
+            paramInfo.format(context, paramInfo.range.last),
         )
 
-        if (paramInfo.type == RangedParamType.Bitrate) {
-            binding.textLayout.suffixText = "kbps"
+        // Try to detect if the displayed format is a prefix or suffix since it's not the same in
+        // every language (eg. "Level 8" vs "8级")
+        val translated = when (paramInfo.type) {
+            RangedParamType.CompressionLevel ->
+                getString(R.string.format_param_compression_level, "\u0000")
+            RangedParamType.Bitrate ->
+                getString(R.string.format_param_bitrate, "\u0000")
+        }
+        val placeholder = translated.indexOf('\u0000')
+        val hasPrefix = placeholder > 0
+        val hasSuffix = placeholder < translated.length - 1
+        if (hasPrefix) {
+            binding.textLayout.prefixText = translated.substring(0, placeholder).trimEnd()
+        }
+        if (hasSuffix) {
+            binding.textLayout.suffixText = translated.substring(placeholder + 1).trimStart()
+        }
+        if (hasPrefix && hasSuffix) {
+            binding.text.textAlignment = View.TEXT_ALIGNMENT_CENTER
+        } else if (hasSuffix) {
             binding.text.textAlignment = View.TEXT_ALIGNMENT_TEXT_END
         }
 
         binding.text.inputType = InputType.TYPE_CLASS_NUMBER
         binding.text.addTextChangedListener {
-            value = if (it!!.isNotEmpty()) {
-                val newValue = it.toString().toUInt().times(multiplier.toULong())
-                if (newValue in paramInfo.range) {
-                    newValue.toUInt()
-                } else {
-                    null
+            value = null
+
+            if (it!!.isNotEmpty()) {
+                try {
+                    val newValue = it.toString().toUInt().times(multiplier.toULong())
+                    if (newValue in paramInfo.range) {
+                        value = newValue.toUInt()
+                    }
+                } catch (e: NumberFormatException) {
+                    // Ignore
                 }
-            } else {
-                null
             }
 
             refreshOkButtonEnabledState()

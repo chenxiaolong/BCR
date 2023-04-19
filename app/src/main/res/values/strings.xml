@@ -61,6 +61,10 @@
     <string name="format_param_dialog_title">Custom parameter</string>
     <string name="format_param_dialog_message">Enter a value in the range [%s, %s].</string>
 
+    <!-- Format parameter -->
+    <string name="format_param_bitrate">%s kbps</string>
+    <string name="format_param_compression_level">Level %s</string>
+
     <!-- Dialogs -->
     <string name="dialog_action_ok">OK</string>
     <string name="dialog_action_cancel">Cancel</string>

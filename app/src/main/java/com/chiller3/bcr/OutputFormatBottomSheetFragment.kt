@@ -100,7 +100,7 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
             chipBinding.root.setOnCloseIconClickListener(::onChipClosed)
         }
         if (value != null) {
-            chipBinding.root.text = paramInfo.format(value)
+            chipBinding.root.text = paramInfo.format(requireContext(), value)
         } else {
             chipBinding.root.setText(R.string.output_format_bottom_sheet_custom_param)
         }
