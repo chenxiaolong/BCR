@@ -31,11 +31,13 @@
     <string name="output_dir_bottom_sheet_filename_template">Filename template</string>
     <string name="output_dir_bottom_sheet_edit_template">Edit template</string>
     <string name="output_dir_bottom_sheet_file_retention">File retention</string>
+    <string name="output_dir_bottom_sheet_edit_retention">Edit retention</string>
     <string name="retention_keep_all">Keep all</string>
     <plurals name="retention_days">
         <item quantity="one">Keep %d day</item>
         <item quantity="other">Keep %d days</item>
     </plurals>
+    <string name="retention_unusable">File retention is disabled because the current filename template is incompatible with the feature.</string>
 
     <!-- Output format bottom sheet -->
     <string name="output_format_bottom_sheet_output_format">Output format</string>
@@ -56,6 +58,11 @@
     <string name="filename_template_dialog_error_invalid_argument">Invalid variable argument: <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_invalid_syntax">Template syntax is invalid</string>
     <string name="filename_template_dialog_action_reset_to_default">Reset to default</string>
+
+    <!-- File retention dialog -->
+    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_message">Enter the number of days to keep recordings.</string>
+    <string name="file_retention_error_too_large">Number is too large</string>
 
     <!-- Format parameter dialog -->
     <string name="format_param_dialog_title">Custom parameter</string>

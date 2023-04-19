@@ -99,7 +99,7 @@ class FilenameTemplateDialogFragment : DialogFragment() {
             refreshOkButtonEnabledState()
         }
         if (savedInstanceState == null) {
-            binding.text.setText(template.toString())
+            binding.text.setText(template!!.toString())
         }
 
         return MaterialAlertDialogBuilder(requireContext())
@@ -112,6 +112,7 @@ class FilenameTemplateDialogFragment : DialogFragment() {
             .setNegativeButton(R.string.dialog_action_cancel, null)
             .setNeutralButton(R.string.filename_template_dialog_action_reset_to_default) { _, _ ->
                 prefs.filenameTemplate = null
+                success = true
             }
             .create()
             .apply {

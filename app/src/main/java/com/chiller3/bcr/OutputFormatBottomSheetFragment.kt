@@ -16,10 +16,7 @@ import com.google.android.material.chip.ChipGroup
 
 class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
     ChipGroup.OnCheckedStateChangeListener, View.OnClickListener {
-    private var _binding: OutputFormatBottomSheetBinding? = null
-    private val binding
-        get() = _binding!!
-
+    private lateinit var binding: OutputFormatBottomSheetBinding
     private lateinit var prefs: Preferences
 
     private val chipIdToFormat = HashMap<Int, Format>()
@@ -36,7 +33,7 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = OutputFormatBottomSheetBinding.inflate(inflater, container, false)
+        binding = OutputFormatBottomSheetBinding.inflate(inflater, container, false)
 
         prefs = Preferences(requireContext())
 
@@ -69,11 +66,6 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
         refreshSampleRate()
 
         return binding.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun addChip(inflater: LayoutInflater, parent: ViewGroup): BottomSheetChipBinding {
@@ -192,7 +184,7 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
                 }
             }
             binding.sampleRateGroup -> {
-                prefs.sampleRate = chipIdToSampleRate[checkedIds.first()]
+                prefs.sampleRate = chipIdToSampleRate[checkedIds.first()]!!
             }
         }
     }
