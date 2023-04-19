@@ -7,6 +7,7 @@ import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.text.Annotation
+import android.text.InputType
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.SpannedString
@@ -20,7 +21,7 @@ import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import com.chiller3.bcr.databinding.DialogFilenameTemplateBinding
+import com.chiller3.bcr.databinding.DialogTextInputBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class FilenameTemplateDialogFragment : DialogFragment() {
@@ -32,7 +33,7 @@ class FilenameTemplateDialogFragment : DialogFragment() {
 
     private lateinit var prefs: Preferences
     private lateinit var highlighter: TemplateSyntaxHighlighter
-    private lateinit var binding: DialogFilenameTemplateBinding
+    private lateinit var binding: DialogTextInputBinding
     private var template: Template? = null
     private var success: Boolean = false
 
@@ -42,11 +43,13 @@ class FilenameTemplateDialogFragment : DialogFragment() {
         highlighter = TemplateSyntaxHighlighter(context)
         template = prefs.filenameTemplate ?: Preferences.DEFAULT_FILENAME_TEMPLATE
 
-        binding = DialogFilenameTemplateBinding.inflate(layoutInflater)
+        binding = DialogTextInputBinding.inflate(layoutInflater)
 
         binding.message.movementMethod = LinkMovementMethod.getInstance()
         binding.message.text = buildMessage()
 
+        binding.text.inputType = InputType.TYPE_CLASS_TEXT or
+                InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
         // Make this non-multiline text box look like one
         binding.text.setHorizontallyScrolling(false)
         binding.text.maxLines = Int.MAX_VALUE
@@ -95,7 +98,9 @@ class FilenameTemplateDialogFragment : DialogFragment() {
 
             refreshOkButtonEnabledState()
         }
-        binding.text.setText(template.toString())
+        if (savedInstanceState == null) {
+            binding.text.setText(template!!.toString())
+        }
 
         return MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.filename_template_dialog_title)
@@ -107,6 +112,7 @@ class FilenameTemplateDialogFragment : DialogFragment() {
             .setNegativeButton(R.string.dialog_action_cancel, null)
             .setNeutralButton(R.string.filename_template_dialog_action_reset_to_default) { _, _ ->
                 prefs.filenameTemplate = null
+                success = true
             }
             .create()
             .apply {

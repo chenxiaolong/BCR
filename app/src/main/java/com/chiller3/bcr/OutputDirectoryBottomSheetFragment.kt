@@ -8,13 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.setFragmentResultListener
 import com.chiller3.bcr.databinding.OutputDirectoryBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.slider.Slider
 
-class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment(), Slider.OnChangeListener {
-    private var _binding: OutputDirectoryBottomSheetBinding? = null
-    private val binding
-        get() = _binding!!
-
+class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment() {
+    private lateinit var binding: OutputDirectoryBottomSheetBinding
     private lateinit var prefs: Preferences
     private lateinit var highlighter: TemplateSyntaxHighlighter
 
@@ -29,7 +25,7 @@ class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment(), Slider.O
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = OutputDirectoryBottomSheetBinding.inflate(inflater, container, false)
+        binding = OutputDirectoryBottomSheetBinding.inflate(inflater, container, false)
 
         val context = requireContext()
 
@@ -45,13 +41,10 @@ class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment(), Slider.O
                 parentFragmentManager.beginTransaction(), FilenameTemplateDialogFragment.TAG)
         }
 
-        binding.retentionSlider.valueFrom = 0f
-        binding.retentionSlider.valueTo = (Retention.all.size - 1).toFloat()
-        binding.retentionSlider.stepSize = 1f
-        binding.retentionSlider.setLabelFormatter {
-            Retention.all[it.toInt()].toFormattedString(context)
+        binding.editRetention.setOnClickListener {
+            FileRetentionDialogFragment().show(
+                parentFragmentManager.beginTransaction(), FileRetentionDialogFragment.TAG)
         }
-        binding.retentionSlider.addOnChangeListener(this)
 
         binding.reset.setOnClickListener {
             prefs.outputDir = null
@@ -64,6 +57,9 @@ class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment(), Slider.O
 
         setFragmentResultListener(FilenameTemplateDialogFragment.TAG) { _, _ ->
             refreshFilenameTemplate()
+            refreshOutputRetention()
+        }
+        setFragmentResultListener(FileRetentionDialogFragment.TAG) { _, _ ->
             refreshOutputRetention()
         }
 
@@ -88,21 +84,20 @@ class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment(), Slider.O
     }
 
     private fun refreshOutputRetention() {
-        val days = Retention.fromPreferences(prefs)
-        binding.retentionSlider.value = Retention.all.indexOf(days).toFloat()
-
         // Disable retention options if the template makes it impossible for the feature to work
         val template = prefs.filenameTemplate ?: Preferences.DEFAULT_FILENAME_TEMPLATE
         val locations = template.findVariableRef(OutputFilenameGenerator.DATE_VAR)
-        binding.retentionSlider.isEnabled = locations != null &&
+        val retentionUsable = locations != null &&
                 locations.second != setOf(Template.VariableRefLocation.Arbitrary)
-    }
 
-    override fun onValueChange(slider: Slider, value: Float, fromUser: Boolean) {
-        when (slider) {
-            binding.retentionSlider -> {
-                prefs.outputRetention = Retention.all[value.toInt()]
-            }
+        binding.retention.isEnabled = retentionUsable
+        binding.editRetention.isEnabled = retentionUsable
+
+        if (retentionUsable) {
+            val retention = Retention.fromPreferences(prefs)
+            binding.retention.text = retention.toFormattedString(requireContext())
+        } else {
+            binding.retention.setText(R.string.retention_unusable)
         }
     }
 

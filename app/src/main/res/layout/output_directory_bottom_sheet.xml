@@ -22,7 +22,8 @@
             android:id="@+id/output_dir"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom" />
+            android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
+            android:textAlignment="center" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/select_new_dir"
@@ -62,11 +63,19 @@
             android:text="@string/output_dir_bottom_sheet_file_retention"
             android:textAppearance="?attr/textAppearanceHeadline6" />
 
-        <com.google.android.material.slider.Slider
-            android:id="@+id/retention_slider"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/retention"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:labelBehavior="visible" />
+            android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
+            android:textAlignment="center" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/edit_retention"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/output_dir_bottom_sheet_edit_retention"
+            style="?attr/materialButtonOutlinedStyle" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/reset"
