@@ -98,7 +98,9 @@ class FilenameTemplateDialogFragment : DialogFragment() {
 
             refreshOkButtonEnabledState()
         }
-        binding.text.setText(template.toString())
+        if (savedInstanceState == null) {
+            binding.text.setText(template.toString())
+        }
 
         return MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.filename_template_dialog_title)
