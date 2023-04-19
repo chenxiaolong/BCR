@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalUnsignedTypes::class)
+
 package com.chiller3.bcr.format
 
 import android.media.MediaFormat
@@ -11,10 +13,16 @@ object OpusFormat : Format() {
     override val paramInfo: FormatParamInfo = RangedParamInfo(
         RangedParamType.Bitrate,
         6_000u..510_000u,
-        21_000u,
-        // "Essentially transparent mono or stereo speech, reasonable music"
-        // https://wiki.hydrogenaud.io/index.php?title=Opus
         48_000u,
+        // https://wiki.hydrogenaud.io/index.php?title=Opus
+        uintArrayOf(
+            // "Medium bandwidth, better than telephone quality"
+            12_000u,
+            // "Near transparent speech"
+            24_000u,
+            // "Essentially transparent mono or stereo speech, reasonable music"
+            48_000u,
+        ),
     )
     // https://datatracker.ietf.org/doc/html/rfc7845#section-9
     override val mimeTypeContainer: String = "audio/ogg"

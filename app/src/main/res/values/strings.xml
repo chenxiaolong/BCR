@@ -42,6 +42,7 @@
     <string name="output_format_bottom_sheet_compression_level">Compression level</string>
     <string name="output_format_bottom_sheet_bitrate">Bitrate</string>
     <string name="output_format_bottom_sheet_sample_rate">Sample rate</string>
+    <string name="output_format_bottom_sheet_custom_param">Custom</string>
 
     <string name="bottom_sheet_reset">Reset to defaults</string>
 
@@ -55,6 +56,10 @@
     <string name="filename_template_dialog_error_invalid_argument">Invalid variable argument: <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_invalid_syntax">Template syntax is invalid</string>
     <string name="filename_template_dialog_action_reset_to_default">Reset to default</string>
+
+    <!-- Format parameter dialog -->
+    <string name="format_param_dialog_title">Custom parameter</string>
+    <string name="format_param_dialog_message">Enter a value in the range [%s, %s].</string>
 
     <!-- Dialogs -->
     <string name="dialog_action_ok">OK</string>

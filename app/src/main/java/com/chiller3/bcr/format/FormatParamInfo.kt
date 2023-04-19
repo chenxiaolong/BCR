@@ -1,6 +1,12 @@
+@file:OptIn(ExperimentalUnsignedTypes::class)
+
 package com.chiller3.bcr.format
 
-sealed class FormatParamInfo(val default: UInt) {
+sealed class FormatParamInfo(
+    val default: UInt,
+    /** Handful of handpicked parameter choices to show in the UI as presets. */
+    val presets: UIntArray,
+) {
     /**
      * Ensure that [param] is valid.
      *
@@ -27,9 +33,9 @@ enum class RangedParamType {
 class RangedParamInfo(
     val type: RangedParamType,
     val range: UIntRange,
-    val stepSize: UInt,
     default: UInt,
-) : FormatParamInfo(default) {
+    presets: UIntArray,
+) : FormatParamInfo(default, presets) {
     override fun validate(param: UInt) {
         if (param !in range) {
             throw IllegalArgumentException("Parameter ${format(param)} is not in the range: " +
@@ -37,27 +43,8 @@ class RangedParamInfo(
         }
     }
 
-    /** Clamp [param] to [range] and snap to nearest [stepSize]. */
-    override fun toNearest(param: UInt): UInt {
-        val offset = param.coerceIn(range) - range.first
-        val roundedDown = (offset / stepSize) * stepSize
-
-        return range.first + if (roundedDown == offset) {
-            // Already on step size boundary
-            offset
-        } else if (roundedDown >= UInt.MAX_VALUE - stepSize) {
-            // Rounded up would overflow
-            roundedDown
-        } else {
-            // Round to closer boundary, preferring the upper boundary if it's in the middle
-            val roundedUp = roundedDown + stepSize
-            if (roundedUp - offset <= offset - roundedDown) {
-                roundedUp
-            } else {
-                roundedDown
-            }
-        }
-    }
+    /** Clamp [param] to [range]. */
+    override fun toNearest(param: UInt): UInt = param.coerceIn(range)
 
     override fun format(param: UInt): String =
         when (type) {
@@ -66,7 +53,7 @@ class RangedParamInfo(
         }
 }
 
-object NoParamInfo : FormatParamInfo(0u) {
+object NoParamInfo : FormatParamInfo(0u, uintArrayOf()) {
     override fun validate(param: UInt) {
         // Always valid
     }

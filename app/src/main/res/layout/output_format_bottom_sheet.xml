@@ -26,7 +26,7 @@
             app:singleSelection="true" />
 
         <LinearLayout
-            android:id="@+id/param_group"
+            android:id="@+id/param_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -39,11 +39,12 @@
                 android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
                 android:textAppearance="?attr/textAppearanceHeadline6" />
 
-            <com.google.android.material.slider.Slider
-                android:id="@+id/param_slider"
+            <com.chiller3.bcr.ChipGroupCentered
+                android:id="@+id/param_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:labelBehavior="visible" />
+                app:selectionRequired="true"
+                app:singleSelection="true" />
         </LinearLayout>
 
         <TextView

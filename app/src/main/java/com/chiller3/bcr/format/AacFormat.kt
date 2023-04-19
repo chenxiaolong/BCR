@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalUnsignedTypes::class)
+
 package com.chiller3.bcr.format
 
 import android.media.MediaCodecInfo
@@ -14,8 +16,13 @@ object AacFormat : Format() {
         // with AAC-LC: 2 * 64kbps/channel.
         // https://trac.ffmpeg.org/wiki/Encode/AAC
         24_000u..128_000u,
-        4_000u,
         64_000u,
+        uintArrayOf(
+            24_000u,
+            // "As a rule of thumb, for audible transparency, use 64 kBit/s for each channel"
+            64_000u,
+            128_000u,
+        ),
     )
     // https://datatracker.ietf.org/doc/html/rfc6381#section-3.1
     override val mimeTypeContainer: String = "audio/mp4"
