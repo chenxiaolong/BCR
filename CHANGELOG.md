@@ -13,6 +13,7 @@
 * Add support for querying the name from the call log (Issue: #291, PR: #298, @chenxiaolong)
   * This requires the optional `READ_CALL_LOGS` permission to be granted.
 * Add support for formatting the phone number as digits only or with the country-specific style (Issue: #290, PR: #299, @chenxiaolong)
+* Replace slider UI components with chips and the ability to set custom values (Issue: #295, PR: #301, @chenxiaolong)
 
 Non-user-facing changes:
 
