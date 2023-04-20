@@ -83,6 +83,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/bottom_sheet_section_separation"
             android:text="@string/bottom_sheet_reset"
-            style="?attr/materialButtonOutlinedStyle" />
+            style="@style/Widget.Material3.Button.TextButton" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
