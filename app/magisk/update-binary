@@ -40,5 +40,20 @@ else
 
     . /data/adb/magisk/util_functions.sh
 
+    has_overlays() {
+        local mnt="${1}" count
+        count=$(awk -v mnt="${mnt}" '$9 == "overlay" && $5 ~ mnt' /proc/self/mountinfo | wc -l)
+        [ "${count}" -gt 0 ]
+    }
+
+    # https://github.com/topjohnwu/Magisk/pull/6588
+    if [ -n "${MAGISK_VER_CODE}" ]; then
+        ui_print "Magisk version: ${MAGISK_VER_CODE}"
+        if has_overlays /system && [ "${MAGISK_VER_CODE}" -lt 26000 ]; then
+            ui_print "Magisk v26.0 (26000) or newer is required because this device uses overlayfs"
+            exit 1
+        fi
+    fi
+
     install_module
 fi
