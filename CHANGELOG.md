@@ -1,4 +1,4 @@
-### Unreleased
+### Version 1.40
 
 * Update all dependencies (PR: #289, #294, @PatrykMis)
 * Improve conference call handling (PR: #285, @chenxiaolong)
