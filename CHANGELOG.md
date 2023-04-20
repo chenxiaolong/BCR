@@ -14,6 +14,7 @@
   * This requires the optional `READ_CALL_LOGS` permission to be granted.
 * Add support for formatting the phone number as digits only or with the country-specific style (Issue: #290, PR: #299, @chenxiaolong)
 * Replace slider UI components with chips and the ability to set custom values (Issue: #295, PR: #301, @chenxiaolong)
+* Remove outline "Reset to defaults" button to make it less prominent (PR: #302, @chenxiaolong)
 
 Non-user-facing changes:
 
