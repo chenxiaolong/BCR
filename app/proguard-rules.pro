@@ -29,3 +29,8 @@
 -keepclassmembers class androidx.documentfile.provider.TreeDocumentFile {
     <init>(androidx.documentfile.provider.DocumentFile, android.content.Context, android.net.Uri);
 }
+
+# Keep standalone CLI utilities
+-keep class com.chiller3.bcr.standalone.* {
+    *;
+}
