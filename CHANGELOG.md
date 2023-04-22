@@ -4,6 +4,7 @@
   * MIUI users must update to Magisk v26.0 or newer now that the issue is properly fixed there
 * Work around `READ_CALL_LOG` being a hard restricted permission in Android 10+ (Issue: #304, PR: #308, #309, @chenxiaolong)
   * For Magisk installs, this is done automatically. For direct installs (from recovery), see the updated documentation.
+* Minor formatting fixes in translation files (PR: #310, @chenxiaolong)
 
 ### Version 1.40
 
