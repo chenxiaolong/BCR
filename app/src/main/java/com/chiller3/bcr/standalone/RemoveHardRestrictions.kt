@@ -272,7 +272,7 @@ private fun waitForLogin(userId: Int) {
         "User $userId did not unlock the device after $IS_USER_UNLOCKED_ATTEMPTS attempts")
 }
 
-fun mainInternal() {
+private fun mainInternal() {
     if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
         println("Android 9 does not have hard-restricted permissions")
         return
