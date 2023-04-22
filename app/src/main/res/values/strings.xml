@@ -66,7 +66,7 @@
 
     <!-- Format parameter dialog -->
     <string name="format_param_dialog_title">Custom parameter</string>
-    <string name="format_param_dialog_message">Enter a value in the range [%s, %s].</string>
+    <string name="format_param_dialog_message">Enter a value in the range [%1$s, %2$s].</string>
 
     <!-- Format parameter -->
     <string name="format_param_bitrate">%s kbps</string>

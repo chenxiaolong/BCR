@@ -13,7 +13,7 @@
     <string name="pref_initially_paused_name">Domyślnie wstrzymane</string>
     <string name="pref_initially_paused_desc_on">Nagrywanie zostanie wstrzymane po uruchomieniu. Jeżeli nie wznowisz go przyciskiem w powiadomieniu wyświetlanym w trakcie rozmowy, pusty plik wyjściowy nie zostanie zapisany.</string>
     <string name="pref_initially_paused_desc_off">Rozmowa będzie nagrywana natychmiast po rozpoczęciu. Możesz wstrzymać i wznowić nagrywanie przyciskiem w powiadomieniu wyświetlanym w trakcie rozmowy.</string>
-    
+
     <string name="pref_output_dir_name">Katalog wyjściowy</string>
     <string name="pref_output_dir_desc">Wybierz katalog do przechowywania nagrań.</string>
 
@@ -42,7 +42,7 @@
     <string name="output_format_bottom_sheet_compression_level">Poziom kompresji</string>
     <string name="output_format_bottom_sheet_bitrate">Szybkość transmisji</string>
     <string name="output_format_bottom_sheet_sample_rate">Częstotliwość próbkowania</string>
-    
+
     <string name="bottom_sheet_reset">Przywróć domyślne ustawienia</string>
 
     <!-- Notifications -->

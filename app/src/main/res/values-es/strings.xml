@@ -13,7 +13,7 @@
     <string name="pref_initially_paused_name">Iniciar pausado</string>
     <string name="pref_initially_paused_desc_on">La grabación se pausará después de comenzar. Si no lo reanuda con el botón en la notificación, el archivo de salida vacío no se guardará.</string>
     <string name="pref_initially_paused_desc_off">La llamada se grabará inmediatamente después de conectarse. Para pausar y reanudar, toque el botón en la notificación que se muestra durante una llamada.</string>
-    
+
     <string name="pref_output_dir_name">Directorio de salida</string>
     <string name="pref_output_dir_desc">Elija un directorio para almacenar grabaciones.</string>
 
