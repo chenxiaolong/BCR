@@ -1,4 +1,4 @@
-### Unreleased
+### Version 1.41
 
 * Remove workaround for overlayfs (PR: #306, @chenxiaolong)
   * MIUI users must update to Magisk v26.0 or newer now that the issue is properly fixed there
