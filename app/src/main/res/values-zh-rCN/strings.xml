@@ -1,8 +1,7 @@
 <resources>
-    <string name="app_name">BCR</string>
+    <string name="app_name_full">通话录音配置</string>
 
     <!-- Preference headers -->
-    <string name="app_name_full">通话录音配置</string>
     <string name="pref_header_general">通用</string>
     <string name="pref_header_about">关于</string>
 
