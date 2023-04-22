@@ -2,8 +2,8 @@
 
 * Remove workaround for overlayfs (PR: #306, @chenxiaolong)
   * MIUI users must update to Magisk v26.0 or newer now that the issue is properly fixed there
-* Work around `READ_CALL_LOG` being a hard restricted permission in Android 10+ (Issue: #304, PR: #308, @chenxiaolong)
-  * In order to enable this (optional) permission, it's necessary to flash BCR twice (but just for the initial install)
+* Work around `READ_CALL_LOG` being a hard restricted permission in Android 10+ (Issue: #304, PR: #308, #309, @chenxiaolong)
+  * For Magisk installs, this is done automatically. For direct installs (from recovery), see the updated documentation.
 
 ### Version 1.40
 
