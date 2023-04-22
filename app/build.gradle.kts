@@ -350,7 +350,7 @@ android.applicationVariants.all {
             }
         }
 
-        from(File(magiskDir, "customize.sh"))
+        from(File(magiskDir, "service.sh"))
 
         from(File(rootDir, "LICENSE"))
         from(File(rootDir, "README.md"))

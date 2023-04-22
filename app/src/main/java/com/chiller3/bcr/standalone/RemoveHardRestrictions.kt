@@ -4,37 +4,59 @@
     "PrivateApi",
     "SoonBlockedPrivateApi",
 )
+@file:Suppress("SameParameterValue")
 
 package com.chiller3.bcr.standalone
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.IBinder
+import android.os.IInterface
 import android.os.Process
 import android.system.ErrnoException
 import androidx.annotation.RequiresApi
 import com.chiller3.bcr.BuildConfig
 import kotlin.system.exitProcess
 
-private object ActivityThreadProxy {
-    private val CLS = Class.forName("android.app.ActivityThread")
-    private val METHOD_GET_PACKAGE_MANAGER = CLS.getDeclaredMethod("getPackageManager")
-    private val METHOD_GET_PERMISSION_MANAGER = CLS.getDeclaredMethod("getPermissionManager")
+private const val GET_SERVICE_ATTEMPTS = 30
+private const val IS_USER_UNLOCKED_ATTEMPTS = 3600
 
-    fun getPackageManager(): PackageManagerProxy {
-        val iface = METHOD_GET_PACKAGE_MANAGER.invoke(null)!!
-        return PackageManagerProxy(iface)
-    }
+private object ServiceManagerProxy {
+    private val CLS = Class.forName("android.os.ServiceManager")
 
-    @RequiresApi(Build.VERSION_CODES.R)
-    fun getPermissionManager(): PermissionManagerProxy {
-        val iface = METHOD_GET_PERMISSION_MANAGER.invoke(null)!!
-        return PermissionManagerProxy(iface)
+    private val METHOD_GET_SERVICE =
+        CLS.getDeclaredMethod("getService", String::class.java)
+
+    fun getService(name: String): IBinder? {
+        return METHOD_GET_SERVICE.invoke(null, name) as IBinder?
     }
 }
 
-private class PackageManagerProxy(private val iface: Any) {
+private fun getService(interfaceClass: Class<*>, serviceName: String): IInterface {
+    val stubCls = Class.forName("${interfaceClass.canonicalName}\$Stub")
+    val stubMethodAsInterface = stubCls.getDeclaredMethod("asInterface", IBinder::class.java)
+
+    // ServiceManager.waitForService() tries to start the service, which we want to avoid to be 100%
+    // sure we're not disrupting the boot flow. It also wasn't introduced until Android 11+.
+    for (attempt in 1..GET_SERVICE_ATTEMPTS) {
+        val iBinder = ServiceManagerProxy.getService(serviceName)
+        if (iBinder != null) {
+            return stubMethodAsInterface.invoke(null, iBinder) as IInterface
+        }
+
+        if (attempt < GET_SERVICE_ATTEMPTS) {
+            Thread.sleep(1000)
+        }
+    }
+
+    throw IllegalStateException(
+        "Service $serviceName not found after $GET_SERVICE_ATTEMPTS attempts")
+}
+
+private class PackageManagerProxy private constructor(private val iFace: IInterface) {
     companion object {
         private val CLS = Class.forName("android.content.pm.IPackageManager")
         private val METHOD_IS_PACKAGE_AVAILABLE = CLS.getDeclaredMethod(
@@ -60,6 +82,10 @@ private class PackageManagerProxy(private val iface: Any) {
             )
         }
 
+        val instance by lazy {
+            PackageManagerProxy(getService(CLS, "package"))
+        }
+
         private val WRAPPER_CLS = PackageManager::class.java
         val FLAG_PERMISSION_APPLY_RESTRICTION = WRAPPER_CLS.getDeclaredField(
             "FLAG_PERMISSION_APPLY_RESTRICTION").getInt(null)
@@ -70,11 +96,11 @@ private class PackageManagerProxy(private val iface: Any) {
     }
 
     fun isPackageAvailable(packageName: String, userId: Int): Boolean {
-        return METHOD_IS_PACKAGE_AVAILABLE.invoke(iface, packageName, userId) as Boolean
+        return METHOD_IS_PACKAGE_AVAILABLE.invoke(iFace, packageName, userId) as Boolean
     }
 
     fun getPermissionFlags(permissionName: String, packageName: String, userId: Int): Int {
-        return METHOD_GET_PERMISSION_FLAGS.invoke(iface, permissionName, packageName, userId) as Int
+        return METHOD_GET_PERMISSION_FLAGS.invoke(iFace, permissionName, packageName, userId) as Int
     }
 
     fun updatePermissionFlags(
@@ -85,7 +111,7 @@ private class PackageManagerProxy(private val iface: Any) {
         userId: Int,
     ) {
         METHOD_UPDATE_PERMISSION_FLAGS.invoke(
-            iface,
+            iFace,
             permissionName,
             packageName,
             flagMask,
@@ -97,7 +123,7 @@ private class PackageManagerProxy(private val iface: Any) {
 }
 
 @RequiresApi(Build.VERSION_CODES.R)
-private class PermissionManagerProxy(private val iface: Any) {
+private class PermissionManagerProxy private constructor(private val iFace: IInterface) {
     companion object {
         private val CLS = Class.forName("android.permission.IPermissionManager")
         private val METHOD_GET_PERMISSION_FLAGS =
@@ -117,10 +143,14 @@ private class PermissionManagerProxy(private val iface: Any) {
                 Boolean::class.java,
                 Int::class.java,
             )
+
+        val instance by lazy {
+            PermissionManagerProxy(getService(CLS, "permissionmgr"))
+        }
     }
 
     fun getPermissionFlags(packageName: String, permissionName: String, userId: Int): Int {
-        return METHOD_GET_PERMISSION_FLAGS(iface, packageName, permissionName, userId) as Int
+        return METHOD_GET_PERMISSION_FLAGS(iFace, packageName, permissionName, userId) as Int
     }
 
     fun updatePermissionFlags(
@@ -132,7 +162,7 @@ private class PermissionManagerProxy(private val iface: Any) {
         userId: Int,
     ) {
         METHOD_UPDATE_PERMISSION_FLAGS.invoke(
-            iface,
+            iFace,
             packageName,
             permissionName,
             flagMask,
@@ -140,6 +170,22 @@ private class PermissionManagerProxy(private val iface: Any) {
             checkAdjustPolicyFlagPermission,
             userId,
         )
+    }
+}
+
+private class UserManagerProxy private constructor(private val iFace: IInterface) {
+    companion object {
+        private val CLS = Class.forName("android.os.IUserManager")
+        private val METHOD_IS_USER_UNLOCKING_OR_UNLOCKED =
+            CLS.getDeclaredMethod("isUserUnlockingOrUnlocked", Int::class.java)
+
+        val instance by lazy {
+            UserManagerProxy(getService(CLS, Context.USER_SERVICE))
+        }
+    }
+
+    fun isUserUnlockingOrUnlocked(userId: Int): Boolean {
+        return METHOD_IS_USER_UNLOCKING_OR_UNLOCKED.invoke(iFace, userId) as Boolean
     }
 }
 
@@ -159,16 +205,15 @@ private fun switchToSystemUid() {
     }
 }
 
-@Suppress("SameParameterValue")
 private fun removeRestriction(packageName: String, permission: String, userId: Int): Boolean {
-    val packageManager = ActivityThreadProxy.getPackageManager()
+    val packageManager = PackageManagerProxy.instance
     if (!packageManager.isPackageAvailable(packageName, userId)) {
         throw IllegalArgumentException("Package $packageName is not installed for user $userId")
     }
 
     val (getFlags, updateFlags) = if (Build.VERSION.SDK_INT in
         Build.VERSION_CODES.R..Build.VERSION_CODES.TIRAMISU) {
-        val permissionManager = ActivityThreadProxy.getPermissionManager()
+        val permissionManager = PermissionManagerProxy.instance
 
         Pair(
             { permissionManager.getPermissionFlags(packageName, permission, userId) },
@@ -207,34 +252,34 @@ private fun removeRestriction(packageName: String, permission: String, userId: I
     return newFlags != oldFlags
 }
 
+private fun waitForLogin(userId: Int) {
+    val userManager = UserManagerProxy.instance
+
+    System.err.println("Waiting for user $userId to unlock the device")
+
+    for (attempt in 1..IS_USER_UNLOCKED_ATTEMPTS) {
+        if (userManager.isUserUnlockingOrUnlocked(userId)) {
+            println("User $userId is unlocking/unlocked")
+            return
+        }
+
+        if (attempt < IS_USER_UNLOCKED_ATTEMPTS) {
+            Thread.sleep(1000)
+        }
+    }
+
+    throw IllegalStateException(
+        "User $userId did not unlock the device after $IS_USER_UNLOCKED_ATTEMPTS attempts")
+}
+
 fun mainInternal() {
     if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
-        // Android 9 does not have FLAG_PERMISSION_APPLY_RESTRICTION
-        System.err.println("Android 9 does not have hard-restricted permissions")
+        println("Android 9 does not have hard-restricted permissions")
         return
     }
 
     switchToSystemUid()
-
-    val packageManager = ActivityThreadProxy.getPackageManager()
-    if (!packageManager.isPackageAvailable(BuildConfig.APPLICATION_ID, 0)) {
-        System.err.println("""
-            ---------------- NOTE ----------------
-            Android 10+ marks the READ_CALL_LOG
-            permission as being hard restricted.
-            This makes it impossible to grant the
-            (optional) permission, even from
-            Android's settings. To remove this
-            restriction for BCR only, reboot and
-            reflash one more time. This procedure
-            only needs to be done once and will
-            persist across upgrades. This does not
-            affect other apps and the changes go
-            away when BCR is uninstalled.
-            --------------------------------------
-        """.trimIndent())
-        exitProcess(2)
-    }
+    waitForLogin(0)
 
     val changed = removeRestriction(BuildConfig.APPLICATION_ID, Manifest.permission.READ_CALL_LOG, 0)
     val suffix = "from ${BuildConfig.APPLICATION_ID} for ${Manifest.permission.READ_CALL_LOG}"
@@ -250,7 +295,7 @@ fun main() {
     try {
         mainInternal()
     } catch (e: Exception) {
-        // Otherwise, exceptions go to the logcat
+        System.err.println("Failed to remove hard restrictions")
         e.printStackTrace()
         exitProcess(1)
     }
