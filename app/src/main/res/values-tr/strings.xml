@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">BCR</string>
     <string name="app_name_full">Basic Call Recorder</string>
 
     <!-- Preference headers -->

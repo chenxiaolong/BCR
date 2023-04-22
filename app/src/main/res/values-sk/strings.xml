@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">BCR</string>
     <string name="app_name_full">Základný nahrávač hovorov</string>
 
     <!-- Preference headers -->
