@@ -1,6 +1,6 @@
 ### Unreleased
 
-* Update all dependencies (PR: #311, @PatrykMis)
+* Update all dependencies (PR: #311, #315, @PatrykMis)
 
 ### Version 1.41
 
