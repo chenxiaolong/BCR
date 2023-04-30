@@ -19,7 +19,7 @@
 	<string name="pref_version_name">Версия</string>
 	<!-- Output directory bottom sheet -->
 	<string name="output_dir_bottom_sheet_change_dir">Изменить папку</string>
-	<string name="output_dir_bottom_sheet_filename_template">Шаблон для имени файла</string>
+	<string name="output_dir_bottom_sheet_filename_template">Шаблон имени файла</string>
 	<string name="output_dir_bottom_sheet_edit_template">Редактировать шаблон</string>
 	<string name="output_dir_bottom_sheet_file_retention">Хранение файлов</string>
 	<string name="output_dir_bottom_sheet_edit_retention">Изменить срок хранения</string>
@@ -38,7 +38,7 @@
 	<string name="output_format_bottom_sheet_custom_param">Пользовательский</string>
 	<string name="bottom_sheet_reset">Восстановить параметры по умолчанию</string>
 	<!-- Filename template dialog -->
-	<string name="filename_template_dialog_title">Шаблон для имени файла</string>
+	<string name="filename_template_dialog_title">Шаблон имени файла</string>
 	<!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
 	<string name="filename_template_dialog_message">Введите пользовательский шаблон для имени выходного файла. Переменные указываются фигурными скобками (например, 
 		<annotation type="template">{var}</annotation>). Резервные варианты указываются в квадратных скобках (например, 
@@ -47,7 +47,7 @@
 		<annotation type="template_docs">документацию</annotation> для полного описания синтаксиса.
 	</string>
 	<string name="filename_template_dialog_error_empty">Шаблон не может быть пустым</string>
-	<string name="filename_template_dialog_error_unknown_variable">Неизвестная переменная шаблона: 
+	<string name="filename_template_dialog_error_unknown_variable">Неизвестная переменная для шаблона: 
 		<annotation type="template">PLACEHOLDER</annotation>
 	</string>
 	<string name="filename_template_dialog_error_has_argument">Переменная не может иметь аргумент: 
