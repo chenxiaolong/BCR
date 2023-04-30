@@ -27,21 +27,54 @@
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Изменить папку</string>
+    <string name="output_dir_bottom_sheet_filename_template">Filename template</string>
+    <string name="output_dir_bottom_sheet_edit_template">Редактировать шаблон</string>
     <string name="output_dir_bottom_sheet_file_retention">Хранение файлов</string>
+    <string name="output_dir_bottom_sheet_edit_retention">Изменить срок хранения</string>
     <string name="retention_keep_all">Сохранить все</string>
     <plurals name="retention_days">
         <item quantity="one">Держите %d день</item>
         <item quantity="few">Держите %d дня</item>
         <item quantity="many">Держите %d дней</item>
     </plurals>
+    <string name="retention_unusable">Хранение файлов отключено, поскольку текущий шаблон имени файла несовместим с этой функцией.</string>
 
     <!-- Output format bottom sheet -->
     <string name="output_format_bottom_sheet_output_format">Выходной формат</string>
     <string name="output_format_bottom_sheet_compression_level">Уровень сжатия</string>
     <string name="output_format_bottom_sheet_bitrate">Битрейт</string>
     <string name="output_format_bottom_sheet_sample_rate">Частота дискретизации</string>
+    <string name="output_format_bottom_sheet_custom_param">Пользовательский</string>
 
     <string name="bottom_sheet_reset">Восстановить параметры по умолчанию</string>
+
+    <!-- Filename template dialog -->
+    <string name="filename_template_dialog_title">Filename template</string>
+    <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
+    <string name="filename_template_dialog_message">Введите пользовательский шаблон для имени выходного файла. Переменные указываются фигурными скобками (например, <annotation type="template">{var}</annotation>). Резервные варианты указываются в квадратных скобках (например, <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nПоддерживаемые переменные: <annotation type="supported_vars">PLACEHOLDER</annotation>. Смотри <annotation type="template_docs">документацию</annotation> для полного описания синтаксиса.</string>
+    <string name="filename_template_dialog_error_empty">Шаблон не может быть пустым</string>
+    <string name="filename_template_dialog_error_unknown_variable">Неизвестная переменная шаблона: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">Переменная не может иметь аргумент: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_argument">Недопустимый аргумент переменной: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_syntax">Недопустимый синтаксис шаблона</string>
+    <string name="filename_template_dialog_action_reset_to_default">Сброс к настройкам по умолчанию</string>
+
+    <!-- File retention dialog -->
+    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_message">Введите количество дней для хранения записей.</string>
+    <string name="file_retention_error_too_large">Номер слишком большой</string>
+
+    <!-- Format parameter dialog -->
+    <string name="format_param_dialog_title">Пользовательский параметр</string>
+    <string name="format_param_dialog_message">Введите значение в диапазоне [%1$s, %2$s].</string>
+
+    <!-- Format parameter -->
+    <string name="format_param_bitrate">%s kbps</string>
+    <string name="format_param_compression_level">Уровень %s</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_action_ok">OK</string>
+    <string name="dialog_action_cancel">Отмена</string>
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Фоновые сервисы</string>
