@@ -38,24 +38,13 @@
 	<string name="output_format_bottom_sheet_custom_param">Пользовательский</string>
 	<string name="bottom_sheet_reset">Восстановить параметры по умолчанию</string>
 	<!-- Filename template dialog -->
-	<string name="filename_template_dialog_title">Шаблон имени файла</string>
+	<string name="filename_template_dialog_title">@string/output_dir_bottom_sheet_filename_template</string>
 	<!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
-	<string name="filename_template_dialog_message">Введите пользовательский шаблон для имени выходного файла. Переменные указываются фигурными скобками (например, 
-		<annotation type="template">{var}</annotation>). Резервные варианты указываются в квадратных скобках (например, 
-		<annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nПоддерживаемые переменные: 
-		<annotation type="supported_vars">PLACEHOLDER</annotation>. Смотри 
-		<annotation type="template_docs">документацию</annotation> для полного описания синтаксиса.
-	</string>
+	<string name="filename_template_dialog_message">Введите пользовательский шаблон для имени выходного файла. Переменные указываются фигурными скобками (например, <annotation type="template">{var}</annotation>). Резервные варианты указываются в квадратных скобках (например, <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nПоддерживаемые переменные: <annotation type="supported_vars">PLACEHOLDER</annotation>. Смотри <annotation type="template_docs">документацию</annotation> для полного описания синтаксиса.</string>
 	<string name="filename_template_dialog_error_empty">Шаблон не может быть пустым</string>
-	<string name="filename_template_dialog_error_unknown_variable">Неизвестная переменная для шаблона: 
-		<annotation type="template">PLACEHOLDER</annotation>
-	</string>
-	<string name="filename_template_dialog_error_has_argument">Переменная не может иметь аргумент: 
-		<annotation type="template">PLACEHOLDER</annotation>
-	</string>
-	<string name="filename_template_dialog_error_invalid_argument">Недопустимый аргумент переменной: 
-		<annotation type="template">PLACEHOLDER</annotation>
-	</string>
+	<string name="filename_template_dialog_error_unknown_variable">Неизвестная переменная для шаблона: <annotation type="template">PLACEHOLDER</annotation></string>
+	<string name="filename_template_dialog_error_has_argument">Переменная не может иметь аргумент: <annotation type="template">PLACEHOLDER</annotation></string>
+	<string name="filename_template_dialog_error_invalid_argument">Недопустимый аргумент переменной: <annotation type="template">PLACEHOLDER</annotation></string>
 	<string name="filename_template_dialog_error_invalid_syntax">Недопустимый синтаксис шаблона</string>
 	<string name="filename_template_dialog_action_reset_to_default">Сброс к настройкам по умолчанию</string>
 	<!-- File retention dialog -->
