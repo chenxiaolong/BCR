@@ -1,6 +1,7 @@
 ### Unreleased
 
 * Update all dependencies (PR: #311, #315, @PatrykMis)
+* Update Russian translations (PR: #319, @bogachenko)
 
 ### Version 1.41
 
