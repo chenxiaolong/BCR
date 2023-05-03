@@ -3,6 +3,8 @@
 * Update all dependencies (PR: #311, #315, @PatrykMis)
 * Update Russian translations (PR: #319, @bogachenko)
 * Work around crash due to broken Android package manager caching on custom ROMs that set the system time too late in the boot process (Issue: #275, #303, #307, #314, PR: #323, @chenxiaolong)
+* Show a separate notification for each call when using call waiting (PR: #324, @chenxiaolong)
+  * Pausing/resuming can now be done per call and the notification will correctly show that the background call is hold
 
 ### Version 1.41
 
