@@ -1,12 +1,16 @@
 package com.chiller3.bcr
 
+import android.app.NotificationManager
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.telecom.Call
 import android.telecom.InCallService
 import android.util.Log
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import kotlin.random.Random
 
 class RecorderInCallService : InCallService(), RecorderThread.OnRecordingCompletedListener {
@@ -16,23 +20,47 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         private val ACTION_PAUSE = "${RecorderInCallService::class.java.canonicalName}.pause"
         private val ACTION_RESUME = "${RecorderInCallService::class.java.canonicalName}.resume"
         private const val EXTRA_TOKEN = "token"
+        private const val EXTRA_NOTIFICATION_ID = "notification_id"
     }
 
+    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var notificationManager: NotificationManager
     private lateinit var prefs: Preferences
     private lateinit var notifications: Notifications
-    private val handler = Handler(Looper.getMainLooper())
+
+    /**
+     * Notification ID to use for the foreground service. Throughout the lifetime of the service, it
+     * may be associated with different calls. It is not cancelled until all recorders exit.
+     */
+    private val foregroundNotificationId = Notifications.allocateNotificationId()
+
+    /**
+     * Notification IDs and their associated recorders. This indicates the desired state of the
+     * notifications. It may not match the actual state until [updateForegroundState] is called.
+     */
+    private val notificationIdsToRecorders = HashMap<Int, RecorderThread>()
+
+    private data class NotificationState(
+        @StringRes val titleResId: Int,
+        val message: String?,
+        @DrawableRes val iconResId: Int,
+        // We don't store the intents because Intent does not override equals()
+        val actionsResIds: List<Int>,
+    )
+
+    /**
+     * All notification IDs currently shown, along with their state. This is used to determine which
+     * notifications should be cancelled after items are removed from [notificationIdsToRecorders].
+     * The state is used for only applying updates when the state actually changes. Otherwise,
+     * Android will block updates if they exceed the rate limit (10 updates per second).
+     */
+    private val allNotificationIds = HashMap<Int, NotificationState>()
 
     /**
      * Recording threads for each active call. When a call is disconnected, it is immediately
-     * removed from this map and [pendingExit] is incremented.
+     * removed from this map.
      */
-    private val recorders = HashMap<Call, RecorderThread>()
-
-    /**
-     * Number of threads pending exit after the call has been disconnected. This can be negative if
-     * the recording thread fails before the call is disconnected.
-     */
-    private var pendingExit = 0
+    private val callsToRecorders = HashMap<Call, RecorderThread>()
 
     /**
      * Token value for all intents received by this instance of the service.
@@ -71,24 +99,30 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         }
     }
 
-    private fun createBaseIntent(): Intent =
+    private fun createBaseIntent(notificationId: Int): Intent =
         Intent(this, RecorderInCallService::class.java).apply {
+            // The URI is not used for anything besides ensuring that the PendingIntents across
+            // different notifications are unique. PendingIntent treats Intents that differ only in
+            // the extras as the same.
+            data = Uri.fromParts("notification", notificationId.toString(), null)
             putExtra(EXTRA_TOKEN, token)
+            putExtra(EXTRA_NOTIFICATION_ID, notificationId)
         }
 
-    private fun createPauseIntent(): Intent =
-        createBaseIntent().apply {
+    private fun createPauseIntent(notificationId: Int): Intent =
+        createBaseIntent(notificationId).apply {
             action = ACTION_PAUSE
         }
 
-    private fun createResumeIntent(): Intent =
-        createBaseIntent().apply {
+    private fun createResumeIntent(notificationId: Int): Intent =
+        createBaseIntent(notificationId).apply {
             action = ACTION_RESUME
         }
 
     override fun onCreate() {
         super.onCreate()
 
+        notificationManager = getSystemService(NotificationManager::class.java)
         prefs = Preferences(this)
         notifications = Notifications(this)
     }
@@ -101,11 +135,14 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
                 throw IllegalArgumentException("Invalid token")
             }
 
+            val notificationId = intent?.getIntExtra(EXTRA_NOTIFICATION_ID, -1)
+            if (notificationId == -1) {
+                throw IllegalArgumentException("Invalid notification ID")
+            }
+
             when (val action = intent?.action) {
                 ACTION_PAUSE, ACTION_RESUME -> {
-                    for ((_, recorder) in recorders) {
-                        recorder.isPaused = action == ACTION_PAUSE
-                    }
+                    notificationIdsToRecorders[notificationId]?.isPaused = action == ACTION_PAUSE
                     updateForegroundState()
                 }
                 else -> throw IllegalArgumentException("Invalid action: $action")
@@ -181,7 +218,8 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
             requestStopRecording(call)
         }
 
-        recorders[call]?.isHolding = callState == Call.STATE_HOLDING
+        callsToRecorders[call]?.isHolding = callState == Call.STATE_HOLDING
+        updateForegroundState()
     }
 
     /**
@@ -197,14 +235,21 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
             Log.v(TAG, "Call recording is disabled")
         } else if (!Permissions.haveRequired(this)) {
             Log.v(TAG, "Required permissions have not been granted")
-        } else if (!recorders.containsKey(call)) {
+        } else if (!callsToRecorders.containsKey(call)) {
             val recorder = try {
                 RecorderThread(this, this, call)
             } catch (e: Exception) {
                 notifyFailure(e.message, null)
                 throw e
             }
-            recorders[call] = recorder
+            callsToRecorders[call] = recorder
+
+            val notificationId = if (notificationIdsToRecorders.isEmpty()) {
+                foregroundNotificationId
+            } else {
+                Notifications.allocateNotificationId()
+            }
+            notificationIdsToRecorders[notificationId] = recorder
 
             updateForegroundState()
             recorder.start()
@@ -214,10 +259,10 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
     /**
      * Request the cancellation of the [RecorderThread].
      *
-     * The [RecorderThread] is immediately removed from [recorders], but [pendingExit] will be
-     * incremented to keep the foreground notification alive until the [RecorderThread] exits and
-     * reports its status. The thread may exit, decrementing [pendingExit], before this function is
-     * called if an error occurs during recording.
+     * The [RecorderThread] is immediately removed from [callsToRecorders], but will remain in
+     * [notificationIdsToRecorders] to keep the foreground service alive until the [RecorderThread]
+     * exits and reports its status. The thread may exit and be removed from [callsToRecorders]
+     * before this function is called if an error occurs during recording.
      *
      * This function will also unregister [callback] from the call since it's no longer necessary to
      * track further state changes.
@@ -230,14 +275,13 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         // track of which calls have callbacks registered.
         call.unregisterCallback(callback)
 
-        val recorder = recorders[call]
+        val recorder = callsToRecorders[call]
         if (recorder != null) {
             recorder.cancel()
 
-            recorders.remove(call)
+            callsToRecorders.remove(call)
 
             // Don't change the foreground state until the thread has exited
-            ++pendingExit
         }
     }
 
@@ -249,9 +293,9 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
     private fun handleDetailsChange(call: Call, details: Call.Details) {
         val parentCall = call.parent
         val recorder = if (parentCall != null) {
-            recorders[parentCall]
+            callsToRecorders[parentCall]
         } else {
-            recorders[call]
+            callsToRecorders[call]
         }
 
         recorder?.onCallDetailsChanged(call, details)
@@ -262,24 +306,74 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
      * recording threads that haven't finished exiting yet.
      */
     private fun updateForegroundState() {
-        if (recorders.isEmpty() && pendingExit == 0) {
+        if (notificationIdsToRecorders.isEmpty()) {
             stopForeground(STOP_FOREGROUND_REMOVE)
         } else {
-            if (recorders.any { it.value.isPaused }) {
-                startForeground(1, notifications.createPersistentNotification(
-                    R.string.notification_recording_paused,
-                    R.drawable.ic_launcher_quick_settings,
-                    R.string.notification_action_resume,
-                    createResumeIntent(),
-                ))
-            } else {
-                startForeground(1, notifications.createPersistentNotification(
-                    R.string.notification_recording_in_progress,
-                    R.drawable.ic_launcher_quick_settings,
-                    R.string.notification_action_pause,
-                    createPauseIntent(),
-                ))
+            // Cancel and remove notifications for recorders that have exited
+            for (notificationId in allNotificationIds.keys.minus(notificationIdsToRecorders.keys)) {
+                // The foreground notification will be overwritten
+                if (notificationId != foregroundNotificationId) {
+                    notificationManager.cancel(notificationId)
+                }
+                allNotificationIds.remove(notificationId)
             }
+
+            // Reassign the foreground notification to another recorder
+            if (foregroundNotificationId !in notificationIdsToRecorders) {
+                val iterator = notificationIdsToRecorders.iterator()
+                val (notificationId, recorder) = iterator.next()
+                iterator.remove()
+                notificationManager.cancel(notificationId)
+                allNotificationIds.remove(notificationId)
+                notificationIdsToRecorders[foregroundNotificationId] = recorder
+            }
+
+            // Create/update notifications
+            for ((notificationId, recorder) in notificationIdsToRecorders) {
+                val titleResId: Int
+                val actionResIds = mutableListOf<Int>()
+                val actionIntents = mutableListOf<Intent>()
+
+                if (recorder.isHolding) {
+                    titleResId = R.string.notification_recording_on_hold
+                    // Don't allow changing the pause state while holding
+                } else if (recorder.isPaused) {
+                    titleResId = R.string.notification_recording_paused
+                    actionResIds.add(R.string.notification_action_resume)
+                    actionIntents.add(createResumeIntent(notificationId))
+                } else {
+                    titleResId = R.string.notification_recording_in_progress
+                    actionResIds.add(R.string.notification_action_pause)
+                    actionIntents.add(createPauseIntent(notificationId))
+                }
+
+                val state = NotificationState(
+                    titleResId,
+                    recorder.filename.value,
+                    R.drawable.ic_launcher_quick_settings,
+                    actionResIds,
+                )
+                if (state == allNotificationIds[notificationId]) {
+                    // Avoid rate limiting
+                    continue
+                }
+
+                val notification = notifications.createPersistentNotification(
+                    state.titleResId,
+                    state.message,
+                    state.iconResId,
+                    state.actionsResIds.zip(actionIntents),
+                )
+
+                if (notificationId == foregroundNotificationId) {
+                    startForeground(notificationId, notification)
+                } else {
+                    notificationManager.notify(notificationId, notification)
+                }
+
+                allNotificationIds[notificationId] = state
+            }
+
             notifications.vibrateIfEnabled(Notifications.CHANNEL_ID_PERSISTENT)
         }
     }
@@ -301,15 +395,33 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         )
     }
 
-    private fun onThreadExited() {
-        --pendingExit
+    private fun onRecorderExited(recorder: RecorderThread) {
+        // This may be an early exit if an error occurred while recording. Remove from the map to
+        // make sure the thread doesn't receive any more call-related callbacks.
+        if (callsToRecorders.entries.removeIf { it.value === recorder }) {
+            Log.w(TAG, "$recorder exited before cancellation")
+        }
+
+        // The notification no longer needs to be shown. If this recorder was associated with the
+        // foreground service notification, updateForegroundState() will reassign
+        // foregroundNotificationId to another recorder.
+        assert(notificationIdsToRecorders.entries.removeIf { it.value === recorder }) {
+            "$recorder not found"
+        }
+
         updateForegroundState()
+    }
+
+    override fun onRecordingFilenameChanged(thread: RecorderThread, filename: OutputFilename) {
+        handler.post {
+            updateForegroundState()
+        }
     }
 
     override fun onRecordingCompleted(thread: RecorderThread, file: OutputFile?) {
         Log.i(TAG, "Recording completed: ${thread.id}: ${file?.redacted}")
         handler.post {
-            onThreadExited()
+            onRecorderExited(thread)
 
             // If the recording was initially paused and the user never resumed it, there's no
             // output file, so nothing needs to be shown.
@@ -322,7 +434,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
     override fun onRecordingFailed(thread: RecorderThread, errorMsg: String?, file: OutputFile?) {
         Log.w(TAG, "Recording failed: ${thread.id}: ${file?.redacted}")
         handler.post {
-            onThreadExited()
+            onRecorderExited(thread)
 
             notifyFailure(errorMsg, file)
         }

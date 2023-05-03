@@ -65,6 +65,8 @@ class RecorderThread(
     // Filename
     private val outputFilenameGenerator = OutputFilenameGenerator(context, parentCall)
     private val dirUtils = OutputDirUtils(context, outputFilenameGenerator.redactor)
+    val filename: OutputFilename
+        get() = outputFilenameGenerator.filename
 
     // Format
     private val format: Format
@@ -86,7 +88,8 @@ class RecorderThread(
     }
 
     fun onCallDetailsChanged(call: Call, details: Call.Details) {
-        outputFilenameGenerator.updateCallDetails(call, details)
+        val filename = outputFilenameGenerator.updateCallDetails(call, details)
+        listener.onRecordingFilenameChanged(this, filename)
     }
 
     override fun run() {
@@ -455,6 +458,9 @@ class RecorderThread(
     }
 
     interface OnRecordingCompletedListener {
+        /** Called when the output filename is changed. */
+        fun onRecordingFilenameChanged(thread: RecorderThread, filename: OutputFilename)
+
         /**
          * Called when the recording completes successfully. [file] is the output file. If [file] is
          * null, then the recording was started in the paused state and the output file was deleted

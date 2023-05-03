@@ -29,8 +29,15 @@ class Notifications(
 
         private val LEGACY_CHANNEL_IDS = arrayOf("alerts")
 
-        /** Incremented for each new alert (non-persistent) notification. */
-        private var notificationId = 2
+        /** Incremented for each new notification. */
+        private var nextNotificationId = 1
+
+        /** Get a new unique notification ID. */
+        fun allocateNotificationId(): Int {
+            val id = nextNotificationId
+            ++nextNotificationId
+            return id
+        }
 
         /** For access to system/internal resource values. */
         private val systemRes = Resources.getSystem()
@@ -125,10 +132,10 @@ class Notifications(
      * notification.
      */
     fun createPersistentNotification(
-        @StringRes title: Int,
-        @DrawableRes icon: Int,
-        @StringRes actionText: Int,
-        actionIntent: Intent,
+        @StringRes titleResId: Int,
+        message: String?,
+        @DrawableRes iconResId: Int,
+        actions: List<Pair<Int, Intent>>,
     ): Notification {
         val notificationIntent = Intent(context, SettingsActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
@@ -136,23 +143,31 @@ class Notifications(
         )
 
         return Notification.Builder(context, CHANNEL_ID_PERSISTENT).run {
-            setContentTitle(context.getText(title))
-            setSmallIcon(icon)
+            setContentTitle(context.getText(titleResId))
+            if (message != null) {
+                setContentText(message)
+            }
+            setSmallIcon(iconResId)
             setContentIntent(pendingIntent)
             setOngoing(true)
+            setOnlyAlertOnce(true)
 
-            val actionPendingIntent = PendingIntent.getService(
-                context,
-                0,
-                actionIntent,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
-            )
+            for ((actionTextResId, actionIntent) in actions) {
+                val actionPendingIntent = PendingIntent.getService(
+                    context,
+                    0,
+                    actionIntent,
+                    PendingIntent.FLAG_IMMUTABLE or
+                            PendingIntent.FLAG_UPDATE_CURRENT or
+                            PendingIntent.FLAG_ONE_SHOT,
+                )
 
-            addAction(Notification.Action.Builder(
-                null,
-                context.getString(actionText),
-                actionPendingIntent,
-            ).build())
+                addAction(Notification.Action.Builder(
+                    null,
+                    context.getString(actionTextResId),
+                    actionPendingIntent,
+                ).build())
+            }
 
             // Inhibit 10-second delay when showing persistent notification
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -179,6 +194,8 @@ class Notifications(
         errorMsg: String?,
         file: OutputFile?,
     ) {
+        val notificationId = allocateNotificationId()
+
         val notification = Notification.Builder(context, channel).run {
             val text = buildString {
                 val errorMsgTrimmed = errorMsg?.trim()
@@ -262,7 +279,6 @@ class Notifications(
         }
 
         notificationManager.notify(notificationId, notification)
-        ++notificationId
     }
 
     /**
@@ -300,9 +316,11 @@ class Notifications(
 
     /** Dismiss all alert (non-persistent) notifications. */
     fun dismissAll() {
-        // This is safe to run at any time because it doesn't dismiss notifications belonging to
-        // foreground services.
-        notificationManager.cancelAll()
+        for (notification in notificationManager.activeNotifications) {
+            if (!notification.isClearable) {
+                notificationManager.cancel(notification.tag, notification.id)
+            }
+        }
     }
 
     /**
