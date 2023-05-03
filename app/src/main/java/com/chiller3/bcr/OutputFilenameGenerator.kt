@@ -103,7 +103,7 @@ class OutputFilenameGenerator(
      * @param call Either the parent call or a child of the parent (for conference calls)
      * @param details The updated call details belonging to [call]
      */
-    fun updateCallDetails(call: Call, details: Call.Details) {
+    fun updateCallDetails(call: Call, details: Call.Details): OutputFilename {
         if (call !== parentCall && call.parent !== parentCall) {
             throw IllegalStateException("Not the parent call nor one of its children: $call")
         }
@@ -111,7 +111,7 @@ class OutputFilenameGenerator(
         synchronized(this) {
             callDetails[call] = details
 
-            update(false)
+            return update(false)
         }
     }
 
