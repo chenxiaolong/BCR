@@ -9,6 +9,8 @@ import android.os.Looper
 import android.telecom.Call
 import android.telecom.InCallService
 import android.util.Log
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import kotlin.random.Random
 
 class RecorderInCallService : InCallService(), RecorderThread.OnRecordingCompletedListener {
@@ -38,11 +40,21 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
      */
     private val notificationIdsToRecorders = HashMap<Int, RecorderThread>()
 
+    private data class NotificationState(
+        @StringRes val titleResId: Int,
+        val message: String?,
+        @DrawableRes val iconResId: Int,
+        // We don't store the intents because Intent does not override equals()
+        val actionsResIds: List<Int>,
+    )
+
     /**
-     * All notification IDs currently shown. This is used to determine which notifications should be
-     * cancelled after items are removed from [notificationIdsToRecorders].
+     * All notification IDs currently shown, along with their state. This is used to determine which
+     * notifications should be cancelled after items are removed from [notificationIdsToRecorders].
+     * The state is used for only applying updates when the state actually changes. Otherwise,
+     * Android will block updates if they exceed the rate limit (10 updates per second).
      */
-    private val allNotificationIds = HashSet<Int>()
+    private val allNotificationIds = HashMap<Int, NotificationState>()
 
     /**
      * Recording threads for each active call. When a call is disconnected, it is immediately
@@ -207,6 +219,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         }
 
         callsToRecorders[call]?.isHolding = callState == Call.STATE_HOLDING
+        updateForegroundState()
     }
 
     /**
@@ -297,7 +310,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
             stopForeground(STOP_FOREGROUND_REMOVE)
         } else {
             // Cancel and remove notifications for recorders that have exited
-            for (notificationId in allNotificationIds.minus(notificationIdsToRecorders.keys)) {
+            for (notificationId in allNotificationIds.keys.minus(notificationIdsToRecorders.keys)) {
                 // The foreground notification will be overwritten
                 if (notificationId != foregroundNotificationId) {
                     notificationManager.cancel(notificationId)
@@ -317,26 +330,39 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
 
             // Create/update notifications
             for ((notificationId, recorder) in notificationIdsToRecorders) {
-                val (titleResId, actionResId, actionIntent) = if (recorder.isPaused) {
-                    Triple(
-                        R.string.notification_recording_paused,
-                        R.string.notification_action_resume,
-                        createResumeIntent(notificationId),
-                    )
+                val titleResId: Int
+                val actionResIds = mutableListOf<Int>()
+                val actionIntents = mutableListOf<Intent>()
+
+                if (recorder.isHolding) {
+                    titleResId = R.string.notification_recording_on_hold
+                    // Don't allow changing the pause state while holding
+                } else if (recorder.isPaused) {
+                    titleResId = R.string.notification_recording_paused
+                    actionResIds.add(R.string.notification_action_resume)
+                    actionIntents.add(createResumeIntent(notificationId))
                 } else {
-                    Triple(
-                        R.string.notification_recording_in_progress,
-                        R.string.notification_action_pause,
-                        createPauseIntent(notificationId),
-                    )
+                    titleResId = R.string.notification_recording_in_progress
+                    actionResIds.add(R.string.notification_action_pause)
+                    actionIntents.add(createPauseIntent(notificationId))
                 }
 
-                val notification = notifications.createPersistentNotification(
+                val state = NotificationState(
                     titleResId,
                     recorder.filename.value,
                     R.drawable.ic_launcher_quick_settings,
-                    actionResId,
-                    actionIntent,
+                    actionResIds,
+                )
+                if (state == allNotificationIds[notificationId]) {
+                    // Avoid rate limiting
+                    continue
+                }
+
+                val notification = notifications.createPersistentNotification(
+                    state.titleResId,
+                    state.message,
+                    state.iconResId,
+                    state.actionsResIds.zip(actionIntents),
                 )
 
                 if (notificationId == foregroundNotificationId) {
@@ -345,7 +371,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
                     notificationManager.notify(notificationId, notification)
                 }
 
-                allNotificationIds.add(notificationId)
+                allNotificationIds[notificationId] = state
             }
 
             notifications.vibrateIfEnabled(Notifications.CHANNEL_ID_PERSISTENT)

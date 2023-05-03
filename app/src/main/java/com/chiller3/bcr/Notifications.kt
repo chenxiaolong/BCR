@@ -135,8 +135,7 @@ class Notifications(
         @StringRes titleResId: Int,
         message: String?,
         @DrawableRes iconResId: Int,
-        @StringRes actionTextResId: Int,
-        actionIntent: Intent,
+        actions: List<Pair<Int, Intent>>,
     ): Notification {
         val notificationIntent = Intent(context, SettingsActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
@@ -153,20 +152,22 @@ class Notifications(
             setOngoing(true)
             setOnlyAlertOnce(true)
 
-            val actionPendingIntent = PendingIntent.getService(
-                context,
-                0,
-                actionIntent,
-                PendingIntent.FLAG_IMMUTABLE or
-                        PendingIntent.FLAG_UPDATE_CURRENT or
-                        PendingIntent.FLAG_ONE_SHOT,
-            )
+            for ((actionTextResId, actionIntent) in actions) {
+                val actionPendingIntent = PendingIntent.getService(
+                    context,
+                    0,
+                    actionIntent,
+                    PendingIntent.FLAG_IMMUTABLE or
+                            PendingIntent.FLAG_UPDATE_CURRENT or
+                            PendingIntent.FLAG_ONE_SHOT,
+                )
 
-            addAction(Notification.Action.Builder(
-                null,
-                context.getString(actionTextResId),
-                actionPendingIntent,
-            ).build())
+                addAction(Notification.Action.Builder(
+                    null,
+                    context.getString(actionTextResId),
+                    actionPendingIntent,
+                ).build())
+            }
 
             // Inhibit 10-second delay when showing persistent notification
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
