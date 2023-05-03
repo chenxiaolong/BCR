@@ -151,6 +151,7 @@ class Notifications(
             setSmallIcon(iconResId)
             setContentIntent(pendingIntent)
             setOngoing(true)
+            setOnlyAlertOnce(true)
 
             val actionPendingIntent = PendingIntent.getService(
                 context,
