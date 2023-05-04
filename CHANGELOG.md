@@ -5,6 +5,8 @@
 * Work around crash due to broken Android package manager caching on custom ROMs that set the system time too late in the boot process (Issue: #275, #303, #307, #314, PR: #323, @chenxiaolong)
 * Show a separate notification for each call when using call waiting (PR: #324, @chenxiaolong)
   * Pausing/resuming can now be done per call and the notification will correctly show that the background call is hold
+* Add support for auto-record rules (Issue: #320, PR: #327, @chenxiaolong)
+  * This replaces the old "Initially paused" setting, which will automatically be migrated to the new rules system.
 
 ### Version 1.41
 
