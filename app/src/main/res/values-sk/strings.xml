@@ -9,10 +9,6 @@
     <string name="pref_call_recording_name">Nahrávanie hovorov</string>
     <string name="pref_call_recording_desc">Nahráva prichádzajúce a odchádzajúce hovory. Aby nahrávanie fungovalo na pozadí, je potrebné povoliť prístup k mikrofónu a upozorneniam.</string>
 
-    <string name="pref_initially_paused_name">Pôvodne pozastavené</string>
-    <string name="pref_initially_paused_desc_on">Nahrávanie hovorov bude po spojení hovoru pozastavené. Ak nahrávanie nikdy nespustíte, prázdny súbor nebude uložený.</string>
-    <string name="pref_initially_paused_desc_off">Nahrávanie sa automaticky spustí hneď po spojení hovoru. Pozastaviť a pokračovať v nahrávaní môžete klepnutím na tlačidlo v oznamovacej oblasti počas hovoru.</string>
-
     <string name="pref_output_dir_name">Priečinok s nahrávkami</string>
     <string name="pref_output_dir_desc">Vyberte priečinok, kde sa budú ukladať nahrávky.</string>
 

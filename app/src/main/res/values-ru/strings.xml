@@ -6,9 +6,6 @@
     <!-- General preferences -->
     <string name="pref_call_recording_name">Запись звонков</string>
     <string name="pref_call_recording_desc">Запись входящих и исходящих телефонных звонков. Для записи в фоновом режиме требуются разрешения на использование микрофона и уведомлений.</string>
-    <string name="pref_initially_paused_name">Остановить запись</string>
-    <string name="pref_initially_paused_desc_on">Запись вызова будет приостановлена после запуска. Если вы не возобновите его с помощью кнопки в шторке уведомлений, отображаемой во время разговора, пустой файл сохранен не будет.</string>
-    <string name="pref_initially_paused_desc_off">Запись вызова начнется автоматически, сразу после подключения. Чтобы сделать паузу и возобновить, нажмите на кнопку в шторке уведомлений, отображаемой во время разговора.</string>
     <string name="pref_output_dir_name">Папка для сохранения</string>
     <string name="pref_output_dir_desc">Выберите папку, в которой будут храниться записи.</string>
     <string name="pref_output_format_name">Выходной формат</string>

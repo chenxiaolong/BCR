@@ -13,6 +13,7 @@ import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.NoParamInfo
 import com.chiller3.bcr.format.RangedParamInfo
 import com.chiller3.bcr.format.SampleRate
+import com.chiller3.bcr.rule.RecordRulesActivity
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,10 +32,11 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChangeListener,
-        Preference.OnPreferenceClickListener, LongClickablePreference.OnPreferenceLongClickListener,
+        Preference.OnPreferenceClickListener, OnPreferenceLongClickListener,
         SharedPreferences.OnSharedPreferenceChangeListener {
         private lateinit var prefs: Preferences
         private lateinit var prefCallRecording: SwitchPreferenceCompat
+        private lateinit var prefRecordRules: Preference
         private lateinit var prefOutputDir: Preference
         private lateinit var prefOutputFormat: Preference
         private lateinit var prefInhibitBatteryOpt: SwitchPreferenceCompat
@@ -69,6 +71,9 @@ class SettingsActivity : AppCompatActivity() {
                 prefCallRecording.isChecked = false
             }
             prefCallRecording.onPreferenceChangeListener = this
+
+            prefRecordRules = findPreference(Preferences.PREF_RECORD_RULES)!!
+            prefRecordRules.onPreferenceClickListener = this
 
             prefOutputDir = findPreference(Preferences.PREF_OUTPUT_DIR)!!
             prefOutputDir.onPreferenceClickListener = this
@@ -164,6 +169,10 @@ class SettingsActivity : AppCompatActivity() {
 
         override fun onPreferenceClick(preference: Preference): Boolean {
             when (preference) {
+                prefRecordRules -> {
+                    startActivity(Intent(requireContext(), RecordRulesActivity::class.java))
+                    return true
+                }
                 prefOutputDir -> {
                     OutputDirectoryBottomSheetFragment().show(
                         childFragmentManager, OutputDirectoryBottomSheetFragment.TAG)

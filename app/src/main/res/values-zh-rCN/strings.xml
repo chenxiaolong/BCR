@@ -7,22 +7,18 @@
 
     <!-- General preferences -->
     <string name="pref_call_recording_name">通话录音</string>
-
     <string name="pref_call_recording_desc">对来电和去电进行通话录音，录音时候需要麦克风和通知权限。</string>
-    <string name="pref_initially_paused_name">初始暂停</string>
-    <string name="pref_initially_paused_desc_on">电话接通后不会启用录音功能，需要手动点击通知中心录音按钮才能开启录音。</string>
 
-    <string name="pref_initially_paused_desc_off">电话接通后自动开启录音，如果需要暂停或者恢复录音，需要点击通知中心对应按钮。</string>
     <string name="pref_output_dir_name">保存目录</string>
-
     <string name="pref_output_dir_desc">选择一个目录用来保存录音文件。</string>
-    <string name="pref_output_format_name">保存格式</string>
 
+    <string name="pref_output_format_name">保存格式</string>
     <string name="pref_output_format_desc">选择录音存储编码格式</string>
+
     <string name="pref_inhibit_batt_opt_name">禁用电池优化</string>
+    <string name="pref_inhibit_batt_opt_desc">禁用电池优化可以避免软件在后台被杀死</string>
 
     <!-- About "preference" -->
-    <string name="pref_inhibit_batt_opt_desc">禁用电池优化可以避免软件在后台被杀死</string>
     <string name="pref_version_name">软件版本</string>
 
     <!-- Output directory bottom sheet -->

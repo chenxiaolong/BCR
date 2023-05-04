@@ -6,14 +6,13 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.CallLog
-import android.provider.ContactsContract
 import android.telecom.Call
-import android.telecom.PhoneAccount
 import android.telephony.PhoneNumberUtils
 import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.core.database.getStringOrNull
+import com.chiller3.bcr.extension.phoneNumber
 import java.text.ParsePosition
 import java.time.DateTimeException
 import java.time.Instant
@@ -151,13 +150,7 @@ class OutputFilenameGenerator(
     }
 
     private fun getPhoneNumber(details: Call.Details, arg: String?): String? {
-        val uri = details.handle
-
-        val number = if (uri?.scheme == PhoneAccount.SCHEME_TEL) {
-            uri.schemeSpecificPart
-        } else {
-            null
-        } ?: return null
+        val number = details.phoneNumber ?: return null
 
         when (arg) {
             null, "E.164" -> {
@@ -211,7 +204,8 @@ class OutputFilenameGenerator(
             return null
         }
 
-        if (!Permissions.isGranted(context, Manifest.permission.READ_CONTACTS)) {
+        if (context.checkSelfPermission(Manifest.permission.READ_CONTACTS) !=
+            PackageManager.PERMISSION_GRANTED) {
             Log.w(TAG, "Permissions not granted for looking up contacts")
             return null
         }
@@ -224,25 +218,9 @@ class OutputFilenameGenerator(
             return null
         }
 
-        // Same heuristic as InCallUI's PhoneNumberHelper.isUriNumber()
-        val numberIsSip = number.contains("@") || number.contains("%40")
-
-        val uri = ContactsContract.PhoneLookup.ENTERPRISE_CONTENT_FILTER_URI.buildUpon()
-            .appendPath(number)
-            .appendQueryParameter(
-                ContactsContract.PhoneLookup.QUERY_PARAMETER_SIP_ADDRESS,
-                numberIsSip.toString())
-            .build()
-
-        context.contentResolver.query(
-            uri, arrayOf(ContactsContract.PhoneLookup.DISPLAY_NAME), null, null, null)?.use { cursor ->
-            if (cursor.moveToFirst()) {
-                val index = cursor.getColumnIndex(ContactsContract.PhoneLookup.DISPLAY_NAME)
-                if (index != -1) {
-                    Log.d(TAG, "Found contact display name via manual lookup")
-                    return cursor.getStringOrNull(index)
-                }
-            }
+        for (contact in findContactsByPhoneNumber(context, number)) {
+            Log.d(TAG, "Found contact display name via manual lookup")
+            return contact.displayName
         }
 
         Log.d(TAG, "Contact not found via manual lookup")
@@ -259,7 +237,8 @@ class OutputFilenameGenerator(
             return null
         }
 
-        if (!Permissions.isGranted(context, Manifest.permission.READ_CALL_LOG)) {
+        if (context.checkSelfPermission(Manifest.permission.READ_CALL_LOG) !=
+            PackageManager.PERMISSION_GRANTED) {
             Log.w(TAG, "Permissions not granted for looking up call log")
             return null
         }

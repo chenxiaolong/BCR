@@ -9,11 +9,11 @@
             app:summary="@string/pref_call_recording_desc"
             app:iconSpaceReserved="false" />
 
-        <SwitchPreferenceCompat
-            app:key="initially_paused"
-            app:title="@string/pref_initially_paused_name"
-            app:summaryOff="@string/pref_initially_paused_desc_off"
-            app:summaryOn="@string/pref_initially_paused_desc_on"
+        <Preference
+            app:key="record_rules"
+            app:persistent="false"
+            app:title="@string/pref_record_rules_name"
+            app:summary="@string/pref_record_rules_desc"
             app:iconSpaceReserved="false" />
 
         <Preference

@@ -12,9 +12,11 @@ import android.telecom.Call
 import android.util.Log
 import androidx.core.net.toFile
 import androidx.documentfile.provider.DocumentFile
+import com.chiller3.bcr.extension.phoneNumber
 import com.chiller3.bcr.format.Encoder
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.SampleRate
+import com.chiller3.bcr.rule.RecordRule
 import java.lang.Process
 import java.nio.ByteBuffer
 import java.time.*
@@ -47,20 +49,49 @@ class RecorderThread(
     @Volatile private var isCancelled = false
     private var captureFailed = false
 
+    /**
+     * Whether to preserve the recording.
+     *
+     * This is initially set to null while the [RecordRule]s are being processed. Once computed,
+     * this field is set to the computed value. The value can be changed, including from other
+     * threads, in case the user wants to override the rules during the middle of the call.
+     */
+    @Volatile var keepRecording: Boolean? = null
+        set(value) {
+            require(value != null)
+
+            field = value
+            Log.d(tag, "Keep state updated: $value")
+
+            listener.onRecordingStateChanged(this)
+        }
+
+    /**
+     * Whether the user paused the recording.
+     *
+     * Safe to update from other threads.
+     */
     // Pause state
-    @Volatile var isPaused = prefs.initiallyPaused
+    @Volatile var isPaused = false
         set(value) {
             field = value
-            if (!value) {
-                wasEverResumed = true
-            }
-
             Log.d(tag, "Pause state updated: $value")
-        }
-    private var wasEverResumed = !isPaused
 
-    // Call state
+            listener.onRecordingStateChanged(this)
+        }
+
+    /**
+     * Whether the call is currently on hold.
+     *
+     * Safe to update from other threads.
+     */
     @Volatile var isHolding = false
+        set(value) {
+            field = value
+            Log.d(tag, "Holding state updated: $value")
+
+            listener.onRecordingStateChanged(this)
+        }
 
     // Filename
     private val outputFilenameGenerator = OutputFilenameGenerator(context, parentCall)
@@ -80,7 +111,6 @@ class RecorderThread(
 
     init {
         Log.i(tag, "Created thread for call: $parentCall")
-        Log.i(tag, "Initially paused: $isPaused")
 
         val savedFormat = Format.fromPreferences(prefs)
         format = savedFormat.first
@@ -88,8 +118,37 @@ class RecorderThread(
     }
 
     fun onCallDetailsChanged(call: Call, details: Call.Details) {
-        val filename = outputFilenameGenerator.updateCallDetails(call, details)
-        listener.onRecordingFilenameChanged(this, filename)
+        outputFilenameGenerator.updateCallDetails(call, details)
+        listener.onRecordingStateChanged(this)
+    }
+
+    private fun evaluateRules() {
+        if (keepRecording != null) {
+            return
+        }
+
+        val numbers = hashSetOf<String>()
+
+        if (parentCall.details.hasProperty(Call.Details.PROPERTY_CONFERENCE)) {
+            for (childCall in parentCall.children) {
+                childCall.details?.phoneNumber?.let { numbers.add(it) }
+            }
+        } else {
+            parentCall.details?.phoneNumber?.let { numbers.add(it) }
+        }
+
+        Log.i(tag, "Evaluating record rules for ${numbers.size} phone number(s)")
+
+        val rules = prefs.recordRules ?: Preferences.DEFAULT_RECORD_RULES
+        keepRecording = try {
+            RecordRule.evaluate(context, rules, numbers)
+        } catch (e: Exception) {
+            Log.w(tag, "Failed to evaluate record rules", e)
+            // Err on the side of caution
+            true
+        }
+
+        listener.onRecordingStateChanged(this)
     }
 
     override fun run() {
@@ -105,6 +164,8 @@ class RecorderThread(
             if (isCancelled) {
                 Log.i(tag, "Recording cancelled before it began")
             } else {
+                evaluateRules()
+
                 val initialFilename = outputFilenameGenerator.filename
                 val outputFile = dirUtils.createFileInDefaultDir(
                     initialFilename.value, format.mimeTypeContainer)
@@ -127,12 +188,12 @@ class RecorderThread(
                         }
                     }
 
-                    if (wasEverResumed) {
+                    if (keepRecording != false) {
                         dirUtils.tryMoveToUserDir(outputFile)?.let {
                             resultUri = it.uri
                         }
                     } else {
-                        Log.i(tag, "Deleting because recording was never resumed: $finalFilename")
+                        Log.i(tag, "Deleting recording: $finalFilename")
                         outputFile.delete()
                         resultUri = null
                     }
@@ -458,8 +519,10 @@ class RecorderThread(
     }
 
     interface OnRecordingCompletedListener {
-        /** Called when the output filename is changed. */
-        fun onRecordingFilenameChanged(thread: RecorderThread, filename: OutputFilename)
+        /**
+         * Called when the pause state, keep state, or output filename are changed.
+         */
+        fun onRecordingStateChanged(thread: RecorderThread)
 
         /**
          * Called when the recording completes successfully. [file] is the output file. If [file] is
