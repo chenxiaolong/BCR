@@ -59,18 +59,19 @@
     <string name="dialog_action_cancel">Отмена</string>
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Фоновые сервисы</string>
-    <string name="notification_channel_persistent_desc">Постоянное уведомление для записи вызовов в фоновом режиме</string>
-    <string name="notification_recording_in_progress">Происходит запись вызова</string>
+    <string name="notification_channel_persistent_desc">Постоянное уведомление о записи разговоров в фоновом режиме</string>
+    <string name="notification_recording_in_progress">Происходит запись разговора</string>
     <string name="notification_channel_failure_desc">Оповещение об ошибках во время записи разговора</string>
-    <string name="notification_recording_failed">Не удалось записать звонок</string>
+    <string name="notification_recording_failed">Не удалось записать разговор</string>
     <string name="notification_action_open">Открыть</string>
     <string name="notification_action_share">Поделиться</string>
     <string name="notification_action_delete">Удалить</string>
     <string name="notification_channel_failure_name">Предупреждение о сбое</string>
     <string name="notification_channel_success_name">Оповещение об успешном выполнении</string>
-    <string name="notification_channel_success_desc">Оповещение об успешной записи звонков</string>
-    <string name="notification_recording_paused">Запись звонков приостановлена</string>
-    <string name="notification_recording_succeeded">Успешно записанный звонок</string>
+    <string name="notification_channel_success_desc">Оповещение об успешной записи разговора</string>
+    <string name="notification_recording_paused">Запись разговора приостановлена</string>
+    <string name="notification_recording_on_hold">Запись разговора на удержании</string>
+    <string name="notification_recording_succeeded">Успешно записан разговор</string>
     <string name="notification_internal_android_error">Сбой записи во внутреннем компоненте Android (%s). Это устройство или прошивка может не поддерживает запись вызовов.</string>
     <string name="notification_action_pause">Пауза</string>
     <string name="notification_action_resume">Возобновить</string>
