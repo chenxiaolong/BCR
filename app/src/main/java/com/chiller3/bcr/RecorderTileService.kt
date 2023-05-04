@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.preference.PreferenceManager
+import com.chiller3.bcr.settings.SettingsActivity
 
 class RecorderTileService : TileService(), SharedPreferences.OnSharedPreferenceChangeListener {
     private lateinit var prefs: Preferences

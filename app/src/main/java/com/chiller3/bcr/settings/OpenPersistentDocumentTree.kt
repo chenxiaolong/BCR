@@ -1,4 +1,4 @@
-package com.chiller3.bcr
+package com.chiller3.bcr.settings
 
 import android.content.Context
 import android.content.Intent

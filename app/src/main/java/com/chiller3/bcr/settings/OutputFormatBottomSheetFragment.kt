@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalUnsignedTypes::class)
 
-package com.chiller3.bcr
+package com.chiller3.bcr.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,8 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
+import com.chiller3.bcr.Preferences
+import com.chiller3.bcr.R
 import com.chiller3.bcr.databinding.BottomSheetChipBinding
 import com.chiller3.bcr.databinding.OutputFormatBottomSheetBinding
+import com.chiller3.bcr.dialog.FormatParamDialogFragment
 import com.chiller3.bcr.format.*
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.ChipGroup

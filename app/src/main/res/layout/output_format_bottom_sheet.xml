@@ -18,7 +18,7 @@
             android:text="@string/output_format_bottom_sheet_output_format"
             android:textAppearance="?attr/textAppearanceHeadline6" />
 
-        <com.chiller3.bcr.ChipGroupCentered
+        <com.chiller3.bcr.view.ChipGroupCentered
             android:id="@+id/name_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
                 android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
                 android:textAppearance="?attr/textAppearanceHeadline6" />
 
-            <com.chiller3.bcr.ChipGroupCentered
+            <com.chiller3.bcr.view.ChipGroupCentered
                 android:id="@+id/param_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
             android:text="@string/output_format_bottom_sheet_sample_rate"
             android:textAppearance="?attr/textAppearanceHeadline6" />
 
-        <com.chiller3.bcr.ChipGroupCentered
+        <com.chiller3.bcr.view.ChipGroupCentered
             android:id="@+id/sample_rate_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

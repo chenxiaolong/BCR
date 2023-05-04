@@ -7,9 +7,12 @@ import android.util.Log
 import androidx.core.content.edit
 import androidx.documentfile.provider.DocumentFile
 import androidx.preference.PreferenceManager
+import com.chiller3.bcr.extension.findFileFast
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.SampleRate
+import com.chiller3.bcr.output.Retention
 import com.chiller3.bcr.rule.RecordRule
+import com.chiller3.bcr.template.Template
 import java.io.File
 import java.util.Properties
 

@@ -15,6 +15,9 @@ import android.os.VibratorManager
 import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import com.chiller3.bcr.extension.formattedString
+import com.chiller3.bcr.output.OutputFile
+import com.chiller3.bcr.settings.SettingsActivity
 import java.util.*
 
 class Notifications(

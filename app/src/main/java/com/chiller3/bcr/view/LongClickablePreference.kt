@@ -1,4 +1,4 @@
-package com.chiller3.bcr
+package com.chiller3.bcr.view
 
 import android.content.Context
 import android.util.AttributeSet

@@ -1,4 +1,4 @@
-package com.chiller3.bcr
+package com.chiller3.bcr.view
 
 import android.annotation.SuppressLint
 import android.content.Context

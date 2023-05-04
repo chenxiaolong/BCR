@@ -3,6 +3,7 @@ package com.chiller3.bcr
 import android.app.Application
 import android.util.Log
 import androidx.core.net.toFile
+import com.chiller3.bcr.output.OutputDirUtils
 import com.google.android.material.color.DynamicColors
 
 class RecorderApplication : Application() {

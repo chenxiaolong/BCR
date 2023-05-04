@@ -1,4 +1,4 @@
-package com.chiller3.bcr
+package com.chiller3.bcr.template
 
 import com.copperleaf.kudzu.node.chars.CharNode
 import com.copperleaf.kudzu.node.choice.Choice3Node

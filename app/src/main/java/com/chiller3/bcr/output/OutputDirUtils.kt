@@ -1,4 +1,4 @@
-package com.chiller3.bcr
+package com.chiller3.bcr.output
 
 import android.content.Context
 import android.net.Uri
@@ -8,6 +8,7 @@ import android.system.Os
 import android.system.OsConstants
 import android.util.Log
 import androidx.documentfile.provider.DocumentFile
+import com.chiller3.bcr.Preferences
 import java.io.IOException
 
 class OutputDirUtils(private val context: Context, private val redactor: Redactor) {
