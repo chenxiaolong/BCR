@@ -1,6 +1,8 @@
-package com.chiller3.bcr
+package com.chiller3.bcr.output
 
 import android.content.Context
+import com.chiller3.bcr.Preferences
+import com.chiller3.bcr.R
 import java.time.Duration
 
 sealed interface Retention {

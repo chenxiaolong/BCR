@@ -18,8 +18,8 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.get
 import androidx.preference.size
-import com.chiller3.bcr.LongClickableSwitchPreference
-import com.chiller3.bcr.OnPreferenceLongClickListener
+import com.chiller3.bcr.view.LongClickableSwitchPreference
+import com.chiller3.bcr.view.OnPreferenceLongClickListener
 import com.chiller3.bcr.Preferences
 import com.chiller3.bcr.R
 import com.chiller3.bcr.dialog.MessageDialogFragment

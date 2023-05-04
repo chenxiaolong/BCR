@@ -1,4 +1,4 @@
-package com.chiller3.bcr
+package com.chiller3.bcr.template
 
 import android.content.Context
 import android.content.res.Configuration
@@ -6,6 +6,7 @@ import android.text.Spannable
 import android.text.style.ForegroundColorSpan
 import androidx.annotation.ColorRes
 import androidx.core.text.getSpans
+import com.chiller3.bcr.R
 import com.google.android.material.color.ColorRoles
 import com.google.android.material.color.MaterialColors
 

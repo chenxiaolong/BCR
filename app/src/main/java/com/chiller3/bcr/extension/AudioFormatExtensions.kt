@@ -1,4 +1,4 @@
-package com.chiller3.bcr
+package com.chiller3.bcr.extension
 
 import android.media.AudioFormat
 import android.os.Build

@@ -1,4 +1,4 @@
-package com.chiller3.bcr
+package com.chiller3.bcr.view
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -20,13 +20,10 @@ class ChipGroupCentered : ChipGroup {
         _rowCountField.isAccessible = true
     }
 
-    @Suppress("unused")
     constructor(context: Context) : super(context)
 
-    @Suppress("unused")
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
-    @Suppress("unused")
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
             super(context, attrs, defStyleAttr)
 

@@ -1,4 +1,4 @@
-package com.chiller3.bcr
+package com.chiller3.bcr.extension
 
 import android.content.ContentResolver
 import android.net.Uri

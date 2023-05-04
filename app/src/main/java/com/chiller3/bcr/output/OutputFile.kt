@@ -1,4 +1,4 @@
-package com.chiller3.bcr
+package com.chiller3.bcr.output
 
 import android.content.ContentResolver
 import android.content.Context

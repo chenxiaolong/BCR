@@ -1,4 +1,4 @@
-package com.chiller3.bcr
+package com.chiller3.bcr.output
 
 import android.Manifest
 import android.content.Context
@@ -12,7 +12,10 @@ import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.core.database.getStringOrNull
+import com.chiller3.bcr.Preferences
 import com.chiller3.bcr.extension.phoneNumber
+import com.chiller3.bcr.findContactsByPhoneNumber
+import com.chiller3.bcr.template.Template
 import java.text.ParsePosition
 import java.time.DateTimeException
 import java.time.Instant

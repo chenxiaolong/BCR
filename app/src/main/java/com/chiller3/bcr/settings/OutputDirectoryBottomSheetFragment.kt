@@ -1,4 +1,4 @@
-package com.chiller3.bcr
+package com.chiller3.bcr.settings
 
 import android.os.Bundle
 import android.text.SpannableString
@@ -6,7 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.setFragmentResultListener
+import com.chiller3.bcr.Preferences
+import com.chiller3.bcr.R
 import com.chiller3.bcr.databinding.OutputDirectoryBottomSheetBinding
+import com.chiller3.bcr.dialog.FileRetentionDialogFragment
+import com.chiller3.bcr.dialog.FilenameTemplateDialogFragment
+import com.chiller3.bcr.extension.formattedString
+import com.chiller3.bcr.output.OutputFilenameGenerator
+import com.chiller3.bcr.output.Retention
+import com.chiller3.bcr.template.Template
+import com.chiller3.bcr.template.TemplateSyntaxHighlighter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment() {

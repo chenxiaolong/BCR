@@ -3,7 +3,7 @@ package com.chiller3.bcr.format
 import android.media.AudioFormat
 import android.media.MediaFormat
 import com.chiller3.bcr.Preferences
-import com.chiller3.bcr.frameSizeInBytesCompat
+import com.chiller3.bcr.extension.frameSizeInBytesCompat
 import java.io.FileDescriptor
 
 sealed class Format {

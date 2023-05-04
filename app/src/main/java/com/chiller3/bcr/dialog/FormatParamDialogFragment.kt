@@ -1,4 +1,4 @@
-package com.chiller3.bcr
+package com.chiller3.bcr.dialog
 
 import android.app.Dialog
 import android.content.DialogInterface
@@ -10,6 +10,8 @@ import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import com.chiller3.bcr.Preferences
+import com.chiller3.bcr.R
 import com.chiller3.bcr.databinding.DialogTextInputBinding
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.RangedParamInfo
