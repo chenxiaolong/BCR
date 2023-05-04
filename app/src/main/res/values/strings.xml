@@ -9,9 +9,8 @@
     <string name="pref_call_recording_name">Call recording</string>
     <string name="pref_call_recording_desc">Record incoming and outgoing phone calls. Microphone and notification permissions are required for recording in the background.</string>
 
-    <string name="pref_initially_paused_name">Initially paused</string>
-    <string name="pref_initially_paused_desc_on">Recording will be paused after starting. If you don\'t resume it using the button in the notification, the empty output file won\'t be saved.</string>
-    <string name="pref_initially_paused_desc_off">Call will be recorded immediately after connecting. To pause and resume, tap on the button in the notification displayed during a call.</string>
+    <string name="pref_record_rules_name">Auto-record rules</string>
+    <string name="pref_record_rules_desc">Configure which calls should be automatically recorded.</string>
 
     <string name="pref_output_dir_name">Output directory</string>
     <string name="pref_output_dir_desc">Pick a directory to store recordings.</string>
@@ -24,6 +23,18 @@
 
     <!-- About "preference" -->
     <string name="pref_version_name">Version</string>
+
+    <!-- Record rules bottom sheet -->
+    <string name="pref_add_rule_name">Add rule</string>
+    <string name="pref_add_rule_desc">Add an auto-record rule for a contact.</string>
+    <string name="pref_rule_desc_on">Keep the recording.</string>
+    <string name="pref_rule_desc_off">Delete the recording when the call ends.</string>
+    <string name="record_rules_rule_added">Added new rule. Long press the rule to delete it.</string>
+    <string name="record_rules_rule_exists">Rule already exists.</string>
+    <string name="record_rules_help">BCR internally always records every call, but when auto-record is turned off, the recording will be deleted at the end of the call. While a call is in progress, a recording that is scheduled for deletion can be preserved via BCR\'s notification.</string>
+    <string name="record_rule_type_all_calls">All other calls</string>
+    <string name="record_rule_type_unknown_calls">Unknown calls</string>
+    <string name="record_rule_type_contact">Contact: %s</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Change directory</string>
@@ -87,12 +98,17 @@
     <string name="notification_recording_on_hold">Call on hold</string>
     <string name="notification_recording_failed">Failed to record call</string>
     <string name="notification_recording_succeeded">Successfully recorded call</string>
+    <string name="notification_message_delete_at_end">The recording will be deleted at the end of the call. Tap Restore to keep the recording.</string>
     <string name="notification_internal_android_error">The recording failed in an internal Android component (%s). This device or firmware might not support call recording.</string>
     <string name="notification_action_open">Open</string>
     <string name="notification_action_share">Share</string>
     <string name="notification_action_delete">Delete</string>
+    <string name="notification_action_restore">Restore</string>
     <string name="notification_action_pause">Pause</string>
     <string name="notification_action_resume">Resume</string>
+
+    <!-- Menus -->
+    <string name="menu_action_help">Help</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Call recording</string>

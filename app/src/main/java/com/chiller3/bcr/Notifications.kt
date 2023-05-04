@@ -146,6 +146,7 @@ class Notifications(
             setContentTitle(context.getText(titleResId))
             if (message != null) {
                 setContentText(message)
+                style = Notification.BigTextStyle().bigText(message)
             }
             setSmallIcon(iconResId)
             setContentIntent(pendingIntent)

@@ -2,6 +2,7 @@ package com.chiller3.bcr
 
 import android.content.ContentResolver
 import android.net.Uri
+import android.telecom.PhoneAccount
 
 val Uri.formattedString: String
     get() = when (scheme) {
@@ -26,4 +27,10 @@ val Uri.formattedString: String
             }
         }
         else -> toString()
+    }
+
+val Uri.phoneNumber: String?
+    get() = when (scheme) {
+        PhoneAccount.SCHEME_TEL -> schemeSpecificPart
+        else -> null
     }

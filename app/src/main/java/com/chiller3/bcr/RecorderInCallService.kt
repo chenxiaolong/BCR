@@ -19,6 +19,8 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
 
         private val ACTION_PAUSE = "${RecorderInCallService::class.java.canonicalName}.pause"
         private val ACTION_RESUME = "${RecorderInCallService::class.java.canonicalName}.resume"
+        private val ACTION_RESTORE = "${RecorderInCallService::class.java.canonicalName}.restore"
+        private val ACTION_DELETE = "${RecorderInCallService::class.java.canonicalName}.delete"
         private const val EXTRA_TOKEN = "token"
         private const val EXTRA_NOTIFICATION_ID = "notification_id"
     }
@@ -99,24 +101,15 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         }
     }
 
-    private fun createBaseIntent(notificationId: Int): Intent =
+    private fun createActionIntent(notificationId: Int, action: String): Intent =
         Intent(this, RecorderInCallService::class.java).apply {
+            this.action = action
             // The URI is not used for anything besides ensuring that the PendingIntents across
             // different notifications are unique. PendingIntent treats Intents that differ only in
             // the extras as the same.
             data = Uri.fromParts("notification", notificationId.toString(), null)
             putExtra(EXTRA_TOKEN, token)
             putExtra(EXTRA_NOTIFICATION_ID, notificationId)
-        }
-
-    private fun createPauseIntent(notificationId: Int): Intent =
-        createBaseIntent(notificationId).apply {
-            action = ACTION_PAUSE
-        }
-
-    private fun createResumeIntent(notificationId: Int): Intent =
-        createBaseIntent(notificationId).apply {
-            action = ACTION_RESUME
         }
 
     override fun onCreate() {
@@ -143,7 +136,10 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
             when (val action = intent?.action) {
                 ACTION_PAUSE, ACTION_RESUME -> {
                     notificationIdsToRecorders[notificationId]?.isPaused = action == ACTION_PAUSE
-                    updateForegroundState()
+                }
+                ACTION_RESTORE, ACTION_DELETE -> {
+                    notificationIdsToRecorders[notificationId]?.keepRecording =
+                        action == ACTION_RESTORE
                 }
                 else -> throw IllegalArgumentException("Invalid action: $action")
             }
@@ -219,7 +215,6 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         }
 
         callsToRecorders[call]?.isHolding = callState == Call.STATE_HOLDING
-        updateForegroundState()
     }
 
     /**
@@ -340,16 +335,30 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
                 } else if (recorder.isPaused) {
                     titleResId = R.string.notification_recording_paused
                     actionResIds.add(R.string.notification_action_resume)
-                    actionIntents.add(createResumeIntent(notificationId))
+                    actionIntents.add(createActionIntent(notificationId, ACTION_RESUME))
                 } else {
                     titleResId = R.string.notification_recording_in_progress
                     actionResIds.add(R.string.notification_action_pause)
-                    actionIntents.add(createPauseIntent(notificationId))
+                    actionIntents.add(createActionIntent(notificationId, ACTION_PAUSE))
+                }
+
+                val message = StringBuilder(recorder.filename.value)
+
+                recorder.keepRecording?.let {
+                    if (it) {
+                        actionResIds.add(R.string.notification_action_delete)
+                        actionIntents.add(createActionIntent(notificationId, ACTION_DELETE))
+                    } else {
+                        message.append("\n\n")
+                        message.append(getString(R.string.notification_message_delete_at_end))
+                        actionResIds.add(R.string.notification_action_restore)
+                        actionIntents.add(createActionIntent(notificationId, ACTION_RESTORE))
+                    }
                 }
 
                 val state = NotificationState(
                     titleResId,
-                    recorder.filename.value,
+                    message.toString(),
                     R.drawable.ic_launcher_quick_settings,
                     actionResIds,
                 )
@@ -412,7 +421,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         updateForegroundState()
     }
 
-    override fun onRecordingFilenameChanged(thread: RecorderThread, filename: OutputFilename) {
+    override fun onRecordingStateChanged(thread: RecorderThread) {
         handler.post {
             updateForegroundState()
         }

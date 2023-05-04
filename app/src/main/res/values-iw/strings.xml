@@ -9,10 +9,6 @@
     <string name="pref_call_recording_name">הקלטת שיחה</string>
     <string name="pref_call_recording_desc">הקלט שיחות יוצאות ונכנסות. חובה לאפשר הרשאות למיקרופון ולהתראות, מומלץ לאפשר גישה לטלפון ולאנשי הקשר על מנת שקבצי ההקלטות יישמרו עם נתוני השיחה</string>
 
-    <string name="pref_initially_paused_name">עצור הקלטה</string>
-    <string name="pref_initially_paused_desc_on">ההקלטה לא תפעל בתחילתה. אם לא תפעיל אותה באמצעות הכפתור בהודעה, קובץ ההקלטה הריק לא ישמר</string>
-    <string name="pref_initially_paused_desc_off">השיחה תוקלט מיד בתחילת שיחה. כדי להשהות ולהמשיך, לחץ על הכפתור בהתראה המוצגת במהלך שיחה</string>
-
     <string name="pref_output_dir_name">מיקום האחסון</string>
     <string name="pref_output_dir_desc">בחר תיקיה לאחסון הקלטות</string>
 

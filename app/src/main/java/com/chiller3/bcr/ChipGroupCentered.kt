@@ -10,8 +10,7 @@ import java.lang.Integer.max
 import java.lang.Integer.min
 
 /** Hacky wrapper around [ChipGroup] to make every row individually centered. */
-class ChipGroupCentered(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
-    ChipGroup(context, attrs, defStyleAttr) {
+class ChipGroupCentered : ChipGroup {
     private val _rowCountField = javaClass.superclass.superclass.getDeclaredField("rowCount")
     private var rowCountField
         get() = _rowCountField.getInt(this)
@@ -21,10 +20,15 @@ class ChipGroupCentered(context: Context, attrs: AttributeSet?, defStyleAttr: In
         _rowCountField.isAccessible = true
     }
 
-    constructor(context: Context, attrs: AttributeSet?) :
-        this(context, attrs, com.google.android.material.R.attr.chipGroupStyle)
+    @Suppress("unused")
+    constructor(context: Context) : super(context)
 
-    constructor(context: Context) : this(context, null)
+    @Suppress("unused")
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+
+    @Suppress("unused")
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
+            super(context, attrs, defStyleAttr)
 
     @SuppressLint("RestrictedApi")
     override fun onLayout(sizeChanged: Boolean, left: Int, top: Int, right: Int, bottom: Int) {

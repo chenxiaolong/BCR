@@ -9,23 +9,32 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.preference.PreferenceManager
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.SampleRate
+import com.chiller3.bcr.rule.RecordRule
 import java.io.File
-import java.util.*
+import java.util.Properties
 
 class Preferences(private val context: Context) {
     companion object {
         private val TAG = Preferences::class.java.simpleName
 
         const val PREF_CALL_RECORDING = "call_recording"
-        const val PREF_INITIALLY_PAUSED = "initially_paused"
+        const val PREF_RECORD_RULES = "record_rules"
         const val PREF_OUTPUT_DIR = "output_dir"
         const val PREF_FILENAME_TEMPLATE = "filename_template"
         const val PREF_OUTPUT_FORMAT = "output_format"
         const val PREF_INHIBIT_BATT_OPT = "inhibit_batt_opt"
         const val PREF_VERSION = "version"
 
+        const val PREF_ADD_RULE = "add_rule"
+        const val PREF_RULE_PREFIX = "rule_"
+
+        // Legacy preferences
+        private const val PREF_INITIALLY_PAUSED = "initially_paused"
+
         // Not associated with a UI preference
         private const val PREF_DEBUG_MODE = "debug_mode"
+        private const val PREF_RECORD_RULE_PREFIX = "record_rule_"
+        private const val PREF_RECORD_RULES_HELP_SHOWN = "record_rules_help_shown"
         private const val PREF_FORMAT_NAME = "codec_name"
         private const val PREF_FORMAT_PARAM_PREFIX = "codec_param_"
         const val PREF_OUTPUT_RETENTION = "output_retention"
@@ -38,6 +47,10 @@ class Preferences(private val context: Context) {
                     "[_sim{sim_slot}|]" +
                     "[_{phone_number}|]" +
                     "[_[{contact_name}|{caller_name}|{call_log_name}]|]"
+        )
+        val DEFAULT_RECORD_RULES = listOf(
+            RecordRule.UnknownCalls(true),
+            RecordRule.AllCalls(true),
         )
 
         fun isFormatKey(key: String): Boolean =
@@ -164,7 +177,11 @@ class Preferences(private val context: Context) {
             }
         }
 
-    /** Migrate legacy properties file based filename template to [Template]. */
+    /**
+     * Migrate legacy properties file based filename template to [Template].
+     *
+     * Will be removed in version 1.45.
+     */
     fun migrateLegacyProperties() {
         val outputDir = outputDir?.let {
             // Only returns null on API <21
@@ -210,12 +227,50 @@ class Preferences(private val context: Context) {
         get() = prefs.getBoolean(PREF_CALL_RECORDING, false)
         set(enabled) = prefs.edit { putBoolean(PREF_CALL_RECORDING, enabled) }
 
+    /** List of rules to determine whether to automatically record. */
+    var recordRules: List<RecordRule>?
+        get() {
+            val rules = mutableListOf<RecordRule>()
+            while (true) {
+                val prefix = "${PREF_RECORD_RULE_PREFIX}${rules.size}_"
+                val rule = RecordRule.fromRawPreferences(prefs, prefix) ?: break
+                rules.add(rule)
+            }
+            return rules.ifEmpty { null }
+        }
+        set(rules) = prefs.edit {
+            val keys = prefs.all.keys.filter { it.startsWith(PREF_RECORD_RULE_PREFIX) }
+            for (key in keys) {
+                remove(key)
+            }
+
+            if (rules != null) {
+                for ((i, rule) in rules.withIndex()) {
+                    rule.toRawPreferences(this, "${PREF_RECORD_RULE_PREFIX}${i}_")
+                }
+            }
+        }
+
+    /** Whether the help dialog for the record rules has already been shown. */
+    var recordRulesHelpShown: Boolean
+        get() = prefs.getBoolean(PREF_RECORD_RULES_HELP_SHOWN, false)
+        set(shown) = prefs.edit { putBoolean(PREF_RECORD_RULES_HELP_SHOWN, shown) }
+
     /**
-     * Whether the recording should initially start in the paused state.
+     * Migrate old "initially paused" setting to the new record rules.
+     *
+     * Will be removed in version 1.47.
      */
-    var initiallyPaused: Boolean
-        get() = prefs.getBoolean(PREF_INITIALLY_PAUSED, false)
-        set(enabled) = prefs.edit { putBoolean(PREF_INITIALLY_PAUSED, enabled) }
+    fun migrateInitiallyPaused() {
+        if (prefs.contains(PREF_INITIALLY_PAUSED)) {
+            val oldValue = prefs.getBoolean(PREF_INITIALLY_PAUSED, false)
+            recordRules = listOf(
+                RecordRule.UnknownCalls(oldValue),
+                RecordRule.AllCalls(oldValue),
+            )
+            prefs.edit { remove(PREF_INITIALLY_PAUSED) }
+        }
+    }
 
     /**
      * The saved output format.

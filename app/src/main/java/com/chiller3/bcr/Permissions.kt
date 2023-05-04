@@ -26,14 +26,13 @@ object Permissions {
         Manifest.permission.READ_PHONE_STATE,
     )
 
-    fun isGranted(context: Context, permission: String) =
-        ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
-
     /**
      * Check if all permissions required for call recording have been granted.
      */
     fun haveRequired(context: Context): Boolean =
-        REQUIRED.all { isGranted(context, it) }
+        REQUIRED.all {
+            ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+        }
 
     /**
      * Check if battery optimizations are currently disabled for this app.
@@ -46,19 +45,17 @@ object Permissions {
     /**
      * Get intent for opening the app info page in the system settings.
      */
-    fun getAppInfoIntent(context: Context): Intent {
-        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        intent.data = Uri.fromParts("package", context.packageName, null)
-        return intent
-    }
+    fun getAppInfoIntent(context: Context) = Intent(
+        Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+        Uri.fromParts("package", context.packageName, null),
+    )
 
     /**
      * Get intent for requesting the disabling of battery optimization for this app.
      */
     @SuppressLint("BatteryLife")
-    fun getInhibitBatteryOptIntent(context: Context): Intent {
-        val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
-        intent.data = Uri.fromParts("package", context.packageName, null)
-        return intent
-    }
+    fun getInhibitBatteryOptIntent(context: Context) = Intent(
+        Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+        Uri.fromParts("package", context.packageName, null),
+    )
 }

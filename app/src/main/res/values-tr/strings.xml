@@ -9,10 +9,6 @@
     <string name="pref_call_recording_name">Çağrı kaydı</string>
     <string name="pref_call_recording_desc">Gelen ve giden çağrıları kaydet. Arka planda kayıt için mikrofon ve bildirim izinleri gereklidir.</string>
 
-    <string name="pref_initially_paused_name">Başlangıçta duraklatılmış</string>
-    <string name="pref_initially_paused_desc_on">Kayıt başladıktan sonra duraklatılacaktır. Bildirimdeki düğmeyi kullanarak devam ettirmezseniz, boş çıktı dosyası kaydedilmez.</string>
-    <string name="pref_initially_paused_desc_off">Bağlandıktan hemen sonra çağrı kaydedilecektir. Duraklatmak ve devam ettirmek için, arama sırasında görüntülenen bildirimdeki düğmeye basın</string>
-
     <string name="pref_output_dir_name">Kayıt konumu</string>
     <string name="pref_output_dir_desc">Kayıtlar için bir konum seçin.</string>
 

@@ -18,6 +18,7 @@ BCR is a simple Android call recording app for rooted devices or devices running
   * FLAC - Lossless, larger files
   * WAV/PCM - Lossless, largest files, least CPU usage
 * Supports Android's Storage Access Framework (can record to SD cards, USB devices, etc.)
+* Per-contact auto-record rules
 * Quick settings toggle
 * Material You dynamic theming
 * No persistent notification unless a recording is in progress
@@ -84,7 +85,7 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
 * `READ_CALL_LOG` (**optional**)
   * If allowed, the name as shown in the call log can be added to the output filename.
 * `READ_CONTACTS` (**optional**)
-  * If allowed, the contact name can be added to the output filename.
+  * If allowed, the contact name can be added to the output filename. It also allows auto-record rules to be set per contact.
 * `READ_PHONE_STATE` (**optional**)
   * If allowed, the SIM slot for devices with multiple active SIMs is added to the output filename.
 * `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` (**optional**)
