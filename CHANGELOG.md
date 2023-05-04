@@ -8,6 +8,10 @@
 * Add support for auto-record rules (Issue: #320, PR: #327, @chenxiaolong)
   * This replaces the old "Initially paused" setting, which will automatically be migrated to the new rules system.
 
+Non-user-facing changes:
+
+* Reorganize source files (PR: #328, @chenxiaolong)
+
 ### Version 1.41
 
 * Remove workaround for overlayfs (PR: #306, @chenxiaolong)
