@@ -1,6 +1,6 @@
 ### Unreleased
 
-* Update all dependencies (PR: #311, #315, @PatrykMis)
+* Update all dependencies (PR: #311, #315, #329, @PatrykMis, @chenxiaolong)
 * Update Russian translations (PR: #319, #325, @bogachenko)
 * Work around crash due to broken Android package manager caching on custom ROMs that set the system time too late in the boot process (Issue: #275, #303, #307, #314, PR: #323, @chenxiaolong)
 * Show a separate notification for each call when using call waiting (PR: #324, @chenxiaolong)
