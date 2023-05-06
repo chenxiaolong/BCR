@@ -25,10 +25,13 @@
     <string name="output_dir_bottom_sheet_change_dir">שינוי תיקיה</string>
     <string name="output_dir_bottom_sheet_file_retention">שמירת קבצים</string>
     <string name="retention_keep_all">שמור הכול</string>
+    <!-- TODO: This translation fails the lint test because quantity="many" and quantity="two" are missing (required for Hebrew) -->
+    <!--
     <plurals name="retention_days">
         <item quantity="one">שמור %d יום</item>
         <item quantity="other">שמור %d ימים</item>
     </plurals>
+    -->
 
     <!-- Output format bottom sheet -->
     <string name="output_format_bottom_sheet_output_format">פורמט הקובץ</string>
