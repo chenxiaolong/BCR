@@ -25,11 +25,14 @@
     <string name="output_dir_bottom_sheet_change_dir">Zmeniť priečinok</string>
     <string name="output_dir_bottom_sheet_file_retention">Platnosť nahrávok</string>
     <string name="retention_keep_all">Ponechať všetky</string>
+    <!-- TODO: This translation fails the lint test because quantity="many" is missing (required for Slovak) -->
+    <!--
     <plurals name="retention_days">
         <item quantity="one">Ponechať %d deň</item>
         <item quantity="few">Ponechať %d dni</item>
         <item quantity="other">Ponechať %d dní</item>
     </plurals>
+    -->
 
     <!-- Output format bottom sheet -->
     <string name="output_format_bottom_sheet_output_format">Formát súborov</string>
