@@ -1,4 +1,4 @@
-### Unreleased
+### Version 1.42
 
 * Update all dependencies (PR: #311, #315, #329, @PatrykMis, @chenxiaolong)
 * Update Russian translations (PR: #319, #325, @bogachenko)
