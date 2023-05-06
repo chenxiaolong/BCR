@@ -9,6 +9,9 @@
     <string name="pref_call_recording_name">Çağrı kaydı</string>
     <string name="pref_call_recording_desc">Gelen ve giden çağrıları kaydet. Arka planda kayıt için mikrofon ve bildirim izinleri gereklidir.</string>
 
+    <string name="pref_record_rules_name">Oto-kayıt kuralları</string>
+    <string name="pref_record_rules_desc">Hangi aramaların otomatik olarak kaydedileceğini ayarlayın.</string>
+
     <string name="pref_output_dir_name">Kayıt konumu</string>
     <string name="pref_output_dir_desc">Kayıtlar için bir konum seçin.</string>
 
@@ -21,22 +24,67 @@
     <!-- About "preference" -->
     <string name="pref_version_name">Versiyon</string>
 
+    <!-- Record rules bottom sheet -->
+    <string name="pref_add_rule_name">Kural ekle</string>
+    <string name="pref_add_rule_desc">Bir kişi için oto-kayı kuralı ekleyin.</string>
+    <string name="pref_rule_desc_on">Kaydı saklayın.</string>
+    <string name="pref_rule_desc_off">Arama bittiğinde kaydı silin.</string>
+    <string name="record_rules_rule_added">Yeni kural eklendi. Silmek için kurala uzun basın.</string>
+    <string name="record_rules_rule_exists">Kural zaten var.</string>
+    <string name="record_rules_help">BCR dahili olarak her aramayı her zaman kaydeder, ancak otomatik kayıt kapatıldığında, arama sonunda kayıt silinir. Bir görüşme devam ederken, silinmesi planlanan bir kayıt, BCR\'nin bildirimi ile saklanabilir.</string>
+    <string name="record_rule_type_all_calls">Diğer tüm aramalar</string>
+    <string name="record_rule_type_unknown_calls">Bilinmeyen aramalar</string>
+    <string name="record_rule_type_contact">Kişi: %s</string>
+
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Çıkış klasörünü değiştir</string>
+    <string name="output_dir_bottom_sheet_filename_template">Dosya adı şablonu</string>
+    <string name="output_dir_bottom_sheet_edit_template">Şablonu düzenle</string>
     <string name="output_dir_bottom_sheet_file_retention">Dosyaları sakla</string>
+    <string name="output_dir_bottom_sheet_edit_retention">Saklamayı düzenleyin</string>
     <string name="retention_keep_all">Hepsini sakla</string>
     <plurals name="retention_days">
         <item quantity="one">%d gün sakla</item>
         <item quantity="other">%d gün sakla</item>
     </plurals>
+    <string name="retention_unusable">Geçerli dosya adı şablonu bu özellikle uyumlu olmadığı için dosya tutma devre dışı bırakıldı.</string>
 
     <!-- Output format bottom sheet -->
     <string name="output_format_bottom_sheet_output_format">Çıkış formatı</string>
     <string name="output_format_bottom_sheet_compression_level">Sıkıştırma seviyesi</string>
     <string name="output_format_bottom_sheet_bitrate">Bit hızı</string>
     <string name="output_format_bottom_sheet_sample_rate">Örnekleme hızı</string>
+    <string name="output_format_bottom_sheet_custom_param">Özel</string>
 
     <string name="bottom_sheet_reset">Varsayılana döndür</string>
+
+    <!-- Filename template dialog -->
+    <string name="filename_template_dialog_title">Filename template</string>
+    <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
+    <string name="filename_template_dialog_message">Çıkış dosyası adı için özel bir şablon girin. Değişkenler ayraçlarla belirtilir (ör. <annotation type="template">{var}</annotation>). Yedekler köşeli parantez içinde belirtilir (örn. <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nDesteklenen değişkenler: <annotation type="supported_vars">PLACEHOLDER</annotation>. Sözdiziminin tam açıklaması için <annotation type="template_docs">belgelere</annotation> bakın.</string>
+    <string name="filename_template_dialog_error_empty">Şablon boş olamaz</string>
+    <string name="filename_template_dialog_error_unknown_variable">Bilinmeyen şablon değişkeni: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">Değişkenin argümanı olamaz: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_argument">Geçersiz değişken argümanı: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_syntax">Şablon sözdizimi geçersiz</string>
+    <string name="filename_template_dialog_action_reset_to_default">Varsayılana sıfırla</string>
+
+    <!-- File retention dialog -->
+    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_message">Kayıtların saklanacağı gün sayısını girin.</string>
+    <string name="file_retention_error_too_large">Sayı çok büyük</string>
+
+    <!-- Format parameter dialog -->
+    <string name="format_param_dialog_title">Özel parametre</string>
+    <string name="format_param_dialog_message">Bu aralıkta bir değer girin [%1$s, %2$s].</string>
+
+    <!-- Format parameter -->
+    <string name="format_param_bitrate">%s kbps</string>
+    <string name="format_param_compression_level">Seviye %s</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_action_ok">Tamam</string>
+    <string name="dialog_action_cancel">İptal</string>
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Arka plan servisleri</string>
@@ -47,13 +95,20 @@
     <string name="notification_channel_success_desc">Başarılı çağrı kayıtları için uyarılar</string>
     <string name="notification_recording_in_progress">Çağrı kaydediliyor</string>
     <string name="notification_recording_paused">Çağrı kaydı duraklatıldı</string>
+    <string name="notification_recording_on_hold">Arama beklemede</string>
     <string name="notification_recording_failed">Çağrı kaydı başarısız</string>
     <string name="notification_recording_succeeded">Çağrı kaydı başarılı</string>
+    <string name="notification_message_delete_at_end">Görüşme sonunda kayıt silinecektir. Kaydı tutmak için Geri Yükle'ye dokunun.</string>
+    <string name="notification_internal_android_error">Kayıt, dahili bir Android bileşeninde (%s) başarısız oldu. Bu cihaz veya donanım yazılımı arama kaydını desteklemiyor olabilir.</string>
     <string name="notification_action_open">Aç</string>
     <string name="notification_action_share">Paylaş</string>
     <string name="notification_action_delete">Sil</string>
+    <string name="notification_action_restore">Geri yükle</string>
     <string name="notification_action_pause">Duraklat</string>
     <string name="notification_action_resume">Devam ettir</string>
+
+    <!-- Menus -->
+    <string name="menu_action_help">Yardım</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Çağrı kaydı</string>
