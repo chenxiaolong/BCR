@@ -12,6 +12,7 @@
 Non-user-facing changes:
 
 * Reorganize source files (PR: #328, @chenxiaolong)
+* Add CI workflow for pull requests (PR: #331, @chenxiaolong)
 
 ### Version 1.41
 
