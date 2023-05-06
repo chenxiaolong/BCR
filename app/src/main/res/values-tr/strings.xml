@@ -98,7 +98,7 @@
     <string name="notification_recording_on_hold">Arama beklemede</string>
     <string name="notification_recording_failed">Çağrı kaydı başarısız</string>
     <string name="notification_recording_succeeded">Çağrı kaydı başarılı</string>
-    <string name="notification_message_delete_at_end">Görüşme sonunda kayıt silinecektir. Kaydı tutmak için Geri Yükle'ye dokunun.</string>
+    <string name="notification_message_delete_at_end">Görüşme sonunda kayıt silinecektir. Kaydı tutmak için Geri Yükle\'ye dokunun.</string>
     <string name="notification_internal_android_error">Kayıt, dahili bir Android bileşeninde (%s) başarısız oldu. Bu cihaz veya donanım yazılımı arama kaydını desteklemiyor olabilir.</string>
     <string name="notification_action_open">Aç</string>
     <string name="notification_action_share">Paylaş</string>
