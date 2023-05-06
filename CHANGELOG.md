@@ -7,6 +7,7 @@
   * Pausing/resuming can now be done per call and the notification will correctly show that the background call is hold
 * Add support for auto-record rules (Issue: #93, #320, PR: #327, @chenxiaolong)
   * This replaces the old "Initially paused" setting, which will automatically be migrated to the new rules system.
+* Update Turkish translations (PR: #330, @symbuzzer)
 
 Non-user-facing changes:
 
