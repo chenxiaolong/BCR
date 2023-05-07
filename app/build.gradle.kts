@@ -120,7 +120,8 @@ android {
             "ru",
             "sk",
             "tr",
-            "zh-rCN"
+            "zh-rCN",
+            "zh-rTW"
         ))
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
