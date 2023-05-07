@@ -39,7 +39,7 @@
         <item quantity="few">Держите %d дня</item>
         <item quantity="many">Держите %d дней</item>
     </plurals>
-    <string name="retention_unusable">Хранение файлов отключено, поскольку текущий шаблон имени файла несовместим с этой функцией.</string>
+    <string name="retention_unusable">Хранение файлов отключено, так как текущий шаблон имени файла несовместим с этой функцией.</string>
     <!-- Output format bottom sheet -->
     <string name="output_format_bottom_sheet_output_format">Выходной формат</string>
     <string name="output_format_bottom_sheet_compression_level">Уровень сжатия</string>
@@ -85,6 +85,7 @@
     <string name="notification_recording_paused">Запись разговора приостановлена</string>
     <string name="notification_recording_on_hold">Запись разговора на удержании</string>
     <string name="notification_recording_succeeded">Успешно записан разговор</string>
+    <string name="notification_action_restore">Восстановить</string>
     <string name="notification_internal_android_error">Сбой записи во внутреннем компоненте Android (%s). Это устройство или прошивка может не поддерживает запись вызовов.</string>
     <string name="notification_action_pause">Пауза</string>
     <string name="notification_action_resume">Возобновить</string>
