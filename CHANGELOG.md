@@ -2,6 +2,7 @@
 
 * Update Russian translations (PR: #333, @bogachenko)
 * Add Traditional Chinese translations (PR: #334, @anenasa)
+* Update Simplified Chinese translations (PR: #347, @Yee2)
 
 ### Version 1.42
 
