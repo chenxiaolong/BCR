@@ -396,6 +396,84 @@ android.applicationVariants.all {
     }
 }
 
+data class LinkRef(val type: String, val number: Int, val user: String?) : Comparable<LinkRef> {
+    override fun compareTo(other: LinkRef): Int = compareValuesBy(
+        this,
+        other,
+        { it.type },
+        { it.number },
+        { it.user },
+    )
+
+    override fun toString(): String = buildString {
+        append('[')
+        append(type)
+        append(" #")
+        append(number)
+        if (user != null) {
+            append(" @")
+            append(user)
+        }
+        append(']')
+    }
+}
+
+fun updateChangelogLinks(baseUrl: String) {
+    val file = File(rootDir, "CHANGELOG.md")
+    val regex = Regex("\\[(Issue|PR) #(\\d+)(?: @(\\w+))?\\]")
+    val links = hashMapOf<LinkRef, String>()
+    var skipRemaining = false
+    val changelog = mutableListOf<String>()
+
+    file.useLines { lines ->
+        for (rawLine in lines) {
+            val line = rawLine.trimEnd()
+
+            if (!skipRemaining) {
+                val matches = regex.findAll(line)
+
+                for (match in matches) {
+                    val ref = match.groupValues[0]
+                    val type = match.groupValues[1]
+                    val number = match.groupValues[2].toInt()
+                    val user = match.groups[3]?.value
+
+                    val link = when (type) {
+                        "Issue" -> {
+                            require(user == null) { "$ref should not have a username" }
+                            "$baseUrl/issues/$number"
+                        }
+                        "PR" -> {
+                            require(user != null) { "$ref should have a username" }
+                            "$baseUrl/pull/$number"
+                        }
+                        else -> throw IllegalArgumentException("Unknown link type: $type")
+                    }
+
+                    // #0 is used for examples only
+                    if (number != 0) {
+                        links[LinkRef(type, number, user)] = link
+                    }
+                }
+
+                if ("Do not manually edit the lines below" in line) {
+                    skipRemaining = true
+                }
+
+                changelog.add(line)
+            }
+        }
+    }
+
+    for ((ref, link) in links.entries.sortedBy { it.key }) {
+        changelog.add("$ref: $link")
+    }
+
+    changelog.add("")
+
+    file.writeText(changelog.joinToString("\n"))
+}
+
 fun updateChangelog(version: String?, replaceFirst: Boolean) {
     val file = File(rootDir, "CHANGELOG.md")
     val expected = if (version != null) { "### Version $version" } else { "### Unreleased" }
@@ -405,11 +483,12 @@ fun updateChangelog(version: String?, replaceFirst: Boolean) {
         addAll(file.readText().lineSequence())
     }
 
-    if (changelog.firstOrNull() != expected) {
+    val index = changelog.indexOfFirst { it.startsWith("### ") }
+    if (index == -1 || changelog[index] != expected) {
         if (replaceFirst) {
-            changelog[0] = expected
+            changelog[index] = expected
         } else {
-            changelog.addAll(0, listOf(expected, ""))
+            changelog.addAll(index, listOf(expected, ""))
         }
     }
 
@@ -419,6 +498,12 @@ fun updateChangelog(version: String?, replaceFirst: Boolean) {
 fun updateMagiskChangelog(gitRef: String) {
     File(File(File(File(projectDir, "magisk"), "updates"), "release"), "changelog.txt")
         .writeText("The changelog can be found at: [`CHANGELOG.md`]($projectUrl/blob/$gitRef/CHANGELOG.md).\n")
+}
+
+tasks.register("changelogUpdateLinks") {
+    doLast {
+        updateChangelogLinks(projectUrl)
+    }
 }
 
 tasks.register("changelogPreRelease") {
@@ -438,6 +523,7 @@ tasks.register("changelogPostRelease") {
 }
 
 tasks.register("preRelease") {
+    dependsOn("changelogUpdateLinks")
     dependsOn("changelogPreRelease")
 }
 
