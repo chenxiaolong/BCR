@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.43
 
 * Update Russian translations ([PR #333 @bogachenko])
 * Add Traditional Chinese translations ([PR #334 @anenasa])
