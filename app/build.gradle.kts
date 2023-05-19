@@ -484,7 +484,9 @@ fun updateChangelog(version: String?, replaceFirst: Boolean) {
     }
 
     val index = changelog.indexOfFirst { it.startsWith("### ") }
-    if (index == -1 || changelog[index] != expected) {
+    if (index == -1) {
+        changelog.addAll(0, listOf(expected, ""))
+    } else if (changelog[index] != expected) {
         if (replaceFirst) {
             changelog[index] = expected
         } else {
