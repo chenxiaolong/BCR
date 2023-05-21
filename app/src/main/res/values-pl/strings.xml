@@ -8,6 +8,9 @@
     <!-- General preferences -->
     <string name="pref_call_recording_name">Nagrywanie rozmów</string>
     <string name="pref_call_recording_desc">Nagrywaj przychodzące i wychodzące rozmowy telefoniczne. Do nagrywania w tle wymagane są uprawnienia do mikrofonu i powiadomień.</string>
+    
+    <string name="pref_record_rules_name">Reguły automatycznego nagrywania</string>
+    <string name="pref_record_rules_desc">Określ, które połączenia mają być rejestrowane automatycznie.</string>
 
     <string name="pref_output_dir_name">Katalog wyjściowy</string>
     <string name="pref_output_dir_desc">Wybierz katalog do przechowywania nagrań.</string>
@@ -20,10 +23,25 @@
 
     <!-- About "preference" -->
     <string name="pref_version_name">Wersja</string>
+    
+    <!-- Record rules bottom sheet -->
+    <string name="pref_add_rule_name">Dodaj regułę</string>
+    <string name="pref_add_rule_desc">Dodaj regułę automatycznego rejestrowania dla kontaktu.</string>
+    <string name="pref_rule_desc_on">Zachowaj nagranie.</string>
+    <string name="pref_rule_desc_off">Usuń nagranie po zakończeniu połączenia.</string>
+    <string name="record_rules_rule_added">Dodano nową regułę. Naciśnij i przytrzymaj regułę, aby ją usunąć.</string>
+    <string name="record_rules_rule_exists">Reguła już istnieje.</string>
+    <string name="record_rules_help">BCR zawsze nagrywa wewnętrznie każde połączenie, ale gdy automatyczne nagrywanie jest wyłączone, nagranie zostanie usunięte po zakończeniu połączenia. Podczas trwania rozmowy nagranie, które zaplanowano do usunięcia, można zachować za pośrednictwem powiadomienia BCR.</string>
+    <string name="record_rule_type_all_calls">Wszystkie inne połączenia</string>
+    <string name="record_rule_type_unknown_calls">Nieznane połączenia</string>
+    <string name="record_rule_type_contact">Kontakt: %s</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Zmień katalog</string>
+    <string name="output_dir_bottom_sheet_filename_template">Szablon nazwy pliku</string>
+    <string name="output_dir_bottom_sheet_edit_template">Edytuj szablon</string>
     <string name="output_dir_bottom_sheet_file_retention">Okres przechowywania plików</string>
+    <string name="output_dir_bottom_sheet_edit_retention">Edytuj okres</string>
     <string name="retention_keep_all">Pozostaw wszystkie</string>
     <plurals name="retention_days">
         <item quantity="one">Pozostaw z %d dnia</item>
@@ -31,14 +49,44 @@
         <item quantity="many">Pozostaw z %d dni</item>
         <item quantity="other">Pozostaw z %d dni</item>
     </plurals>
+    <string name="retention_unusable">Przechowywanie plików jest wyłączone, ponieważ bieżący szablon nazwy pliku jest niezgodny z tą funkcją.</string>
 
     <!-- Output format bottom sheet -->
     <string name="output_format_bottom_sheet_output_format">Format wyjściowy</string>
     <string name="output_format_bottom_sheet_compression_level">Poziom kompresji</string>
     <string name="output_format_bottom_sheet_bitrate">Szybkość transmisji</string>
     <string name="output_format_bottom_sheet_sample_rate">Częstotliwość próbkowania</string>
+    <string name="output_format_bottom_sheet_custom_param">Inna</string>
 
     <string name="bottom_sheet_reset">Przywróć domyślne ustawienia</string>
+    
+    <!-- Filename template dialog -->
+    <string name="filename_template_dialog_title">Szablon nazwy pliku</string>
+    <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
+    <string name="filename_template_dialog_message">Wprowadź niestandardowy szablon dla nazwy pliku wyjściowego. Zmienne są określane za pomocą nawiasów klamrowych (np. <annotation type="template">{var}</annotation>). Składowe są określane nawiasami kwadratowymi (np. <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nObsługiwane zmienne: <annotation type="supported_vars">PLACEHOLDER</annotation>. Zapoznaj się <annotation type="template_docs">z dkomunetacją</annotation> aby uzyskać pełen opis składni.</string>
+    <string name="filename_template_dialog_error_empty">Szablon nie może być pusty</string>
+    <string name="filename_template_dialog_error_unknown_variable">Nieznana zmienna szablonu: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">Zmienna nie może mieć argumentu: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_argument">Nieprawidłowy argument zmiennej: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_syntax">Składnia szablonu jest nieprawidłowa</string>
+    <string name="filename_template_dialog_action_reset_to_default">Przywróć ustawienia domyślne</string>
+
+    <!-- File retention dialog -->
+    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_message">Wprowadź liczbę dni przechowywania nagrań.</string>
+    <string name="file_retention_error_too_large">Liczba jest za duża</string>
+
+    <!-- Format parameter dialog -->
+    <string name="format_param_dialog_title">Parametr niestandardowy</string>
+    <string name="format_param_dialog_message">Wprowadź wartość z zakresu [%1$s, %2$s].</string>
+
+    <!-- Format parameter -->
+    <string name="format_param_bitrate">%s kbps</string>
+    <string name="format_param_compression_level">Poziom %s</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_action_ok">OK</string>
+    <string name="dialog_action_cancel">Anuluj</string>
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Usługi w tle</string>
@@ -51,12 +99,17 @@
     <string name="notification_recording_paused">Nagrywanie rozmowy wstrzymane</string>
     <string name="notification_recording_failed">Nie udało się nagrać rozmowy</string>
     <string name="notification_recording_succeeded">Pomyślnie nagrano rozmowę</string>
+    <string name="notification_message_delete_at_end">Nagranie zostanie usunięte po zakończeniu rozmowy. Stuknij Przywróć, aby zachować nagranie.</string>
     <string name="notification_internal_android_error">Podczas nagrywania wystąpił błąd w wewnętrznym komponencie Androida (%s). To urządzenie lub system może nie obsługiwać nagrywania rozmów.</string>
     <string name="notification_action_open">Otwórz</string>
     <string name="notification_action_share">Udostępnij</string>
     <string name="notification_action_delete">Usuń</string>
+    <string name="notification_action_restore">Przywróć</string>
     <string name="notification_action_pause">Wstrzymaj</string>
     <string name="notification_action_resume">Wznów</string>
+    
+    <!-- Menus -->
+    <string name="menu_action_help">Pomoc</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Nagrywanie rozmów</string>
