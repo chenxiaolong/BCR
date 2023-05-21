@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update Polish translations ([PR #349 @phyrz91])
+
 ### Version 1.43
 
 * Update Russian translations ([PR #333 @bogachenko])
@@ -593,3 +595,4 @@ Non-user-facing changes:
 [PR #333 @bogachenko]: https://github.com/chenxiaolong/BCR/pull/333
 [PR #334 @anenasa]: https://github.com/chenxiaolong/BCR/pull/334
 [PR #347 @Yee2]: https://github.com/chenxiaolong/BCR/pull/347
+[PR #349 @phyrz91]: https://github.com/chenxiaolong/BCR/pull/349
