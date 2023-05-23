@@ -32,7 +32,7 @@ class Preferences(private val context: Context) {
         const val PREF_RULE_PREFIX = "rule_"
 
         // Legacy preferences
-        private const val PREF_INITIALLY_PAUSED = "initially_paused"
+        internal const val PREF_INITIALLY_PAUSED = "initially_paused"
 
         // Not associated with a UI preference
         private const val PREF_DEBUG_MODE = "debug_mode"
@@ -60,7 +60,7 @@ class Preferences(private val context: Context) {
             key == PREF_FORMAT_NAME || key.startsWith(PREF_FORMAT_PARAM_PREFIX)
     }
 
-    private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+    internal val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
     /**
      * Get a unsigned integer preference value.
@@ -266,7 +266,7 @@ class Preferences(private val context: Context) {
      */
     fun migrateInitiallyPaused() {
         if (prefs.contains(PREF_INITIALLY_PAUSED)) {
-            val oldValue = prefs.getBoolean(PREF_INITIALLY_PAUSED, false)
+            val oldValue = !prefs.getBoolean(PREF_INITIALLY_PAUSED, false)
             recordRules = listOf(
                 RecordRule.UnknownCalls(oldValue),
                 RecordRule.AllCalls(oldValue),

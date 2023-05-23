@@ -23,7 +23,7 @@ sealed class RecordRule {
         editor.putBoolean(prefix + PREF_SUFFIX_RECORD, record)
     }
 
-    class AllCalls(override val record: Boolean) : RecordRule() {
+    data class AllCalls(override val record: Boolean) : RecordRule() {
         override fun matches(contactLookupKeys: Collection<String>?): Boolean = true
 
         companion object {
@@ -35,7 +35,7 @@ sealed class RecordRule {
         }
     }
 
-    class UnknownCalls(override val record: Boolean) : RecordRule() {
+    data class UnknownCalls(override val record: Boolean) : RecordRule() {
         override fun matches(contactLookupKeys: Collection<String>?): Boolean =
             contactLookupKeys?.isEmpty() ?: false
 
@@ -48,7 +48,7 @@ sealed class RecordRule {
         }
     }
 
-    class Contact(val lookupKey: String, override val record: Boolean) : RecordRule() {
+    data class Contact(val lookupKey: String, override val record: Boolean) : RecordRule() {
         override fun matches(contactLookupKeys: Collection<String>?): Boolean =
             contactLookupKeys != null && lookupKey in contactLookupKeys
 
