@@ -9,7 +9,11 @@
 
 ### Unreleased
 
+**IMPORTANT:** For folks who upgraded from an old BCR version to 1.42 or 1.43, please double check to make sure the auto-record rules are what you expect.
+
 * Update Polish translations ([PR #349 @phyrz91])
+* Fix incorrect/opposite logic in the migration of the old "Initially paused" option ([Issue #350], [PR #351 @chenxiaolong])
+  * Users who toggled the "Initially paused" option in the past (even turning on and then back off) had the setting migrated to the opposite auto-record behavior. For example, initially paused disabled was migrated to auto-record disabled (instead of enabled).
 
 ### Version 1.43
 
@@ -436,6 +440,7 @@ Non-user-facing changes:
 [Issue #307]: https://github.com/chenxiaolong/BCR/issues/307
 [Issue #314]: https://github.com/chenxiaolong/BCR/issues/314
 [Issue #320]: https://github.com/chenxiaolong/BCR/issues/320
+[Issue #350]: https://github.com/chenxiaolong/BCR/issues/350
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -596,3 +601,4 @@ Non-user-facing changes:
 [PR #334 @anenasa]: https://github.com/chenxiaolong/BCR/pull/334
 [PR #347 @Yee2]: https://github.com/chenxiaolong/BCR/pull/347
 [PR #349 @phyrz91]: https://github.com/chenxiaolong/BCR/pull/349
+[PR #351 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/351
