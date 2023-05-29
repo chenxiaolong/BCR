@@ -1,0 +1,115 @@
+<resources>
+    <string name="app_name_full">Basic Call Recorder</string>
+
+    <!-- Preference headers -->
+    <string name="pref_header_general">Загальні налаштування</string>
+    <string name="pref_header_about">Про програму</string>
+
+    <!-- General preferences -->
+    <string name="pref_call_recording_name">Записування дзвінків</string>
+    <string name="pref_call_recording_desc">Запис вхідних і вихідних телефонних дзвінків. Для запису у фоновому режимі потрібні дозволи на мікрофон і сповіщення.</string>
+
+    <string name="pref_record_rules_name">Правила автозапису</string>
+    <string name="pref_record_rules_desc">Налаштуйте, які дзвінки мають автоматично записуватися.</string>
+
+    <string name="pref_output_dir_name">Вихідний каталог</string>
+    <string name="pref_output_dir_desc">Виберіть каталог для зберігання записів.</string>
+
+    <string name="pref_output_format_name">Вихідний формат</string>
+    <string name="pref_output_format_desc">Виберіть формат кодування для записів.</string>
+
+    <string name="pref_inhibit_batt_opt_name">Вимкнути оптимізацію акумулятора</string>
+    <string name="pref_inhibit_batt_opt_desc">Зменшує ймовірність закриття програми системою.</string>
+
+    <!-- About "preference" -->
+    <string name="pref_version_name">Версія</string>
+
+    <!-- Record rules bottom sheet -->
+    <string name="pref_add_rule_name">Додати правило</string>
+    <string name="pref_add_rule_desc">Додайте правило автоматичного запису для контакту.</string>
+    <string name="pref_rule_desc_on">Зберегти запис</string>
+    <string name="pref_rule_desc_off">Видалити запис після завершення розмови.</string>
+    <string name="record_rules_rule_added">Додано нове правило. Натисніть і утримуйте правило, щоб видалити його.</string>
+    <string name="record_rules_rule_exists">Правило вже існує.</string>
+    <string name="record_rules_help">BCR внутрішньо завжди записує кожен дзвінок, але коли автоматичний запис вимкнено, запис буде видалено в кінці дзвінка. Під час розмови запис, запланований на видалення, можна зберегти за допомогою сповіщення BCR.</string>
+    <string name="record_rule_type_all_calls">Усі інші дзвінки</string>
+    <string name="record_rule_type_unknown_calls">Невідомі дзвінки</string>
+    <string name="record_rule_type_contact">Контакт: %s</string>
+
+    <!-- Output directory bottom sheet -->
+    <string name="output_dir_bottom_sheet_change_dir">Змінити каталог</string>
+    <string name="output_dir_bottom_sheet_filename_template">Шаблон імені файлу</string>
+    <string name="output_dir_bottom_sheet_edit_template">Редагувати шаблон</string>
+    <string name="output_dir_bottom_sheet_file_retention">Збереження записів</string>
+    <string name="output_dir_bottom_sheet_edit_retention">Редагувати збереження</string>
+    <string name="retention_keep_all">Зберегти назавжди</string>
+    <plurals name="retention_days">
+        <item quantity="one">Зберегти %d день</item>
+        <item quantity="other">Зберегти %d днів</item>
+    </plurals>
+    <string name="retention_unusable">Збереження файлів вимкнено, оскільки поточний шаблон імені файлу несумісний із цією функцією.</string>
+
+    <!-- Output format bottom sheet -->
+    <string name="output_format_bottom_sheet_output_format">Вихідний формат</string>
+    <string name="output_format_bottom_sheet_compression_level">Рівень стиснення</string>
+    <string name="output_format_bottom_sheet_bitrate">Бітрейт</string>
+    <string name="output_format_bottom_sheet_sample_rate">Частота дискретизації</string>
+    <string name="output_format_bottom_sheet_custom_param">Вручну</string>
+
+    <string name="bottom_sheet_reset">Відновити налаштування за замовчуванням</string>
+
+    <!-- Filename template dialog -->
+    <string name="filename_template_dialog_title">Шаблон імені файлу</string>
+    <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
+    <string name="filename_template_dialog_message">Введіть спеціальний шаблон для назви вихідного файлу. Змінні вказуються у фігурних дужках (наприклад <annotation type="template">{var}</annotation>). Резервні варіанти вказуються у квадратних дужках (наприклад <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nПідтримувані змінні: <annotation type="supported_vars">PLACEHOLDER</annotation>. Дивись <annotation type="template_docs">документацію</annotation> для повного опису синтаксису.</string>
+    <string name="filename_template_dialog_error_empty">Шаблон не може бути порожнім</string>
+    <string name="filename_template_dialog_error_unknown_variable">Невідома змінна шаблону: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">Змінна не може мати аргумент: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_argument">Недійсний аргумент змінної: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_syntax">Недійсний синтаксис шаблону</string>
+    <string name="filename_template_dialog_action_reset_to_default">Відновити налаштування за замовчуванням</string>
+
+    <!-- File retention dialog -->
+    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_message">Введіть кількість днів для зберігання записів.</string>
+    <string name="file_retention_error_too_large">Число завелике</string>
+
+    <!-- Format parameter dialog -->
+    <string name="format_param_dialog_title">Власний параметр</string>
+    <string name="format_param_dialog_message">Введіть значення в діапазоні [%1$s, %2$s].</string>
+
+    <!-- Format parameter -->
+    <string name="format_param_bitrate">%s кбіт/с</string>
+    <string name="format_param_compression_level">Рівень %s</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_action_ok">Гаразд</string>
+    <string name="dialog_action_cancel">Скасувати</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_persistent_name">Фонові служби</string>
+    <string name="notification_channel_persistent_desc">Постійне сповіщення про фоновий запис дзвінка</string>
+    <string name="notification_channel_failure_name">Сповіщення про збої</string>
+    <string name="notification_channel_failure_desc">Сповіщення про помилки під час запису розмови</string>
+    <string name="notification_channel_success_name">Сповіщення про успіх</string>
+    <string name="notification_channel_success_desc">Сповіщення про успішні записи дзвінків</string>
+    <string name="notification_recording_in_progress">Триває запис розмови</string>
+    <string name="notification_recording_paused">Запис виклику призупинено</string>
+    <string name="notification_recording_on_hold">Дзвінок на утриманні</string>
+    <string name="notification_recording_failed">Не вдалося записати дзвінок</string>
+    <string name="notification_recording_succeeded">Успішно записаний дзвінок</string>
+    <string name="notification_message_delete_at_end">Після завершення розмови запис буде видалено. Натисніть «Відновити», щоб зберегти запис.</string>
+    <string name="notification_internal_android_error">Помилка запису у внутрішньому компоненті Android (%s). Цей пристрій або мікропрограма може не підтримувати запис викликів.</string>
+    <string name="notification_action_open">Відкрити</string>
+    <string name="notification_action_share">Поділитися</string>
+    <string name="notification_action_delete">Видалити</string>
+    <string name="notification_action_restore">Відновити</string>
+    <string name="notification_action_pause">Призупинити</string>
+    <string name="notification_action_resume">Відновити</string>
+
+    <!-- Menus -->
+    <string name="menu_action_help">Допомога</string>
+
+    <!-- Quick settings tile -->
+    <string name="quick_settings_label">Запис дзвінків</string>
+</resources>
