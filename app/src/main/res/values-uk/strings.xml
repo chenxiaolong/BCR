@@ -45,6 +45,9 @@
     <string name="retention_keep_all">Зберегти назавжди</string>
     <plurals name="retention_days">
         <item quantity="one">Зберегти %d день</item>
+        <item quantity="two">Зберегти %d дні</item>
+        <item quantity="three">Зберегти %d дні</item>
+        <item quantity="four">Зберегти %d дні</item>
         <item quantity="other">Зберегти %d днів</item>
     </plurals>
     <string name="retention_unusable">Збереження файлів вимкнено, оскільки поточний шаблон імені файлу несумісний із цією функцією.</string>
