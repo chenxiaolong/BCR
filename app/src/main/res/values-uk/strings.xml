@@ -13,10 +13,10 @@
     <string name="pref_record_rules_desc">Налаштуйте, які дзвінки мають автоматично записуватися.</string>
 
     <string name="pref_output_dir_name">Вихідний каталог</string>
-    <string name="pref_output_dir_desc">Виберіть каталог для зберігання записів.</string>
+    <string name="pref_output_dir_desc">Виберіть каталог для збереження записів.</string>
 
     <string name="pref_output_format_name">Вихідний формат</string>
-    <string name="pref_output_format_desc">Виберіть формат кодування для записів.</string>
+    <string name="pref_output_format_desc">Виберіть формат кодування записів.</string>
 
     <string name="pref_inhibit_batt_opt_name">Вимкнути оптимізацію акумулятора</string>
     <string name="pref_inhibit_batt_opt_desc">Зменшує ймовірність закриття програми системою.</string>
@@ -93,15 +93,15 @@
     <string name="notification_channel_persistent_name">Фонові служби</string>
     <string name="notification_channel_persistent_desc">Постійне сповіщення про фоновий запис дзвінка</string>
     <string name="notification_channel_failure_name">Сповіщення про збої</string>
-    <string name="notification_channel_failure_desc">Сповіщення про помилки під час запису розмови</string>
+    <string name="notification_channel_failure_desc">Сповіщення про помилки під час запису дзвінка</string>
     <string name="notification_channel_success_name">Сповіщення про успіх</string>
     <string name="notification_channel_success_desc">Сповіщення про успішні записи дзвінків</string>
-    <string name="notification_recording_in_progress">Триває запис розмови</string>
+    <string name="notification_recording_in_progress">Триває запис дзвінка</string>
     <string name="notification_recording_paused">Запис виклику призупинено</string>
     <string name="notification_recording_on_hold">Дзвінок на утриманні</string>
     <string name="notification_recording_failed">Не вдалося записати дзвінок</string>
-    <string name="notification_recording_succeeded">Успішно записаний дзвінок</string>
-    <string name="notification_message_delete_at_end">Після завершення розмови запис буде видалено. Натисніть «Відновити», щоб зберегти запис.</string>
+    <string name="notification_recording_succeeded">Дзвінок успішно записаний</string>
+    <string name="notification_message_delete_at_end">Після завершення дзвінка запис буде видалено. Натисніть «Відновити», щоб зберегти запис.</string>
     <string name="notification_internal_android_error">Помилка запису у внутрішньому компоненті Android (%s). Цей пристрій або мікропрограма може не підтримувати запис викликів.</string>
     <string name="notification_action_open">Відкрити</string>
     <string name="notification_action_share">Поділитися</string>
