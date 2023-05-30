@@ -9,7 +9,7 @@
 
 ### Unreleased
 
-* Update all dependencies ([PR #354 @PatrykMis]
+* Update all dependencies ([PR #354 @PatrykMis])
 
 ### Version 1.44
 
