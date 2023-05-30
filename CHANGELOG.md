@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update all dependencies ([PR #354 @PatrykMis]
+
 ### Version 1.44
 
 **IMPORTANT:** For folks who upgraded from an old BCR version to 1.42 or 1.43, please double check to make sure the auto-record rules are what you expect.
@@ -604,3 +606,4 @@ Non-user-facing changes:
 [PR #347 @Yee2]: https://github.com/chenxiaolong/BCR/pull/347
 [PR #349 @phyrz91]: https://github.com/chenxiaolong/BCR/pull/349
 [PR #351 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/351
+[PR #354 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/354
