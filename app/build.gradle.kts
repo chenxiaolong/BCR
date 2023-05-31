@@ -120,6 +120,7 @@ android {
             "ru",
             "sk",
             "tr",
+            "uk",
             "zh-rCN",
             "zh-rTW"
         ))
