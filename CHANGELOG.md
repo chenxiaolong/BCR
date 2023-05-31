@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update all dependencies ([PR #354 @PatrykMis])
+* Add Ukrainian translations ([Issue #352], [PR #356 @Hutsul-coder])
 
 ### Version 1.44
 
@@ -445,6 +446,7 @@ Non-user-facing changes:
 [Issue #314]: https://github.com/chenxiaolong/BCR/issues/314
 [Issue #320]: https://github.com/chenxiaolong/BCR/issues/320
 [Issue #350]: https://github.com/chenxiaolong/BCR/issues/350
+[Issue #352]: https://github.com/chenxiaolong/BCR/issues/352
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -607,3 +609,4 @@ Non-user-facing changes:
 [PR #349 @phyrz91]: https://github.com/chenxiaolong/BCR/pull/349
 [PR #351 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/351
 [PR #354 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/354
+[PR #356 @Hutsul-coder]: https://github.com/chenxiaolong/BCR/pull/356

@@ -421,7 +421,7 @@ data class LinkRef(val type: String, val number: Int, val user: String?) : Compa
 
 fun updateChangelogLinks(baseUrl: String) {
     val file = File(rootDir, "CHANGELOG.md")
-    val regex = Regex("\\[(Issue|PR) #(\\d+)(?: @(\\w+))?\\]")
+    val regex = Regex("\\[(Issue|PR) #(\\d+)(?: @([\\w-]+))?\\]")
     val links = hashMapOf<LinkRef, String>()
     var skipRemaining = false
     val changelog = mutableListOf<String>()
