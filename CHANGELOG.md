@@ -12,6 +12,8 @@
 * Update all dependencies ([PR #354 @PatrykMis])
 * Add Ukrainian translations ([Issue #352], [PR #356 @Hutsul-coder])
 * Add German translations ([PR #358 @newsn23])
+* Remove migration of the old `bcr.properties` config file to the new filename templates ([PR #359 @chenxiaolong])
+  * If you used `bcr.properties` in the past, upgrade to 1.44 first and then upgrade to this version.
 
 ### Version 1.44
 
@@ -612,3 +614,4 @@ Non-user-facing changes:
 [PR #354 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/354
 [PR #356 @Hutsul-coder]: https://github.com/chenxiaolong/BCR/pull/356
 [PR #358 @newsn23]: https://github.com/chenxiaolong/BCR/pull/358
+[PR #359 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/359
