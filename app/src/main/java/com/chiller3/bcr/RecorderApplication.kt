@@ -12,9 +12,6 @@ class RecorderApplication : Application() {
 
         val props = Preferences(this)
         props.migrateInitiallyPaused()
-        // Migrate the old properties file. This is blocking, but oh well. We can remove the
-        // migration logic after a few more releases.
-        props.migrateLegacyProperties()
 
         // Enable Material You colors
         DynamicColors.applyToActivitiesIfAvailable(this)

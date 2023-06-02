@@ -17,7 +17,6 @@ import com.copperleaf.kudzu.parser.mapped.MappedParser
 import com.copperleaf.kudzu.parser.maybe.MaybeParser
 import com.copperleaf.kudzu.parser.sequence.SequenceParser
 import com.copperleaf.kudzu.parser.text.IdentifierTokenParser
-import java.util.*
 
 class Template(template: String) {
     companion object {
@@ -177,63 +176,6 @@ class Template(template: String) {
             ),
         ) {
             it.node1.value
-        }
-
-        /**
-         * Convert the legacy properties file template format to a string template.
-         */
-        fun fromLegacyProperties(props: Properties): Template {
-            val clean = { value: String ->
-                // Android's regex implementation requires the "redundant" escapes
-                @Suppress("RegExpRedundantEscape")
-                value
-                    .replace("\\\$\\{([^\\}]+)\\}".toRegex(), "\u0000$1\u0000")
-                    .let { escape(it) }
-                    .replace("\u0000([^\u0000]+)\u0000".toRegex(), "{$1}")
-            }
-
-            var index = 0
-            val template = StringBuilder()
-
-            while (true) {
-                val textRaw = props.getProperty("filename.$index.text") ?: break
-                val defaultRaw = props.getProperty("filename.$index.default")
-                val prefixRaw = props.getProperty("filename.$index.prefix")
-                val suffixRaw = props.getProperty("filename.$index.suffix")
-                val text = clean(textRaw)
-                val default = defaultRaw?.let { clean(it) }
-                val prefix = prefixRaw?.let { clean(it) }
-                val suffix = suffixRaw?.let { clean(it) }
-
-                if (default == null && prefix == null && suffix == null) {
-                    template.append(text)
-                } else {
-                    template.append('[')
-                    if (prefix != null) {
-                        template.append(prefix)
-                    }
-                    if (default != null) {
-                        template.append('[')
-                        template.append(text)
-                        template.append('|')
-                        template.append(default)
-                        template.append(']')
-                    } else {
-                        template.append(text)
-                    }
-                    if (suffix != null) {
-                        template.append(suffix)
-                    }
-                    if (default == null || default.contains('$')) {
-                        template.append('|')
-                    }
-                    template.append(']')
-                }
-
-                ++index
-            }
-
-            return Template(template.toString())
         }
 
         /**

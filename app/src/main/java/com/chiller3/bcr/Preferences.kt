@@ -5,16 +5,13 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.edit
-import androidx.documentfile.provider.DocumentFile
 import androidx.preference.PreferenceManager
-import com.chiller3.bcr.extension.findFileFast
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.SampleRate
 import com.chiller3.bcr.output.Retention
 import com.chiller3.bcr.rule.RecordRule
 import com.chiller3.bcr.template.Template
 import java.io.File
-import java.util.Properties
 
 class Preferences(private val context: Context) {
     companion object {
@@ -179,40 +176,6 @@ class Preferences(private val context: Context) {
                 putString(PREF_FILENAME_TEMPLATE, template.toString())
             }
         }
-
-    /**
-     * Migrate legacy properties file based filename template to [Template].
-     *
-     * Will be removed in version 1.45.
-     */
-    fun migrateLegacyProperties() {
-        val outputDir = outputDir?.let {
-            // Only returns null on API <21
-            DocumentFile.fromTreeUri(context, it)!!
-        } ?: DocumentFile.fromFile(defaultOutputDir)
-
-        Log.d(TAG, "Looking for legacy filename template in: ${outputDir.uri}")
-
-        val templateFile = outputDir.findFileFast("bcr.properties")
-        if (templateFile != null) {
-            try {
-                Log.d(TAG, "Migrating legacy filename template: ${templateFile.uri}")
-
-                val props = Properties()
-
-                context.contentResolver.openInputStream(templateFile.uri)?.use {
-                    props.load(it)
-                }
-
-                filenameTemplate = Template.fromLegacyProperties(props)
-                templateFile.renameTo("bcr.properties.migrated")
-            } catch (e: Exception) {
-                Log.w(TAG, "Failed to migrate legacy filename template", e)
-            }
-        } else {
-            Log.d(TAG, "No legacy filename template to migrate")
-        }
-    }
 
     /**
      * The saved file retention (in days).
