@@ -1,0 +1,115 @@
+<resources>
+    <string name="app_name_full">Basic Call Recorder</string>
+
+    <!-- Preference headers -->
+    <string name="pref_header_general">Allgemein</string>
+    <string name="pref_header_about">Über</string>
+
+    <!-- General preferences -->
+    <string name="pref_call_recording_name">Anrufaufnahme</string>
+    <string name="pref_call_recording_desc">Nehme ankommende und ausgehende Anrufe auf. Mikrofon- und Benachrichtigungserlaubnis sind erforderlich, um im Hintergrund aufnehmen zu können.</string>
+
+    <string name="pref_record_rules_name">Automatische Aufnahme Regeln</string>
+    <string name="pref_record_rules_desc">Stelle eine welche Anrufe automatisch aufgenommen werden sollen.</string>
+
+    <string name="pref_output_dir_name">Aufnahmen Verzeichnis</string>
+    <string name="pref_output_dir_desc">Wähle den Ordner, in dem die Aufnahmen gespeichert werden sollen.</string>
+
+    <string name="pref_output_format_name">Aufnahmeformat</string>
+    <string name="pref_output_format_desc">Wähle ein Dateiformat für die Aufnahmen.</string>
+
+    <string name="pref_inhibit_batt_opt_name">Deaktivere die Batterieoptimierung</string>
+    <string name="pref_inhibit_batt_opt_desc">Reduziert die Wahrscheinlichkeit, dass die App vom System beendet wird.</string>
+
+    <!-- About "preference" -->
+    <string name="pref_version_name">Version</string>
+
+    <!-- Record rules bottom sheet -->
+    <string name="pref_add_rule_name">Füge eine Regel hinzu</string>
+    <string name="pref_add_rule_desc">Füge eine automatische Aufnahmeregel für einen Kontakt hinzu.</string>
+    <string name="pref_rule_desc_on">Behalte die Aufnahme.</string>
+    <string name="pref_rule_desc_off">Lösche die Aufnahme, sobald das Gespräch beendet wurde.</string>
+    <string name="record_rules_rule_added">Neue Regel hinzugefügt. Lange gedrückt halten, um sie zu löschen.</string>
+    <string name="record_rules_rule_exists">Regel existiert bereits.</string>
+    <string name="record_rules_help">BCR nimmt intern jeden Anruf auf, aber wenn "Automatische Aufnahme" ausgeschaltet ist, wird die Aufnahme am Ende des Gesprächs gelöscht. Während eines Anrufs kann der Nutzer über die BCR Benachrichtungsleiste auswählen, dass die Aufnahme erhalten bleiben soll.</string>
+    <string name="record_rule_type_all_calls">Alle anderen Anrufe</string>
+    <string name="record_rule_type_unknown_calls">Unbekannte Anrufe</string>
+    <string name="record_rule_type_contact">Kontakt: %s</string>
+
+    <!-- Output directory bottom sheet -->
+    <string name="output_dir_bottom_sheet_change_dir">Ändere Ordner</string>
+    <string name="output_dir_bottom_sheet_filename_template">Dateinamen Vorlage</string>
+    <string name="output_dir_bottom_sheet_edit_template">Vorlage ändern</string>
+    <string name="output_dir_bottom_sheet_file_retention">Aufbewahrung</string>
+    <string name="output_dir_bottom_sheet_edit_retention">Bearbeite Aufbewahrung</string>
+    <string name="retention_keep_all">Behalte alle</string>
+    <plurals name="retention_days">
+        <item quantity="one">Behalte für %d Tage</item>
+        <item quantity="other">Behalte für %d Tage</item>
+    </plurals>
+    <string name="retention_unusable">Dateiaufbewahrung ist deaktiviert, da die aktuelle Dateinamenvorlage mit dieser Funktion inkompatibel ist.</string>
+
+    <!-- Output format bottom sheet -->
+    <string name="output_format_bottom_sheet_output_format">Aufnahmeformat</string>
+    <string name="output_format_bottom_sheet_compression_level">Komprimierungsstufe</string>
+    <string name="output_format_bottom_sheet_bitrate">Bitrate</string>
+    <string name="output_format_bottom_sheet_sample_rate">Abtastrate</string>
+    <string name="output_format_bottom_sheet_custom_param">Benutzerdefiniert</string>
+
+    <string name="bottom_sheet_reset">Standardeinstellungen wiederherstellen</string>
+
+    <!-- Filename template dialog -->
+    <string name="filename_template_dialog_title">Dateinamen Vorlage</string>
+    <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
+    <string name="filename_template_dialog_message">Gebe eine eigene Vorlage für die Aufnahmebezeichnung an. Variablen werden mit geschweiften Klammern gekennzeichnet. (z.B. <annotation type="template">{var}</annotation>). Ausweichlösungen werden mit eckigen Klammern gekennzeichnet (z.B. <annotation type="template">[{kontakt_name}|Unbekannt]</annotation>).\n\nUnterstützte Variablen: <annotation type="supported_vars">PLACEHOLDER</annotation>. Siehe in<annotation type="template_docs">der Dokumentation</annotation> für eine komplette Beschreibung der Syntax nach.</string>
+    <string name="filename_template_dialog_error_empty">Vorlage darf nicht leer sein</string>
+    <string name="filename_template_dialog_error_unknown_variable">Unbekannte Vorlagen Variable: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">Variable kann kein Parameter beinhalten: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_argument">Ungültiges Variablenparameter: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_syntax">Vorlagen Syntax ist ungültig</string>
+    <string name="filename_template_dialog_action_reset_to_default">Standardeinstellungen wiederherstellen</string>
+
+    <!-- File retention dialog -->
+    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_message">Gebe die Anzahl der Tage ein, für die, die Aufnahmen aufbewahrt werden sollen.</string>
+    <string name="file_retention_error_too_large">Nummer ist zu groß</string>
+
+    <!-- Format parameter dialog -->
+    <string name="format_param_dialog_title">Benutzerdefinierte Parameter</string>
+    <string name="format_param_dialog_message">Gebe einen Wert von [%1$s, %2$s] ein.</string>
+
+    <!-- Format parameter -->
+    <string name="format_param_bitrate">%s kbps</string>
+    <string name="format_param_compression_level">Komprimierungsstufe %s</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_action_ok">OK</string>
+    <string name="dialog_action_cancel">Abbrechen</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_persistent_name">Hintergrunddienste</string>
+    <string name="notification_channel_persistent_desc">Persistierende Benachrichtigung für Aufnahmen im Hintergrund</string>
+    <string name="notification_channel_failure_name">Fehlfunktionswarnung</string>
+    <string name="notification_channel_failure_desc">Warnung für Fehler während einer Anrufaufnahme</string>
+    <string name="notification_channel_success_name">Erfolgsbenachrichtigung</string>
+    <string name="notification_channel_success_desc">Benachrichtigung für erfolgreiche Anrufaufnahmen</string>
+    <string name="notification_recording_in_progress">Anrufaufnahme in Gange</string>
+    <string name="notification_recording_paused">Anrufaufnahme pausiert</string>
+    <string name="notification_recording_on_hold">Anruf wird gehalten</string>
+    <string name="notification_recording_failed">Fehler bei Anrufaufnahme</string>
+    <string name="notification_recording_succeeded">Erfolgreiche Anrufaufnahme</string>
+    <string name="notification_message_delete_at_end">Die Aufnahme wird am Ende des Gesprächs gelöscht. Tippe "Behalten", um die Aufnahme zu erhalten.</string>
+    <string name="notification_internal_android_error">Die Aufnahme ist aufgrund eines internen Android Bestandteils gescheitert (%s). Dieses Gerät oder die Firmware unterstützt eventuell keine Anrufaufnahmen.</string>
+    <string name="notification_action_open">Öffnen</string>
+    <string name="notification_action_share">Teilen</string>
+    <string name="notification_action_delete">Löschen</string>
+    <string name="notification_action_restore">Behalten</string>
+    <string name="notification_action_pause">Pause</string>
+    <string name="notification_action_resume">Fortsetzen</string>
+
+    <!-- Menus -->
+    <string name="menu_action_help">Hilfe</string>
+
+    <!-- Quick settings tile -->
+    <string name="quick_settings_label">Anrufaufnahme</string>
+</resources>
