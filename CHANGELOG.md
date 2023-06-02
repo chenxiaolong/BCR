@@ -11,6 +11,7 @@
 
 * Update all dependencies ([PR #354 @PatrykMis])
 * Add Ukrainian translations ([Issue #352], [PR #356 @Hutsul-coder])
+* Add German translations ([PR #358 @newsn23])
 
 ### Version 1.44
 
@@ -610,3 +611,4 @@ Non-user-facing changes:
 [PR #351 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/351
 [PR #354 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/354
 [PR #356 @Hutsul-coder]: https://github.com/chenxiaolong/BCR/pull/356
+[PR #358 @newsn23]: https://github.com/chenxiaolong/BCR/pull/358
