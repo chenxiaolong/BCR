@@ -199,24 +199,6 @@ class TemplateTest {
     }
 
     @Test
-    fun testLegacyPropertiesToTemplate() {
-        val props = Properties()
-        props["filename.0.text"] = "\${var:arg}"
-        props["filename.1.text"] = "\${missing}"
-        props["filename.1.default"] = "|"
-        props["filename.1.prefix"] = "{"
-        props["filename.1.suffix"] = "}"
-        props["filename.2.text"] = "\${missing}"
-        props["filename.2.prefix"] = "["
-        props["filename.2.suffix"] = "]"
-
-        assertEquals(
-            "{var:arg}[\\{[{missing}|\\|]\\}][\\[{missing}\\]|]",
-            Template.fromLegacyProperties(props).toString(),
-        )
-    }
-
-    @Test
     fun testEvaluate() {
         fun getVar(name: String, arg: String?): String? {
             return when (name) {
