@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.45
 
 * Update all dependencies ([PR #354 @PatrykMis])
 * Add Ukrainian translations ([Issue #352], [PR #356 @Hutsul-coder])
