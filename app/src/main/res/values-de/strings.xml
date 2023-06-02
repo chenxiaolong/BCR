@@ -16,7 +16,7 @@
     <string name="pref_output_dir_desc">Wähle den Ordner, in dem die Aufnahmen gespeichert werden sollen.</string>
 
     <string name="pref_output_format_name">Aufnahmeformat</string>
-    <string name="pref_output_format_desc">Wähle eine  Select an Dateiformat für die Aufnahmen.</string>
+    <string name="pref_output_format_desc">Wähle ein Dateiformat für die Aufnahmen.</string>
 
     <string name="pref_inhibit_batt_opt_name">Deaktivere die Batterieoptimierung</string>
     <string name="pref_inhibit_batt_opt_desc">Reduziert die Wahrscheinlichkeit, dass die App vom System beendet wird.</string>
@@ -25,10 +25,10 @@
     <string name="pref_version_name">Version</string>
 
     <!-- Record rules bottom sheet -->
-    <string name="pref_add_rule_name">Füge Regel hinzu</string>
+    <string name="pref_add_rule_name">Füge eine Regel hinzu</string>
     <string name="pref_add_rule_desc">Füge eine automatische Aufnahmeregel für einen Kontakt hinzu.</string>
     <string name="pref_rule_desc_on">Behalte die Aufnahme.</string>
-    <string name="pref_rule_desc_off">Lösche die Aufnahme, wenn das Gespräch beendet wurde.</string>
+    <string name="pref_rule_desc_off">Lösche die Aufnahme, sobald das Gespräch beendet wurde.</string>
     <string name="record_rules_rule_added">Neue Regel hinzugefügt. Lange gedrückt halten, um sie zu löschen.</string>
     <string name="record_rules_rule_exists">Regel existiert bereits.</string>
     <string name="record_rules_help">BCR nimmt intern jeden Anruf auf, aber wenn "Automatische Aufnahme" ausgeschaltet ist, wird die Aufnahme am Ende des Gesprächs gelöscht. Während eines Anrufs kann der Nutzer über die BCR Benachrichtungsleiste auswählen, dass die Aufnahme erhalten bleiben soll.</string>
