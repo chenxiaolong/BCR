@@ -420,9 +420,28 @@ data class LinkRef(val type: String, val number: Int, val user: String?) : Compa
     }
 }
 
+fun checkBrackets(line: String) {
+    var expectOpening = true
+
+    for (c in line) {
+        if (c == '[' || c == ']') {
+            if (c == '[' != expectOpening) {
+                throw IllegalArgumentException("Mismatched brackets: $line")
+            }
+
+            expectOpening = !expectOpening
+        }
+    }
+
+    if (!expectOpening) {
+        throw IllegalArgumentException("Missing closing bracket: $line")
+    }
+}
+
 fun updateChangelogLinks(baseUrl: String) {
     val file = File(rootDir, "CHANGELOG.md")
-    val regex = Regex("\\[(Issue|PR) #(\\d+)(?: @([\\w-]+))?\\]")
+    var regexStandaloneLink = Regex("\\[([^\\]]+)\\](?![\\(\\[])")
+    val regexAutoLink = Regex("(Issue|PR) #(\\d+)(?: @([\\w-]+))?")
     val links = hashMapOf<LinkRef, String>()
     var skipRemaining = false
     val changelog = mutableListOf<String>()
@@ -432,9 +451,14 @@ fun updateChangelogLinks(baseUrl: String) {
             val line = rawLine.trimEnd()
 
             if (!skipRemaining) {
-                val matches = regex.findAll(line)
+                checkBrackets(line)
+                val matches = regexStandaloneLink.findAll(line)
 
-                for (match in matches) {
+                for (linkMatch in matches) {
+                    val linkText = linkMatch.groupValues[1]
+                    val match = regexAutoLink.matchEntire(linkText)
+                    require(match != null) { "Invalid link format: $linkText" }
+
                     val ref = match.groupValues[0]
                     val type = match.groupValues[1]
                     val number = match.groupValues[2].toInt()

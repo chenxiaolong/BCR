@@ -34,7 +34,7 @@
 ### Version 1.42
 
 * Update all dependencies ([PR #311 @PatrykMis], [PR #315 @PatrykMis], [PR #329 @chenxiaolong])
-* Update Russian translations (]PR #319 @bogachenko], [PR #325 @bogachenko])
+* Update Russian translations ([PR #319 @bogachenko], [PR #325 @bogachenko])
 * Work around crash due to broken Android package manager caching on custom ROMs that set the system time too late in the boot process ([Issue #275], [Issue #303], [Issue #307], [Issue #314], [PR #323 @chenxiaolong])
 * Show a separate notification for each call when using call waiting ([PR #324 @chenxiaolong])
   * Pausing/resuming can now be done per call and the notification will correctly show that the background call is hold
@@ -84,7 +84,7 @@ Non-user-facing changes:
 
 ### Version 1.38
 
-* Update all dependencies ([PR: #266 @PatrykMis], [PR #272 @PatrykMis])
+* Update all dependencies ([PR #266 @PatrykMis], [PR #272 @PatrykMis])
 * Mark quick settings tile as toggleable for accessibility ([PR #270 @PatrykMis])
 * Add support for Android 13's per-app language preferences ([PR #271 @PatrykMis])
 * Fix crash when changing the output directory if the previous output directory was associated with a cloud provider app that is no longer installed ([PR #273 @chenxiaolong])
@@ -230,7 +230,7 @@ Non-user-facing changes:
 
 * (Direct installs only) Add `/system/addon.d/` script to persist installation across OS updates ([Issue #142], [PR #144 @chenxiaolong])
   * Only applies to LineageOS-based firmware
-* Improve logging in debug mode ([Issue #143], [PR #145 @chenxiaolong], [PR #147 chenxiaolong], [PR #148 @chenxiaolong])
+* Improve logging in debug mode ([Issue #143], [PR #145 @chenxiaolong], [PR #147 @chenxiaolong], [PR #148 @chenxiaolong])
   * Run logcat interactively for the duration of the call to ensure no lost log messages due to logcat overflow
   * Include BCR version number in the logs
 * Improve output file writing reliability ([Issue #143], [PR #146 @chenxiaolong], [PR #149 @chenxiaolong], [PR #150 @chenxiaolong])
@@ -366,7 +366,7 @@ Non-user-facing changes:
 ### Version 1.3
 
 * Write audio duration to FLAC metadata after recording is complete ([Issue #19], [PR #20 @chenxiaolong])
-* Add Turkish translations ([Issue: #18], [PR #22 @fnldstntn])
+* Add Turkish translations ([Issue #18], [PR #22 @fnldstntn])
 
 Non-user-facing changes:
 
@@ -402,6 +402,7 @@ Non-user-facing changes:
 [Issue #1]: https://github.com/chenxiaolong/BCR/issues/1
 [Issue #3]: https://github.com/chenxiaolong/BCR/issues/3
 [Issue #6]: https://github.com/chenxiaolong/BCR/issues/6
+[Issue #18]: https://github.com/chenxiaolong/BCR/issues/18
 [Issue #19]: https://github.com/chenxiaolong/BCR/issues/19
 [Issue #21]: https://github.com/chenxiaolong/BCR/issues/21
 [Issue #25]: https://github.com/chenxiaolong/BCR/issues/25
@@ -525,6 +526,7 @@ Non-user-facing changes:
 [PR #144 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/144
 [PR #145 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/145
 [PR #146 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/146
+[PR #147 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/147
 [PR #148 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/148
 [PR #149 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/149
 [PR #150 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/150
@@ -575,6 +577,7 @@ Non-user-facing changes:
 [PR #258 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/258
 [PR #259 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/259
 [PR #261 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/261
+[PR #266 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/266
 [PR #270 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/270
 [PR #271 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/271
 [PR #272 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/272
@@ -600,6 +603,7 @@ Non-user-facing changes:
 [PR #310 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/310
 [PR #311 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/311
 [PR #315 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/315
+[PR #319 @bogachenko]: https://github.com/chenxiaolong/BCR/pull/319
 [PR #323 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/323
 [PR #324 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/324
 [PR #325 @bogachenko]: https://github.com/chenxiaolong/BCR/pull/325
