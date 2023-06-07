@@ -171,29 +171,20 @@ fun DocumentFile.createNestedFile(mimeType: String, path: List<String>): Documen
         ?.createFile(mimeType, path.last())
 }
 
-/**
- * Like [DocumentFile.renameTo], but preserves the extension for file URIs.
- *
- * This fixes [DocumentFile.renameTo]'s behavior so it is the same for both SAF and file URIs.
- */
+/** Like [DocumentFile.renameTo], but preserves the file extension. */
 fun DocumentFile.renameToPreserveExt(displayName: String): Boolean {
-    val newName = when (uri.scheme) {
-        ContentResolver.SCHEME_FILE -> {
-            buildString {
-                append(displayName)
+    val newName = buildString {
+        append(displayName)
 
-                // This intentionally just does simple string operations because MimeTypeMap's
-                // getExtensionFromMimeType() and getMimeTypeFromExtension() are not consistent with
-                // each other. Eg. audio/mp4 -> m4a -> audio/mpeg -> mp3.
+        // This intentionally just does simple string operations because MimeTypeMap's
+        // getExtensionFromMimeType() and getMimeTypeFromExtension() are not consistent with
+        // each other. Eg. audio/mp4 -> m4a -> audio/mpeg -> mp3.
 
-                val ext = name!!.substringAfterLast('.', "")
-                if (ext.isNotEmpty()) {
-                    append('.')
-                    append(ext)
-                }
-            }
+        val ext = name!!.substringAfterLast('.', "")
+        if (ext.isNotEmpty()) {
+            append('.')
+            append(ext)
         }
-        else -> displayName
     }
 
     return renameTo(newName)
