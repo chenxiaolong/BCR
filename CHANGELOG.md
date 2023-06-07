@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.46
 
 * Add support for subdirectories in the filename template (`/` character) ([Issue #357], [PR #361 @chenxiaolong])
   * See [the documentation](./README.md#subdirectories) for details.
