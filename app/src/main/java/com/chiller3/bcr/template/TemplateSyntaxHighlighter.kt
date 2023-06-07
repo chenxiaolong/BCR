@@ -17,6 +17,8 @@ class TemplateSyntaxHighlighter(context: Context) {
         context, R.color.template_highlighting_variable_ref_arg)
     private val colorFallbackChars = getHarmonizedColor(
         context, R.color.template_highlighting_fallback_chars)
+    private val colorDirectorySeparator = getHarmonizedColor(
+        context, R.color.template_highlighting_directory_separator)
 
     fun highlight(
         spannable: Spannable,
@@ -67,6 +69,18 @@ class TemplateSyntaxHighlighter(context: Context) {
                     ForegroundColorSpan(colorVariableRefArg.accent),
                     templateStart + arg.range.first,
                     templateStart + arg.range.last + 1,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+                )
+            }
+        }
+
+        // Color directory separators last to ensure their visual prominence.
+        for ((i, c) in template.withIndex()) {
+            if (c == '/') {
+                spannable.setSpan(
+                    ForegroundColorSpan(colorDirectorySeparator.accent),
+                    templateStart + i,
+                    templateStart + i + 1,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
                 )
             }

@@ -12,10 +12,10 @@ import android.telecom.Call
 import android.util.Log
 import androidx.core.net.toFile
 import androidx.documentfile.provider.DocumentFile
+import com.chiller3.bcr.extension.deleteIfEmptyDir
 import com.chiller3.bcr.extension.frameSizeInBytesCompat
-import com.chiller3.bcr.extension.listFilesWithNames
+import com.chiller3.bcr.extension.listFilesWithPathsRecursively
 import com.chiller3.bcr.extension.phoneNumber
-import com.chiller3.bcr.extension.renameToPreserveExt
 import com.chiller3.bcr.format.Encoder
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.SampleRate
@@ -23,8 +23,8 @@ import com.chiller3.bcr.output.DaysRetention
 import com.chiller3.bcr.output.NoRetention
 import com.chiller3.bcr.output.OutputDirUtils
 import com.chiller3.bcr.output.OutputFile
-import com.chiller3.bcr.output.OutputFilename
 import com.chiller3.bcr.output.OutputFilenameGenerator
+import com.chiller3.bcr.output.OutputPath
 import com.chiller3.bcr.output.Retention
 import com.chiller3.bcr.rule.RecordRule
 import java.lang.Process
@@ -55,7 +55,16 @@ class RecorderThread(
     private val prefs = Preferences(context)
     private val isDebug = prefs.isDebugMode
 
+    enum class State {
+        NOT_STARTED,
+        RECORDING,
+        FINALIZING,
+        COMPLETED,
+    }
+
     // Thread state
+    @Volatile var state = State.NOT_STARTED
+        private set
     @Volatile private var isCancelled = false
     private var captureFailed = false
 
@@ -106,8 +115,8 @@ class RecorderThread(
     // Filename
     private val outputFilenameGenerator = OutputFilenameGenerator(context, parentCall)
     private val dirUtils = OutputDirUtils(context, outputFilenameGenerator.redactor)
-    val filename: OutputFilename
-        get() = outputFilenameGenerator.filename
+    val path: OutputPath
+        get() = outputFilenameGenerator.path
 
     // Format
     private val format: Format
@@ -115,7 +124,7 @@ class RecorderThread(
     private val sampleRate = SampleRate.fromPreferences(prefs)
 
     // Logging
-    private lateinit var logcatFilename: OutputFilename
+    private lateinit var logcatPath: OutputPath
     private lateinit var logcatFile: DocumentFile
     private lateinit var logcatProcess: Process
 
@@ -174,11 +183,14 @@ class RecorderThread(
             if (isCancelled) {
                 Log.i(tag, "Recording cancelled before it began")
             } else {
+                state = State.RECORDING
+                listener.onRecordingStateChanged(this)
+
                 evaluateRules()
 
-                val initialFilename = outputFilenameGenerator.filename
+                val initialPath = outputFilenameGenerator.path
                 val outputFile = dirUtils.createFileInDefaultDir(
-                    initialFilename.value, format.mimeTypeContainer)
+                    initialPath.value, format.mimeTypeContainer)
                 resultUri = outputFile.uri
 
                 try {
@@ -187,23 +199,17 @@ class RecorderThread(
                         Os.fsync(it.fileDescriptor)
                     }
                 } finally {
-                    val finalFilename = outputFilenameGenerator.update(true)
-                    if (finalFilename != initialFilename) {
-                        Log.i(tag, "Renaming $initialFilename to $finalFilename")
+                    state = State.FINALIZING
+                    listener.onRecordingStateChanged(this)
 
-                        if (outputFile.renameToPreserveExt(finalFilename.value)) {
-                            resultUri = outputFile.uri
-                        } else {
-                            Log.w(tag, "Failed to rename to final filename: $finalFilename")
-                        }
-                    }
+                    val finalPath = outputFilenameGenerator.update(true)
 
                     if (keepRecording != false) {
-                        dirUtils.tryMoveToUserDir(outputFile)?.let {
+                        dirUtils.tryMoveToOutputDir(outputFile, finalPath.value)?.let {
                             resultUri = it.uri
                         }
                     } else {
-                        Log.i(tag, "Deleting recording: $finalFilename")
+                        Log.i(tag, "Deleting recording: $finalPath")
                         outputFile.delete()
                         resultUri = null
                     }
@@ -243,6 +249,9 @@ class RecorderThread(
                 )
             }
 
+            state = State.COMPLETED
+            listener.onRecordingStateChanged(this)
+
             if (success) {
                 listener.onRecordingCompleted(this, outputFile)
             } else {
@@ -265,9 +274,13 @@ class RecorderThread(
         isCancelled = true
     }
 
-    private fun getLogcatFilename(): OutputFilename {
-        return outputFilenameGenerator.filename.let {
-            it.copy(value = it.value + ".log", redacted = it.redacted + ".log")
+    private fun getLogcatPath(): OutputPath {
+        return outputFilenameGenerator.path.let {
+            val path = it.value.mapIndexed { i, p ->
+                p + if (i == it.value.size - 1) { ".log" } else { "" }
+            }
+
+            it.copy(value = path, redacted = it.redacted + ".log")
         }
     }
 
@@ -280,8 +293,8 @@ class RecorderThread(
 
         Log.d(tag, "Starting log file (${BuildConfig.VERSION_NAME})")
 
-        logcatFilename = getLogcatFilename()
-        logcatFile = dirUtils.createFileInDefaultDir(logcatFilename.value, "text/plain")
+        logcatPath = getLogcatPath()
+        logcatFile = dirUtils.createFileInDefaultDir(logcatPath.value, "text/plain")
         logcatProcess = ProcessBuilder("logcat", "*:V")
             // This is better than -f because the logcat implementation calls fflush() when the
             // output stream is stdout. logcatFile is guaranteed to have file:// scheme because it's
@@ -311,16 +324,8 @@ class RecorderThread(
                 logcatProcess.waitFor()
             }
         } finally {
-            val finalLogcatFilename = getLogcatFilename()
-            if (finalLogcatFilename != logcatFilename) {
-                Log.i(tag, "Renaming $logcatFilename to $finalLogcatFilename")
-
-                if (!logcatFile.renameToPreserveExt(finalLogcatFilename.value)) {
-                    Log.w(tag, "Failed to rename to final filename: $finalLogcatFilename")
-                }
-            }
-
-            dirUtils.tryMoveToUserDir(logcatFile)
+            val finalLogcatPath = getLogcatPath()
+            dirUtils.tryMoveToOutputDir(logcatFile, finalLogcatPath.value)
         }
     }
 
@@ -346,15 +351,19 @@ class RecorderThread(
         }
         Log.i(tag, "Retention period is $retention")
 
-        for ((item, name) in directory.listFilesWithNames()) {
-            if (name == null) {
+        val potentiallyEmptyDirs = mutableListOf<Pair<DocumentFile, List<String>>>()
+
+        for ((item, itemPath) in directory.listFilesWithPathsRecursively()) {
+            if (item.isDirectory) {
+                potentiallyEmptyDirs.add(Pair(item, itemPath))
                 continue
             }
-            val redacted = OutputFilenameGenerator.redactTruncate(name)
 
-            val timestamp = outputFilenameGenerator.parseTimestampFromFilename(name)
+            val redacted = OutputFilenameGenerator.redactTruncate(itemPath.joinToString("/"))
+
+            val timestamp = outputFilenameGenerator.parseTimestampFromPath(itemPath)
             if (timestamp == null) {
-                Log.w(tag, "Ignoring unrecognized filename: $redacted")
+                Log.w(tag, "Ignoring unrecognized path: $redacted")
                 continue
             }
 
@@ -365,6 +374,13 @@ class RecorderThread(
                 if (!item.delete()) {
                     Log.w(tag, "Failed to delete: $redacted")
                 }
+            }
+        }
+
+        for ((dir, dirPath) in potentiallyEmptyDirs.asReversed()) {
+            if (dir.deleteIfEmptyDir()) {
+                val redacted = OutputFilenameGenerator.redactTruncate(dirPath.joinToString("/"))
+                Log.i(tag, "Deleted empty directory: $redacted")
             }
         }
     }

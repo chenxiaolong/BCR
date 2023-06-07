@@ -62,6 +62,7 @@
     <string name="filename_template_dialog_title">Filename template</string>
     <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
     <string name="filename_template_dialog_message">Enter a custom template for the output filename. Variables are specified with curly braces (eg. <annotation type="template">{var}</annotation>). Fallbacks are specified with square brackets (eg. <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nSupported variables: <annotation type="supported_vars">PLACEHOLDER</annotation>. See <annotation type="template_docs">the documentation</annotation> for a complete description of the syntax.</string>
+    <string name="filename_template_dialog_warning_subdirectories">Due to Android Storage Access Framework\'s poor performance, using subdirectories (<annotation type="template">/</annotation> character) may cause significant delays when saving the recording on some devices. The delay occurs at the end of the call and should not result in any loss of call audio.</string>
     <string name="filename_template_dialog_error_empty">Template cannot be empty</string>
     <string name="filename_template_dialog_error_unknown_variable">Unknown template variable: <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_has_argument">Variable cannot have an argument: <annotation type="template">PLACEHOLDER</annotation></string>
@@ -93,7 +94,9 @@
     <string name="notification_channel_failure_desc">Alerts for errors during call recording</string>
     <string name="notification_channel_success_name">Success alerts</string>
     <string name="notification_channel_success_desc">Alerts for successful call recordings</string>
+    <string name="notification_recording_initializing">Call recording initializing</string>
     <string name="notification_recording_in_progress">Call recording in progress</string>
+    <string name="notification_recording_finalizing">Call recording finalizing</string>
     <string name="notification_recording_paused">Call recording paused</string>
     <string name="notification_recording_on_hold">Call on hold</string>
     <string name="notification_recording_failed">Failed to record call</string>

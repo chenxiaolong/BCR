@@ -329,31 +329,47 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
                 val titleResId: Int
                 val actionResIds = mutableListOf<Int>()
                 val actionIntents = mutableListOf<Intent>()
+                val canShowDelete: Boolean
 
-                if (recorder.isHolding) {
-                    titleResId = R.string.notification_recording_on_hold
-                    // Don't allow changing the pause state while holding
-                } else if (recorder.isPaused) {
-                    titleResId = R.string.notification_recording_paused
-                    actionResIds.add(R.string.notification_action_resume)
-                    actionIntents.add(createActionIntent(notificationId, ACTION_RESUME))
-                } else {
-                    titleResId = R.string.notification_recording_in_progress
-                    actionResIds.add(R.string.notification_action_pause)
-                    actionIntents.add(createActionIntent(notificationId, ACTION_PAUSE))
+                when (recorder.state) {
+                    RecorderThread.State.NOT_STARTED -> {
+                        titleResId = R.string.notification_recording_initializing
+                        canShowDelete = true
+                    }
+                    RecorderThread.State.RECORDING -> {
+                        if (recorder.isHolding) {
+                            titleResId = R.string.notification_recording_on_hold
+                            // Don't allow changing the pause state while holding
+                        } else if (recorder.isPaused) {
+                            titleResId = R.string.notification_recording_paused
+                            actionResIds.add(R.string.notification_action_resume)
+                            actionIntents.add(createActionIntent(notificationId, ACTION_RESUME))
+                        } else {
+                            titleResId = R.string.notification_recording_in_progress
+                            actionResIds.add(R.string.notification_action_pause)
+                            actionIntents.add(createActionIntent(notificationId, ACTION_PAUSE))
+                        }
+                        canShowDelete = true
+                    }
+                    RecorderThread.State.FINALIZING, RecorderThread.State.COMPLETED -> {
+                        titleResId = R.string.notification_recording_finalizing
+                        canShowDelete = false
+                    }
                 }
 
-                val message = StringBuilder(recorder.filename.value)
+                val message = StringBuilder(recorder.path.unredacted)
 
-                recorder.keepRecording?.let {
-                    if (it) {
-                        actionResIds.add(R.string.notification_action_delete)
-                        actionIntents.add(createActionIntent(notificationId, ACTION_DELETE))
-                    } else {
-                        message.append("\n\n")
-                        message.append(getString(R.string.notification_message_delete_at_end))
-                        actionResIds.add(R.string.notification_action_restore)
-                        actionIntents.add(createActionIntent(notificationId, ACTION_RESTORE))
+                if (canShowDelete) {
+                    recorder.keepRecording?.let {
+                        if (it) {
+                            actionResIds.add(R.string.notification_action_delete)
+                            actionIntents.add(createActionIntent(notificationId, ACTION_DELETE))
+                        } else {
+                            message.append("\n\n")
+                            message.append(getString(R.string.notification_message_delete_at_end))
+                            actionResIds.add(R.string.notification_action_restore)
+                            actionIntents.add(createActionIntent(notificationId, ACTION_RESTORE))
+                        }
                     }
                 }
 

@@ -4,4 +4,5 @@
     <color name="template_highlighting_variable_ref_name">#ff008000</color>
     <color name="template_highlighting_variable_ref_arg">#ff0000ff</color>
     <color name="template_highlighting_fallback_chars">#ffff00ff</color>
+    <color name="template_highlighting_directory_separator">#ffff0000</color>
 </resources>

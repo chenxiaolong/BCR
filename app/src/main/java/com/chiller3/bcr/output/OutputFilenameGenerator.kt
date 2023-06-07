@@ -3,7 +3,6 @@ package com.chiller3.bcr.output
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.provider.CallLog
 import android.telecom.Call
@@ -30,10 +29,12 @@ import java.time.temporal.ChronoField
 import java.time.temporal.Temporal
 import java.util.Locale
 
-data class OutputFilename(
-    val value: String,
+data class OutputPath(
+    val value: List<String>,
     val redacted: String,
 ) {
+    val unredacted = value.joinToString("/")
+
     override fun toString() = redacted
 }
 
@@ -76,14 +77,12 @@ class OutputFilenameGenerator(
                 return result
             }
         }
-
-        override fun redact(uri: Uri): String = redact(Uri.decode(uri.toString()))
     }
 
-    private lateinit var _filename: OutputFilename
-    val filename: OutputFilename
+    private lateinit var _path: OutputPath
+    val path: OutputPath
         get() = synchronized(this) {
-            _filename
+            _path
         }
 
     init {
@@ -100,12 +99,12 @@ class OutputFilenameGenerator(
     }
 
     /**
-     * Update [filename] with information from [details].
+     * Update [path] with information from [details].
      *
      * @param call Either the parent call or a child of the parent (for conference calls)
      * @param details The updated call details belonging to [call]
      */
-    fun updateCallDetails(call: Call, details: Call.Details): OutputFilename {
+    fun updateCallDetails(call: Call, details: Call.Details): OutputPath {
         if (call !== parentCall && call.parent !== parentCall) {
             throw IllegalStateException("Not the parent call nor one of its children: $call")
         }
@@ -301,7 +300,127 @@ class OutputFilenameGenerator(
         return null
     }
 
-    private fun generate(template: Template, allowBlockingCalls: Boolean): OutputFilename {
+    private fun evaluateVars(
+        name: String,
+        arg: String?,
+        parentDetails: Call.Details,
+        displayDetails: List<Call.Details>,
+        allowBlockingCalls: Boolean,
+    ): String? {
+        when (name) {
+            "date" -> {
+                val instant = Instant.ofEpochMilli(parentDetails.creationTimeMillis)
+                _callTimestamp = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
+
+                if (arg != null) {
+                    Log.d(TAG, "Using custom datetime pattern: $arg")
+
+                    try {
+                        formatter = DateTimeFormatterBuilder()
+                            .appendPattern(arg)
+                            .toFormatter()
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Invalid custom datetime pattern: $arg; using default", e)
+                    }
+                }
+
+                return formatter.format(_callTimestamp)
+            }
+            "direction" -> {
+                // AOSP's telephony framework has internal documentation that specifies that the
+                // call direction is meaningless for conference calls until enough participants hang
+                // up that it becomes an emulated one-on-one call.
+                if (isConference) {
+                    return "conference"
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    when (parentDetails.callDirection) {
+                        Call.Details.DIRECTION_INCOMING -> return "in"
+                        Call.Details.DIRECTION_OUTGOING -> return "out"
+                        Call.Details.DIRECTION_UNKNOWN -> {}
+                    }
+                }
+            }
+            "sim_slot" -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+                    && context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
+                    == PackageManager.PERMISSION_GRANTED
+                    && context.packageManager.hasSystemFeature(
+                        PackageManager.FEATURE_TELEPHONY_SUBSCRIPTION)) {
+                    val subscriptionManager = context.getSystemService(SubscriptionManager::class.java)
+
+                    // Only append SIM slot ID if the device has multiple active SIMs
+                    if (subscriptionManager.activeSubscriptionInfoCount > 1) {
+                        val telephonyManager = context.getSystemService(TelephonyManager::class.java)
+                        val subscriptionId = telephonyManager.getSubscriptionId(parentDetails.accountHandle)
+                        val subscriptionInfo = subscriptionManager.getActiveSubscriptionInfo(subscriptionId)
+
+                        return "${subscriptionInfo.simSlotIndex + 1}"
+                    }
+                }
+            }
+            "phone_number" -> {
+                val joined = displayDetails.asSequence()
+                    .map { d -> getPhoneNumber(d, arg) }
+                    .filterNotNull()
+                    .joinToString(",")
+                if (joined.isNotEmpty()) {
+                    addRedaction(joined, if (isConference) {
+                        "<conference phone numbers>"
+                    } else {
+                        "<phone number>"
+                    })
+
+                    return joined
+                }
+            }
+            "caller_name" -> {
+                val joined = displayDetails.asSequence()
+                    .map { d -> d.callerDisplayName?.trim() }
+                    .filter { n -> !n.isNullOrEmpty() }
+                    .joinToString(",")
+                if (joined.isNotEmpty()) {
+                    addRedaction(joined, if (isConference) {
+                        "<conference caller names>"
+                    } else {
+                        "<caller name>"
+                    })
+
+                    return joined
+                }
+            }
+            "contact_name" -> {
+                val joined = displayDetails.asSequence()
+                    .map { d -> getContactDisplayName(d, allowBlockingCalls)?.trim() }
+                    .filter { n -> !n.isNullOrEmpty() }
+                    .joinToString(",")
+                if (joined.isNotEmpty()) {
+                    addRedaction(joined, if (isConference) {
+                        "<conference contact names>"
+                    } else {
+                        "<contact name>"
+                    })
+
+                    return joined
+                }
+            }
+            "call_log_name" -> {
+                val cachedName = getCallLogCachedName(parentDetails, allowBlockingCalls)?.trim()
+                if (!cachedName.isNullOrEmpty()) {
+                    addRedaction(cachedName, "<call log name>")
+                    return cachedName
+                }
+            }
+            else -> {
+                Log.w(TAG, "Unknown filename template variable: $name")
+            }
+        }
+
+        return null
+    }
+
+    private fun generate(template: Template, allowBlockingCalls: Boolean): OutputPath {
         synchronized(this) {
             val parentDetails = callDetails[parentCall]!!
             val displayDetails = if (isConference) {
@@ -313,131 +432,26 @@ class OutputFilenameGenerator(
                 listOf(parentDetails)
             }
 
-            val newFilename = template.evaluate { name, arg ->
+            val newPathString = template.evaluate { name, arg ->
+                val result = evaluateVars(
+                    name, arg, parentDetails, displayDetails, allowBlockingCalls)?.trim()
+
+                // Directories are allowed in the template, but not in a variable's value unless
+                // it's part of the timestamp because that's fully user controlled.
                 when (name) {
-                    "date" -> {
-                        val instant = Instant.ofEpochMilli(parentDetails.creationTimeMillis)
-                        _callTimestamp = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
-
-                        if (arg != null) {
-                            Log.d(TAG, "Using custom datetime pattern: $arg")
-
-                            try {
-                                formatter = DateTimeFormatterBuilder()
-                                    .appendPattern(arg)
-                                    .toFormatter()
-                            } catch (e: Exception) {
-                                Log.w(TAG, "Invalid custom datetime pattern: $arg; using default", e)
-                            }
-                        }
-
-                        return@evaluate formatter.format(_callTimestamp)
-                    }
-                    "direction" -> {
-                        // AOSP's telephony framework has internal documentation that specifies that
-                        // the call direction is meaningless for conference calls until enough
-                        // participants hang up that it becomes an emulated one-on-one call.
-                        if (isConference) {
-                            return@evaluate "conference"
-                        }
-
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                            when (parentDetails.callDirection) {
-                                Call.Details.DIRECTION_INCOMING -> return@evaluate "in"
-                                Call.Details.DIRECTION_OUTGOING -> return@evaluate "out"
-                                Call.Details.DIRECTION_UNKNOWN -> {}
-                            }
-                        }
-                    }
-                    "sim_slot" -> {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
-                            && context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
-                            == PackageManager.PERMISSION_GRANTED
-                            && context.packageManager.hasSystemFeature(
-                                PackageManager.FEATURE_TELEPHONY_SUBSCRIPTION)) {
-                            val subscriptionManager = context.getSystemService(SubscriptionManager::class.java)
-
-                            // Only append SIM slot ID if the device has multiple active SIMs
-                            if (subscriptionManager.activeSubscriptionInfoCount > 1) {
-                                val telephonyManager = context.getSystemService(TelephonyManager::class.java)
-                                val subscriptionId = telephonyManager.getSubscriptionId(parentDetails.accountHandle)
-                                val subscriptionInfo = subscriptionManager.getActiveSubscriptionInfo(subscriptionId)
-
-                                return@evaluate "${subscriptionInfo.simSlotIndex + 1}"
-                            }
-                        }
-                    }
-                    "phone_number" -> {
-                        val joined = displayDetails.asSequence()
-                            .map { d -> getPhoneNumber(d, arg) }
-                            .filterNotNull()
-                            .joinToString(",")
-                        if (joined.isNotEmpty()) {
-                            addRedaction(joined, if (isConference) {
-                                "<conference phone numbers>"
-                            } else {
-                                "<phone number>"
-                            })
-
-                            return@evaluate joined
-                        }
-                    }
-                    "caller_name" -> {
-                        val joined = displayDetails.asSequence()
-                            .map { d -> d.callerDisplayName?.trim() }
-                            .filter { n -> !n.isNullOrEmpty() }
-                            .joinToString(",")
-                        if (joined.isNotEmpty()) {
-                            addRedaction(joined, if (isConference) {
-                                "<conference caller names>"
-                            } else {
-                                "<caller name>"
-                            })
-
-                            return@evaluate joined
-                        }
-                    }
-                    "contact_name" -> {
-                        val joined = displayDetails.asSequence()
-                            .map { d -> getContactDisplayName(d, allowBlockingCalls)?.trim() }
-                            .filter { n -> !n.isNullOrEmpty() }
-                            .joinToString(",")
-                        if (joined.isNotEmpty()) {
-                            addRedaction(joined, if (isConference) {
-                                "<conference contact names>"
-                            } else {
-                                "<contact name>"
-                            })
-
-                            return@evaluate joined
-                        }
-                    }
-                    "call_log_name" -> {
-                        val cachedName = getCallLogCachedName(parentDetails, allowBlockingCalls)?.trim()
-                        if (!cachedName.isNullOrEmpty()) {
-                            addRedaction(cachedName, "<call log name>")
-                            return@evaluate cachedName
-                        }
-                    }
-                    else -> {
-                        Log.w(TAG, "Unknown filename template variable: $name")
-                    }
+                    DATE_VAR -> result
+                    else -> result?.replace('/', '_')
                 }
-
-                null
             }
-                // AOSP's SAF automatically replaces invalid characters with underscores, but just in
-                // case an OEM fork breaks that, do the replacement ourselves to prevent directory
-                // traversal attacks.
-                .replace('/', '_').trim()
+            val newPath = splitPath(newPathString)
 
-            return OutputFilename(newFilename, redactor.redact(newFilename))
+            return OutputPath(newPath, redactor.redact(newPath))
         }
     }
 
-    fun update(allowBlockingCalls: Boolean): OutputFilename {
+    fun update(allowBlockingCalls: Boolean): OutputPath {
         synchronized(this) {
-            _filename = try {
+            _path = try {
                 generate(filenameTemplate, allowBlockingCalls)
             } catch (e: Exception) {
                 if (filenameTemplate === Preferences.DEFAULT_FILENAME_TEMPLATE) {
@@ -448,9 +462,9 @@ class OutputFilenameGenerator(
                 }
             }
 
-            Log.i(TAG, "Updated filename: $_filename")
+            Log.i(TAG, "Updated filename: $_path")
 
-            return _filename
+            return _path
         }
     }
 
@@ -511,9 +525,10 @@ class OutputFilenameGenerator(
         return null
     }
 
-    fun parseTimestampFromFilename(name: String): Temporal? {
-        val redacted = redactTruncate(name)
-        val timestamp = parseTimestamp(name)
+    fun parseTimestampFromPath(path: List<String>): Temporal? {
+        val pathString = path.joinToString("/")
+        val redacted = redactTruncate(pathString)
+        val timestamp = parseTimestamp(pathString)
 
         Log.d(TAG, "Parsed $timestamp from $redacted")
 
@@ -566,6 +581,11 @@ class OutputFilenameGenerator(
 
         private const val CALL_LOG_QUERY_TIMEOUT_NANOS = 2_000_000_000L
         private const val CALL_LOG_QUERY_RETRY_DELAY_MILLIS = 100L
+
+        private fun splitPath(pathString: String) = pathString
+            .splitToSequence('/')
+            .filter { it.isNotEmpty() && it != "." && it != ".." }
+            .toList()
 
         fun redactTruncate(msg: String): String = buildString {
             val n = 2
