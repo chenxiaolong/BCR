@@ -343,7 +343,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
                     actionIntents.add(createActionIntent(notificationId, ACTION_PAUSE))
                 }
 
-                val message = StringBuilder(recorder.filename.value)
+                val message = StringBuilder(recorder.path.unredacted)
 
                 recorder.keepRecording?.let {
                     if (it) {

@@ -24,7 +24,8 @@ class RecorderApplication : Application() {
             try {
                 val redactor = OutputDirUtils.NULL_REDACTOR
                 val dirUtils = OutputDirUtils(this, redactor)
-                val logcatFile = dirUtils.createFileInDefaultDir("crash.log", "text/plain")
+                val logcatPath = listOf("crash.log")
+                val logcatFile = dirUtils.createFileInDefaultDir(logcatPath, "text/plain")
 
                 Log.e(TAG, "Saving logcat to ${redactor.redact(logcatFile.uri)} due to uncaught exception in $t", e)
 
@@ -35,7 +36,7 @@ class RecorderApplication : Application() {
                         .start()
                         .waitFor()
                 } finally {
-                    dirUtils.tryMoveToUserDir(logcatFile)
+                    dirUtils.tryMoveToOutputDir(logcatFile, logcatPath)
                 }
             } finally {
                 oldCrashHandler?.uncaughtException(t, e)
