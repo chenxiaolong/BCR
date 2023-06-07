@@ -9,6 +9,9 @@
 
 ### Unreleased
 
+* Add support for subdirectories in the filename template (`/` character) ([Issue #357], [PR #361 @chenxiaolong])
+  * See [the documentation](./README.md#subdirectories) for details.
+
 ### Version 1.45
 
 * Update all dependencies ([PR #354 @PatrykMis])
@@ -453,6 +456,7 @@ Non-user-facing changes:
 [Issue #320]: https://github.com/chenxiaolong/BCR/issues/320
 [Issue #350]: https://github.com/chenxiaolong/BCR/issues/350
 [Issue #352]: https://github.com/chenxiaolong/BCR/issues/352
+[Issue #357]: https://github.com/chenxiaolong/BCR/issues/357
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -621,3 +625,4 @@ Non-user-facing changes:
 [PR #356 @Hutsul-coder]: https://github.com/chenxiaolong/BCR/pull/356
 [PR #358 @newsn23]: https://github.com/chenxiaolong/BCR/pull/358
 [PR #359 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/359
+[PR #361 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/361

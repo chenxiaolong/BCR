@@ -440,7 +440,7 @@ fun checkBrackets(line: String) {
 
 fun updateChangelogLinks(baseUrl: String) {
     val file = File(rootDir, "CHANGELOG.md")
-    var regexStandaloneLink = Regex("\\[([^\\]]+)\\](?![\\(\\[])")
+    val regexStandaloneLink = Regex("\\[([^\\]]+)\\](?![\\(\\[])")
     val regexAutoLink = Regex("(Issue|PR) #(\\d+)(?: @([\\w-]+))?")
     val links = hashMapOf<LinkRef, String>()
     var skipRemaining = false

@@ -125,6 +125,12 @@ BCR supports customizing the template used for determining the output filenames 
 * `{contact_name}` The name of the (first) contact associated with the phone number. This is only defined if BCR is granted the Contacts permission.
 * `{call_log_name}`: The name shown in the call log. This may include more information, like the name of the business, if the system dialer performs reverse lookups. This is only defined if BCR is granted the Read Call Logs permission.
 
+### Subdirectories
+
+The filename template supports specifying subdirectories using the `/` character. Slashes are allowed anywhere inside the filename template, including `{date}` (eg. `{date:yyyy/MM/dd}`). However, any slashes that appear after expanding other variables will be replaced with underscores. For example, if the caller ID for a call is `First/Last`, then `{caller_name}` is expanded to `First_Last`.
+
+Note that due to Android Storage Access Framework's poor performance, using subdirectories may significantly slow down the saving of the recording on some devices. On Android builds with a good SAF implementation, this may only be a few seconds. On the OEM Android build with the worst known SAF implementation, this could take several minutes. The delay is proportional to the number of files in the output directory.
+
 ## Advanced features
 
 This section describes BCR's hidden advanced features.
