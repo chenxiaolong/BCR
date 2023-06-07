@@ -18,6 +18,7 @@ import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
@@ -54,6 +55,8 @@ class FilenameTemplateDialogFragment : DialogFragment() {
         binding.message.movementMethod = LinkMovementMethod.getInstance()
         binding.message.text = buildMessage()
 
+        binding.bottomMessage.text = buildSubdirectoryWarningMessage()
+
         binding.text.inputType = InputType.TYPE_CLASS_TEXT or
                 InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
         // Make this non-multiline text box look like one
@@ -61,6 +64,8 @@ class FilenameTemplateDialogFragment : DialogFragment() {
         binding.text.maxLines = Int.MAX_VALUE
         binding.text.addTextChangedListener {
             highlighter.highlight(it!!)
+
+            binding.bottomMessage.isVisible = '/' in it
 
             if (it.isEmpty()) {
                 template = null
@@ -188,6 +193,32 @@ class FilenameTemplateDialogFragment : DialogFragment() {
                     end,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
                 )
+            } else {
+                throw IllegalStateException("Invalid annotation: $annotation")
+            }
+        }
+
+        return message
+    }
+
+    private fun buildSubdirectoryWarningMessage(): SpannableStringBuilder {
+        val origMessage = getText(R.string.filename_template_dialog_warning_subdirectories) as SpannedString
+        val message = SpannableStringBuilder(origMessage)
+        val annotations = message.getSpans(0, origMessage.length, Annotation::class.java)
+
+        for (annotation in annotations) {
+            val start = message.getSpanStart(annotation)
+            val end = message.getSpanEnd(annotation)
+
+            if (annotation.key == "type" && annotation.value == "template") {
+                message.setSpan(
+                    TypefaceSpan(Typeface.MONOSPACE),
+                    start,
+                    end,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE,
+                )
+
+                highlighter.highlight(message, start, end)
             } else {
                 throw IllegalStateException("Invalid annotation: $annotation")
             }
