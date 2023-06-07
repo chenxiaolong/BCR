@@ -44,15 +44,30 @@ class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment() {
         binding.selectNewDir.setOnClickListener {
             requestSafOutputDir.launch(null)
         }
+        binding.selectNewDir.setOnLongClickListener {
+            prefs.outputDir = null
+            refreshOutputDir()
+            true
+        }
 
         binding.editTemplate.setOnClickListener {
             FilenameTemplateDialogFragment().show(
                 parentFragmentManager.beginTransaction(), FilenameTemplateDialogFragment.TAG)
         }
+        binding.editTemplate.setOnLongClickListener {
+            prefs.filenameTemplate = null
+            refreshFilenameTemplate()
+            true
+        }
 
         binding.editRetention.setOnClickListener {
             FileRetentionDialogFragment().show(
                 parentFragmentManager.beginTransaction(), FileRetentionDialogFragment.TAG)
+        }
+        binding.editRetention.setOnLongClickListener {
+            prefs.outputRetention = null
+            refreshOutputRetention()
+            true
         }
 
         binding.reset.setOnClickListener {
