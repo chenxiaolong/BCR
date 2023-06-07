@@ -55,7 +55,16 @@ class RecorderThread(
     private val prefs = Preferences(context)
     private val isDebug = prefs.isDebugMode
 
+    enum class State {
+        NOT_STARTED,
+        RECORDING,
+        FINALIZING,
+        COMPLETED,
+    }
+
     // Thread state
+    @Volatile var state = State.NOT_STARTED
+        private set
     @Volatile private var isCancelled = false
     private var captureFailed = false
 
@@ -174,6 +183,9 @@ class RecorderThread(
             if (isCancelled) {
                 Log.i(tag, "Recording cancelled before it began")
             } else {
+                state = State.RECORDING
+                listener.onRecordingStateChanged(this)
+
                 evaluateRules()
 
                 val initialPath = outputFilenameGenerator.path
@@ -187,6 +199,9 @@ class RecorderThread(
                         Os.fsync(it.fileDescriptor)
                     }
                 } finally {
+                    state = State.FINALIZING
+                    listener.onRecordingStateChanged(this)
+
                     val finalPath = outputFilenameGenerator.update(true)
 
                     if (keepRecording != false) {
@@ -233,6 +248,9 @@ class RecorderThread(
                     format.mimeTypeContainer,
                 )
             }
+
+            state = State.COMPLETED
+            listener.onRecordingStateChanged(this)
 
             if (success) {
                 listener.onRecordingCompleted(this, outputFile)

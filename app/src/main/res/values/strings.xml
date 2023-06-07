@@ -93,7 +93,9 @@
     <string name="notification_channel_failure_desc">Alerts for errors during call recording</string>
     <string name="notification_channel_success_name">Success alerts</string>
     <string name="notification_channel_success_desc">Alerts for successful call recordings</string>
+    <string name="notification_recording_initializing">Call recording initializing</string>
     <string name="notification_recording_in_progress">Call recording in progress</string>
+    <string name="notification_recording_finalizing">Call recording finalizing</string>
     <string name="notification_recording_paused">Call recording paused</string>
     <string name="notification_recording_on_hold">Call on hold</string>
     <string name="notification_recording_failed">Failed to record call</string>
