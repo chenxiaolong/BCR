@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update Turkish translations ([PR #362 @symbuzzer])
+
 ### Version 1.46
 
 * Add support for subdirectories in the filename template (`/` character) ([Issue #357], [PR #361 @chenxiaolong])
@@ -628,3 +630,4 @@ Non-user-facing changes:
 [PR #358 @newsn23]: https://github.com/chenxiaolong/BCR/pull/358
 [PR #359 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/359
 [PR #361 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/361
+[PR #362 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/362
