@@ -6,8 +6,8 @@
     <string name="pref_header_about">Hakkında</string>
 
     <!-- General preferences -->
-    <string name="pref_call_recording_name">Çağrı kaydı</string>
-    <string name="pref_call_recording_desc">Gelen ve giden çağrıları kaydet. Arka planda kayıt için mikrofon ve bildirim izinleri gereklidir.</string>
+    <string name="pref_call_recording_name">Arama kaydı</string>
+    <string name="pref_call_recording_desc">Gelen ve giden aramaları kaydet. Arka planda kayıt için mikrofon ve bildirim izinleri gereklidir.</string>
 
     <string name="pref_record_rules_name">Oto-kayıt kuralları</string>
     <string name="pref_record_rules_desc">Hangi aramaların otomatik olarak kaydedileceğini ayarlayın.</string>
@@ -62,6 +62,7 @@
     <string name="filename_template_dialog_title">Filename template</string>
     <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
     <string name="filename_template_dialog_message">Çıkış dosyası adı için özel bir şablon girin. Değişkenler ayraçlarla belirtilir (ör. <annotation type="template">{var}</annotation>). Yedekler köşeli parantez içinde belirtilir (örn. <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nDesteklenen değişkenler: <annotation type="supported_vars">PLACEHOLDER</annotation>. Sözdiziminin tam açıklaması için <annotation type="template_docs">belgelere</annotation> bakın.</string>
+    <string name="filename_template_dialog_warning_subdirectories">Android Storage Access Framework\'ün düşük performansı nedeniyle, alt dizinler kullanılması (<annotation type="template">/</annotation> character) bazı cihazlarda kayıtta önemli gecikmelere neden olabilir. Gecikme, aramanın sonunda gerçekleşeceğinden, görüşme sesinin herhangi bir şekilde kaybolmasına neden olmaz.</string>
     <string name="filename_template_dialog_error_empty">Şablon boş olamaz</string>
     <string name="filename_template_dialog_error_unknown_variable">Bilinmeyen şablon değişkeni: <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_has_argument">Değişkenin argümanı olamaz: <annotation type="template">PLACEHOLDER</annotation></string>
@@ -88,16 +89,18 @@
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Arka plan servisleri</string>
-    <string name="notification_channel_persistent_desc">Arka plan çağrı kaydı için kalıcı bildirim</string>
+    <string name="notification_channel_persistent_desc">Arka plan arama kaydı için kalıcı bildirim</string>
     <string name="notification_channel_failure_name">Hata uyarıları</string>
     <string name="notification_channel_failure_desc">Kayıt esnasındaki hatalar için uyarılar</string>
     <string name="notification_channel_success_name">Başarı uyarları</string>
-    <string name="notification_channel_success_desc">Başarılı çağrı kayıtları için uyarılar</string>
-    <string name="notification_recording_in_progress">Çağrı kaydediliyor</string>
-    <string name="notification_recording_paused">Çağrı kaydı duraklatıldı</string>
+    <string name="notification_channel_success_desc">Başarılı arama kayıtları için uyarılar</string>
+    <string name="notification_recording_initializing">Arama kaydı başlatılıyor</string>
+    <string name="notification_recording_in_progress">Arama kaydı devam ediyor</string>
+    <string name="notification_recording_finalizing">Arama kaydı tamamlanıyor</string>
+    <string name="notification_recording_paused">Arama kaydı duraklatıldı</string>
     <string name="notification_recording_on_hold">Arama beklemede</string>
-    <string name="notification_recording_failed">Çağrı kaydı başarısız</string>
-    <string name="notification_recording_succeeded">Çağrı kaydı başarılı</string>
+    <string name="notification_recording_failed">Arama kaydı başarısız</string>
+    <string name="notification_recording_succeeded">Arama kaydı başarılı</string>
     <string name="notification_message_delete_at_end">Görüşme sonunda kayıt silinecektir. Kaydı tutmak için Geri Yükle\'ye dokunun.</string>
     <string name="notification_internal_android_error">Kayıt, dahili bir Android bileşeninde (%s) başarısız oldu. Bu cihaz veya donanım yazılımı arama kaydını desteklemiyor olabilir.</string>
     <string name="notification_action_open">Aç</string>
@@ -111,5 +114,5 @@
     <string name="menu_action_help">Yardım</string>
 
     <!-- Quick settings tile -->
-    <string name="quick_settings_label">Çağrı kaydı</string>
+    <string name="quick_settings_label">Arama kaydı</string>
 </resources>
