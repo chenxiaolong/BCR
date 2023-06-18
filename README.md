@@ -58,7 +58,9 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
 
 3. Reboot and open BCR.
 
-4. Enable call recording and pick an output directory. If no output directory is selected or if the output directory is no longer accessible, then recordings will be saved to `/sdcard/Android/data/com.chiller3.bcr/files`.
+4. Enable call recording and pick an output directory.
+
+    If no output directory is selected or if the output directory is no longer accessible, then recordings will be saved to `/sdcard/Android/data/com.chiller3.bcr/files`. Note that on Android 12+, `/sdcard/Android/data/` is only accessible via USB or DocumentsUI (AOSP's built in file manager).
 
     When enabling call recording the first time, BCR will prompt for microphone, notification (Android 13+), call log, contacts, and phone permissions. Only microphone and notification permissions are required basic call recording functionality. If additional permissions are granted, more information is added to the output filename. For example, the contacts permission will allow the contact name to be added to the filename.
 
