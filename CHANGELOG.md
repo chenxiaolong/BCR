@@ -11,6 +11,7 @@
 
 * Update Turkish translations ([PR #362 @symbuzzer])
 * Fix regression in version 1.46 that reintroduced an issue where M4A/AAC output files sometimes get an incorrect `.mp3` file extension (previously [Issue #292], [Issue #367], [PR #368 @chenxiaolong])
+* Update all dependencies ([PR #369 @chenxiaolong])
 
 ### Version 1.46
 
@@ -634,3 +635,4 @@ Non-user-facing changes:
 [PR #361 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/361
 [PR #362 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/362
 [PR #368 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/368
+[PR #369 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/369
