@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.47
 
 * Update Turkish translations ([PR #362 @symbuzzer])
 * Fix regression in version 1.46 that reintroduced an issue where M4A/AAC output files sometimes get an incorrect `.mp3` file extension (previously [Issue #292], [Issue #367], [PR #368 @chenxiaolong])
