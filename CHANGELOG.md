@@ -12,6 +12,8 @@
 * Update Turkish translations ([PR #362 @symbuzzer])
 * Fix regression in version 1.46 that reintroduced an issue where M4A/AAC output files sometimes get an incorrect `.mp3` file extension (previously [Issue #292], [Issue #367], [PR #368 @chenxiaolong])
 * Update all dependencies ([PR #369 @chenxiaolong])
+* Remove migration of the old `Initially paused` option to the auto-record rules ([PR #370 @chenxiaolong])
+  * If you used `Initially paused` in the past, upgrade to 1.46 first and then upgrade to this version.
 
 ### Version 1.46
 
@@ -636,3 +638,4 @@ Non-user-facing changes:
 [PR #362 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/362
 [PR #368 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/368
 [PR #369 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/369
+[PR #370 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/370
