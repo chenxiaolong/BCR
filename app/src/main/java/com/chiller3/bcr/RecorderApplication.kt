@@ -10,9 +10,6 @@ class RecorderApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val props = Preferences(this)
-        props.migrateInitiallyPaused()
-
         // Enable Material You colors
         DynamicColors.applyToActivitiesIfAvailable(this)
 

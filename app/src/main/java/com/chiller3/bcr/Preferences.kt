@@ -28,9 +28,6 @@ class Preferences(private val context: Context) {
         const val PREF_ADD_RULE = "add_rule"
         const val PREF_RULE_PREFIX = "rule_"
 
-        // Legacy preferences
-        internal const val PREF_INITIALLY_PAUSED = "initially_paused"
-
         // Not associated with a UI preference
         private const val PREF_DEBUG_MODE = "debug_mode"
         private const val PREF_RECORD_RULE_PREFIX = "record_rule_"
@@ -221,22 +218,6 @@ class Preferences(private val context: Context) {
     var recordRulesHelpShown: Boolean
         get() = prefs.getBoolean(PREF_RECORD_RULES_HELP_SHOWN, false)
         set(shown) = prefs.edit { putBoolean(PREF_RECORD_RULES_HELP_SHOWN, shown) }
-
-    /**
-     * Migrate old "initially paused" setting to the new record rules.
-     *
-     * Will be removed in version 1.47.
-     */
-    fun migrateInitiallyPaused() {
-        if (prefs.contains(PREF_INITIALLY_PAUSED)) {
-            val oldValue = !prefs.getBoolean(PREF_INITIALLY_PAUSED, false)
-            recordRules = listOf(
-                RecordRule.UnknownCalls(oldValue),
-                RecordRule.AllCalls(oldValue),
-            )
-            prefs.edit { remove(PREF_INITIALLY_PAUSED) }
-        }
-    }
 
     /**
      * The saved output format.
