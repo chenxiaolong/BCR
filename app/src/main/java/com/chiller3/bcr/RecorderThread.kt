@@ -205,7 +205,11 @@ class RecorderThread(
                     val finalPath = outputFilenameGenerator.update(true)
 
                     if (keepRecording != false) {
-                        dirUtils.tryMoveToOutputDir(outputFile, finalPath.value)?.let {
+                        dirUtils.tryMoveToOutputDir(
+                            outputFile,
+                            finalPath.value,
+                            format.mimeTypeContainer,
+                        )?.let {
                             resultUri = it.uri
                         }
                     } else {
@@ -325,7 +329,7 @@ class RecorderThread(
             }
         } finally {
             val finalLogcatPath = getLogcatPath()
-            dirUtils.tryMoveToOutputDir(logcatFile, finalLogcatPath.value)
+            dirUtils.tryMoveToOutputDir(logcatFile, finalLogcatPath.value, "text/plain")
         }
     }
 

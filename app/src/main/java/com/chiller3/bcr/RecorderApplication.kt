@@ -36,7 +36,7 @@ class RecorderApplication : Application() {
                         .start()
                         .waitFor()
                 } finally {
-                    dirUtils.tryMoveToOutputDir(logcatFile, logcatPath)
+                    dirUtils.tryMoveToOutputDir(logcatFile, logcatPath, "text/plain")
                 }
             } finally {
                 oldCrashHandler?.uncaughtException(t, e)

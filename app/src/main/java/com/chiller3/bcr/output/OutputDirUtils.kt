@@ -106,6 +106,7 @@ class OutputDirUtils(private val context: Context, private val redactor: Redacto
         sourcePath: List<String>,
         targetTree: DocumentFile,
         targetPath: List<String>,
+        mimeType: String,
     ): DocumentFile {
         require(targetPath.isNotEmpty()) { "Target path must not be empty" }
 
@@ -139,7 +140,7 @@ class OutputDirUtils(private val context: Context, private val redactor: Redacto
                     "${redactor.redact(targetParent.uri)}: ${e.message}")
         }
 
-        val targetFile = createFile(targetTree, targetPath, sourceFile.type!!)
+        val targetFile = createFile(targetTree, targetPath, mimeType)
         copyAndDelete(sourceFile, targetFile)
         return targetFile
     }
@@ -173,7 +174,11 @@ class OutputDirUtils(private val context: Context, private val redactor: Redacto
      *
      * @return Whether the user output directory is set and the file was successfully moved
      */
-    fun tryMoveToOutputDir(sourceFile: DocumentFile, path: List<String>): DocumentFile? {
+    fun tryMoveToOutputDir(
+        sourceFile: DocumentFile,
+        path: List<String>,
+        mimeType: String,
+    ): DocumentFile? {
         val userDir = prefs.outputDir?.let {
             // Only returns null on API <21
             DocumentFile.fromTreeUri(context, it)!!
@@ -183,10 +188,10 @@ class OutputDirUtils(private val context: Context, private val redactor: Redacto
 
         return try {
             val targetFile = try {
-                move(sourceFile, emptyList(), userDir, path)
+                move(sourceFile, emptyList(), userDir, path, mimeType)
             } catch (e: Exception) {
                 Log.w(TAG, "Failed to move file; using fallback path", e)
-                move(sourceFile, emptyList(), userDir, getErrorFallbackPath(path))
+                move(sourceFile, emptyList(), userDir, getErrorFallbackPath(path), mimeType)
             }
             val redactedTarget = redactor.redact(targetFile.uri)
 
