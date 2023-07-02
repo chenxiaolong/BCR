@@ -7,6 +7,8 @@
     to update the actual links at the bottom of the file.
 -->
 
+### Unreleased
+
 ### Version 1.47
 
 * Update Turkish translations ([PR #362 @symbuzzer])
