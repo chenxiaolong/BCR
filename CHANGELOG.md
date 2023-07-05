@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update dependencies ([PR #371 @PatrykMis])
+
 ### Version 1.47
 
 * Update Turkish translations ([PR #362 @symbuzzer])
