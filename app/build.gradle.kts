@@ -10,6 +10,12 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
 buildscript {
     dependencies {
         classpath("org.eclipse.jgit:org.eclipse.jgit:6.6.0.202305301015-r")
@@ -177,11 +183,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility(JavaVersion.VERSION_11)
-        targetCompatibility(JavaVersion.VERSION_11)
+        sourceCompatibility(JavaVersion.VERSION_17)
+        targetCompatibility(JavaVersion.VERSION_17)
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         buildConfig = true
