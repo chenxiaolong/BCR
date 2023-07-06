@@ -9,7 +9,7 @@
 
 ### Unreleased
 
-* Update dependencies ([PR #371 @PatrykMis])
+* Update dependencies ([PR #371 @PatrykMis], [PR #372 @PatrykMis])
 
 ### Version 1.47
 
@@ -643,3 +643,5 @@ Non-user-facing changes:
 [PR #368 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/368
 [PR #369 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/369
 [PR #370 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/370
+[PR #371 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/371
+[PR #372 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/372
