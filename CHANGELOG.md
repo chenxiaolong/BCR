@@ -11,6 +11,7 @@
 
 * Update dependencies ([PR #371 @PatrykMis], [PR #372 @PatrykMis])
 * Enable checksum verification for dependencies ([PR #373 @chenxiaolong])
+* Update Turkish translations ([PR #374 @symbuzzer])
 
 ### Version 1.47
 
@@ -647,3 +648,4 @@ Non-user-facing changes:
 [PR #371 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/371
 [PR #372 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/372
 [PR #373 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/373
+[PR #374 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/374
