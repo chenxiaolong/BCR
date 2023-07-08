@@ -13,7 +13,7 @@
     <string name="pref_record_rules_desc">Hangi aramaların otomatik olarak kaydedileceğini ayarlayın.</string>
 
     <string name="pref_output_dir_name">Kayıt dosya  konumu</string>
-    <string name="pref_output_dir_desc">Kayıtlar için bir dosya konum seçin.</string>
+    <string name="pref_output_dir_desc">Kayıtlar için bir dosya konumu seçin.</string>
 
     <string name="pref_output_format_name">Kayıt formatı</string>
     <string name="pref_output_format_desc">Kayıtlar için bir dosya formatı seçin.</string>
