@@ -12,6 +12,7 @@
 * Update dependencies ([PR #371 @PatrykMis], [PR #372 @PatrykMis], [PR #375 @PatrykMis])
 * Enable checksum verification for dependencies ([PR #373 @chenxiaolong])
 * Update Turkish translations ([PR #374 @symbuzzer])
+* Prepare for API 34 update ([Issue #376], [PR #376 @PatrykMis])
 
 ### Version 1.47
 
@@ -472,6 +473,7 @@ Non-user-facing changes:
 [Issue #352]: https://github.com/chenxiaolong/BCR/issues/352
 [Issue #357]: https://github.com/chenxiaolong/BCR/issues/357
 [Issue #367]: https://github.com/chenxiaolong/BCR/issues/367
+[Issue #376]: https://github.com/chenxiaolong/BCR/issues/376
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -650,3 +652,4 @@ Non-user-facing changes:
 [PR #373 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/373
 [PR #374 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/374
 [PR #375 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/375
+[PR #376 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/376
