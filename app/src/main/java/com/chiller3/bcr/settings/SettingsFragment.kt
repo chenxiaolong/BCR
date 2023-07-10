@@ -199,8 +199,9 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
         return false
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
         when {
+            key == null -> return
             // Update the switch state if it was toggled outside of the preference (eg. from the
             // quick settings toggle)
             key == prefCallRecording.key -> {
