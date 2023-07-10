@@ -9,7 +9,7 @@
 
 ### Unreleased
 
-* Update dependencies ([PR #371 @PatrykMis], [PR #372 @PatrykMis])
+* Update dependencies ([PR #371 @PatrykMis], [PR #372 @PatrykMis], [PR #375 @PatrykMis])
 * Enable checksum verification for dependencies ([PR #373 @chenxiaolong])
 * Update Turkish translations ([PR #374 @symbuzzer])
 
@@ -649,3 +649,4 @@ Non-user-facing changes:
 [PR #372 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/372
 [PR #373 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/373
 [PR #374 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/374
+[PR #375 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/375
