@@ -6,9 +6,9 @@ import org.jetbrains.kotlin.backend.common.pop
 import org.json.JSONObject
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.parcelize")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 java {
@@ -19,9 +19,9 @@ java {
 
 buildscript {
     dependencies {
-        classpath("org.eclipse.jgit:org.eclipse.jgit:6.6.0.202305301015-r")
-        classpath("org.eclipse.jgit:org.eclipse.jgit.archive:6.6.0.202305301015-r")
-        classpath("org.json:json:20230618")
+        "classpath"(libs.jgit)
+        "classpath"(libs.jgit.archive)
+        "classpath"(libs.json)
     }
 }
 
@@ -202,17 +202,17 @@ android {
 }
 
 dependencies {
-    implementation("androidx.activity:activity-ktx:1.7.2")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.documentfile:documentfile:1.0.1")
-    implementation("androidx.fragment:fragment-ktx:1.6.0")
-    implementation("androidx.preference:preference-ktx:1.2.0")
-    implementation("com.google.android.material:material:1.9.0")
-    implementation("io.github.copper-leaf:kudzu-core:5.0.0")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.documentfile)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.preference.ktx)
+    implementation(libs.material)
+    implementation(libs.kudzu)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.junit)
+    androidTestImplementation(libs.androidx.test.espresso)
 }
 
 val archive = tasks.register("archive") {
