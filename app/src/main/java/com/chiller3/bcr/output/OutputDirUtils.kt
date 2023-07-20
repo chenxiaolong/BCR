@@ -48,6 +48,24 @@ class OutputDirUtils(private val context: Context, private val redactor: Redacto
             ?: throw IOException("Failed to create file $redactedPath in $redactedRoot")
     }
 
+    private fun createFileWithFallback(
+        root: DocumentFile,
+        path: List<String>,
+        mimeType: String,
+    ): DocumentFile {
+        return try {
+            createFile(root, path, mimeType)
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to create file; using fallback path", e)
+
+            // If the failure is due to eg. running out of space, then there's nothing we can do and
+            // this will just fail the same way again. However, if the failure is due to eg. an
+            // intermediate path segment being a file instead of a directory, then at least the user
+            // will still have the recording, even if the directory structure is wrong.
+            createFile(root, getErrorFallbackPath(path), mimeType)
+        }
+    }
+
     /**
      * Open seekable file descriptor to [file].
      *
@@ -156,17 +174,24 @@ class OutputDirUtils(private val context: Context, private val redactor: Redacto
     fun createFileInDefaultDir(path: List<String>, mimeType: String): DocumentFile {
         val defaultDir = DocumentFile.fromFile(prefs.defaultOutputDir)
 
-        return try {
-            createFile(defaultDir, path, mimeType)
-        } catch (e: Exception) {
-            Log.w(TAG, "Failed to create file; using fallback path", e)
+        return createFileWithFallback(defaultDir, path, mimeType)
+    }
 
-            // If the failure is due to eg. running out of space, then there's nothing we can do and
-            // this will just fail the same way again. However, if the failure is due to eg. an
-            // intermediate path segment being a file instead of a directory, then at least the user
-            // will still have the recording, even if the directory structure is wrong.
-            createFile(defaultDir, getErrorFallbackPath(path), mimeType)
-        }
+    /**
+     * Create [path] in the output directory.
+     *
+     * @param path The last element is the filename, which should not contain a file extension
+     * @param mimeType Determines the file extension
+     *
+     * @throws IOException if the file could not be created in the output directory
+     */
+    fun createFileInOutputDir(path: List<String>, mimeType: String): DocumentFile {
+        val userDir = prefs.outputDir?.let {
+            // Only returns null on API <21
+            DocumentFile.fromTreeUri(context, it)!!
+        } ?: DocumentFile.fromFile(prefs.defaultOutputDir)
+
+        return createFileWithFallback(userDir, path, mimeType)
     }
 
     /**

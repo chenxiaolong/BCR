@@ -23,6 +23,7 @@ class Preferences(private val context: Context) {
         const val PREF_FILENAME_TEMPLATE = "filename_template"
         const val PREF_OUTPUT_FORMAT = "output_format"
         const val PREF_INHIBIT_BATT_OPT = "inhibit_batt_opt"
+        const val PREF_WRITE_METADATA = "write_metadata"
         const val PREF_VERSION = "version"
 
         const val PREF_ADD_RULE = "add_rule"
@@ -270,4 +271,11 @@ class Preferences(private val context: Context) {
     var sampleRate: SampleRate?
         get() = getOptionalUint(PREF_SAMPLE_RATE)?.let { SampleRate(it) }
         set(sampleRate) = setOptionalUint(PREF_SAMPLE_RATE, sampleRate?.value)
+
+    /**
+     * Whether to write call metadata file.
+     */
+    var writeMetadata: Boolean
+        get() = prefs.getBoolean(PREF_WRITE_METADATA, false)
+        set(enabled) = prefs.edit { putBoolean(PREF_WRITE_METADATA, enabled) }
 }

@@ -117,8 +117,8 @@ BCR supports customizing the template used for determining the output filenames 
 * `{date}`: The timestamp of the call. The default timestamp format tries to be as unambiguous as possible and is in the form: `20230414_215701.088-0400`. A custom timestamp format can be specified with `{date:<format string>}`. For example, `{date:yyyy-MM-dd @ h.mm.ss a}` would produce `2023-04-14 @ 9.57.01 PM`. A full list of timestamp formatting characters can be found at: https://developer.android.com/reference/java/time/format/DateTimeFormatterBuilder#appendPattern(java.lang.String).
   * For the file retention feature to work, the date must not immediately follow another variable. For example, `{phone_number}{date}` will cause file retention to be disabled, but `{phone_number} ({date})` works because there's some text ` (` between the two variables.
   * If the date format is changed, the old recordings should be manually renamed or moved to another directory to ensure that they won't inadvertently be deleted. For example, if `yyMMdd_HHmmss` was changed to `HHmmss_yyMMdd`, the timestamps from the old recording's filenames would be parsed incorrectly and may get deleted.
-* `{direction}`: For 1-on-1 calls, either `in` or `out` depending on if the call is an incoming or outgoing call. If the call is a conference call, then `conference` is used instead.
-* `{sim_slot}`: **[Android 11+ only]** The SIM slot number for the call (counting from 1). This is only defined for multi-SIM devices that have multiple SIMs active.
+* `{direction}`: **[Android 10+ only]** For 1-on-1 calls, either `in` or `out` depending on if the call is an incoming or outgoing call. If the call is a conference call, then `conference` is used instead.
+* `{sim_slot}`: **[Android 11+ only]** The SIM slot number for the call (counting from 1). This is only defined for multi-SIM devices that have multiple SIMs active and if BCR is granted the Phone permission.
 * `{phone_number}`: The phone number for the call. This is undefined for private calls. Available formatting options:
   * `{phone_number:E.164}`: Default (same as just `{phone_number}`). Phone number formatted in the international E.164 format (`+<country code><subscriber>`).
   * `{phone_number:digits_only}`: Phone number with digits only (no `+` or separators).
@@ -132,6 +132,58 @@ BCR supports customizing the template used for determining the output filenames 
 The filename template supports specifying subdirectories using the `/` character. Slashes are allowed anywhere inside the filename template, including `{date}` (eg. `{date:yyyy/MM/dd}`). However, any slashes that appear after expanding other variables will be replaced with underscores. For example, if the caller ID for a call is `First/Last`, then `{caller_name}` is expanded to `First_Last`.
 
 Note that due to Android Storage Access Framework's poor performance, using subdirectories may significantly slow down the saving of the recording on some devices. On Android builds with a good SAF implementation, this may only be a few seconds. On the OEM Android build with the worst known SAF implementation, this could take several minutes. The delay is proportional to the number of files in the output directory.
+
+## Metadata file
+
+If the `Write metadata file` option is enabled, BCR will write a JSON file to the output directory containing all of the details that BCR knows about the call. The file has the same name as the audio file, except with a `.json` extension.
+
+The JSON structure is shown in the following example. The only fields that are guaranteed to exist are the timestamp fields. If the value for a field can't be determined (eg. when a required permission is denied), then it is set to `null`.
+
+```jsonc
+{
+    // The timestamp represented as milliseconds since the Unix epoch in UTC.
+    "timestamp_unix_ms": 1689817988931,
+
+    // The timestamp represented as ISO8601 (+ offset) in the local time zone.
+    "timestamp": "2023-07-19T21:53:08.931-04:00",
+
+    // The call direction ("in", "out", or "conference").
+    // [Android 10+ only]
+    "direction": "in",
+
+    // The SIM slot used for the call.
+    // [Android 11+ only; requires the Phone permission]
+    "sim_slot": 1,
+
+    // The name shown in the dialer's call log. This may include the business'
+    // name for dialers that perform reverse lookups.
+    // [Requires the Call Log permission]
+    "call_log_name": "John Doe",
+
+    // Details about the other party or parties in the call. There will be
+    // multiple entries for conference calls.
+    "calls": [
+        {
+            // The raw phone number as reported by Android. For outgoing calls,
+            // this is usually what the user typed. For incoming calls, this is
+            // usually E.164 formatted. This will be null for private calls.
+            "phone_number": "+11234567890",
+
+            // The phone number formatted using the country-specific style. This
+            // will be null for private calls or if Android cannot determine the
+            // country.
+            "phone_number_formatted": "+1 123-456-7890",
+
+            // The caller name/ID as reported by CNAP from the carrier.
+            "caller_name": "John Doe",
+
+            // The contact name associated with the phone number.
+            // [Requires the Contacts permission]
+            "contact_name": "John Doe"
+        }
+    ]
+}
+```
 
 ## Advanced features
 

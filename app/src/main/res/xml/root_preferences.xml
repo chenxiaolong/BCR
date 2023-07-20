@@ -35,6 +35,12 @@
             app:title="@string/pref_inhibit_batt_opt_name"
             app:summary="@string/pref_inhibit_batt_opt_desc"
             app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="write_metadata"
+            app:title="@string/pref_write_metadata_name"
+            app:summary="@string/pref_write_metadata_desc"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory

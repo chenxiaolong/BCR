@@ -5,6 +5,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
@@ -16,40 +17,41 @@ class NotificationActionService : Service() {
         private val TAG = NotificationActionService::class.java.simpleName
 
         private val ACTION_DELETE_URI = "${NotificationActionService::class.java.canonicalName}.delete_uri"
-        private const val EXTRA_REDACTED = "redacted"
+        private const val EXTRA_FILES = "files"
         private const val EXTRA_NOTIFICATION_ID = "notification_id"
 
-        private fun intentFromFile(context: Context, file: OutputFile): Intent =
-            Intent(context, NotificationActionService::class.java).apply {
-                setDataAndType(file.uri, file.mimeType)
-                putExtra(EXTRA_REDACTED, file.redacted)
-            }
-
-        fun createDeleteUriIntent(context: Context, file: OutputFile, notificationId: Int): Intent =
-            intentFromFile(context, file).apply {
-                action = ACTION_DELETE_URI
-                putExtra(EXTRA_NOTIFICATION_ID, notificationId)
-            }
+        fun createDeleteUriIntent(
+            context: Context,
+            files: List<OutputFile>,
+            notificationId: Int,
+        ) = Intent(context, NotificationActionService::class.java).apply {
+            action = ACTION_DELETE_URI
+            // Unused, but guarantees filterEquals() uniqueness for use with PendingIntents
+            data = Uri.fromParts("notification", notificationId.toString(), null)
+            putExtra(EXTRA_FILES, ArrayList(files))
+            putExtra(EXTRA_NOTIFICATION_ID, notificationId)
+        }
     }
 
     private val handler = Handler(Looper.getMainLooper())
 
-    private fun parseFileFromIntent(intent: Intent): OutputFile =
-        OutputFile(
-            intent.data!!,
-            intent.getStringExtra(EXTRA_REDACTED)!!,
-            intent.type!!,
-        )
-
-    private fun parseDeleteUriIntent(intent: Intent): Pair<OutputFile, Int> {
-        val file = parseFileFromIntent(intent)
+    private fun parseDeleteUriIntent(intent: Intent): Pair<List<OutputFile>, Int> {
+        val files = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableArrayListExtra(EXTRA_FILES, OutputFile::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableArrayListExtra(EXTRA_FILES)
+        }
+        if (files == null) {
+            throw IllegalArgumentException("No files specified")
+        }
 
         val notificationId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1)
         if (notificationId < 0) {
             throw IllegalArgumentException("Invalid notification ID: $notificationId")
         }
 
-        return Pair(file, notificationId)
+        return Pair(files, notificationId)
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -58,16 +60,19 @@ class NotificationActionService : Service() {
         try {
             when (intent?.action) {
                 ACTION_DELETE_URI -> {
-                    val (file, notificationId) = parseDeleteUriIntent(intent)
-                    val documentFile = file.toDocumentFile(this)
+                    val (files, notificationId) = parseDeleteUriIntent(intent)
                     val notificationManager = getSystemService(NotificationManager::class.java)
 
                     Thread {
-                        Log.d(TAG, "Deleting: ${file.redacted}")
-                        try {
-                            documentFile.delete()
-                        } catch (e: Exception) {
-                            Log.w(TAG, "Failed to delete ${file.redacted}", e)
+                        for (file in files) {
+                            val documentFile = file.toDocumentFile(this)
+
+                            Log.d(TAG, "Deleting: ${file.redacted}")
+                            try {
+                                documentFile.delete()
+                            } catch (e: Exception) {
+                                Log.w(TAG, "Failed to delete ${file.redacted}", e)
+                            }
                         }
 
                         handler.post {
