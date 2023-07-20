@@ -9,12 +9,16 @@
 
 ### Unreleased
 
-* Update dependencies ([PR #371 @PatrykMis], [PR #372 @PatrykMis], [PR #375 @PatrykMis])
-* Enable checksum verification for dependencies ([PR #373 @chenxiaolong])
 * Update Turkish translations ([PR #374 @symbuzzer])
-* Prepare for API 34 update ([Issue #376], [PR #377 @PatrykMis])
 * Add support for writing a JSON file containing the call metadata ([Issue #135], [Issue #380], [PR #382 @chenxiaolong])
 * Long pressing the output directory will now open it in the system file manager ([Issue #135], [PR #383 @chenxiaolong])
+
+Non-user-facing changes:
+
+* Update dependencies ([PR #371 @PatrykMis], [PR #372 @PatrykMis], [PR #375 @PatrykMis])
+* Enable checksum verification for dependencies ([PR #373 @chenxiaolong])
+* Prepare for API 34 update ([Issue #376], [PR #377 @PatrykMis])
+* Migrate dependency declarations to version catalogs ([PR #381 @PatrykMis])
 
 ### Version 1.47
 
@@ -657,5 +661,6 @@ Non-user-facing changes:
 [PR #374 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/374
 [PR #375 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/375
 [PR #377 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/377
+[PR #381 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/381
 [PR #382 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/382
 [PR #383 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/383
