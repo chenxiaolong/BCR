@@ -3,9 +3,13 @@ package com.chiller3.bcr
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Environment
+import android.provider.DocumentsContract
 import android.util.Log
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
+import com.chiller3.bcr.extension.DOCUMENTSUI_AUTHORITY
+import com.chiller3.bcr.extension.safTreeToDocument
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.SampleRate
 import com.chiller3.bcr.output.Retention
@@ -163,6 +167,24 @@ class Preferences(private val context: Context) {
      */
     val outputDirOrDefault: Uri
         get() = outputDir ?: Uri.fromFile(defaultOutputDir)
+
+    /**
+     * Build an [Intent] for opening DocumentsUI to the user-specified output directory or the
+     * default if none was set.
+     */
+    val outputDirOrDefaultIntent: Intent
+        get() = Intent(Intent.ACTION_VIEW).apply {
+            val uri = outputDir?.safTreeToDocument() ?: run {
+                // Opening a file:// URI will fail with FileUriExposedException. We need to hackily
+                // build our own URI for the directory. Luckily, the implementation details have
+                // never changed...
+                val externalDir = Environment.getExternalStorageDirectory()
+                val relPath = defaultOutputDir.relativeTo(externalDir)
+
+                DocumentsContract.buildDocumentUri(DOCUMENTSUI_AUTHORITY, "primary:$relPath")
+            }
+            setDataAndType(uri, "vnd.android.document/directory")
+        }
 
     /** The user-specified filename template. */
     var filenameTemplate: Template?

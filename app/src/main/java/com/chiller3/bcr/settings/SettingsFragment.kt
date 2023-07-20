@@ -1,5 +1,6 @@
 package com.chiller3.bcr.settings
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -21,6 +22,7 @@ import com.chiller3.bcr.output.Retention
 import com.chiller3.bcr.rule.RecordRulesActivity
 import com.chiller3.bcr.view.LongClickablePreference
 import com.chiller3.bcr.view.OnPreferenceLongClickListener
+import com.google.android.material.snackbar.Snackbar
 
 class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChangeListener,
     Preference.OnPreferenceClickListener, OnPreferenceLongClickListener,
@@ -28,7 +30,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
     private lateinit var prefs: Preferences
     private lateinit var prefCallRecording: SwitchPreferenceCompat
     private lateinit var prefRecordRules: Preference
-    private lateinit var prefOutputDir: Preference
+    private lateinit var prefOutputDir: LongClickablePreference
     private lateinit var prefOutputFormat: Preference
     private lateinit var prefInhibitBatteryOpt: SwitchPreferenceCompat
     private lateinit var prefVersion: LongClickablePreference
@@ -68,6 +70,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
 
         prefOutputDir = findPreference(Preferences.PREF_OUTPUT_DIR)!!
         prefOutputDir.onPreferenceClickListener = this
+        prefOutputDir.onPreferenceLongClickListener = this
         refreshOutputDir()
 
         prefOutputFormat = findPreference(Preferences.PREF_OUTPUT_FORMAT)!!
@@ -189,6 +192,18 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
 
     override fun onPreferenceLongClick(preference: Preference): Boolean {
         when (preference) {
+            prefOutputDir -> {
+                try {
+                    startActivity(prefs.outputDirOrDefaultIntent)
+                } catch (e: ActivityNotFoundException) {
+                    Snackbar.make(
+                        requireView(),
+                        R.string.documentsui_not_found,
+                        Snackbar.LENGTH_LONG,
+                    ).show()
+                }
+                return true
+            }
             prefVersion -> {
                 prefs.isDebugMode = !prefs.isDebugMode
                 refreshVersion()

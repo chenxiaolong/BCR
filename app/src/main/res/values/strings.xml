@@ -13,7 +13,7 @@
     <string name="pref_record_rules_desc">Configure which calls should be automatically recorded.</string>
 
     <string name="pref_output_dir_name">Output directory</string>
-    <string name="pref_output_dir_desc">Pick a directory to store recordings.</string>
+    <string name="pref_output_dir_desc">Pick a directory to store recordings. Long press to open in file manager.</string>
 
     <string name="pref_output_format_name">Output format</string>
     <string name="pref_output_format_desc">Select an encoding format for the recordings.</string>
@@ -118,4 +118,7 @@
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Call recording</string>
+
+    <!-- Snackbar alerts -->
+    <string name="documentsui_not_found">Android\'s builtin file manager (DocumentsUI) is unavailable.</string>
 </resources>

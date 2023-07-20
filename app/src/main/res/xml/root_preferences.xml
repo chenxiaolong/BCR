@@ -16,7 +16,7 @@
             app:summary="@string/pref_record_rules_desc"
             app:iconSpaceReserved="false" />
 
-        <Preference
+        <com.chiller3.bcr.view.LongClickablePreference
             app:key="output_dir"
             app:persistent="false"
             app:title="@string/pref_output_dir_name"

@@ -2,14 +2,17 @@ package com.chiller3.bcr.extension
 
 import android.content.ContentResolver
 import android.net.Uri
+import android.provider.DocumentsContract
 import android.telecom.PhoneAccount
+
+val DOCUMENTSUI_AUTHORITY = "com.android.externalstorage.documents"
 
 val Uri.formattedString: String
     get() = when (scheme) {
         ContentResolver.SCHEME_FILE -> path!!
         ContentResolver.SCHEME_CONTENT -> {
             val prefix = when (authority) {
-                "com.android.externalstorage.documents" -> ""
+                DOCUMENTSUI_AUTHORITY -> ""
                 // Include the authority to reduce ambiguity when this isn't a SAF URI provided by
                 // Android's local filesystem document provider
                 else -> "[$authority] "
@@ -34,3 +37,10 @@ val Uri.phoneNumber: String?
         PhoneAccount.SCHEME_TEL -> schemeSpecificPart
         else -> null
     }
+
+fun Uri.safTreeToDocument(): Uri {
+    require(scheme == ContentResolver.SCHEME_CONTENT) { "Not a content URI" }
+
+    val documentId = DocumentsContract.getTreeDocumentId(this)
+    return DocumentsContract.buildDocumentUri(authority, documentId)
+}
