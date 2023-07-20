@@ -10,7 +10,7 @@
 ### Unreleased
 
 * Update Turkish translations ([PR #374 @symbuzzer])
-* Add support for writing a JSON file containing the call metadata ([Issue #135], [Issue #380], [PR #382 @chenxiaolong])
+* Add support for writing a JSON file containing the call metadata ([Issue #135], [Issue #380], [PR #382 @chenxiaolong], [PR #384 @chenxiaolong])
 * Long pressing the output directory will now open it in the system file manager ([Issue #135], [PR #383 @chenxiaolong])
 
 Non-user-facing changes:
@@ -664,3 +664,4 @@ Non-user-facing changes:
 [PR #381 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/381
 [PR #382 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/382
 [PR #383 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/383
+[PR #384 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/384
