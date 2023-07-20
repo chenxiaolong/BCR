@@ -13,6 +13,7 @@
 * Enable checksum verification for dependencies ([PR #373 @chenxiaolong])
 * Update Turkish translations ([PR #374 @symbuzzer])
 * Prepare for API 34 update ([Issue #376], [PR #377 @PatrykMis])
+* Add support for writing a JSON file containing the call metadata ([Issue #135], [Issue #380], [PR #382 @chenxiaolong])
 
 ### Version 1.47
 
@@ -438,6 +439,7 @@ Non-user-facing changes:
 [Issue #111]: https://github.com/chenxiaolong/BCR/issues/111
 [Issue #128]: https://github.com/chenxiaolong/BCR/issues/128
 [Issue #131]: https://github.com/chenxiaolong/BCR/issues/131
+[Issue #135]: https://github.com/chenxiaolong/BCR/issues/135
 [Issue #138]: https://github.com/chenxiaolong/BCR/issues/138
 [Issue #142]: https://github.com/chenxiaolong/BCR/issues/142
 [Issue #143]: https://github.com/chenxiaolong/BCR/issues/143
@@ -474,6 +476,7 @@ Non-user-facing changes:
 [Issue #357]: https://github.com/chenxiaolong/BCR/issues/357
 [Issue #367]: https://github.com/chenxiaolong/BCR/issues/367
 [Issue #376]: https://github.com/chenxiaolong/BCR/issues/376
+[Issue #380]: https://github.com/chenxiaolong/BCR/issues/380
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -653,3 +656,4 @@ Non-user-facing changes:
 [PR #374 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/374
 [PR #375 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/375
 [PR #377 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/377
+[PR #382 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/382
