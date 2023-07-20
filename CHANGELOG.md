@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.48
 
 * Update Turkish translations ([PR #374 @symbuzzer])
 * Add support for writing a JSON file containing the call metadata ([Issue #135], [Issue #380], [PR #382 @chenxiaolong], [PR #384 @chenxiaolong])
