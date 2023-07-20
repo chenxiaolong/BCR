@@ -197,6 +197,7 @@ class Notifications(
         @DrawableRes icon: Int,
         errorMsg: String?,
         file: OutputFile?,
+        additionalFiles: List<OutputFile>,
     ) {
         val notificationId = allocateNotificationId()
 
@@ -250,7 +251,11 @@ class Notifications(
                 val deleteIntent = PendingIntent.getService(
                     context,
                     0,
-                    NotificationActionService.createDeleteUriIntent(context, file, notificationId),
+                    NotificationActionService.createDeleteUriIntent(
+                        context,
+                        listOf(file) + additionalFiles,
+                        notificationId,
+                    ),
                     PendingIntent.FLAG_IMMUTABLE,
                 )
 
@@ -296,8 +301,9 @@ class Notifications(
         @StringRes title: Int,
         @DrawableRes icon: Int,
         file: OutputFile,
+        additionalFiles: List<OutputFile>,
     ) {
-        sendAlertNotification(CHANNEL_ID_SUCCESS, title, icon, null, file)
+        sendAlertNotification(CHANNEL_ID_SUCCESS, title, icon, null, file, additionalFiles)
         vibrateIfEnabled(CHANNEL_ID_SUCCESS)
     }
 
@@ -313,8 +319,9 @@ class Notifications(
         @DrawableRes icon: Int,
         errorMsg: String?,
         file: OutputFile?,
+        additionalFiles: List<OutputFile>,
     ) {
-        sendAlertNotification(CHANNEL_ID_FAILURE, title, icon, errorMsg, file)
+        sendAlertNotification(CHANNEL_ID_FAILURE, title, icon, errorMsg, file, additionalFiles)
         vibrateIfEnabled(CHANNEL_ID_FAILURE)
     }
 

@@ -19,6 +19,8 @@ import com.chiller3.bcr.extension.phoneNumber
 import com.chiller3.bcr.format.Encoder
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.SampleRate
+import com.chiller3.bcr.output.CallMetadata
+import com.chiller3.bcr.output.CallMetadataCollector
 import com.chiller3.bcr.output.DaysRetention
 import com.chiller3.bcr.output.NoRetention
 import com.chiller3.bcr.output.OutputDirUtils
@@ -113,10 +115,11 @@ class RecorderThread(
         }
 
     // Filename
-    private val outputFilenameGenerator = OutputFilenameGenerator(context, parentCall)
+    private val callMetadataCollector = CallMetadataCollector(context, parentCall)
+    private val outputFilenameGenerator = OutputFilenameGenerator(context)
     private val dirUtils = OutputDirUtils(context, outputFilenameGenerator.redactor)
-    val path: OutputPath
-        get() = outputFilenameGenerator.path
+    val outputPath: OutputPath
+        get() = outputFilenameGenerator.generate(callMetadataCollector.callMetadata)
 
     // Format
     private val format: Format
@@ -137,7 +140,7 @@ class RecorderThread(
     }
 
     fun onCallDetailsChanged(call: Call, details: Call.Details) {
-        outputFilenameGenerator.updateCallDetails(call, details)
+        callMetadataCollector.updateCallDetails(call, details)
         listener.onRecordingStateChanged(this)
     }
 
@@ -150,10 +153,10 @@ class RecorderThread(
 
         if (parentCall.details.hasProperty(Call.Details.PROPERTY_CONFERENCE)) {
             for (childCall in parentCall.children) {
-                childCall.details?.phoneNumber?.let { numbers.add(it) }
+                childCall.details?.phoneNumber?.let { numbers.add(it.toString()) }
             }
         } else {
-            parentCall.details?.phoneNumber?.let { numbers.add(it) }
+            parentCall.details?.phoneNumber?.let { numbers.add(it.toString()) }
         }
 
         Log.i(tag, "Evaluating record rules for ${numbers.size} phone number(s)")
@@ -174,6 +177,7 @@ class RecorderThread(
         var success = false
         var errorMsg: String? = null
         var resultUri: Uri? = null
+        val additionalFiles = ArrayList<OutputFile>()
 
         startLogcat()
 
@@ -188,7 +192,7 @@ class RecorderThread(
 
                 evaluateRules()
 
-                val initialPath = outputFilenameGenerator.path
+                val initialPath = outputPath
                 val outputFile = dirUtils.createFileInDefaultDir(
                     initialPath.value, format.mimeTypeContainer)
                 resultUri = outputFile.uri
@@ -202,7 +206,8 @@ class RecorderThread(
                     state = State.FINALIZING
                     listener.onRecordingStateChanged(this)
 
-                    val finalPath = outputFilenameGenerator.update(true)
+                    callMetadataCollector.update(true)
+                    val finalPath = outputPath
 
                     if (keepRecording != false) {
                         dirUtils.tryMoveToOutputDir(
@@ -212,6 +217,8 @@ class RecorderThread(
                         )?.let {
                             resultUri = it.uri
                         }
+
+                        writeMetadataFile(finalPath.value)?.let { additionalFiles.add(it) }
                     } else {
                         Log.i(tag, "Deleting recording: $finalPath")
                         outputFile.delete()
@@ -240,7 +247,7 @@ class RecorderThread(
             Log.i(tag, "Recording thread completed")
 
             try {
-                stopLogcat()
+                stopLogcat()?.let { additionalFiles.add(it) }
             } catch (e: Exception) {
                 Log.w(tag, "Failed to dump logcat", e)
             }
@@ -257,9 +264,9 @@ class RecorderThread(
             listener.onRecordingStateChanged(this)
 
             if (success) {
-                listener.onRecordingCompleted(this, outputFile)
+                listener.onRecordingCompleted(this, outputFile, additionalFiles)
             } else {
-                listener.onRecordingFailed(this, errorMsg, outputFile)
+                listener.onRecordingFailed(this, errorMsg, outputFile, additionalFiles)
             }
         }
     }
@@ -279,7 +286,7 @@ class RecorderThread(
     }
 
     private fun getLogcatPath(): OutputPath {
-        return outputFilenameGenerator.path.let {
+        return outputPath.let {
             val path = it.value.mapIndexed { i, p ->
                 p + if (i == it.value.size - 1) { ".log" } else { "" }
             }
@@ -298,7 +305,7 @@ class RecorderThread(
         Log.d(tag, "Starting log file (${BuildConfig.VERSION_NAME})")
 
         logcatPath = getLogcatPath()
-        logcatFile = dirUtils.createFileInDefaultDir(logcatPath.value, "text/plain")
+        logcatFile = dirUtils.createFileInDefaultDir(logcatPath.value, MIME_LOGCAT)
         logcatProcess = ProcessBuilder("logcat", "*:V")
             // This is better than -f because the logcat implementation calls fflush() when the
             // output stream is stdout. logcatFile is guaranteed to have file:// scheme because it's
@@ -308,12 +315,14 @@ class RecorderThread(
             .start()
     }
 
-    private fun stopLogcat() {
+    private fun stopLogcat(): OutputFile? {
         if (!isDebug) {
-            return
+            return null
         }
 
         assert(this::logcatProcess.isInitialized) { "logcat not started" }
+
+        var uri = logcatFile.uri
 
         try {
             try {
@@ -329,16 +338,48 @@ class RecorderThread(
             }
         } finally {
             val finalLogcatPath = getLogcatPath()
-            dirUtils.tryMoveToOutputDir(logcatFile, finalLogcatPath.value, "text/plain")
+            dirUtils.tryMoveToOutputDir(logcatFile, finalLogcatPath.value, MIME_LOGCAT)?.let {
+                uri = it.uri
+            }
+        }
+
+        return OutputFile(uri, outputFilenameGenerator.redactor.redact(uri), MIME_LOGCAT)
+    }
+
+    private fun writeMetadataFile(path: List<String>): OutputFile? {
+        if (!prefs.writeMetadata) {
+            Log.i(tag, "Metadata writing is disabled")
+            return null
+        }
+
+        Log.i(tag, "Writing metadata file")
+
+        try {
+            val metadataJson = callMetadataCollector.callMetadata.toJson(context)
+            val metadataBytes = metadataJson.toString(4).toByteArray()
+
+            val metadataFile = dirUtils.createFileInOutputDir(path, MIME_METADATA)
+            dirUtils.openFile(metadataFile, true).use {
+                Os.write(it.fileDescriptor, metadataBytes, 0, metadataBytes.size)
+            }
+
+            return OutputFile(
+                metadataFile.uri,
+                outputFilenameGenerator.redactor.redact(metadataFile.uri),
+                MIME_METADATA,
+            )
+        } catch (e: Exception) {
+            Log.w(tag, "Failed to write metadata file", e)
+            return null
         }
     }
 
     /**
      * Delete files older than the specified retention period.
      *
-     * The "current time" is [OutputFilenameGenerator.callTimestamp], not the actual current time
-     * and the timestamp of past recordings is based on the filename, not the file modification
-     * time. Incorrectly-named files are ignored.
+     * The "current time" is [CallMetadata.timestamp], not the actual current time. The timestamp of
+     * past recordings is based on the filename, not the file modification time. Incorrectly-named
+     * files are ignored.
      */
     private fun processRetention() {
         val directory = prefs.outputDir?.let {
@@ -371,7 +412,7 @@ class RecorderThread(
                 continue
             }
 
-            val diff = Duration.between(timestamp, outputFilenameGenerator.callTimestamp)
+            val diff = Duration.between(timestamp, callMetadataCollector.callMetadata.timestamp)
 
             if (diff > retention) {
                 Log.i(tag, "Deleting $redacted ($timestamp)")
@@ -546,6 +587,9 @@ class RecorderThread(
     companion object {
         private const val CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO
         private const val ENCODING = AudioFormat.ENCODING_PCM_16BIT
+
+        private const val MIME_LOGCAT = "text/plain"
+        private const val MIME_METADATA = "application/json"
     }
 
     interface OnRecordingCompletedListener {
@@ -558,14 +602,29 @@ class RecorderThread(
          * Called when the recording completes successfully. [file] is the output file. If [file] is
          * null, then the recording was started in the paused state and the output file was deleted
          * because the user never resumed it.
+         *
+         * [additionalFiles] are additional files associated with the main output file and should be
+         * deleted along with the main file.
          */
-        fun onRecordingCompleted(thread: RecorderThread, file: OutputFile?)
+        fun onRecordingCompleted(
+            thread: RecorderThread,
+            file: OutputFile?,
+            additionalFiles: List<OutputFile>,
+        )
 
         /**
          * Called when an error occurs during recording. If [file] is not null, it points to the
          * output file containing partially recorded audio. If [file] is null, then either the
          * output file could not be created or the thread was cancelled before it was started.
+         *
+         * [additionalFiles] are additional files associated with the main output file and should be
+         * deleted along with the main file.
          */
-        fun onRecordingFailed(thread: RecorderThread, errorMsg: String?, file: OutputFile?)
+        fun onRecordingFailed(
+            thread: RecorderThread,
+            errorMsg: String?,
+            file: OutputFile?,
+            additionalFiles: List<OutputFile>,
+        )
     }
 }

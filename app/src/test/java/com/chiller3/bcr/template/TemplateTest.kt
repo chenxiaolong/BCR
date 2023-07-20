@@ -1,7 +1,7 @@
 package com.chiller3.bcr.template
 
-import com.chiller3.bcr.output.OutputFilenameGenerator
 import com.chiller3.bcr.Preferences
+import com.chiller3.bcr.output.OutputFilenameGenerator
 import com.copperleaf.kudzu.node.mapped.ValueNode
 import com.copperleaf.kudzu.parser.Parser
 import com.copperleaf.kudzu.parser.ParserContext
@@ -9,7 +9,6 @@ import com.copperleaf.kudzu.parser.ParserException
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Test
-import java.util.*
 
 class TemplateTest {
     private fun <N: Template.AstNode> parse(

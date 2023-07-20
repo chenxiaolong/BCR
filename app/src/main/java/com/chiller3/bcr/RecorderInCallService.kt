@@ -235,7 +235,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
             val recorder = try {
                 RecorderThread(this, this, call)
             } catch (e: Exception) {
-                notifyFailure(e.message, null)
+                notifyFailure(e.message, null, emptyList())
                 throw e
             }
             callsToRecorders[call] = recorder
@@ -357,7 +357,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
                     }
                 }
 
-                val message = StringBuilder(recorder.path.unredacted)
+                val message = StringBuilder(recorder.outputPath.unredacted)
 
                 if (canShowDelete) {
                     recorder.keepRecording?.let {
@@ -404,20 +404,26 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         }
     }
 
-    private fun notifySuccess(file: OutputFile) {
+    private fun notifySuccess(file: OutputFile, additionalFiles: List<OutputFile>) {
         notifications.notifySuccess(
             R.string.notification_recording_succeeded,
             R.drawable.ic_launcher_quick_settings,
             file,
+            additionalFiles,
         )
     }
 
-    private fun notifyFailure(errorMsg: String?, file: OutputFile?) {
+    private fun notifyFailure(
+        errorMsg: String?,
+        file: OutputFile?,
+        additionalFiles: List<OutputFile>,
+    ) {
         notifications.notifyFailure(
             R.string.notification_recording_failed,
             R.drawable.ic_launcher_quick_settings,
             errorMsg,
             file,
+            additionalFiles,
         )
     }
 
@@ -444,7 +450,11 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         }
     }
 
-    override fun onRecordingCompleted(thread: RecorderThread, file: OutputFile?) {
+    override fun onRecordingCompleted(
+        thread: RecorderThread,
+        file: OutputFile?,
+        additionalFiles: List<OutputFile>,
+    ) {
         Log.i(TAG, "Recording completed: ${thread.id}: ${file?.redacted}")
         handler.post {
             onRecorderExited(thread)
@@ -452,17 +462,22 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
             // If the recording was initially paused and the user never resumed it, there's no
             // output file, so nothing needs to be shown.
             if (file != null) {
-                notifySuccess(file)
+                notifySuccess(file, additionalFiles)
             }
         }
     }
 
-    override fun onRecordingFailed(thread: RecorderThread, errorMsg: String?, file: OutputFile?) {
+    override fun onRecordingFailed(
+        thread: RecorderThread,
+        errorMsg: String?,
+        file: OutputFile?,
+        additionalFiles: List<OutputFile>,
+    ) {
         Log.w(TAG, "Recording failed: ${thread.id}: ${file?.redacted}")
         handler.post {
             onRecorderExited(thread)
 
-            notifyFailure(errorMsg, file)
+            notifyFailure(errorMsg, file, additionalFiles)
         }
     }
 }
