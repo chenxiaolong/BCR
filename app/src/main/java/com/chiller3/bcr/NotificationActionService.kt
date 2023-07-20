@@ -27,7 +27,8 @@ class NotificationActionService : Service() {
         ) = Intent(context, NotificationActionService::class.java).apply {
             action = ACTION_DELETE_URI
             // Unused, but guarantees filterEquals() uniqueness for use with PendingIntents
-            data = Uri.fromParts("notification", notificationId.toString(), null)
+            val uniqueSsp = files.asSequence().map { it.uri.toString() }.joinToString("\u0000")
+            data = Uri.fromParts("unused", uniqueSsp, null)
             putExtra(EXTRA_FILES, ArrayList(files))
             putExtra(EXTRA_NOTIFICATION_ID, notificationId)
         }
@@ -76,6 +77,7 @@ class NotificationActionService : Service() {
                         }
 
                         handler.post {
+                            Log.i(TAG, "Cancelling notification $notificationId")
                             notificationManager.cancel(notificationId)
                             stopSelf(startId)
                         }
