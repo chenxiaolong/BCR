@@ -21,6 +21,9 @@
     <string name="pref_inhibit_batt_opt_name">Pil optimizasyonunu devre dışı bırak</string>
     <string name="pref_inhibit_batt_opt_desc">Uygulamanın sistem tarafından durdurulma riskini azaltır.</string>
 
+    <string name="pref_write_metadata_name">Metadata dosyası oluştur</string>
+    <string name="pref_write_metadata_desc">Ses dosyasının yanında aramayla ilgili ayrıntıları içeren bir JSON dosyası oluşturun.</string>
+    
     <!-- About "preference" -->
     <string name="pref_version_name">Sürüm</string>
 
@@ -115,4 +118,7 @@
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Arama kaydı</string>
+
+    <!-- Snackbar alerts -->
+    <string name="documentsui_not_found">Android\'in yerleşik dosya yöneticisi (DocumentsUI) mevcut değil.</string>
 </resources>
