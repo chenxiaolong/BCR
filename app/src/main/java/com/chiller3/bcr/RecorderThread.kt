@@ -18,6 +18,9 @@ import com.chiller3.bcr.extension.listFilesWithPathsRecursively
 import com.chiller3.bcr.extension.phoneNumber
 import com.chiller3.bcr.format.Encoder
 import com.chiller3.bcr.format.Format
+import com.chiller3.bcr.format.NoParamInfo
+import com.chiller3.bcr.format.RangedParamInfo
+import com.chiller3.bcr.format.RangedParamType
 import com.chiller3.bcr.format.SampleRate
 import com.chiller3.bcr.output.CallMetadata
 import com.chiller3.bcr.output.CallMetadataCollector
@@ -29,6 +32,7 @@ import com.chiller3.bcr.output.OutputFilenameGenerator
 import com.chiller3.bcr.output.OutputPath
 import com.chiller3.bcr.output.Retention
 import com.chiller3.bcr.rule.RecordRule
+import org.json.JSONObject
 import java.lang.Process
 import java.nio.ByteBuffer
 import java.time.*
@@ -197,9 +201,11 @@ class RecorderThread(
                     initialPath.value, format.mimeTypeContainer)
                 resultUri = outputFile.uri
 
+                var recordingInfo: RecordingInfo? = null
+
                 try {
                     dirUtils.openFile(outputFile, true).use {
-                        recordUntilCancelled(it)
+                        recordingInfo = recordUntilCancelled(it)
                         Os.fsync(it.fileDescriptor)
                     }
                 } finally {
@@ -218,7 +224,9 @@ class RecorderThread(
                             resultUri = it.uri
                         }
 
-                        writeMetadataFile(finalPath.value)?.let { additionalFiles.add(it) }
+                        writeMetadataFile(finalPath.value, recordingInfo)?.let {
+                            additionalFiles.add(it)
+                        }
                     } else {
                         Log.i(tag, "Deleting recording: $finalPath")
                         outputFile.delete()
@@ -346,7 +354,7 @@ class RecorderThread(
         return OutputFile(uri, outputFilenameGenerator.redactor.redact(uri), MIME_LOGCAT)
     }
 
-    private fun writeMetadataFile(path: List<String>): OutputFile? {
+    private fun writeMetadataFile(path: List<String>, recordingInfo: RecordingInfo?): OutputFile? {
         if (!prefs.writeMetadata) {
             Log.i(tag, "Metadata writing is disabled")
             return null
@@ -355,7 +363,42 @@ class RecorderThread(
         Log.i(tag, "Writing metadata file")
 
         try {
-            val metadataJson = callMetadataCollector.callMetadata.toJson(context)
+            val formatJson = JSONObject().apply {
+                put("type", format.name)
+                put("mime_type_container", format.mimeTypeContainer)
+                put("mime_type_audio", format.mimeTypeAudio)
+                put("parameter_type", when (val info = format.paramInfo) {
+                    NoParamInfo -> "none"
+                    is RangedParamInfo -> when (info.type) {
+                        RangedParamType.CompressionLevel -> "compression_level"
+                        RangedParamType.Bitrate -> "bitrate"
+                    }
+                })
+                put("parameter", (formatParam ?: format.paramInfo.default).toInt())
+            }
+            val recordingJson = if (recordingInfo != null) {
+                JSONObject().apply {
+                    put("frames_total", recordingInfo.framesTotal)
+                    put("frames_encoded", recordingInfo.framesEncoded)
+                    put("sample_rate", recordingInfo.sampleRate)
+                    put("channel_count", recordingInfo.channelCount)
+                    put("duration_secs_total", recordingInfo.durationSecsTotal)
+                    put("duration_secs_encoded", recordingInfo.durationSecsEncoded)
+                    put("buffer_frames", recordingInfo.bufferFrames)
+                    put("buffer_overruns", recordingInfo.bufferOverruns)
+                    put("was_ever_paused", recordingInfo.wasEverPaused)
+                    put("was_ever_holding", recordingInfo.wasEverHolding)
+                }
+            } else {
+                JSONObject.NULL
+            }
+            val outputJson = JSONObject().apply {
+                put("format", formatJson)
+                put("recording", recordingJson)
+            }
+            val metadataJson = callMetadataCollector.callMetadata.toJson(context).apply {
+                put("output", outputJson)
+            }
             val metadataBytes = metadataJson.toString(4).toByteArray()
 
             val metadataFile = dirUtils.createFileInOutputDir(path, MIME_METADATA)
@@ -437,7 +480,7 @@ class RecorderThread(
      * [pfd] does not get closed by this method.
      */
     @SuppressLint("MissingPermission")
-    private fun recordUntilCancelled(pfd: ParcelFileDescriptor) {
+    private fun recordUntilCancelled(pfd: ParcelFileDescriptor): RecordingInfo {
         AndroidProcess.setThreadPriority(AndroidProcess.THREAD_PRIORITY_URGENT_AUDIO)
 
         val minBufSize = AudioRecord.getMinBufferSize(
@@ -478,7 +521,7 @@ class RecorderThread(
                         encoder.start()
 
                         try {
-                            encodeLoop(audioRecord, encoder, minBufSize)
+                            return encodeLoop(audioRecord, encoder, minBufSize)
                         } finally {
                             encoder.stop()
                         }
@@ -514,16 +557,25 @@ class RecorderThread(
      *
      * @throws Exception if the audio recorder or encoder encounters an error
      */
-    private fun encodeLoop(audioRecord: AudioRecord, encoder: Encoder, bufSize: Int) {
+    private fun encodeLoop(
+        audioRecord: AudioRecord,
+        encoder: Encoder,
+        bufSize: Int,
+    ): RecordingInfo {
         var numFramesTotal = 0L
         var numFramesEncoded = 0L
+        var bufferOverruns = 0
+        var wasEverPaused = false
+        var wasEverHolding = false
         val frameSize = audioRecord.format.frameSizeInBytesCompat
 
         // Use a slightly larger buffer to reduce the chance of problems under load
         val factor = 2
         val buffer = ByteBuffer.allocateDirect(bufSize * factor)
         val bufferFrames = buffer.capacity().toLong() / frameSize
-        val bufferNs = bufferFrames * 1_000_000_000L / audioRecord.sampleRate
+        val bufferNs = bufferFrames * 1_000_000_000L /
+                audioRecord.sampleRate /
+                audioRecord.channelCount
         Log.d(tag, "Buffer is ${buffer.capacity()} bytes, $bufferFrames frames, ${bufferNs}ns")
 
         while (!isCancelled) {
@@ -552,6 +604,9 @@ class RecorderThread(
                 if (!isPaused && !isHolding) {
                     encoder.encode(buffer, false)
                     numFramesEncoded += n / frameSize
+                } else {
+                    wasEverPaused = wasEverPaused || isPaused
+                    wasEverHolding = wasEverHolding || isHolding
                 }
 
                 numFramesTotal += n / frameSize
@@ -563,9 +618,12 @@ class RecorderThread(
 
             val totalElapsed = System.nanoTime() - begin
             if (encodeElapsed > bufferNs) {
+                bufferOverruns += 1
                 Log.w(tag, "${encoder.javaClass.simpleName} took too long: " +
-                        "timestampTotal=${numFramesTotal.toDouble() / audioRecord.sampleRate}s, " +
-                        "timestampEncode=${numFramesEncoded.toDouble() / audioRecord.sampleRate}s, " +
+                        "timestampTotal=${numFramesTotal.toDouble() / audioRecord.sampleRate /
+                                audioRecord.channelCount}s, " +
+                        "timestampEncode=${numFramesEncoded.toDouble() / audioRecord.sampleRate /
+                                audioRecord.channelCount}s, " +
                         "buffer=${bufferNs / 1_000_000.0}ms, " +
                         "total=${totalElapsed / 1_000_000.0}ms, " +
                         "record=${recordElapsed / 1_000_000.0}ms, " +
@@ -578,10 +636,20 @@ class RecorderThread(
         buffer.limit(buffer.position())
         encoder.encode(buffer, true)
 
-        val durationSecsTotal = numFramesTotal.toDouble() / audioRecord.sampleRate
-        val durationSecsEncoded = numFramesEncoded.toDouble() / audioRecord.sampleRate
-        Log.d(tag, "Input complete after ${"%.1f".format(durationSecsTotal)}s " +
-                "(${"%.1f".format(durationSecsEncoded)}s encoded)")
+        val recordingInfo = RecordingInfo(
+            numFramesTotal,
+            numFramesEncoded,
+            audioRecord.sampleRate,
+            audioRecord.channelCount,
+            bufferFrames,
+            bufferOverruns,
+            wasEverPaused,
+            wasEverHolding,
+        )
+
+        Log.d(tag, "Input complete: $recordingInfo")
+
+        return recordingInfo
     }
 
     companion object {
@@ -590,6 +658,31 @@ class RecorderThread(
 
         private const val MIME_LOGCAT = "text/plain"
         private const val MIME_METADATA = "application/json"
+    }
+
+    private data class RecordingInfo(
+        val framesTotal: Long,
+        val framesEncoded: Long,
+        val sampleRate: Int,
+        val channelCount: Int,
+        val bufferFrames: Long,
+        val bufferOverruns: Int,
+        val wasEverPaused: Boolean,
+        val wasEverHolding: Boolean,
+    ) {
+        val durationSecsTotal = framesTotal.toDouble() / sampleRate / channelCount
+        val durationSecsEncoded = framesEncoded.toDouble() / sampleRate / channelCount
+
+        override fun toString() = buildString {
+            append("Total: $framesTotal frames (${"%.1f".format(durationSecsTotal)}s)")
+            append(", Encoded: $framesEncoded frames (${"%.1f".format(durationSecsEncoded)}s)")
+            append(", Sample rate: $sampleRate")
+            append(", Channel count: $channelCount")
+            append(", Buffer frames: $bufferFrames")
+            append(", Buffer overruns: $bufferOverruns")
+            append(", Was ever paused: $wasEverPaused")
+            append(", Was ever holding: $wasEverHolding")
+        }
     }
 
     interface OnRecordingCompletedListener {
