@@ -135,9 +135,9 @@ Note that due to Android Storage Access Framework's poor performance, using subd
 
 ## Metadata file
 
-If the `Write metadata file` option is enabled, BCR will write a JSON file to the output directory containing all of the details that BCR knows about the call. The file has the same name as the audio file, except with a `.json` extension.
+If the `Write metadata file` option is enabled, BCR will write a JSON file to the output directory containing all of the details that BCR knows about the call as well as information about the recorded audio. The file has the same name as the audio file, except with a `.json` extension.
 
-The JSON structure is shown in the following example. The only fields that are guaranteed to exist are the timestamp fields. If the value for a field can't be determined (eg. when a required permission is denied), then it is set to `null`.
+The JSON structure is shown in the following example. Note that only `timestamp_unix_ms`, `timestamp`, and `output.format.*` are guaranteed to exist. If the value for a field can't be determined (eg. when an error occurs or a required permission is denied), then it is set to `null`.
 
 ```jsonc
 {
@@ -181,7 +181,76 @@ The JSON structure is shown in the following example. The only fields that are g
             // [Requires the Contacts permission]
             "contact_name": "John Doe"
         }
-    ]
+    ],
+
+    // Details about the output file.
+    "output": {
+        // Details about the output file format.
+        "format": {
+            // The audio encoding format.
+            "type": "OGG/Opus",
+
+            // The MIME type of the container format (eg. OGG).
+            "mime_type_container": "audio/ogg",
+
+            // The MIME type of the raw audio stream (eg. Opus).
+            "mime_type_audio": "audio/opus",
+
+            // The type of the parameter value below. Either "bitrate",
+            // "compression_level", or "none".
+            "parameter_type": "bitrate",
+
+            // The encoder quality/size parameter.
+            "parameter": 48000,
+        },
+
+        // Details about the recording and encoding process. If the recording
+        // process fails, this is set to null.
+        "recording": {
+            // The total number of audio frames that BCR read from the audio
+            // device. This includes the periods of time when the recording was
+            // paused or on hold.
+            // (Number of frames == number of samples * channel count)
+            "frames_total": 96000,
+
+            // The number of audio frames that were actually saved to the output
+            // file. This excludes the periods of time when the recording was
+            // paused or on hold.
+            // (Number of frames == number of samples * channel count)
+            "frames_encoded": 48000,
+
+            // The number of samples per second of audio.
+            "sample_rate": 48000,
+
+            // The number of channels in the audio. This is currently always 1
+            // because no device supports stereo call audio.
+            "channel_count": 1,
+
+            // The total time in seconds that BCR read from the audio device.
+            // (Equal to: frames_total / sample_rate / channel_count)
+            "duration_secs_total": 2.0,
+
+            // The time in seconds of audio actually saved to the output file.
+            // (Equal to: frames_encoded / sample_rate / channel_count)
+            "duration_secs_encoded": 1.0,
+
+            // The size of the recording buffer in frames. This is the maximum
+            // number of audio frames read from the audio driver before it is
+            // passed to the audio encoder.
+            "buffer_frames": 640,
+
+            // The number of buffer overruns. This is the number of times that
+            // the CPU or storage couldn't keep up while encoding the raw audio,
+            // resulting in skips (loss of audio).
+            "buffer_overruns": 0,
+
+            // Whether the call was ever paused by the user.
+            "was_ever_paused": false,
+
+            // Whether the call was ever placed on hold (call waiting).
+            "was_ever_holding": false
+        }
+    }
 }
 ```
 
