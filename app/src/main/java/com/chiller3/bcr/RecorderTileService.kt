@@ -4,10 +4,12 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
+import android.util.Log
 import androidx.preference.PreferenceManager
 import com.chiller3.bcr.settings.SettingsActivity
 
 class RecorderTileService : TileService(), SharedPreferences.OnSharedPreferenceChangeListener {
+    private val TAG = RecorderTileService::class.java.simpleName
     private lateinit var prefs: Preferences
 
     override fun onCreate() {
@@ -50,6 +52,10 @@ class RecorderTileService : TileService(), SharedPreferences.OnSharedPreferenceC
 
     private fun refreshTileState() {
         val tile = qsTile
+        if (tile == null) {
+            Log.w(TAG, "Tile was null during refreshTileState")
+            return
+        }
 
         // Tile.STATE_UNAVAILABLE is intentionally not used when permissions haven't been granted.
         // Clicking the tile in that state does not invoke the click handler, so it wouldn't be
