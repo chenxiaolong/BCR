@@ -207,6 +207,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.documentfile)
     implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.preference)
     implementation(libs.androidx.preference.ktx)
     implementation(libs.material)
     implementation(libs.kudzu)
