@@ -110,7 +110,7 @@ class OutputFilenameGenerator(
 
                 return formatter.format(metadata.timestamp)
             }
-            "direction" -> metadata.direction?.toString()
+            "direction" -> return metadata.direction?.toString()
             "sim_slot" -> {
                 // Only append SIM slot ID if the device has multiple active SIMs
                 if (metadata.simCount != null && metadata.simCount > 1) {
