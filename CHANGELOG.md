@@ -18,6 +18,7 @@
 * Work around crash when deleting a recording due to an upstream Android 13 bug ([Issue #388], [PR #396 @chenxiaolong])
 * Fix possible unexpected behavior in old notifications if BCR is killed and restarted by Android ([PR #397 @chenxiaolong])
 * Fix `{direction}` filename template variable never being defined ([Issue #394], [PR #398 @chenxiaolong])
+* Add new `{sim_slot:always}` filename template option to get the SIM slot even if there's only one active SIM ([Issue #394], [PR #398 @chenxiaolong])
 
 ### Version 1.48
 
