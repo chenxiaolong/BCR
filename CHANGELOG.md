@@ -15,6 +15,7 @@
 * Fix rare crash in quick settings tile caused by an Android bug ([PR #392 @PatrykMis])
 * Update all dependencies ([PR #393 @PatrykMis])
 * Fix stale notifications not being dismissed when changing the output directory ([PR #395 @chenxiaolong])
+* Work around crash when deleting a recording due to an upstream Android 13 bug ([Issue #388], [PR #396 @chenxiaolong])
 
 ### Version 1.48
 
@@ -491,6 +492,7 @@ Non-user-facing changes:
 [Issue #367]: https://github.com/chenxiaolong/BCR/issues/367
 [Issue #376]: https://github.com/chenxiaolong/BCR/issues/376
 [Issue #380]: https://github.com/chenxiaolong/BCR/issues/380
+[Issue #388]: https://github.com/chenxiaolong/BCR/issues/388
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -680,3 +682,4 @@ Non-user-facing changes:
 [PR #392 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/392
 [PR #393 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/393
 [PR #395 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/395
+[PR #396 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/396
