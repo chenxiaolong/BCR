@@ -11,6 +11,7 @@
 
 * Update Turkish translations ([PR #385 @symbuzzer])
 * Add output format and encoding information to the metadata file ([Issue #380], [PR #387 @chenxiaolong])
+* Update dependency verification metadata for building on Windows ([PR #391 @quyenvsp])
 
 ### Version 1.48
 
@@ -672,3 +673,4 @@ Non-user-facing changes:
 [PR #384 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/384
 [PR #385 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/385
 [PR #387 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/387
+[PR #391 @quyenvsp]: https://github.com/chenxiaolong/BCR/pull/391
