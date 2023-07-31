@@ -328,7 +328,7 @@ class Notifications(
     /** Dismiss all alert (non-persistent) notifications. */
     fun dismissAll() {
         for (notification in notificationManager.activeNotifications) {
-            if (!notification.isClearable) {
+            if (notification.isClearable) {
                 notificationManager.cancel(notification.tag, notification.id)
             }
         }
