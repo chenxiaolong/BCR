@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update Turkish translations ([PR #400 @symbuzzer])
+
 ### Version 1.49
 
 * Update Turkish translations ([PR #385 @symbuzzer])
@@ -691,3 +693,4 @@ Non-user-facing changes:
 [PR #396 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/396
 [PR #397 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/397
 [PR #398 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/398
+[PR #400 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/400
