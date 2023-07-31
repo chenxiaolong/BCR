@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import android.util.Log
+import androidx.core.content.IntentCompat
 import com.chiller3.bcr.output.OutputFile
 
 class NotificationActionService : Service() {
@@ -37,15 +38,12 @@ class NotificationActionService : Service() {
     private val handler = Handler(Looper.getMainLooper())
 
     private fun parseDeleteUriIntent(intent: Intent): Pair<List<OutputFile>, Int> {
-        val files = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableArrayListExtra(EXTRA_FILES, OutputFile::class.java)
-        } else {
-            @Suppress("DEPRECATION")
-            intent.getParcelableArrayListExtra(EXTRA_FILES)
-        }
-        if (files == null) {
-            throw IllegalArgumentException("No files specified")
-        }
+        // This uses IntentCompat because of an Android 13 bug where using the new APIs that take a
+        // class option causes a NullPointerException in release builds.
+        // https://issuetracker.google.com/issues/274185314
+        val files = IntentCompat.getParcelableArrayListExtra(
+            intent, EXTRA_FILES, OutputFile::class.java)
+            ?: throw IllegalArgumentException("No files specified")
 
         val notificationId = intent.getIntExtra(EXTRA_NOTIFICATION_ID, -1)
         if (notificationId < 0) {
