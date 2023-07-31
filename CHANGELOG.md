@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.49
 
 * Update Turkish translations ([PR #385 @symbuzzer])
 * Add output format and encoding information to the metadata file ([Issue #380], [PR #387 @chenxiaolong])
