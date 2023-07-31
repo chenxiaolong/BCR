@@ -7,12 +7,12 @@
 
     <!-- General preferences -->
     <string name="pref_call_recording_name">Arama kaydı</string>
-    <string name="pref_call_recording_desc">Gelen ve giden aramaları kaydet. Arka planda kayıt için mikrofon ve bildirim izinleri gereklidir.</string>
+    <string name="pref_call_recording_desc">Gelen ve giden aramaları kaydet. Arka planda kayıt yapılabilmesi için mikrofon ve bildirim izinleri gereklidir.</string>
 
-    <string name="pref_record_rules_name">Oto-kayıt kuralları</string>
+    <string name="pref_record_rules_name">Otomatik-kayıt kuralları</string>
     <string name="pref_record_rules_desc">Hangi aramaların otomatik olarak kaydedileceğini ayarlayın.</string>
 
-    <string name="pref_output_dir_name">Kayıt dosya  konumu</string>
+    <string name="pref_output_dir_name">Kayıt dosya konumu</string>
     <string name="pref_output_dir_desc">Kayıtlar için bir dosya konumu seçin.</string>
 
     <string name="pref_output_format_name">Kayıt formatı</string>
@@ -29,7 +29,7 @@
 
     <!-- Record rules bottom sheet -->
     <string name="pref_add_rule_name">Kural ekle</string>
-    <string name="pref_add_rule_desc">Bir kişi için oto-kayıt kuralı ekleyin.</string>
+    <string name="pref_add_rule_desc">Bir kişi için otomatik-kayıt kuralı ekleyin.</string>
     <string name="pref_rule_desc_on">Kaydı saklayın.</string>
     <string name="pref_rule_desc_off">Arama bittiğinde kaydı silin.</string>
     <string name="record_rules_rule_added">Yeni kural eklendi. Silmek için kurala uzun basın.</string>
@@ -64,8 +64,8 @@
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">Dosya ismi şablonu</string>
     <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
-    <string name="filename_template_dialog_message">Kayıt dosyası adı için özel bir şablon girin. Değişkenler ayraçlarla belirtilir (ör. <annotation type="template">{var}</annotation>). Yedekler köşeli parantez içinde belirtilir (örn. <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nDesteklenen değişkenler: <annotation type="supported_vars">PLACEHOLDER</annotation>. Sözdiziminin tam açıklaması için <annotation type="template_docs">belgelere</annotation> bakın.</string>
-    <string name="filename_template_dialog_warning_subdirectories">Android Storage Access Framework\'ün düşük performansı nedeniyle, alt dizinler kullanılması (<annotation type="template">/</annotation> character) bazı cihazlarda kayıtta önemli gecikmelere neden olabilir. Gecikme, aramanın sonunda gerçekleşeceğinden, görüşme sesinin herhangi bir şekilde kaybolmasına neden olmaz.</string>
+    <string name="filename_template_dialog_message">Kayıt dosyası adı için özel bir şablon oluşturun. Değişkenler ayraçlarla belirtilir (ör. <annotation type="template">{var}</annotation>). Yedekler köşeli parantez içinde belirtilir (örn. <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nDesteklenen değişkenler: <annotation type="supported_vars">PLACEHOLDER</annotation>. Sözdiziminin tam açıklaması için <annotation type="template_docs">belgelere</annotation> bakın.</string>
+    <string name="filename_template_dialog_warning_subdirectories">Android Storage Access Framework\'ün düşük performansı nedeniyle, alt dizinlerin (<annotation type="template">/</annotation> karakterinin) kullanılması bazı cihazlarda kayıtta önemli gecikmelere neden olabilir. Gecikme, aramanın sonunda gerçekleşeceğinden, görüşme sesinin herhangi bir şekilde kaybolması mümkün değildir.</string>
     <string name="filename_template_dialog_error_empty">Şablon boş olamaz</string>
     <string name="filename_template_dialog_error_unknown_variable">Bilinmeyen şablon değişkeni: <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_has_argument">Değişkenin argümanı olamaz: <annotation type="template">PLACEHOLDER</annotation></string>
@@ -105,7 +105,7 @@
     <string name="notification_recording_failed">Arama kaydı başarısız</string>
     <string name="notification_recording_succeeded">Arama kaydı başarılı</string>
     <string name="notification_message_delete_at_end">Görüşme sonunda kayıt silinecektir. Kaydı tutmak için Geri Yükle\'ye dokunun.</string>
-    <string name="notification_internal_android_error">Kayıt, dahili bir Android bileşeninde (%s) başarısız oldu. Bu cihaz veya donanım yazılımı arama kaydını desteklemiyor olabilir.</string>
+    <string name="notification_internal_android_error">Kayıt, dahili bir Android bileşeninde (%s) başarısız oldu. Bu cihaz, donanımsal veya yazılımsal olarak arama kaydını desteklemiyor olabilir.</string>
     <string name="notification_action_open">Aç</string>
     <string name="notification_action_share">Paylaş</string>
     <string name="notification_action_delete">Sil</string>
