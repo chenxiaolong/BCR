@@ -17,6 +17,7 @@
 * Fix stale notifications not being dismissed when changing the output directory ([PR #395 @chenxiaolong])
 * Work around crash when deleting a recording due to an upstream Android 13 bug ([Issue #388], [PR #396 @chenxiaolong])
 * Fix possible unexpected behavior in old notifications if BCR is killed and restarted by Android ([PR #397 @chenxiaolong])
+* Fix `{direction}` filename template variable never being defined ([Issue #394], [PR #398 @chenxiaolong])
 
 ### Version 1.48
 
@@ -494,6 +495,7 @@ Non-user-facing changes:
 [Issue #376]: https://github.com/chenxiaolong/BCR/issues/376
 [Issue #380]: https://github.com/chenxiaolong/BCR/issues/380
 [Issue #388]: https://github.com/chenxiaolong/BCR/issues/388
+[Issue #394]: https://github.com/chenxiaolong/BCR/issues/394
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -685,3 +687,4 @@ Non-user-facing changes:
 [PR #395 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/395
 [PR #396 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/396
 [PR #397 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/397
+[PR #398 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/398
