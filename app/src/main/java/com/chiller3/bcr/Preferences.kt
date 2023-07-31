@@ -41,6 +41,7 @@ class Preferences(private val context: Context) {
         private const val PREF_FORMAT_PARAM_PREFIX = "codec_param_"
         const val PREF_OUTPUT_RETENTION = "output_retention"
         const val PREF_SAMPLE_RATE = "sample_rate"
+        private const val PREF_NEXT_NOTIFICATION_ID = "next_notification_id"
 
         // Defaults
         val DEFAULT_FILENAME_TEMPLATE = Template(
@@ -300,4 +301,14 @@ class Preferences(private val context: Context) {
     var writeMetadata: Boolean
         get() = prefs.getBoolean(PREF_WRITE_METADATA, false)
         set(enabled) = prefs.edit { putBoolean(PREF_WRITE_METADATA, enabled) }
+
+    /**
+     * Get a unique notification ID that increments on every call.
+     */
+    val nextNotificationId: Int
+        get() = synchronized(context.applicationContext) {
+            val nextId = prefs.getInt(PREF_NEXT_NOTIFICATION_ID, 0)
+            prefs.edit { putInt(PREF_NEXT_NOTIFICATION_ID, nextId + 1) }
+            nextId
+        }
 }

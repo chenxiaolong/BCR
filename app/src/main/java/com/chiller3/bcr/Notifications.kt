@@ -32,16 +32,6 @@ class Notifications(
 
         private val LEGACY_CHANNEL_IDS = arrayOf("alerts")
 
-        /** Incremented for each new notification. */
-        private var nextNotificationId = 1
-
-        /** Get a new unique notification ID. */
-        fun allocateNotificationId(): Int {
-            val id = nextNotificationId
-            ++nextNotificationId
-            return id
-        }
-
         /** For access to system/internal resource values. */
         private val systemRes = Resources.getSystem()
 
@@ -80,6 +70,7 @@ class Notifications(
         }
     }
 
+    private val prefs = Preferences(context)
     private val notificationManager = context.getSystemService(NotificationManager::class.java)
 
     /**
@@ -199,7 +190,7 @@ class Notifications(
         file: OutputFile?,
         additionalFiles: List<OutputFile>,
     ) {
-        val notificationId = allocateNotificationId()
+        val notificationId = prefs.nextNotificationId
 
         val notification = Notification.Builder(context, channel).run {
             val text = buildString {

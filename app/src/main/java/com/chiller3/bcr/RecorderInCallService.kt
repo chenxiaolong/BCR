@@ -35,7 +35,9 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
      * Notification ID to use for the foreground service. Throughout the lifetime of the service, it
      * may be associated with different calls. It is not cancelled until all recorders exit.
      */
-    private val foregroundNotificationId = Notifications.allocateNotificationId()
+    private val foregroundNotificationId by lazy {
+        prefs.nextNotificationId
+    }
 
     /**
      * Notification IDs and their associated recorders. This indicates the desired state of the
@@ -243,7 +245,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
             val notificationId = if (notificationIdsToRecorders.isEmpty()) {
                 foregroundNotificationId
             } else {
-                Notifications.allocateNotificationId()
+                prefs.nextNotificationId
             }
             notificationIdsToRecorders[notificationId] = recorder
 
