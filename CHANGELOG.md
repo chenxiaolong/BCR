@@ -14,6 +14,7 @@
 * Update dependency verification metadata for building on Windows ([PR #391 @quyenvsp])
 * Fix rare crash in quick settings tile caused by an Android bug ([PR #392 @PatrykMis])
 * Update all dependencies ([PR #393 @PatrykMis])
+* Fix stale notifications not being dismissed when changing the output directory ([PR #395 @chenxiaolong])
 
 ### Version 1.48
 
@@ -678,3 +679,4 @@ Non-user-facing changes:
 [PR #391 @quyenvsp]: https://github.com/chenxiaolong/BCR/pull/391
 [PR #392 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/392
 [PR #393 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/393
+[PR #395 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/395
