@@ -119,6 +119,7 @@ BCR supports customizing the template used for determining the output filenames 
   * If the date format is changed, the old recordings should be manually renamed or moved to another directory to ensure that they won't inadvertently be deleted. For example, if `yyMMdd_HHmmss` was changed to `HHmmss_yyMMdd`, the timestamps from the old recording's filenames would be parsed incorrectly and may get deleted.
 * `{direction}`: **[Android 10+ only]** For 1-on-1 calls, either `in` or `out` depending on if the call is an incoming or outgoing call. If the call is a conference call, then `conference` is used instead.
 * `{sim_slot}`: **[Android 11+ only]** The SIM slot number for the call (counting from 1). This is only defined for multi-SIM devices that have multiple SIMs active and if BCR is granted the Phone permission.
+  * To include the SIM slot even if there's only one active SIM, use `{sim_slot:always}`.
 * `{phone_number}`: The phone number for the call. This is undefined for private calls. Available formatting options:
   * `{phone_number:E.164}`: Default (same as just `{phone_number}`). Phone number formatted in the international E.164 format (`+<country code><subscriber>`).
   * `{phone_number:digits_only}`: Phone number with digits only (no `+` or separators).
