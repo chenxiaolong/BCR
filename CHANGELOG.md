@@ -13,6 +13,7 @@
 * Add output format and encoding information to the metadata file ([Issue #380], [PR #387 @chenxiaolong])
 * Update dependency verification metadata for building on Windows ([PR #391 @quyenvsp])
 * Fix rare crash in quick settings tile caused by an Android bug ([PR #392 @PatrykMis])
+* Update all dependencies ([PR #393 @PatrykMis])
 
 ### Version 1.48
 
@@ -676,3 +677,4 @@ Non-user-facing changes:
 [PR #387 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/387
 [PR #391 @quyenvsp]: https://github.com/chenxiaolong/BCR/pull/391
 [PR #392 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/392
+[PR #393 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/393
