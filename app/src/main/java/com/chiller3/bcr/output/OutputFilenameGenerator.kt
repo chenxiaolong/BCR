@@ -113,7 +113,7 @@ class OutputFilenameGenerator(
             "direction" -> return metadata.direction?.toString()
             "sim_slot" -> {
                 // Only append SIM slot ID if the device has multiple active SIMs
-                if (metadata.simCount != null && metadata.simCount > 1) {
+                if (arg == "always" || (metadata.simCount != null && metadata.simCount > 1)) {
                     return metadata.simSlot?.toString()
                 }
             }
@@ -351,7 +351,13 @@ class OutputFilenameGenerator(
                                 ValidationErrorType.INVALID_ARGUMENT, varRef))
                         }
                     }
-                    "direction", "sim_slot", "caller_name", "contact_name", "call_log_name" -> {
+                    "sim_slot" -> {
+                        if (varRef.arg !in arrayOf(null, "always")) {
+                            errors.add(ValidationError(
+                                ValidationErrorType.INVALID_ARGUMENT, varRef))
+                        }
+                    }
+                    "direction", "caller_name", "contact_name", "call_log_name" -> {
                         if (varRef.arg != null) {
                             errors.add(ValidationError(
                                 ValidationErrorType.HAS_ARGUMENT, varRef))
