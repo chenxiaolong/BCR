@@ -16,6 +16,7 @@
 * Update all dependencies ([PR #393 @PatrykMis])
 * Fix stale notifications not being dismissed when changing the output directory ([PR #395 @chenxiaolong])
 * Work around crash when deleting a recording due to an upstream Android 13 bug ([Issue #388], [PR #396 @chenxiaolong])
+* Fix possible unexpected behavior in old notifications if BCR is killed and restarted by Android ([PR #397 @chenxiaolong])
 
 ### Version 1.48
 
@@ -683,3 +684,4 @@ Non-user-facing changes:
 [PR #393 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/393
 [PR #395 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/395
 [PR #396 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/396
+[PR #397 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/397
