@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update Turkish translations ([PR #400 @symbuzzer])
+* Work around gradle dependency verification blocking sources and javadocs from loading in Android Studio ([PR #402 @chenxiaolong])
 
 ### Version 1.49
 
@@ -694,3 +695,4 @@ Non-user-facing changes:
 [PR #397 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/397
 [PR #398 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/398
 [PR #400 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/400
+[PR #402 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/402
