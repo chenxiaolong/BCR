@@ -21,17 +21,19 @@
     <string name="pref_inhibit_batt_opt_desc">禁用电池优化可以避免软件在后台被杀死</string>
 
     <!-- About "preference" -->
+    <string name="pref_write_metadata_name">保存元数据文件</string>
+    <string name="pref_write_metadata_desc">创建同名 JSON 文件包含通话录音详情</string>
     <string name="pref_version_name">软件版本</string>
 
     <!-- Record rules bottom sheet -->
     <string name="pref_add_rule_name">新增规则</string>
     <string name="pref_add_rule_desc">从通讯录里面选择联系人添加到规则里面。</string>
-    <string name="pref_rule_desc_on">保留录音。</string>
+    <string name="pref_rule_desc_on">保存录音。</string>
     <string name="pref_rule_desc_off">通话结束时删除录音。</string>
     <string name="record_rule_type_contact">联系人: %s</string>
     <string name="record_rules_rule_added">规则已添加。删除请长按规则。</string>
     <string name="record_rules_rule_exists">规则已存在。</string>
-    <string name="record_rules_help">BCR 会自动录音所有通话，但是当自动录音关闭时，录音将会在通话结束之后删除，但是你可以在通话的时候通过通知栏里选择保留录音。</string>
+    <string name="record_rules_help">BCR 会自动录音所有通话，但是当自动录音关闭时，录音将会在通话结束之后删除。不过你依旧可以在通知栏里面选择保存当前通话录音。</string>
     <string name="record_rule_type_all_calls">全部其他号码</string>
     <string name="record_rule_type_unknown_calls">未知号码</string>
 
@@ -39,15 +41,15 @@
     <string name="output_dir_bottom_sheet_change_dir">修改</string>
     <string name="output_dir_bottom_sheet_filename_template">文件名模板</string>
     <string name="output_dir_bottom_sheet_edit_template">修改</string>
-    <string name="output_dir_bottom_sheet_file_retention">修改</string>
+    <string name="output_dir_bottom_sheet_file_retention">保存时间</string>
     <plurals name="retention_days">
-        <item quantity="other">保留 %d 天</item>
+        <item quantity="other">保存 %d 天</item>
     </plurals>
 
     <!-- Output format bottom sheet -->
-    <string name="output_dir_bottom_sheet_edit_retention">编辑保留时间</string>
+    <string name="output_dir_bottom_sheet_edit_retention">修改</string>
     <string name="retention_keep_all">永久保存</string>
-    <string name="retention_unusable">文件保留功能已禁用，因为当前文件名模板不兼容此特征。</string>
+    <string name="retention_unusable">文件保存功能已禁用，因为当前文件名模板不兼容此特征。</string>
     <string name="output_format_bottom_sheet_output_format">输出格式</string>
     <string name="output_format_bottom_sheet_compression_level">压缩等级</string>
     <string name="output_format_bottom_sheet_bitrate">比特率</string>
@@ -87,20 +89,23 @@
     <string name="notification_channel_failure_desc">录音发生错误通知</string>
     <string name="notification_channel_success_name">成功警告</string>
     <string name="notification_channel_success_desc">通话录音完成通知</string>
+    <string name="notification_recording_initializing">录音开启中</string>
     <string name="notification_recording_in_progress">通话录音中</string>
+    <string name="notification_recording_finalizing">录音处理中</string>
     <string name="notification_recording_paused">录音已暂停</string>
     <string name="notification_recording_failed">通话录音失败</string>
     <string name="notification_recording_succeeded">通话录音完成</string>
-    <string name="notification_message_delete_at_end">通话结束后将会删除录音，需要保留录音请点击恢复。</string>
-    <string name="notification_internal_android_error">通话录音在 Android 内部组件（%s）中失败。此设备或固件可能不支持通话录音。 </string>
+    <string name="notification_message_delete_at_end">通话结束后将会删除录音，需要保存录音请点击保存按钮。</string>
+    <string name="notification_internal_android_error">通话录音在 Android 内部组件(%s)中失败。此设备或固件可能不支持通话录音。 </string>
     <string name="notification_action_open">打开</string>
     <string name="notification_action_share">分享</string>
     <string name="notification_action_delete">删除</string>
-    <string name="notification_action_restore">恢复</string>
+    <string name="notification_action_restore">保存</string>
     <string name="notification_action_pause">暂停</string>
 
     <!-- Quick settings tile -->
     <string name="notification_action_resume">继续</string>
     <string name="menu_action_help">帮助</string>
     <string name="quick_settings_label">通话录音</string>
+    <string name="documentsui_not_found">Android 内置的文件管理器 (DocumentsUI) 不可用。</string>
 </resources>
