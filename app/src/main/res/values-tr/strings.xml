@@ -86,10 +86,6 @@
     <string name="format_param_bitrate">%s kbps</string>
     <string name="format_param_compression_level">Seviye %s</string>
 
-    <!-- Dialogs -->
-    <string name="dialog_action_ok">Tamam</string>
-    <string name="dialog_action_cancel">İptal</string>
-
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Arka plan servisleri</string>
     <string name="notification_channel_persistent_desc">Arka plan arama kaydı için kalıcı bildirim</string>

@@ -86,10 +86,6 @@
     <string name="format_param_bitrate">%s kbps</string>
     <string name="format_param_compression_level">Level %s</string>
 
-    <!-- Dialogs -->
-    <string name="dialog_action_ok">OK</string>
-    <string name="dialog_action_cancel">Cancel</string>
-
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Background services</string>
     <string name="notification_channel_persistent_desc">Persistent notification for background call recording</string>

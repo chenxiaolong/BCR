@@ -116,11 +116,11 @@ class FilenameTemplateDialogFragment : DialogFragment() {
         return MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.filename_template_dialog_title)
             .setView(binding.root)
-            .setPositiveButton(R.string.dialog_action_ok) { _, _ ->
+            .setPositiveButton(android.R.string.ok) { _, _ ->
                 prefs.filenameTemplate = template!!
                 success = true
             }
-            .setNegativeButton(R.string.dialog_action_cancel, null)
+            .setNegativeButton(android.R.string.cancel, null)
             .setNeutralButton(R.string.filename_template_dialog_action_reset_to_default) { _, _ ->
                 prefs.filenameTemplate = null
                 success = true
