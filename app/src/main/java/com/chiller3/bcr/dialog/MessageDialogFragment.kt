@@ -35,7 +35,7 @@ class MessageDialogFragment : DialogFragment() {
         return MaterialAlertDialogBuilder(requireContext())
             .setTitle(arguments.getCharSequence(ARG_TITLE))
             .setMessage(arguments.getCharSequence(ARG_MESSAGE))
-            .setPositiveButton(R.string.dialog_action_ok) { _, _ ->
+            .setPositiveButton(android.R.string.ok) { _, _ ->
                 success = true
             }
             .create()

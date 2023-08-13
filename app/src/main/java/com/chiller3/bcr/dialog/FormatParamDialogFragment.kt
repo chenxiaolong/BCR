@@ -99,11 +99,11 @@ class FormatParamDialogFragment : DialogFragment() {
         return MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.format_param_dialog_title)
             .setView(binding.root)
-            .setPositiveButton(R.string.dialog_action_ok) { _, _ ->
+            .setPositiveButton(android.R.string.ok) { _, _ ->
                 prefs.setFormatParam(format, value!!)
                 success = true
             }
-            .setNegativeButton(R.string.dialog_action_cancel, null)
+            .setNegativeButton(android.R.string.cancel, null)
             .create()
             .apply {
                 setCanceledOnTouchOutside(false)

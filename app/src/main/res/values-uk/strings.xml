@@ -85,10 +85,6 @@
     <string name="format_param_bitrate">%s кбіт/с</string>
     <string name="format_param_compression_level">Рівень %s</string>
 
-    <!-- Dialogs -->
-    <string name="dialog_action_ok">Гаразд</string>
-    <string name="dialog_action_cancel">Скасувати</string>
-
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Фонові служби</string>
     <string name="notification_channel_persistent_desc">Постійне сповіщення про фоновий запис дзвінка</string>

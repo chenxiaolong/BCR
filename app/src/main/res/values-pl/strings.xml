@@ -84,10 +84,6 @@
     <string name="format_param_bitrate">%s kbps</string>
     <string name="format_param_compression_level">Poziom %s</string>
 
-    <!-- Dialogs -->
-    <string name="dialog_action_ok">OK</string>
-    <string name="dialog_action_cancel">Anuluj</string>
-
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Usługi w tle</string>
     <string name="notification_channel_persistent_desc">Stałe powiadomienie o nagrywaniu rozmów w tle</string>

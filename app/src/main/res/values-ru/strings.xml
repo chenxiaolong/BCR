@@ -67,9 +67,6 @@
     <!-- Format parameter -->
     <string name="format_param_bitrate">%s kbps</string>
     <string name="format_param_compression_level">Уровень %s</string>
-    <!-- Dialogs -->
-    <string name="dialog_action_ok">ОК</string>
-    <string name="dialog_action_cancel">Отмена</string>
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Фоновые сервисы</string>
     <string name="notification_channel_persistent_desc">Постоянное уведомление о записи разговоров в фоновом режиме</string>

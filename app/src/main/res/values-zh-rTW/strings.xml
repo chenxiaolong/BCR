@@ -82,10 +82,6 @@
     <string name="format_param_bitrate">%s kbps</string>
     <string name="format_param_compression_level">等級 %s</string>
 
-    <!-- Dialogs -->
-    <string name="dialog_action_ok">確定</string>
-    <string name="dialog_action_cancel">取消</string>
-
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">背景服務</string>
     <string name="notification_channel_persistent_desc">持續性通知，用於背景通話錄音</string>
