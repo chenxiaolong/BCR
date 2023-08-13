@@ -21,6 +21,9 @@
     <string name="pref_inhibit_batt_opt_name">Wyłącz optymalizację baterii</string>
     <string name="pref_inhibit_batt_opt_desc">Zmniejsza szansę na zabicie aplikacji przez system.</string>
 
+    <string name="pref_write_metadata_name">Zapisuj plik metadanych</string>
+    <string name="pref_write_metadata_desc">Twórz plik  JSON zawierający szczegóły o połączeniu obok pliku audio.</string>
+
     <!-- About "preference" -->
     <string name="pref_version_name">Wersja</string>
     
@@ -63,7 +66,8 @@
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">Szablon nazwy pliku</string>
     <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
-    <string name="filename_template_dialog_message">Wprowadź niestandardowy szablon dla nazwy pliku wyjściowego. Zmienne są określane za pomocą nawiasów klamrowych (np. <annotation type="template">{var}</annotation>). Składowe są określane nawiasami kwadratowymi (np. <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nObsługiwane zmienne: <annotation type="supported_vars">PLACEHOLDER</annotation>. Zapoznaj się <annotation type="template_docs">z dkomunetacją</annotation> aby uzyskać pełen opis składni.</string>
+    <string name="filename_template_dialog_message">Wprowadź niestandardowy szablon dla nazwy pliku wyjściowego. Zmienne są określane za pomocą nawiasów klamrowych (np. <annotation type="template">{var}</annotation>). Składowe są określane nawiasami kwadratowymi (np. <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nObsługiwane zmienne: <annotation type="supported_vars">PLACEHOLDER</annotation>. Zapoznaj się <annotation type="template_docs">z dokumentacją</annotation> aby uzyskać pełen opis składni.</string>
+    <string name="filename_template_dialog_warning_subdirectories">Ze względu na słabą wydajność Storage Access Framework w systemie Android, używanie podkatalogów (znak <annotation type="template">/</annotation>) może powodować znaczne opóźnienia podczas zapisywania nagrania na niektórych urządzeniach. Opóźnienie występuje po zakończeniu połączenia i nie powinno powodować jakiejkolwiek utraty nagrania.</string>
     <string name="filename_template_dialog_error_empty">Szablon nie może być pusty</string>
     <string name="filename_template_dialog_error_unknown_variable">Nieznana zmienna szablonu: <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_has_argument">Zmienna nie może mieć argumentu: <annotation type="template">PLACEHOLDER</annotation></string>
@@ -95,8 +99,11 @@
     <string name="notification_channel_failure_desc">Informacje o błędach podczas nagrywania rozmów</string>
     <string name="notification_channel_success_name">Zakończone nagrywanie</string>
     <string name="notification_channel_success_desc">Informacje o pomyślnym nagraniu rozmowy</string>
+    <string name="notification_recording_initializing">Inicjowanie nagrywania rozmowy</string>
     <string name="notification_recording_in_progress">Trwa nagrywanie rozmowy</string>
+    <string name="notification_recording_finalizing">Finalizowanie nagrywania rozmowy</string>
     <string name="notification_recording_paused">Nagrywanie rozmowy wstrzymane</string>
+        <string name="notification_recording_on_hold">Rozmowa zawieszona</string>
     <string name="notification_recording_failed">Nie udało się nagrać rozmowy</string>
     <string name="notification_recording_succeeded">Pomyślnie nagrano rozmowę</string>
     <string name="notification_message_delete_at_end">Nagranie zostanie usunięte po zakończeniu rozmowy. Stuknij Przywróć, aby zachować nagranie.</string>
@@ -113,4 +120,7 @@
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Nagrywanie rozmów</string>
+
+    <!-- Snackbar alerts -->
+    <string name="documentsui_not_found">Wbudowany menedżer plików Androida (DocumentsUI) jest niedostępny.</string>
 </resources>
