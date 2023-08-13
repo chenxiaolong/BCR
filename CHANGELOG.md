@@ -12,6 +12,7 @@
 * Update Turkish translations ([PR #400 @symbuzzer])
 * Work around gradle dependency verification blocking sources and javadocs from loading in Android Studio ([PR #402 @chenxiaolong])
 * Update Simplified Chinese translations ([PR #404 @Yee2])
+* Use standard OK/Cancel text from Android's resources ([PR #408 @PatrykMis])
 
 ### Version 1.49
 
@@ -698,3 +699,4 @@ Non-user-facing changes:
 [PR #400 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/400
 [PR #402 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/402
 [PR #404 @Yee2]: https://github.com/chenxiaolong/BCR/pull/404
+[PR #408 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/408
