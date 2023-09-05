@@ -51,6 +51,7 @@
     <string name="filename_template_dialog_title">@string/output_dir_bottom_sheet_filename_template</string>
     <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
     <string name="filename_template_dialog_message">Введите пользовательский шаблон для имени выходного файла. Переменные указываются фигурными скобками (например, <annotation type="template">{var}</annotation>). Резервные варианты указываются в квадратных скобках (например, <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nПоддерживаемые переменные: <annotation type="supported_vars">PLACEHOLDER</annotation>. Смотри <annotation type="template_docs">документацию</annotation> для полного описания синтаксиса.</string>
+    <string name="filename_template_dialog_warning_subdirectories">Из-за низкой производительности Android Storage Access Framework использование подкаталогов (<annotation type="template">/</annotation>) может привести к значительным задержкам при сохранении записи на некоторых устройствах. Задержка возникает в конце вызова и не должна приводить к потере звука вызова.</string>
     <string name="filename_template_dialog_error_empty">Шаблон не может быть пустым</string>
     <string name="filename_template_dialog_error_unknown_variable">Неизвестная переменная для шаблона: <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_has_argument">Переменная не может иметь аргумент: <annotation type="template">PLACEHOLDER</annotation></string>
@@ -71,6 +72,7 @@
     <string name="notification_channel_persistent_name">Фоновые сервисы</string>
     <string name="notification_channel_persistent_desc">Постоянное уведомление о записи разговоров в фоновом режиме</string>
     <string name="notification_recording_in_progress">Происходит запись разговора</string>
+    <string name="notification_recording_finalizing">Завершение записи разговора</string>
     <string name="notification_channel_failure_desc">Оповещение об ошибках во время записи разговора</string>
     <string name="notification_recording_failed">Не удалось записать разговор</string>
     <string name="notification_action_open">Открыть</string>
@@ -79,9 +81,11 @@
     <string name="notification_channel_failure_name">Предупреждение о сбое</string>
     <string name="notification_channel_success_name">Оповещение об успешном выполнении</string>
     <string name="notification_channel_success_desc">Оповещение об успешной записи разговора</string>
+    <string name="notification_recording_initializing">Инициализация записи разговоров</string>
     <string name="notification_recording_paused">Запись разговора приостановлена</string>
     <string name="notification_recording_on_hold">Запись разговора на удержании</string>
     <string name="notification_recording_succeeded">Успешно записан разговор</string>
+    <string name="notification_message_delete_at_end">По окончании разговора запись будет удалена. Нажмите «Восстановить», чтобы сохранить запись.</string>
     <string name="notification_action_restore">Восстановить</string>
     <string name="notification_internal_android_error">Сбой записи во внутреннем компоненте Android (%s). Это устройство или прошивка может не поддерживает запись вызовов.</string>
     <string name="notification_action_pause">Пауза</string>
@@ -90,4 +94,6 @@
     <string name="menu_action_help">Помощь</string>
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Запись звонков</string>
+    <!-- Snackbar alerts -->
+    <string name="documentsui_not_found">Встроенный файловый менеджер Android (DocumentsUI) недоступен.</string>
 </resources>
