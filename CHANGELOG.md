@@ -15,6 +15,7 @@
 * Update Polish translations ([PR #407 @PatrykMis])
 * Use standard OK/Cancel text from Android's resources ([PR #408 @PatrykMis])
 * Update all dependencies ([PR #414 @PatrykMis])
+* Update Russian translations ([PR #418 @rze0])
 
 ### Version 1.49
 
@@ -704,3 +705,4 @@ Non-user-facing changes:
 [PR #407 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/407
 [PR #408 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/408
 [PR #414 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/414
+[PR #418 @rze0]: https://github.com/chenxiaolong/BCR/pull/418
