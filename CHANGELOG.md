@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.50
 
 * Update Turkish translations ([PR #400 @symbuzzer])
 * Work around gradle dependency verification blocking sources and javadocs from loading in Android Studio ([PR #402 @chenxiaolong])
