@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update Russian translations ([PR #419 @rze0])
+
 ### Version 1.50
 
 * Update Turkish translations ([PR #400 @symbuzzer])
@@ -708,3 +710,4 @@ Non-user-facing changes:
 [PR #408 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/408
 [PR #414 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/414
 [PR #418 @rze0]: https://github.com/chenxiaolong/BCR/pull/418
+[PR #419 @rze0]: https://github.com/chenxiaolong/BCR/pull/419
