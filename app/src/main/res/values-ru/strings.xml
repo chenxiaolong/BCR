@@ -14,6 +14,8 @@
     <string name="pref_output_format_desc">Выберите формат кодирования записей.</string>
     <string name="pref_inhibit_batt_opt_name">Отключить оптимизацию батареи</string>
     <string name="pref_inhibit_batt_opt_desc">Снижает вероятность того, что приложение будет остановлено системой.</string>
+    <string name="pref_write_metadata_name">Записать файл метаданных</string>
+    <string name="pref_write_metadata_desc">Создать файл JSON рядом с аудиофайлом, содержащий сведения о вызове.</string>
     <!-- About "preference" -->
     <string name="pref_version_name">Версия</string>
     <!-- Record rules bottom sheet -->
