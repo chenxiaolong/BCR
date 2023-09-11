@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update Russian translations ([PR #419 @rze0])
+* Add support for direct install from recovery on devices that use A/B and/or dynamic partitions ([Issue #338], [PR #420 @chenxiaolong])
 
 ### Version 1.50
 
@@ -503,6 +504,7 @@ Non-user-facing changes:
 [Issue #307]: https://github.com/chenxiaolong/BCR/issues/307
 [Issue #314]: https://github.com/chenxiaolong/BCR/issues/314
 [Issue #320]: https://github.com/chenxiaolong/BCR/issues/320
+[Issue #338]: https://github.com/chenxiaolong/BCR/issues/338
 [Issue #350]: https://github.com/chenxiaolong/BCR/issues/350
 [Issue #352]: https://github.com/chenxiaolong/BCR/issues/352
 [Issue #357]: https://github.com/chenxiaolong/BCR/issues/357
@@ -711,3 +713,4 @@ Non-user-facing changes:
 [PR #414 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/414
 [PR #418 @rze0]: https://github.com/chenxiaolong/BCR/pull/418
 [PR #419 @rze0]: https://github.com/chenxiaolong/BCR/pull/419
+[PR #420 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/420
