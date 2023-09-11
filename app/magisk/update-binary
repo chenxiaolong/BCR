@@ -14,13 +14,41 @@ if [ -f /sbin/recovery ] || [ -f /system/bin/recovery ]; then
     set -exu
 
     ui_print 'Mounting system'
-    if mount /system_root; then
-        mount -o remount,rw /system_root
-        root_dir=/system_root
+
+    if [[ "$(getprop ro.boot.dynamic_partitions)" == true ]]; then
+        ui_print "- Device uses dynamic partitions"
+        slot=$(getprop ro.boot.slot_suffix)
+        block_dev=/dev/block/mapper/system"${slot}"
+        blockdev --setrw "${block_dev}"
     else
-        mount /system
-        mount -o remount,rw /system
-        root_dir=/
+        ui_print "- Device uses static partitions"
+        block_dev=/dev/block/bootdevice/by-name/system
+    fi
+
+    ui_print "- System block device: ${block_dev}"
+
+    if [[ -d /mnt/system ]]; then
+        mount_point=/mnt/system
+        root_dir=${mount_point}
+    elif [[ -d /system_root ]]; then
+        mount_point=/system_root
+        root_dir=${mount_point}
+    else
+        mount_point=/system
+        if [[ "$(getprop ro.build.system_root_image)" == true ]]; then
+            root_dir=${mount_point}
+        else
+            root_dir=/
+        fi
+    fi
+
+    ui_print "- System mount point: ${mount_point}"
+    ui_print "- Root directory: ${root_dir}"
+
+    if mountpoint -q "${mount_point}"; then
+        mount -o remount,rw "${mount_point}"
+    else
+        mount "${block_dev}" "${mount_point}"
     fi
 
     ui_print 'Extracting files'
