@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.51
 
 * Update Russian translations ([PR #419 @rze0])
 * Add support for direct install from recovery on devices that use A/B and/or dynamic partitions ([Issue #338], [PR #420 @chenxiaolong])
