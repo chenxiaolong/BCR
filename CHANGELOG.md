@@ -9,6 +9,9 @@
 
 ### Unreleased
 
+* Instead of graying out `Disable battery optimizations`, take the user to Android's Settings ([Issue #422], [PR #424 @chenxiaolong])
+  * Android does not provide a way for apps to directly re-enable battery optimizations.
+
 ### Version 1.51
 
 * Update Russian translations ([PR #419 @rze0])
@@ -515,6 +518,7 @@ Non-user-facing changes:
 [Issue #380]: https://github.com/chenxiaolong/BCR/issues/380
 [Issue #388]: https://github.com/chenxiaolong/BCR/issues/388
 [Issue #394]: https://github.com/chenxiaolong/BCR/issues/394
+[Issue #422]: https://github.com/chenxiaolong/BCR/issues/422
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -716,3 +720,4 @@ Non-user-facing changes:
 [PR #418 @rze0]: https://github.com/chenxiaolong/BCR/pull/418
 [PR #419 @rze0]: https://github.com/chenxiaolong/BCR/pull/419
 [PR #420 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/420
+[PR #424 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/424
