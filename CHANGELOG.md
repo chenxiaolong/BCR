@@ -7,6 +7,8 @@
     to update the actual links at the bottom of the file.
 -->
 
+### Unreleased
+
 ### Version 1.52
 
 * Instead of graying out `Disable battery optimizations`, take the user to Android's Settings ([Issue #422], [PR #424 @chenxiaolong])
