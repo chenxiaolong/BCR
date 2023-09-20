@@ -135,28 +135,26 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
     private fun refreshInhibitBatteryOptState() {
         val inhibiting = Permissions.isInhibitingBatteryOpt(requireContext())
         prefInhibitBatteryOpt.isChecked = inhibiting
-        prefInhibitBatteryOpt.isEnabled = !inhibiting
     }
 
     override fun onPreferenceChange(preference: Preference, newValue: Any?): Boolean {
-        // No need to validate runtime permissions when disabling a feature
-        if (newValue == false) {
-            return true
-        }
-
         val context = requireContext()
 
         when (preference) {
-            prefCallRecording -> if (Permissions.haveRequired(context)) {
+            prefCallRecording -> if (newValue == false || Permissions.haveRequired(context)) {
                 return true
             } else {
                 // Ask for optional permissions the first time only
                 requestPermissionRequired.launch(Permissions.REQUIRED + Permissions.OPTIONAL)
             }
-            // This is only reachable if battery optimization is not already inhibited
-            prefInhibitBatteryOpt -> requestInhibitBatteryOpt.launch(
-                Permissions.getInhibitBatteryOptIntent(requireContext())
-            )
+            prefInhibitBatteryOpt -> {
+                if (newValue == true) {
+                    requestInhibitBatteryOpt.launch(
+                        Permissions.getInhibitBatteryOptIntent(requireContext()))
+                } else {
+                    startActivity(Permissions.getBatteryOptSettingsIntent())
+                }
+            }
         }
 
         return false
