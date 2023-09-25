@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Make auto-record rules UI a bit more intuitive ([Issue #429], [PR #430 @chenxiaolong])
+
 ### Version 1.52
 
 * Instead of graying out `Disable battery optimizations`, take the user to Android's Settings ([Issue #422], [PR #424 @chenxiaolong])
@@ -521,6 +523,7 @@ Non-user-facing changes:
 [Issue #388]: https://github.com/chenxiaolong/BCR/issues/388
 [Issue #394]: https://github.com/chenxiaolong/BCR/issues/394
 [Issue #422]: https://github.com/chenxiaolong/BCR/issues/422
+[Issue #429]: https://github.com/chenxiaolong/BCR/issues/429
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -723,3 +726,4 @@ Non-user-facing changes:
 [PR #419 @rze0]: https://github.com/chenxiaolong/BCR/pull/419
 [PR #420 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/420
 [PR #424 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/424
+[PR #430 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/430
