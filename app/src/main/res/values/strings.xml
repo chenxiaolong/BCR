@@ -28,16 +28,20 @@
     <string name="pref_version_name">Version</string>
 
     <!-- Record rules bottom sheet -->
+    <string name="pref_header_rules">Rules</string>
     <string name="pref_add_rule_name">Add rule</string>
     <string name="pref_add_rule_desc">Add an auto-record rule for a contact.</string>
-    <string name="pref_rule_desc_on">Keep the recording.</string>
-    <string name="pref_rule_desc_off">Delete the recording when the call ends.</string>
     <string name="record_rules_rule_added">Added new rule. Long press the rule to delete it.</string>
     <string name="record_rules_rule_exists">Rule already exists.</string>
-    <string name="record_rules_help">BCR internally always records every call, but when auto-record is turned off, the recording will be deleted at the end of the call. While a call is in progress, a recording that is scheduled for deletion can be preserved via BCR\'s notification.</string>
-    <string name="record_rule_type_all_calls">All other calls</string>
-    <string name="record_rule_type_unknown_calls">Unknown calls</string>
-    <string name="record_rule_type_contact">Contact: %s</string>
+    <string name="record_rules_info">When a rule is turned on, the call is automatically recorded by default and can be manually deleted from the notification. When a rule is turned off, the recording will be deleted at the end of a call unless it is preserved using the Restore button in the notification.</string>
+    <string name="record_rule_type_all_calls_name">All calls</string>
+    <string name="record_rule_type_all_calls_desc">Contacts permission is required for more granular rules.</string>
+    <string name="record_rule_type_all_other_calls_name">All other calls</string>
+    <string name="record_rule_type_all_other_calls_desc">Calls that don\'t match any other rule.</string>
+    <string name="record_rule_type_unknown_calls_name">Unknown calls</string>
+    <string name="record_rule_type_unknown_calls_desc">Calls that don\'t match any contact.</string>
+    <string name="record_rule_type_contact_name">Contact: %s</string>
+    <string name="record_rule_type_contact_desc">Long press to remove rule.</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Change directory</string>
@@ -108,9 +112,6 @@
     <string name="notification_action_restore">Restore</string>
     <string name="notification_action_pause">Pause</string>
     <string name="notification_action_resume">Resume</string>
-
-    <!-- Menus -->
-    <string name="menu_action_help">Help</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Call recording</string>

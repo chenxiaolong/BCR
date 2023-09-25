@@ -30,14 +30,11 @@
     <!-- Record rules bottom sheet -->
     <string name="pref_add_rule_name">Dodaj regułę</string>
     <string name="pref_add_rule_desc">Dodaj regułę automatycznego rejestrowania dla kontaktu.</string>
-    <string name="pref_rule_desc_on">Zachowaj nagranie.</string>
-    <string name="pref_rule_desc_off">Usuń nagranie po zakończeniu połączenia.</string>
     <string name="record_rules_rule_added">Dodano nową regułę. Naciśnij i przytrzymaj regułę, aby ją usunąć.</string>
     <string name="record_rules_rule_exists">Reguła już istnieje.</string>
-    <string name="record_rules_help">BCR zawsze nagrywa wewnętrznie każde połączenie, ale gdy automatyczne nagrywanie jest wyłączone, nagranie zostanie usunięte po zakończeniu połączenia. Podczas trwania rozmowy nagranie, które zaplanowano do usunięcia, można zachować za pośrednictwem powiadomienia BCR.</string>
-    <string name="record_rule_type_all_calls">Wszystkie inne połączenia</string>
-    <string name="record_rule_type_unknown_calls">Nieznane połączenia</string>
-    <string name="record_rule_type_contact">Kontakt: %s</string>
+    <string name="record_rule_type_all_other_calls_name">Wszystkie inne połączenia</string>
+    <string name="record_rule_type_unknown_calls_name">Nieznane połączenia</string>
+    <string name="record_rule_type_contact_name">Kontakt: %s</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Zmień katalog</string>
@@ -110,9 +107,6 @@
     <string name="notification_action_restore">Przywróć</string>
     <string name="notification_action_pause">Wstrzymaj</string>
     <string name="notification_action_resume">Wznów</string>
-    
-    <!-- Menus -->
-    <string name="menu_action_help">Pomoc</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Nagrywanie rozmów</string>

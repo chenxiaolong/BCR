@@ -21,6 +21,8 @@ class Preferences(private val context: Context) {
     companion object {
         private val TAG = Preferences::class.java.simpleName
 
+        const val CATEGORY_RULES = "rules"
+
         const val PREF_CALL_RECORDING = "call_recording"
         const val PREF_RECORD_RULES = "record_rules"
         const val PREF_OUTPUT_DIR = "output_dir"
@@ -36,7 +38,6 @@ class Preferences(private val context: Context) {
         // Not associated with a UI preference
         private const val PREF_DEBUG_MODE = "debug_mode"
         private const val PREF_RECORD_RULE_PREFIX = "record_rule_"
-        private const val PREF_RECORD_RULES_HELP_SHOWN = "record_rules_help_shown"
         private const val PREF_FORMAT_NAME = "codec_name"
         private const val PREF_FORMAT_PARAM_PREFIX = "codec_param_"
         const val PREF_OUTPUT_RETENTION = "output_retention"
@@ -237,11 +238,6 @@ class Preferences(private val context: Context) {
                 }
             }
         }
-
-    /** Whether the help dialog for the record rules has already been shown. */
-    var recordRulesHelpShown: Boolean
-        get() = prefs.getBoolean(PREF_RECORD_RULES_HELP_SHOWN, false)
-        set(shown) = prefs.edit { putBoolean(PREF_RECORD_RULES_HELP_SHOWN, shown) }
 
     /**
      * The saved output format.

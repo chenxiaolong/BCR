@@ -21,14 +21,11 @@
     <!-- Record rules bottom sheet -->
     <string name="pref_add_rule_name">Добавить правило</string>
     <string name="pref_add_rule_desc">Добавить правило автоматической записи для контакта.</string>
-    <string name="pref_rule_desc_on">Сохранять запись.</string>
-    <string name="pref_rule_desc_off">Удалить запись по окончании вызова.</string>
     <string name="record_rules_rule_added">Добавлено новое правило. Нажмите и удерживайте правило, чтобы удалить его.</string>
     <string name="record_rules_rule_exists">Правило уже существует.</string>
-    <string name="record_rules_help">BCR изначально всегда записывает каждый звонок, но когда автоматическая запись выключена, запись будет удалена в конце вызова. Запись, запланированная к удалению, может быть сохранена во время разговора, через шторку уведомлений BCR.</string>
-    <string name="record_rule_type_all_calls">Все остальные вызовы</string>
-    <string name="record_rule_type_unknown_calls">Неизвестные вызовы</string>
-    <string name="record_rule_type_contact">Контакт: %s</string>
+    <string name="record_rule_type_all_other_calls_name">Все остальные вызовы</string>
+    <string name="record_rule_type_unknown_calls_name">Неизвестные вызовы</string>
+    <string name="record_rule_type_contact_name">Контакт: %s</string>
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Изменить папку</string>
     <string name="output_dir_bottom_sheet_filename_template">Шаблон имени файла</string>
@@ -92,8 +89,6 @@
     <string name="notification_internal_android_error">Сбой записи во внутреннем компоненте Android (%s). Это устройство или прошивка может не поддерживает запись вызовов.</string>
     <string name="notification_action_pause">Пауза</string>
     <string name="notification_action_resume">Возобновить</string>
-    <!-- Menus -->
-    <string name="menu_action_help">Помощь</string>
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Запись звонков</string>
     <!-- Snackbar alerts -->

@@ -2,6 +2,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/reset"
         android:title="@string/bottom_sheet_reset" />
-    <item android:id="@+id/help"
-        android:title="@string/menu_action_help" />
 </menu>

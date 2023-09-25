@@ -27,14 +27,11 @@
     <!-- Record rules bottom sheet -->
     <string name="pref_add_rule_name">加入規則</string>
     <string name="pref_add_rule_desc">為聯絡人加入自動錄音規則。</string>
-    <string name="pref_rule_desc_on">保留錄音檔。</string>
-    <string name="pref_rule_desc_off">結束通話時刪除錄音檔。</string>
     <string name="record_rules_rule_added">已加入新規則。長按規則以將其刪除。</string>
     <string name="record_rules_rule_exists">規則已存在。</string>
-    <string name="record_rules_help">BCR 內部總是會錄製所有通話，但是若停用自動錄音，通話結束時錄音檔會被刪除。當進行通話時，你可以經由 BCR 的通知保留將被刪除的錄音檔。</string>
-    <string name="record_rule_type_all_calls">所有其他通話</string>
-    <string name="record_rule_type_unknown_calls">未知通話</string>
-    <string name="record_rule_type_contact">聯絡人：%s</string>
+    <string name="record_rule_type_all_other_calls_name">所有其他通話</string>
+    <string name="record_rule_type_unknown_calls_name">未知通話</string>
+    <string name="record_rule_type_contact_name">聯絡人：%s</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">變更目錄</string>
@@ -102,9 +99,6 @@
     <string name="notification_action_restore">還原</string>
     <string name="notification_action_pause">暫停</string>
     <string name="notification_action_resume">繼續</string>
-
-    <!-- Menus -->
-    <string name="menu_action_help">說明</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">通話錄音</string>
