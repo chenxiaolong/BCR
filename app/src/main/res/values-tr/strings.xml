@@ -30,14 +30,11 @@
     <!-- Record rules bottom sheet -->
     <string name="pref_add_rule_name">Kural ekle</string>
     <string name="pref_add_rule_desc">Bir kişi için otomatik-kayıt kuralı ekleyin.</string>
-    <string name="pref_rule_desc_on">Kaydı saklayın.</string>
-    <string name="pref_rule_desc_off">Arama bittiğinde kaydı silin.</string>
     <string name="record_rules_rule_added">Yeni kural eklendi. Silmek için kurala uzun basın.</string>
     <string name="record_rules_rule_exists">Kural zaten var.</string>
-    <string name="record_rules_help">BCR dahili olarak her aramayı her zaman kaydeder, ancak otomatik kayıt kapatıldığında, arama sonunda kayıt silinir. Bir görüşme devam ederken, silinmesi planlanan bir kayıt, BCR\'nin bildirimi ile saklanabilir.</string>
-    <string name="record_rule_type_all_calls">Diğer bütün aramalar</string>
-    <string name="record_rule_type_unknown_calls">Bilinmeyen aramalar</string>
-    <string name="record_rule_type_contact">Kişi: %s</string>
+    <string name="record_rule_type_all_other_calls_name">Diğer bütün aramalar</string>
+    <string name="record_rule_type_unknown_calls_name">Bilinmeyen aramalar</string>
+    <string name="record_rule_type_contact_name">Kişi: %s</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Çıkış klasörünü değiştir</string>
@@ -108,9 +105,6 @@
     <string name="notification_action_restore">Geri yükle</string>
     <string name="notification_action_pause">Duraklat</string>
     <string name="notification_action_resume">Devam ettir</string>
-
-    <!-- Menus -->
-    <string name="menu_action_help">Yardım</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Arama kaydı</string>

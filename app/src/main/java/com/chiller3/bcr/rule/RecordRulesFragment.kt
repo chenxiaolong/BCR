@@ -9,20 +9,19 @@ import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.MenuProvider
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.get
 import androidx.preference.size
-import com.chiller3.bcr.view.LongClickableSwitchPreference
-import com.chiller3.bcr.view.OnPreferenceLongClickListener
 import com.chiller3.bcr.Preferences
 import com.chiller3.bcr.R
-import com.chiller3.bcr.dialog.MessageDialogFragment
+import com.chiller3.bcr.view.LongClickableSwitchPreference
+import com.chiller3.bcr.view.OnPreferenceLongClickListener
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
@@ -31,6 +30,7 @@ class RecordRulesFragment : PreferenceFragmentCompat(), Preference.OnPreferenceC
     Preference.OnPreferenceChangeListener, OnPreferenceLongClickListener {
     private val viewModel: RecordRulesViewModel by viewModels()
 
+    private lateinit var categoryRules: PreferenceCategory
     private lateinit var prefAddRule: Preference
 
     private var ruleOffset by Delegates.notNull<Int>()
@@ -46,7 +46,9 @@ class RecordRulesFragment : PreferenceFragmentCompat(), Preference.OnPreferenceC
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.record_rules_preferences, rootKey)
 
-        ruleOffset = preferenceScreen.preferenceCount
+        categoryRules = findPreference(Preferences.CATEGORY_RULES)!!
+
+        ruleOffset = categoryRules.preferenceCount
 
         prefAddRule = findPreference(Preferences.PREF_ADD_RULE)!!
         prefAddRule.onPreferenceClickListener = this
@@ -56,10 +58,6 @@ class RecordRulesFragment : PreferenceFragmentCompat(), Preference.OnPreferenceC
                 viewModel.messages.collect {
                     it.firstOrNull()?.let { message ->
                         when (message) {
-                            Message.ShowHelp -> {
-                                showHelpDialog()
-                                viewModel.acknowledgeFirstMessage()
-                            }
                             Message.RuleAdded -> {
                                 showSnackBar(getString(R.string.record_rules_rule_added)) {
                                     viewModel.acknowledgeFirstMessage()
@@ -83,10 +81,6 @@ class RecordRulesFragment : PreferenceFragmentCompat(), Preference.OnPreferenceC
                 }
             }
         }
-
-        setFragmentResultListener(TAG_HELP) { _, _ ->
-            viewModel.helpDismissed()
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -101,10 +95,6 @@ class RecordRulesFragment : PreferenceFragmentCompat(), Preference.OnPreferenceC
                 return when (menuItem.itemId) {
                     R.id.reset -> {
                         viewModel.reset()
-                        true
-                    }
-                    R.id.help -> {
-                        viewModel.showHelp()
                         true
                     }
                     else -> false
@@ -124,36 +114,46 @@ class RecordRulesFragment : PreferenceFragmentCompat(), Preference.OnPreferenceC
 
         prefAddRule.isEnabled = contactsGranted
 
-        for (i in (ruleOffset until preferenceScreen.size).reversed()) {
-            val p = preferenceScreen[i]
-            preferenceScreen.removePreference(p)
+        for (i in (ruleOffset until categoryRules.size).reversed()) {
+            val p = categoryRules[i]
+            categoryRules.removePreference(p)
         }
 
         for ((i, rule) in newRules.withIndex()) {
             val p = LongClickableSwitchPreference(context).apply {
                 key = Preferences.PREF_RULE_PREFIX + i
                 isPersistent = false
-                title = when (rule) {
-                    is DisplayedRecordRule.AllCalls ->
-                        getString(R.string.record_rule_type_all_calls)
-                    is DisplayedRecordRule.UnknownCalls ->
-                        getString(R.string.record_rule_type_unknown_calls)
-                    is DisplayedRecordRule.Contact ->
-                        getString(
-                            R.string.record_rule_type_contact,
-                            rule.displayName ?: rule.lookupKey)
+                when (rule) {
+                    is DisplayedRecordRule.AllCalls -> {
+                        if (contactsGranted) {
+                            title = getString(R.string.record_rule_type_all_other_calls_name)
+                            summary = getString(R.string.record_rule_type_all_other_calls_desc)
+                        } else {
+                            title = getString(R.string.record_rule_type_all_calls_name)
+                            summary = getString(R.string.record_rule_type_all_calls_desc)
+                        }
+                        isEnabled = true
+                    }
+                    is DisplayedRecordRule.UnknownCalls -> {
+                        title = getString(R.string.record_rule_type_unknown_calls_name)
+                        summary = getString(R.string.record_rule_type_unknown_calls_desc)
+                        isEnabled = contactsGranted
+                    }
+                    is DisplayedRecordRule.Contact -> {
+                        title = getString(
+                            R.string.record_rule_type_contact_name,
+                            rule.displayName ?: rule.lookupKey,
+                        )
+                        summary = getString(R.string.record_rule_type_contact_desc)
+                        isEnabled = contactsGranted
+                        onPreferenceLongClickListener = this@RecordRulesFragment
+                    }
                 }
-                summaryOn = getString(R.string.pref_rule_desc_on)
-                summaryOff = getString(R.string.pref_rule_desc_off)
                 isIconSpaceReserved = false
                 isChecked = rule.record
-                isEnabled = rule is DisplayedRecordRule.AllCalls || contactsGranted
                 onPreferenceChangeListener = this@RecordRulesFragment
-                if (rule is DisplayedRecordRule.Contact) {
-                    onPreferenceLongClickListener = this@RecordRulesFragment
-                }
             }
-            preferenceScreen.addPreference(p)
+            categoryRules.addPreference(p)
         }
 
         rules = newRules
@@ -194,11 +194,6 @@ class RecordRulesFragment : PreferenceFragmentCompat(), Preference.OnPreferenceC
         return false
     }
 
-    private fun showHelpDialog() {
-        MessageDialogFragment.newInstance(null, getString(R.string.record_rules_help))
-            .show(parentFragmentManager, TAG_HELP)
-    }
-
     private fun showSnackBar(text: CharSequence, onDismiss: () -> Unit) {
         Snackbar.make(requireView(), text, Snackbar.LENGTH_LONG)
             .addCallback(object : Snackbar.Callback() {
@@ -207,9 +202,5 @@ class RecordRulesFragment : PreferenceFragmentCompat(), Preference.OnPreferenceC
                 }
             })
             .show()
-    }
-
-    companion object {
-        private val TAG_HELP = "${RecordRulesFragment::class.java}.help"
     }
 }

@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
     <Preference
-        app:key="add_rule"
+        app:key="info"
         app:persistent="false"
-        app:title="@string/pref_add_rule_name"
-        app:summary="@string/pref_add_rule_desc"
+        app:summary="@string/record_rules_info"
         app:iconSpaceReserved="false" />
+
+    <PreferenceCategory
+        app:key="rules"
+        app:title="@string/pref_header_rules"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            app:key="add_rule"
+            app:persistent="false"
+            app:title="@string/pref_add_rule_name"
+            app:summary="@string/pref_add_rule_desc"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
 </PreferenceScreen>

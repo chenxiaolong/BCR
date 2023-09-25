@@ -65,11 +65,9 @@ sealed class DisplayedRecordRule : Comparable<DisplayedRecordRule> {
 }
 
 sealed class Message {
-    object ShowHelp : Message()
+    data object RuleAdded : Message()
 
-    object RuleAdded : Message()
-
-    object RuleExists : Message()
+    data object RuleExists : Message()
 }
 
 class RecordRulesViewModel(application: Application) : AndroidViewModel(application) {
@@ -82,10 +80,6 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
     val rules: StateFlow<List<DisplayedRecordRule>> = _rules
 
     init {
-        if (!prefs.recordRulesHelpShown) {
-            showHelp()
-        }
-
         refreshRules()
     }
 
@@ -222,17 +216,8 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    fun showHelp() {
-        _messages.update { it + Message.ShowHelp }
-    }
-
-    fun helpDismissed() {
-        prefs.recordRulesHelpShown = true
-    }
-
     fun reset() {
         prefs.recordRules = null
-        prefs.recordRulesHelpShown = false
         refreshRules()
     }
 

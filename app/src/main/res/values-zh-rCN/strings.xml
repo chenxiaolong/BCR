@@ -28,14 +28,11 @@
     <!-- Record rules bottom sheet -->
     <string name="pref_add_rule_name">新增规则</string>
     <string name="pref_add_rule_desc">从通讯录里面选择联系人添加到规则里面。</string>
-    <string name="pref_rule_desc_on">保存录音。</string>
-    <string name="pref_rule_desc_off">通话结束时删除录音。</string>
-    <string name="record_rule_type_contact">联系人: %s</string>
+    <string name="record_rule_type_contact_name">联系人: %s</string>
     <string name="record_rules_rule_added">规则已添加。删除请长按规则。</string>
     <string name="record_rules_rule_exists">规则已存在。</string>
-    <string name="record_rules_help">BCR 会自动录音所有通话，但是当自动录音关闭时，录音将会在通话结束之后删除。不过你依旧可以在通知栏里面选择保存当前通话录音。</string>
-    <string name="record_rule_type_all_calls">全部其他号码</string>
-    <string name="record_rule_type_unknown_calls">未知号码</string>
+    <string name="record_rule_type_all_other_calls_name">全部其他号码</string>
+    <string name="record_rule_type_unknown_calls_name">未知号码</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">修改</string>
@@ -103,7 +100,6 @@
 
     <!-- Quick settings tile -->
     <string name="notification_action_resume">继续</string>
-    <string name="menu_action_help">帮助</string>
     <string name="quick_settings_label">通话录音</string>
     <string name="documentsui_not_found">Android 内置的文件管理器 (DocumentsUI) 不可用。</string>
 </resources>

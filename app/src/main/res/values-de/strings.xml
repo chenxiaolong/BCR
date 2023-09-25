@@ -27,14 +27,11 @@
     <!-- Record rules bottom sheet -->
     <string name="pref_add_rule_name">Füge eine Regel hinzu</string>
     <string name="pref_add_rule_desc">Füge eine automatische Aufnahmeregel für einen Kontakt hinzu.</string>
-    <string name="pref_rule_desc_on">Behalte die Aufnahme.</string>
-    <string name="pref_rule_desc_off">Lösche die Aufnahme, sobald das Gespräch beendet wurde.</string>
     <string name="record_rules_rule_added">Neue Regel hinzugefügt. Lange gedrückt halten, um sie zu löschen.</string>
     <string name="record_rules_rule_exists">Regel existiert bereits.</string>
-    <string name="record_rules_help">BCR nimmt intern jeden Anruf auf, aber wenn "Automatische Aufnahme" ausgeschaltet ist, wird die Aufnahme am Ende des Gesprächs gelöscht. Während eines Anrufs kann der Nutzer über die BCR Benachrichtungsleiste auswählen, dass die Aufnahme erhalten bleiben soll.</string>
-    <string name="record_rule_type_all_calls">Alle anderen Anrufe</string>
-    <string name="record_rule_type_unknown_calls">Unbekannte Anrufe</string>
-    <string name="record_rule_type_contact">Kontakt: %s</string>
+    <string name="record_rule_type_all_other_calls_name">Alle anderen Anrufe</string>
+    <string name="record_rule_type_unknown_calls_name">Unbekannte Anrufe</string>
+    <string name="record_rule_type_contact_name">Kontakt: %s</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Ändere Ordner</string>
@@ -102,9 +99,6 @@
     <string name="notification_action_restore">Behalten</string>
     <string name="notification_action_pause">Pause</string>
     <string name="notification_action_resume">Fortsetzen</string>
-
-    <!-- Menus -->
-    <string name="menu_action_help">Hilfe</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Anrufaufnahme</string>
