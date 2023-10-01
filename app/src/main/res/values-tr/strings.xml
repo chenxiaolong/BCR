@@ -28,13 +28,20 @@
     <string name="pref_version_name">Sürüm</string>
 
     <!-- Record rules bottom sheet -->
+    <string name="pref_header_rules">Kurallar</string>
     <string name="pref_add_rule_name">Kural ekle</string>
     <string name="pref_add_rule_desc">Bir kişi için otomatik-kayıt kuralı ekleyin.</string>
     <string name="record_rules_rule_added">Yeni kural eklendi. Silmek için kurala uzun basın.</string>
     <string name="record_rules_rule_exists">Kural zaten var.</string>
+    <string name="record_rules_info">Bir kural etkinleştirildiğinde, arama varsayılan olarak otomatik kaydedilir ve bildirimden manuel olarak silinebilir. Bir kural kapatıldığında, bildirimdeki Geri yükle butonu kullanılarak kaydedilmediği sürece kayıt, aramanın sonunda silinecektir.</string>
+    <string name="record_rule_type_all_calls_name">Bütün aramalar</string>
+    <string name="record_rule_type_all_calls_desc">Daha ayrıntılı kurallar için kişilere erişim izni gereklidir.</string>
     <string name="record_rule_type_all_other_calls_name">Diğer bütün aramalar</string>
+    <string name="record_rule_type_all_other_calls_desc">Başka hiçbir kuralla eşleşmeyen aramalar.</string>
     <string name="record_rule_type_unknown_calls_name">Bilinmeyen aramalar</string>
+    <string name="record_rule_type_unknown_calls_desc">Herhangi bir kişiyle eşleşmeyen aramalar.</string>
     <string name="record_rule_type_contact_name">Kişi: %s</string>
+    <string name="record_rule_type_contact_desc">Kuralı kaldırmak için uzun basın.</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Çıkış klasörünü değiştir</string>
