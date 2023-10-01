@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Make auto-record rules UI a bit more intuitive ([Issue #429], [PR #430 @chenxiaolong])
+* Update Turkish translations ([PR #434 @symbuzzer])
 
 ### Version 1.52
 
@@ -727,3 +728,4 @@ Non-user-facing changes:
 [PR #420 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/420
 [PR #424 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/424
 [PR #430 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/430
+[PR #434 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/434
