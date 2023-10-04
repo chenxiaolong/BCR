@@ -11,6 +11,7 @@
 
 * Make auto-record rules UI a bit more intuitive ([Issue #429], [PR #430 @chenxiaolong])
 * Update Turkish translations ([PR #434 @symbuzzer])
+* Update dependencies and target API 34 ([PR #401 @chenxiaolong])
 
 ### Version 1.52
 
@@ -718,6 +719,7 @@ Non-user-facing changes:
 [PR #397 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/397
 [PR #398 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/398
 [PR #400 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/400
+[PR #401 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/401
 [PR #402 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/402
 [PR #404 @Yee2]: https://github.com/chenxiaolong/BCR/pull/404
 [PR #407 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/407
