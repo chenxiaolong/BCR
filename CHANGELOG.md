@@ -7,7 +7,11 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.53
+
+It's Android 14 release day! All previous versions of BCR should work on Android 14. This release is just the first one that targets API 34.
+
+Changes:
 
 * Make auto-record rules UI a bit more intuitive ([Issue #429], [PR #430 @chenxiaolong])
 * Update Turkish translations ([PR #434 @symbuzzer])
