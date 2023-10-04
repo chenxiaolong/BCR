@@ -79,7 +79,7 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
   * Needed to monitor the phone call state for starting and stopping the recording and gathering call information for the output filename.
 * `RECORD_AUDIO` (**must be granted by the user**)
   * Needed to capture the call audio stream.
-* `FOREGROUND_SERVICE` (**automatically granted at install time**)
+* `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_MICROPHONE` (**automatically granted at install time**)
   * Needed to run the call recording service.
 * `POST_NOTIFICATIONS` (**must be granted by the user on Android 13+**)
   * Needed to show notifications.

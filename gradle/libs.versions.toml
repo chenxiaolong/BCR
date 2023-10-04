@@ -1,14 +1,11 @@
 [versions]
-androidx-activity = "1.7.2"
+android-gradle-plugin = "8.1.2"
+androidx-activity = "1.8.0"
 androidx-appcompat = "1.6.1"
-androidx-core = "1.10.1"
+androidx-core = "1.12.0"
 androidx-documentfile = "1.0.1"
 androidx-fragment = "1.6.1"
 androidx-preference = "1.2.1"
-androidx-preference-ktx = "1.2.0"
-androidx-test-espresso = "3.5.1"
-androidx-test-junit = "1.1.5"
-androidGradlePlugin = "8.1.1"
 jgit = "6.6.0.202305301015-r"
 json = "20230618"
 kotlin = "1.9.10"
@@ -23,13 +20,9 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-documentfile = { group = "androidx.documentfile", name = "documentfile", version.ref = "androidx-documentfile" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "androidx-fragment" }
 androidx-preference = { group = "androidx.preference", name = "preference", version.ref = "androidx-preference" }
-androidx-preference-ktx = { group = "androidx.preference", name = "preference-ktx", version.ref = "androidx-preference-ktx" }
+androidx-preference-ktx = { group = "androidx.preference", name = "preference-ktx", version.ref = "androidx-preference" }
 kudzu = { group = "io.github.copper-leaf", name = "kudzu-core", version.ref = "kudzu" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-
-# Android test
-androidx-test-espresso = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidx-test-espresso" }
-androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-junit" }
 
 # Test
 junit = { group = "junit", name = "junit", version.ref = "test-junit" }
@@ -40,6 +33,6 @@ jgit-archive = { group = "org.eclipse.jgit", name = "org.eclipse.jgit.archive", 
 json = { group = "org.json", name = "json", version.ref = "json" }
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
