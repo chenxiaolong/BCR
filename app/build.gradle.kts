@@ -103,8 +103,8 @@ val gitVersionName = getVersionName(git, gitVersionTriple)
 val projectUrl = "https://github.com/chenxiaolong/BCR"
 val releaseMetadataBranch = "master"
 
-val extraDir = File(buildDir, "extra")
-val archiveDir = File(extraDir, "archive")
+val extraDir = layout.buildDirectory.map { it.dir("extra") }
+val archiveDir = extraDir.map { it.dir("archive") }
 
 android {
     namespace = "com.chiller3.bcr"
@@ -212,14 +212,12 @@ dependencies {
     implementation(libs.material)
     implementation(libs.kudzu)
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.junit)
-    androidTestImplementation(libs.androidx.test.espresso)
 }
 
 val archive = tasks.register("archive") {
     inputs.property("gitVersionTriple.third", gitVersionTriple.third)
 
-    val outputFile = File(archiveDir, "archive.tar")
+    val outputFile = archiveDir.map { it.file("archive.tar") }
     outputs.file(outputFile)
 
     doLast {
@@ -227,7 +225,7 @@ val archive = tasks.register("archive") {
 
         ArchiveCommand.registerFormat(format, TarFormat())
         try {
-            outputFile.outputStream().use {
+            outputFile.get().asFile.outputStream().use {
                 git.archive()
                     .setTree(git.repository.resolve(gitVersionTriple.third.name))
                     .setFormat(format)
@@ -243,7 +241,7 @@ val archive = tasks.register("archive") {
 android.applicationVariants.all {
     val variant = this
     val capitalized = variant.name.replaceFirstChar { it.uppercase() }
-    val variantDir = File(extraDir, variant.name)
+    val variantDir = extraDir.map { it.dir(variant.name) }
 
     variant.preBuildProvider.configure {
         dependsOn(archive)
@@ -252,18 +250,19 @@ android.applicationVariants.all {
     val moduleProp = tasks.register("moduleProp${capitalized}") {
         inputs.property("projectUrl", projectUrl)
         inputs.property("releaseMetadataBranch", releaseMetadataBranch)
+        inputs.property("rootProject.name", rootProject.name)
         inputs.property("variant.applicationId", variant.applicationId)
         inputs.property("variant.name", variant.name)
         inputs.property("variant.versionCode", variant.versionCode)
         inputs.property("variant.versionName", variant.versionName)
 
-        val outputFile = File(variantDir, "module.prop")
+        val outputFile = variantDir.map { it.file("module.prop") }
         outputs.file(outputFile)
 
         doLast {
             val props = LinkedHashMap<String, String>()
             props["id"] = variant.applicationId
-            props["name"] = "BCR"
+            props["name"] = rootProject.name
             props["version"] = "v${variant.versionName}"
             props["versionCode"] = variant.versionCode.toString()
             props["author"] = "chenxiaolong"
@@ -273,18 +272,19 @@ android.applicationVariants.all {
                 props["updateJson"] = "${projectUrl}/raw/${releaseMetadataBranch}/app/magisk/updates/${variant.name}/info.json"
             }
 
-            outputFile.writeText(props.map { "${it.key}=${it.value}" }.joinToString("\n"))
+            outputFile.get().asFile.writeText(
+                props.map { "${it.key}=${it.value}" }.joinToString("\n"))
         }
     }
 
     val permissionsXml = tasks.register("permissionsXml${capitalized}") {
         inputs.property("variant.applicationId", variant.applicationId)
 
-        val outputFile = File(variantDir, "privapp-permissions-${variant.applicationId}.xml")
+        val outputFile = variantDir.map { it.file("privapp-permissions-${variant.applicationId}.xml") }
         outputs.file(outputFile)
 
         doLast {
-            outputFile.writeText("""
+            outputFile.get().asFile.writeText("""
                 <?xml version="1.0" encoding="utf-8"?>
                 <permissions>
                     <privapp-permissions package="${variant.applicationId}">
@@ -302,7 +302,7 @@ android.applicationVariants.all {
         // To get output apk filename
         dependsOn.add(variant.assembleProvider)
 
-        val outputFile = File(variantDir, "51-${variant.applicationId}.sh")
+        val outputFile = variantDir.map { it.file("51-${variant.applicationId}.sh") }
         outputs.file(outputFile)
 
         val backupFiles = variant.outputs.map {
@@ -312,7 +312,7 @@ android.applicationVariants.all {
         )
 
         doLast {
-            outputFile.writeText("""
+            outputFile.get().asFile.writeText("""
                 #!/sbin/sh
                 # ADDOND_VERSION=2
 
@@ -332,11 +332,12 @@ android.applicationVariants.all {
     }
 
     tasks.register<Zip>("zip${capitalized}") {
+        inputs.property("rootProject.name", rootProject.name)
         inputs.property("variant.applicationId", variant.applicationId)
         inputs.property("variant.name", variant.name)
         inputs.property("variant.versionName", variant.versionName)
 
-        archiveFileName.set("BCR-${variant.versionName}-${variant.name}.zip")
+        archiveFileName.set("${rootProject.name}-${variant.versionName}-${variant.name}.zip")
         // Force instantiation of old value or else this will cause infinite recursion
         destinationDirectory.set(destinationDirectory.dir(variant.name).get())
 
@@ -377,6 +378,7 @@ android.applicationVariants.all {
     tasks.register("updateJson${capitalized}") {
         inputs.property("gitVersionTriple.first", gitVersionTriple.first)
         inputs.property("projectUrl", projectUrl)
+        inputs.property("rootProject.name", rootProject.name)
         inputs.property("variant.name", variant.name)
         inputs.property("variant.versionCode", variant.versionCode)
         inputs.property("variant.versionName", variant.versionName)
@@ -396,7 +398,7 @@ android.applicationVariants.all {
             val root = JSONObject()
             root.put("version", variant.versionName)
             root.put("versionCode", variant.versionCode)
-            root.put("zipUrl", "${projectUrl}/releases/download/${gitVersionTriple.first}/BCR-${variant.versionName}-release.zip")
+            root.put("zipUrl", "${projectUrl}/releases/download/${gitVersionTriple.first}/${rootProject.name}-${variant.versionName}-release.zip")
             root.put("changelog", "${projectUrl}/raw/${gitVersionTriple.first}/app/magisk/updates/${variant.name}/changelog.txt")
 
             jsonFile.writer().use {
