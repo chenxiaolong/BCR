@@ -70,6 +70,12 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
 
     * If installed via Magisk, the module can be updated right from Magisk Manager's modules tab. Flashing the new version in Magisk manually also works just as well.
     * The `.apk` can also be extracted from the zip and be directly installed. With this method, the old version exists as a system app and the new version exists as a user-installed update to the system app. This method is more convenient if BCR is baked into the Android firmware image.
+  
+## Call recording management
+
+As BCR aims to keep things as simple as possible it doesn't have the possibility of managing recorded calls (keeping a list, deleting or playing them directly) so you must rely on a file manager to do that.
+
+However, a nice developer made a companion app that does all of these features without having to resort to the cumbersome file manager method. If you would like to have this features, you can get the companion app here [BCR-GUI](https://github.com/nicorac/bcr-gui)
 
 ## Permissions
 
