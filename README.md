@@ -86,6 +86,7 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
   * A notification is required for running the call recording service in foreground mode or else Android will not allow access to the call audio stream.
 * `READ_CALL_LOG` (**optional**)
   * If allowed, the name as shown in the call log can be added to the output filename.
+  * This is also required to show the correct phone number when using call redirection apps.
 * `READ_CONTACTS` (**optional**)
   * If allowed, the contact name can be added to the output filename. It also allows auto-record rules to be set per contact.
 * `READ_PHONE_STATE` (**optional**)
@@ -98,6 +99,20 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
   * If vibration is enabled for BCR's notifications in Android's settings, BCR will perform the vibration. Android itself does not respect the vibration option when a phone call is active.
 
 Note that `INTERNET` is _not_ in the list. BCR does not and will never access the network. BCR will never communicate with other apps either, except if the user explicitly taps on the `Open` or `Share` buttons in the notification shown when a recording completes. In that scenario, the target app is granted access to that single recording only.
+
+## Call redirection
+
+BCR has limited support for call redirection apps, like Google Voice. Redirected calls can be recorded only if the call redirection service uses standard telephone calls behind the scenes (instead of VOIP).
+
+There are several limitations when recording redirected calls compared to regular calls:
+
+* The call must not be a conference call. Otherwise, the filename will only show the call redirection service's proxy phone number.
+* Auto-record rules will not work properly. Redirected calls will never match any rules for specified contacts and will only match the `All other calls` rule.
+* During the call, BCR's notification will only show the call redirection service's proxy phone number.
+* BCR must be granted the call logs permission.
+* The dialer app must put the original phone number into the system call log. The AOSP and Google dialer apps do, but other OEM dialer apps might not.
+
+These limitations exist because when a call is redirected, only the dialer app itself is aware of the original phone number. The Android telephony system is not aware of it. BCR can only find the original phone number by searching the system call log when the dialer adds the entry at the end of the call.
 
 ## Filename template
 
