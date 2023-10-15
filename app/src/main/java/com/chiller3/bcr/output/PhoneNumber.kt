@@ -6,7 +6,7 @@ import android.telephony.TelephonyManager
 import android.util.Log
 import java.util.Locale
 
-class PhoneNumber(private val number: String) {
+data class PhoneNumber(private val number: String) {
     fun format(context: Context, format: Format) = when (format) {
         Format.DIGITS_ONLY -> number.filter { Character.digit(it, 10) != -1 }
         Format.COUNTRY_SPECIFIC -> {

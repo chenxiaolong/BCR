@@ -40,6 +40,30 @@ class CallMetadataCollector(
         update(false)
     }
 
+    private fun getContactDisplayNameByNumber(number: PhoneNumber, allowManualLookup: Boolean): String? {
+        // This is disabled until the very last filename update because it's synchronous.
+        if (!allowManualLookup) {
+            Log.d(TAG, "Manual contact lookup is disabled for this invocation")
+            return null
+        }
+
+        if (context.checkSelfPermission(Manifest.permission.READ_CONTACTS) !=
+            PackageManager.PERMISSION_GRANTED) {
+            Log.w(TAG, "Permissions not granted for looking up contacts")
+            return null
+        }
+
+        Log.d(TAG, "Performing manual contact lookup")
+
+        for (contact in findContactsByPhoneNumber(context, number.toString())) {
+            Log.d(TAG, "Found contact display name via manual lookup")
+            return contact.displayName
+        }
+
+        Log.d(TAG, "Contact not found via manual lookup")
+        return null
+    }
+
     private fun getContactDisplayName(details: Call.Details, allowManualLookup: Boolean): String? {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val name = details.contactDisplayName
@@ -55,55 +79,35 @@ class CallMetadataCollector(
             Log.w(TAG, "Contact display name missing in conference child call")
         }
 
-        // This is disabled until the very last filename update because it's synchronous.
-        if (!allowManualLookup) {
-            Log.d(TAG, "Manual contact lookup is disabled for this invocation")
-            return null
-        }
-
-        if (context.checkSelfPermission(Manifest.permission.READ_CONTACTS) !=
-            PackageManager.PERMISSION_GRANTED) {
-            Log.w(TAG, "Permissions not granted for looking up contacts")
-            return null
-        }
-
-        Log.d(TAG, "Performing manual contact lookup")
-
         val number = details.phoneNumber
         if (number == null) {
             Log.w(TAG, "Cannot determine phone number from call")
             return null
         }
 
-        for (contact in findContactsByPhoneNumber(context, number.toString())) {
-            Log.d(TAG, "Found contact display name via manual lookup")
-            return contact.displayName
-        }
-
-        Log.d(TAG, "Contact not found via manual lookup")
-        return null
+        return getContactDisplayNameByNumber(number, allowManualLookup)
     }
 
-    private fun getCallLogCachedName(
+    private fun getCallLogDetails(
         parentDetails: Call.Details,
         allowBlockingCalls: Boolean,
-    ): String? {
+    ): Pair<PhoneNumber?, String?> {
         // This is disabled until the very last filename update because it's synchronous.
         if (!allowBlockingCalls) {
             Log.d(TAG, "Call log lookup is disabled for this invocation")
-            return null
+            return Pair(null, null)
         }
 
         if (context.checkSelfPermission(Manifest.permission.READ_CALL_LOG) !=
             PackageManager.PERMISSION_GRANTED) {
             Log.w(TAG, "Permissions not granted for looking up call log")
-            return null
+            return Pair(null, null)
         }
 
         // The call log does not show all participants in a conference call
         if (isConference) {
             Log.w(TAG, "Skipping call log lookup due to conference call")
-            return null
+            return Pair(null, null)
         }
 
         val uri = CallLog.Calls.CONTENT_URI.buildUpon()
@@ -113,6 +117,9 @@ class CallMetadataCollector(
         // System.nanoTime() is more likely to be monotonic than Instant.now()
         val start = System.nanoTime()
         var attempt = 1
+
+        var number: PhoneNumber? = null
+        var name: String? = null
 
         while (true) {
             val now = System.nanoTime()
@@ -124,7 +131,7 @@ class CallMetadataCollector(
 
             context.contentResolver.query(
                 uri,
-                arrayOf(CallLog.Calls.CACHED_NAME),
+                arrayOf(CallLog.Calls.CACHED_NAME, CallLog.Calls.NUMBER),
                 "${CallLog.Calls.DATE} = ?",
                 arrayOf(parentDetails.creationTimeMillis.toString()),
                 "${CallLog.Calls._ID} DESC",
@@ -132,27 +139,52 @@ class CallMetadataCollector(
                 if (cursor.moveToFirst()) {
                     Log.d(TAG, "${prefix}Found call log entry")
 
-                    val index = cursor.getColumnIndex(CallLog.Calls.CACHED_NAME)
-                    if (index != -1) {
-                        val name = cursor.getStringOrNull(index)
-                        if (name != null) {
-                            Log.d(TAG, "${prefix}Found call log cached name")
-                            return name
+                    if (number == null) {
+                        val index = cursor.getColumnIndex(CallLog.Calls.NUMBER)
+                        if (index != -1) {
+                            number = cursor.getStringOrNull(index)?.let {
+                                Log.d(TAG, "${prefix}Found call log phone number")
+                                PhoneNumber(it)
+                            }
+                        } else {
+                            Log.d(TAG, "${prefix}Call log entry has no phone number")
                         }
                     }
 
-                    Log.d(TAG, "${prefix}Call log entry has no cached name")
+                    if (name == null) {
+                        val index = cursor.getColumnIndex(CallLog.Calls.CACHED_NAME)
+                        if (index != -1) {
+                            name = cursor.getStringOrNull(index)?.let {
+                                Log.d(TAG, "${prefix}Found call log cached name")
+                                it
+                            }
+                        } else {
+                            Log.d(TAG, "${prefix}Call log entry has no cached name")
+                        }
+                    }
+
+                    Unit
                 } else {
                     Log.d(TAG, "${prefix}Call log entry not found")
                 }
             }
 
             attempt += 1
+
+            if (number != null && name != null) {
+                break
+            }
+
             Thread.sleep(CALL_LOG_QUERY_RETRY_DELAY_MILLIS)
         }
 
-        Log.d(TAG, "Call log cached name not found after all ${attempt - 1} attempts")
-        return null
+        if (number != null && name != null) {
+            Log.d(TAG, "Found all call log details after ${attempt - 1} attempts")
+        } else {
+            Log.d(TAG, "Incomplete call log details after all ${attempt - 1} attempts")
+        }
+
+        return Pair(number, name)
     }
 
     private fun computeMetadata(
@@ -197,13 +229,26 @@ class CallMetadataCollector(
             simSlot = subscriptionInfo.simSlotIndex + 1
         }
 
-        val callLogName = getCallLogCachedName(parentDetails, allowBlockingCalls)
+        val (callLogNumber, callLogName) = getCallLogDetails(parentDetails, allowBlockingCalls)
 
-        val calls = displayDetails.map {
+        var calls = displayDetails.map {
             CallPartyDetails(
                 it.phoneNumber,
                 it.callerDisplayName,
                 getContactDisplayName(it, allowBlockingCalls),
+            )
+        }
+
+        if (callLogNumber != null && !calls.any { it.phoneNumber == callLogNumber }) {
+            Log.w(TAG, "Call log phone number does not match any call handle")
+            Log.w(TAG, "Assuming call redirection and trusting call log instead")
+
+            calls = listOf(
+                CallPartyDetails(
+                    callLogNumber,
+                    null,
+                    getContactDisplayNameByNumber(callLogNumber, allowBlockingCalls),
+                )
             )
         }
 
