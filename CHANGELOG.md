@@ -9,6 +9,9 @@
 
 ### Unreleased
 
+* Add support for call redirection apps that use regular phone calls behind the scenes, like Google Voice ([Issue #433], [PR #444 @chenxiaolong])
+  * Please see [the documentation for this feature](./README.md#call-redirection) because there are many limitations.
+
 ### Version 1.53
 
 It's Android 14 release day! All previous versions of BCR should work on Android 14. This release is just the first one that targets API 34.
@@ -532,6 +535,7 @@ Non-user-facing changes:
 [Issue #394]: https://github.com/chenxiaolong/BCR/issues/394
 [Issue #422]: https://github.com/chenxiaolong/BCR/issues/422
 [Issue #429]: https://github.com/chenxiaolong/BCR/issues/429
+[Issue #433]: https://github.com/chenxiaolong/BCR/issues/433
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -737,3 +741,4 @@ Non-user-facing changes:
 [PR #424 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/424
 [PR #430 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/430
 [PR #434 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/434
+[PR #444 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/444
