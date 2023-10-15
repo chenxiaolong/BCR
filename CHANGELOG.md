@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.54
 
 * Add support for call redirection apps that use regular phone calls behind the scenes, like Google Voice ([Issue #433], [PR #444 @chenxiaolong])
   * Please see [the documentation for this feature](./README.md#call-redirection) because there are many limitations.
