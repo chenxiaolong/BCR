@@ -11,7 +11,7 @@ BCR is a simple Android call recording app for rooted devices or devices running
 
 ## Features
 
-* Supports Android 9 through 13
+* Supports Android 9 and newer
 * Supports output in various formats:
   * OGG/Opus - Lossy, smallest files, default on Android 10+
   * M4A/AAC - Lossy, smaller files, default on Android 9
