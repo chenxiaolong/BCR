@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update Russian translations ([PR #450 @rze0])
+
 ### Version 1.54
 
 * Add support for call redirection apps that use regular phone calls behind the scenes, like Google Voice ([Issue #433], [PR #444 @chenxiaolong])
@@ -744,3 +746,4 @@ Non-user-facing changes:
 [PR #430 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/430
 [PR #434 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/434
 [PR #444 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/444
+[PR #450 @rze0]: https://github.com/chenxiaolong/BCR/pull/450
