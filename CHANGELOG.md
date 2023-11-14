@@ -11,6 +11,7 @@
 
 * Update Russian translations ([PR #450 @rze0])
 * Update French translations ([PR #453 @NSO73])
+* Enable memory tagging extensions for ARMv9 devices ([PR #454 @chenxiaolong])
 
 ### Version 1.54
 
@@ -749,3 +750,4 @@ Non-user-facing changes:
 [PR #444 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/444
 [PR #450 @rze0]: https://github.com/chenxiaolong/BCR/pull/450
 [PR #453 @NSO73]: https://github.com/chenxiaolong/BCR/pull/453
+[PR #454 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/454
