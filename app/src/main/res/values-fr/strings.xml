@@ -54,7 +54,7 @@
         <item quantity="one">Garder %d jour</item>
         <item quantity="other">Garder %d jour</item>
     </plurals>
-    <string name="retention_unusable">La sauvegarde des fichiers est indisponible car le modèle du nom de fichier n'est pas valide.</string>
+    <string name="retention_unusable">La sauvegarde des fichiers est indisponible car le modèle du nom de fichier n\'est pas valide.</string>
 
     <!-- Output format bottom sheet -->
     <string name="output_format_bottom_sheet_output_format">Format des enregistrements</string>
@@ -69,7 +69,7 @@
     <string name="filename_template_dialog_title">Modèle du fichier</string>
     <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
     <string name="filename_template_dialog_message">Entrer un modèle personnalisé pour le nom des fichiers. Les variables sont spécifiées entre accolades (ex : <annotation type="template">{var}</annotation>). Les fallbacks sont spécifiés entre crochets (ex : <annotation type="template">[{contact_name}|Inconnu]</annotation>).\n\nVariables supportées : <annotation type="supported_vars">PLACEHOLDER</annotation>. Lire <annotation type="template_docs">la documentation</annotation> pour une description complète de la syntaxe.</string>
-    <string name="filename_template_dialog_warning_subdirectories">À cause des piètres performances du Framework Android Storage Access, utiliser des sous-dossiers (charactère <annotation type="template">/</annotation>) peut causer un délais lors de l'enregistrement sur certains mobiles. Le délais se ressent à la fin de l'appel mais ne cause aucun problème pour l\'enregistrement.</string>
+    <string name="filename_template_dialog_warning_subdirectories">À cause des piètres performances du Framework Android Storage Access, utiliser des sous-dossiers (charactère <annotation type="template">/</annotation>) peut causer un délais lors de l\'enregistrement sur certains mobiles. Le délais se ressent à la fin de l\'appel mais ne cause aucun problème pour l\'enregistrement.</string>
     <string name="filename_template_dialog_error_empty">Le modèle ne peut pas être vide</string>
     <string name="filename_template_dialog_error_unknown_variable">Variable inconnue : <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_has_argument">La variable ne peut pas avoir d\'argument : <annotation type="template">PLACEHOLDER</annotation></string>
