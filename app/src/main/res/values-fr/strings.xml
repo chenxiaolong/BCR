@@ -105,7 +105,7 @@
     <string name="notification_recording_failed">Échec de l\'enregistrement</string>
     <string name="notification_recording_succeeded">Enregistrement validé</string>
     <string name="notification_message_delete_at_end">L\'enregistrement sera supprimé à la fin de l\'appel. Toucher Restaurer pour garder le garder.</string>
-    <string name="notification_internal_android_error">L\'enregistrement a échoué du à un composant interne Android (%s). Ce mobile ou firmware ne semble pas compatible pour l'\enregistrement des appels.</string>
+    <string name="notification_internal_android_error">L\'enregistrement a échoué du à un composant interne Android (%s). Ce mobile ou firmware ne semble pas compatible pour l\'enregistrement des appels.</string>
     <string name="notification_action_open">Ouvrir</string>
     <string name="notification_action_share">Partager</string>
     <string name="notification_action_delete">Supprimer</string>
