@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update Russian translations ([PR #450 @rze0])
+* Update French translations ([PR #453 @NSO73])
 
 ### Version 1.54
 
@@ -747,3 +748,4 @@ Non-user-facing changes:
 [PR #434 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/434
 [PR #444 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/444
 [PR #450 @rze0]: https://github.com/chenxiaolong/BCR/pull/450
+[PR #453 @NSO73]: https://github.com/chenxiaolong/BCR/pull/453
