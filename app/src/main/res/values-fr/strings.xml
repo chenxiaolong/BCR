@@ -9,6 +9,9 @@
     <string name="pref_call_recording_name">Enregistrement d\'appel</string>
     <string name="pref_call_recording_desc">Enregistre les appels entrants et sortants. Les permissions microphone et notification sont nécessaires pour l\'enregistrement en arrière plan.</string>
 
+    <string name="pref_record_rules_name">Règles d\'auto-enregistrement</string>
+    <string name="pref_record_rules_desc">Configurer quels appels doivent être automatiquement enregistrés.</string>
+
     <string name="pref_output_dir_name">Dossier des enregistrements</string>
     <string name="pref_output_dir_desc">Choisir un dossier pour stocker les enregistrements.</string>
 
@@ -18,33 +21,101 @@
     <string name="pref_inhibit_batt_opt_name">Désactiver l\'optimisation de la batterie</string>
     <string name="pref_inhibit_batt_opt_desc">Réduit les chances que l\'application soit arrêtée par le système.</string>
 
+    <string name="pref_write_metadata_name">Écriture fichier metadata</string>
+    <string name="pref_write_metadata_desc">Créer un fichier JSON contenant les détails des appels avec le fichier audio.</string>
+
     <!-- About "preference" -->
     <string name="pref_version_name">Version</string>
 
+    <!-- Record rules bottom sheet -->
+    <string name="pref_header_rules">Règles</string>
+    <string name="pref_add_rule_name">Ajouter une règle</string>
+    <string name="pref_add_rule_desc">Ajouter une règle d\auto-enregistrement pour un contact.</string>
+    <string name="record_rules_rule_added">Règle ajoutée. Maintenir appuyé pour la supprimer.</string>
+    <string name="record_rules_rule_exists">Règle déja existante.</string>
+    <string name="record_rules_info">Quand une règle est active, l\'appel est automatiquement enregistré et peut être supprimé manuellement via la notification. Quand une règle est inactive, l\'enregistrement sera supprimé automatiquement à la fin de l\'appel et peut être restauré manuellement via la notification.</string>
+    <string name="record_rule_type_all_calls_name">Tous les appels</string>
+    <string name="record_rule_type_all_calls_desc">La permission contacts est requise pour les règles spécifiques.</string>
+    <string name="record_rule_type_all_other_calls_name">Autres appels</string>
+    <string name="record_rule_type_all_other_calls_desc">Appels définis par aucune règle.</string>
+    <string name="record_rule_type_unknown_calls_name">Appels inconnus</string>
+    <string name="record_rule_type_unknown_calls_desc">Appels ne correspondant à aucun contact.</string>
+    <string name="record_rule_type_contact_name">Contact: %s</string>
+    <string name="record_rule_type_contact_desc">Maintenir appuyé pour supprimer la règle.</string>
+
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Changer le dossier</string>
+    <string name="output_dir_bottom_sheet_filename_template">Modèle du nom de fichier</string>
+    <string name="output_dir_bottom_sheet_edit_template">Modifier le modèle</string>
     <string name="output_dir_bottom_sheet_file_retention">Conserver les fichiers</string>
+    <string name="output_dir_bottom_sheet_edit_retention">Modifier la durée des sauvegardes</string>
     <string name="retention_keep_all">Garder tout</string>
     <plurals name="retention_days">
         <item quantity="one">Garder %d jour</item>
-        <item quantity="many">Garder %d jours</item>
+        <item quantity="other">Garder %d jour</item>
     </plurals>
+    <string name="retention_unusable">La sauvegarde des fichiers est indisponible car le modèle du nom de fichier n\'est pas valide.</string>
 
     <!-- Output format bottom sheet -->
     <string name="output_format_bottom_sheet_output_format">Format des enregistrements</string>
     <string name="output_format_bottom_sheet_compression_level">Niveau de compression</string>
     <string name="output_format_bottom_sheet_bitrate">Débit binaire</string>
     <string name="output_format_bottom_sheet_sample_rate">Fréquence d\'échantillonnage</string>
+    <string name="output_format_bottom_sheet_custom_param">Personnalisé</string>
 
     <string name="bottom_sheet_reset">Remettre par défaut</string>
 
+    <!-- Filename template dialog -->
+    <string name="filename_template_dialog_title">Modèle du fichier</string>
+    <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
+    <string name="filename_template_dialog_message">Entrer un modèle personnalisé pour le nom des fichiers. Les variables sont spécifiées entre accolades (ex : <annotation type="template">{var}</annotation>). Les fallbacks sont spécifiés entre crochets (ex : <annotation type="template">[{contact_name}|Inconnu]</annotation>).\n\nVariables supportées : <annotation type="supported_vars">PLACEHOLDER</annotation>. Lire <annotation type="template_docs">la documentation</annotation> pour une description complète de la syntaxe.</string>
+    <string name="filename_template_dialog_warning_subdirectories">À cause des piètres performances du Framework Android Storage Access, utiliser des sous-dossiers (charactère <annotation type="template">/</annotation>) peut causer un délais lors de l\'enregistrement sur certains mobiles. Le délais se ressent à la fin de l\'appel mais ne cause aucun problème pour l\'enregistrement.</string>
+    <string name="filename_template_dialog_error_empty">Le modèle ne peut pas être vide</string>
+    <string name="filename_template_dialog_error_unknown_variable">Variable inconnue : <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">La variable ne peut pas avoir d\'argument : <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_argument">Argument de variable invalide : <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_syntax">La syntaxe du modèle est invalide</string>
+    <string name="filename_template_dialog_action_reset_to_default">Remettre par défaut</string>
+
+    <!-- File retention dialog -->
+    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_message">Entrer le nombre de jour pour garder les enregistrements.</string>
+    <string name="file_retention_error_too_large">Le nombre est trop grand</string>
+
+    <!-- Format parameter dialog -->
+    <string name="format_param_dialog_title">Paramètres personnalisés</string>
+    <string name="format_param_dialog_message">Entrer une valeur dans l\'intervalle [%1$s, %2$s].</string>
+
+    <!-- Format parameter -->
+    <string name="format_param_bitrate">%s kbps</string>
+    <string name="format_param_compression_level">Niveau %s</string>
+
     <!-- Notifications -->
-    <string name="notification_channel_persistent_name">Service d\'arrière-plan</string>
-    <string name="notification_channel_persistent_desc">Notification persistante pour l\'enregistrement en arrière-plan</string>
-    <string name="notification_channel_failure_desc">Alertes d\'erreurs pendant l\'enregistrement</string>
-    <string name="notification_recording_in_progress">Enregistrement d\'appel en cours</string>
-    <string name="notification_recording_failed">Enregistrement d\'appel échoué</string>
+    <string name="notification_channel_persistent_name">Service d\'arrière plan</string>
+    <string name="notification_channel_persistent_desc">Notification persistance pour l\'enregistrement des appels</string>
+    <string name="notification_channel_failure_name">Alertes d\'échec</string>
+    <string name="notification_channel_failure_desc">Alertes pour les erreurs pendant les enregistrements</string>
+    <string name="notification_channel_success_name">Alertes de réussite</string>
+    <string name="notification_channel_success_desc">Alertes pour les enregistrements réussis</string>
+    <string name="notification_recording_initializing">Enregistrement initialisé</string>
+    <string name="notification_recording_in_progress">Enregistrement en cours</string>
+    <string name="notification_recording_finalizing">Enregistrement finalisé</string>
+    <string name="notification_recording_paused">Enregistrement en pause</string>
+    <string name="notification_recording_on_hold">Enregistrement en attente</string>
+    <string name="notification_recording_failed">Échec de l\'enregistrement</string>
+    <string name="notification_recording_succeeded">Enregistrement validé</string>
+    <string name="notification_message_delete_at_end">L\'enregistrement sera supprimé à la fin de l\'appel. Toucher Restaurer pour garder le garder.</string>
+    <string name="notification_internal_android_error">L\'enregistrement a échoué du à un composant interne Android (%s). Ce mobile ou firmware ne semble pas compatible pour l\'enregistrement des appels.</string>
+    <string name="notification_action_open">Ouvrir</string>
+    <string name="notification_action_share">Partager</string>
+    <string name="notification_action_delete">Supprimer</string>
+    <string name="notification_action_restore">Restaurer</string>
+    <string name="notification_action_pause">Pause</string>
+    <string name="notification_action_resume">Reprendre</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Enregsitrement d\'appel</string>
+
+    <!-- Snackbar alerts -->
+    <string name="documentsui_not_found">Le gestionnaire de fichier Android (DocumentsUI) n\'est pas disponible.</string>
 </resources>
