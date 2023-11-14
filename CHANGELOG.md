@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.55
 
 * Update Russian translations ([PR #450 @rze0])
 * Update French translations ([PR #453 @NSO73])
