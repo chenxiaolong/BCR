@@ -9,8 +9,11 @@
     <string name="pref_call_recording_name">Nahrávanie hovorov</string>
     <string name="pref_call_recording_desc">Nahráva prichádzajúce a odchádzajúce hovory. Aby nahrávanie fungovalo na pozadí, je potrebné povoliť prístup k mikrofónu a upozorneniam.</string>
 
+    <string name="pref_record_rules_name">Pravidlá automatického nahrávania</string>
+    <string name="pref_record_rules_desc">Nastavenia určujúce, ktoré hovory budú nahrávané automaticky.</string>
+
     <string name="pref_output_dir_name">Priečinok s nahrávkami</string>
-    <string name="pref_output_dir_desc">Vyberte priečinok, kde sa budú ukladať nahrávky.</string>
+    <string name="pref_output_dir_desc">Vyberte priečinok, kde sa budú ukladať nahrávky. Pridržaním otvoríte v správcovi súborov.</string>
 
     <string name="pref_output_format_name">Formát súborov</string>
     <string name="pref_output_format_desc">Vyberte formát kódovania nahrávok.</string>
@@ -18,29 +21,75 @@
     <string name="pref_inhibit_batt_opt_name">Zakázať optimalizáciu batérie</string>
     <string name="pref_inhibit_batt_opt_desc">Znižuje ryziko ukončenia aplikácie systémom</string>
 
+    <string name="pref_write_metadata_name">Zapísať meta údaje do súboru</string>
+    <string name="pref_write_metadata_desc">V nastavenom priečinku vytvárať aj JSON súbor s podrobnosťami o nahratom hovore.</string>
+
     <!-- About "preference" -->
     <string name="pref_version_name">Verzia</string>
 
+    <!-- Record rules bottom sheet -->
+    <string name="pref_header_rules">Pravidlá</string>
+    <string name="pref_add_rule_name">Pridať pravidlo</string>
+    <string name="pref_add_rule_desc">Pravidlo automatického nahrávania pre kontakt.</string>
+    <string name="record_rules_rule_added">Pravidlo pridané. Vymažete dlhým stlačením.</string>
+    <string name="record_rules_rule_exists">Pravidlo už existuje.</string>
+    <string name="record_rules_info">    Keď je pravidlo aktívne, hovory sa budú nahrávať automaticky a nahrávku práve skončeného hovoru je možné vymazať z upozornenia. Keď pravidlo nie je aktívne, nahrávky budú vždy po ukončení hovoru vymazané, jedine, že si ich ponecháte klepnutím na tlačidlo Obnoviť v upozornení.</string>
+    <string name="record_rule_type_all_calls_name">Všetky hovory</string>
+    <string name="record_rule_type_all_calls_desc">Pre adresnejšie pravidlá je vyžadovaný prístup ku kontaktom.</string>
+    <string name="record_rule_type_all_other_calls_name">Všetky ostatné hovory</string>
+    <string name="record_rule_type_all_other_calls_desc">Hovory, na ktoré sa nevzťahujú ostatné pravidlá.</string>
+    <string name="record_rule_type_unknown_calls_name">Neznáme hovory</string>
+    <string name="record_rule_type_unknown_calls_desc">Hovory, ktorých číslo nemáte v kontaktoch.</string>
+    <string name="record_rule_type_contact_name">Kontakt: %s</string>
+    <string name="record_rule_type_contact_desc">Pravidlo odstránite dlhým stlačením.</string>
+
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Zmeniť priečinok</string>
+    <string name="output_dir_bottom_sheet_filename_template">Šablóna pre názov súboru</string>
+    <string name="output_dir_bottom_sheet_edit_template">Upraviť šablónu</string>
     <string name="output_dir_bottom_sheet_file_retention">Platnosť nahrávok</string>
     <string name="retention_keep_all">Ponechať všetky</string>
-    <!-- TODO: This translation fails the lint test because quantity="many" is missing (required for Slovak) -->
-    <!--
     <plurals name="retention_days">
         <item quantity="one">Ponechať %d deň</item>
         <item quantity="few">Ponechať %d dni</item>
+        <item quantity="many">Ponechať %d dní</item>
         <item quantity="other">Ponechať %d dní</item>
     </plurals>
-    -->
+    <string name="retention_unusable">Platnosť súboru nie je povolená, pretože šablóna pre názov súboru nie je kompatibilná.</string>
 
     <!-- Output format bottom sheet -->
     <string name="output_format_bottom_sheet_output_format">Formát súborov</string>
     <string name="output_format_bottom_sheet_compression_level">Úroveň kompresie</string>
     <string name="output_format_bottom_sheet_bitrate">Bitová rýchlosť</string>
     <string name="output_format_bottom_sheet_sample_rate">Rýchlosť vzorkovania</string>
+    <string name="output_format_bottom_sheet_custom_param">Vlastné</string>
 
     <string name="bottom_sheet_reset">Obnoviť predvolené</string>
+
+    <!-- Filename template dialog -->
+    <string name="filename_template_dialog_title">Šablóna pre názov súboru</string>
+    <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
+    <string name="filename_template_dialog_message">    Vložte vlastnú šablónu pre názov súboru. Premenné zadávajte v zložených zátvorkách (napr. <annotation type="template">{premenna}</annotation>). Náhrady zadávajte v hranatých zátvorkách (napr. <annotation type="template">[{contact_name}|Neznámy]</annotation>).\n\nPodporované premenné: <annotation type="supported_vars">PLACEHOLDER</annotation>. Celý popis syntaxe nájdete v <annotation type="template_docs">dokumentácii</annotation>.</string>
+    <string name="filename_template_dialog_warning_subdirectories">    Pre znížený výkon knižnice Storage Access Framework systému android používanie podpriečinkov (znak <annotation type="template">/</annotation>) môže na niektorých zariadeniach spôsobiť výrazné oneskorenie pri ukladaní nahrávok. Toto zdržanie sa prejaví až po ukončení hovoru a následkom by nemala byť strata zvuku v nahrávke.</string>
+    <string name="filename_template_dialog_error_empty">Šablóna nemôže byť prázdna</string>
+    <string name="filename_template_dialog_error_unknown_variable">Neznáma premenná šablóny: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">Premenná nepodporuje argumenty: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_argument">Neplatný argument premennej: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_syntax">Neplatná syntax šablóny</string>
+    <string name="filename_template_dialog_action_reset_to_default">Obnoviť pôvodnú</string>
+
+    <!-- File retention dialog -->
+    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_message">Zadajte počet dní, ako dlho si želáte ponechať nahrávky.</string>
+    <string name="file_retention_error_too_large">Číslo je príliš vysoké</string>
+
+    <!-- Format parameter dialog -->
+    <string name="format_param_dialog_title">Vlastné nastavenia</string>
+    <string name="format_param_dialog_message">Zadajte hodnotu z rozsahu [%1$s, %2$s].</string>
+
+    <!-- Format parameter -->
+    <string name="format_param_bitrate">%s kbps</string>
+    <string name="format_param_compression_level">Úroveň %s</string>
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Služby na pozadí</string>
@@ -49,17 +98,25 @@
     <string name="notification_channel_failure_desc">Upozornenia na chyby počas nahrávania</string>
     <string name="notification_channel_success_name">Úspešné upozornenia</string>
     <string name="notification_channel_success_desc">Upozornenia na úspešne dokončené nahrávky hovorov</string>
+    <string name="notification_recording_initializing">Inicializácia nahrávania hovoru</string>
     <string name="notification_recording_in_progress">Nahrávanie hovoru</string>
+    <string name="notification_recording_finalizing">Dokončenie nahrávania hovoru</string>
     <string name="notification_recording_paused">Nahrávanie hovoru pozastavené</string>
+    <string name="notification_recording_on_hold">Podržaný hovor</string>
     <string name="notification_recording_failed">Nahrávanie hovoru zlyhalo</string>
     <string name="notification_recording_succeeded">Hovor úspešne nahratý</string>
+    <string name="notification_message_delete_at_end">Nahrávka bude po ukončení hovoru vymazaná. Klepnutím na tlačidlo Obnoviť môžete nahrávku ponechať.</string>
     <string name="notification_internal_android_error">Nahrávanie zlyhalo: interný komponent systému Android (%s). Toto zariadenie pravdepodobne nepodporuje nahrávanie hovorov.</string>
     <string name="notification_action_open">Otvoriť</string>
     <string name="notification_action_share">Zdieľať</string>
     <string name="notification_action_delete">Vymazať</string>
+    <string name="notification_action_restore">Obnoviť</string>
     <string name="notification_action_pause">Pozastaviť</string>
     <string name="notification_action_resume">Pokračovať</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Nahrávanie hovorov</string>
+
+    <!-- Snackbar alerts -->
+    <string name="documentsui_not_found">Správca súborov systému Android (DocumentsUI) nie je k dispozícii.</string>
 </resources>
