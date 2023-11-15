@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update Slovak translations ([PR #456 @pvagner])
+
 ### Version 1.55
 
 * Update Russian translations ([PR #450 @rze0])
@@ -753,3 +755,4 @@ Non-user-facing changes:
 [PR #450 @rze0]: https://github.com/chenxiaolong/BCR/pull/450
 [PR #453 @NSO73]: https://github.com/chenxiaolong/BCR/pull/453
 [PR #454 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/454
+[PR #456 @pvagner]: https://github.com/chenxiaolong/BCR/pull/456
