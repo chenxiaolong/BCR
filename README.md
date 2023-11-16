@@ -3,6 +3,7 @@
 <img src="app/images/icon.svg" alt="app icon" width="72" />
 
 ![latest release badge](https://img.shields.io/github/v/release/chenxiaolong/BCR?sort=semver)
+![total-download-count](https://img.shields.io/github/downloads/chenxiaolong/BCR/total?color=brightgreen)
 ![license badge](https://img.shields.io/github/license/chenxiaolong/BCR)
 
 BCR is a simple Android call recording app for rooted devices or devices running custom firmware. Once enabled, it stays out of the way and automatically records incoming and outgoing calls in the background.
