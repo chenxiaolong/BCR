@@ -24,6 +24,7 @@ BCR is a simple Android call recording app for rooted devices or devices running
 * No persistent notification unless a recording is in progress
 * No network access permission
 * Works with call screening on Pixel devices (records the caller, but not the automated system)
+* Supports both Magisk and KernelSU 
 
 ## Non-features
 
@@ -41,7 +42,7 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
 
 2. Install BCR as a system app.
 
-    * **For devices rooted with Magisk**, simply flash the zip as a Magisk module from within the Magisk app.
+    * **For devices rooted with Magisk/KernelSU**, simply flash the zip as a Magisk/KernelSU module from within the respective application.
         * **For OnePlus and Realme devices running the stock firmware (or custom firmware based on the stock firmware)**, also extract the `.apk` from the zip and install it manually before rebooting. This is necessary to work around a bug in the firmware where the app data directory does not get created, causing BCR to open up to a blank screen.
 
     * **For unrooted custom firmware**, flash the zip while booted into recovery.
