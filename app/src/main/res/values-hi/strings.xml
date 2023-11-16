@@ -1,0 +1,121 @@
+<resources>
+    <string name="app_name_full">Basic Call Recorder</string>
+
+    <!-- Preference headers -->
+    <string name="pref_header_general">सामान्य</string>
+    <string name="pref_header_about">के बारे में</string>
+
+    <!-- General preferences -->
+    <string name="pref_call_recording_name">कॉल रिकॉर्डिंग</string>
+    <string name="pref_call_recording_desc">इनकमिंग और आउटगोइंग फ़ोन कॉल रिकॉर्ड करें. पृष्ठभूमि में रिकॉर्डिंग के लिए माइक्रोफ़ोन और अधिसूचना अनुमतियाँ आवश्यक हैं।</string>
+
+    <string name="pref_record_rules_name">ऑटो-रिकॉर्ड नियम</string>
+    <string name="pref_record_rules_desc">कॉन्फ़िगर करें कि कौन सी कॉल स्वचालित रूप से रिकॉर्ड की जानी चाहिए।</string>
+
+    <string name="pref_output_dir_name">उत्पादन निर्देशिका</string>
+    <string name="pref_output_dir_desc">रिकॉर्डिंग संग्रहीत करने के लिए एक निर्देशिका चुनें। फ़ाइल मैनेजर में खोलने के लिए देर तक दबाएँ।</string>
+
+    <string name="pref_output_format_name">आउटपुट स्वरूप</string>
+    <string name="pref_output_format_desc">रिकॉर्डिंग के लिए एक एन्कोडिंग प्रारूप चुनें।</string>
+
+    <string name="pref_inhibit_batt_opt_name">बैटरी अनुकूलन अक्षम करें</string>
+    <string name="pref_inhibit_batt_opt_desc">सिस्टम द्वारा ऐप के बंद होने की संभावना कम हो जाती है।</string>
+
+    <string name="pref_write_metadata_name">मेटाडेटा फ़ाइल लिखें</string>
+    <string name="pref_write_metadata_desc">ऑडियो फ़ाइल के बगल में कॉल के बारे में विवरण वाली एक JSON फ़ाइल बनाएं।</string>
+
+    <!-- About "preference" -->
+    <string name="pref_version_name">वर्जन:</string>
+
+    <!-- Record rules bottom sheet -->
+    <string name="pref_header_rules">नियम</string>
+    <string name="pref_add_rule_name">नियम जोड़ें</string>
+    <string name="pref_add_rule_desc">किसी संपर्क के लिए ऑटो-रिकॉर्ड नियम जोड़ें।</string>
+    <string name="record_rules_rule_added">नया नियम जोड़ा गया। नियम को हटाने के लिए उसे देर तक दबाएँ।</string>
+    <string name="record_rules_rule_exists">नियम पहले से मौजूद है।</string>
+    <string name="record_rules_info">जब कोई नियम चालू होता है, तो कॉल डिफ़ॉल्ट रूप से स्वचालित रूप से रिकॉर्ड हो जाती है और अधिसूचना से मैन्युअल रूप से हटाया जा सकता है। जब कोई नियम बंद कर दिया जाता है, तो कॉल के अंत में रिकॉर्डिंग हटा दी जाएगी जब तक कि इसे अधिसूचना में पुनर्स्थापना बटन का उपयोग करके संरक्षित नहीं किया जाता है।</string>
+    <string name="record_rule_type_all_calls_name">तमाम कॉल्स</string>
+    <string name="record_rule_type_all_calls_desc">अधिक विस्तृत नियमों के लिए संपर्क अनुमति आवश्यक है।</string>
+    <string name="record_rule_type_all_other_calls_name">अन्य सभी कॉल</string>
+    <string name="record_rule_type_all_other_calls_desc">ऐसी कॉलें जो किसी अन्य नियम से मेल नहीं खातीं।</string>
+    <string name="record_rule_type_unknown_calls_name">अज्ञात कॉल</string>
+    <string name="record_rule_type_unknown_calls_desc">ऐसी कॉलें जो किसी भी संपर्क से मेल नहीं खातीं।</string>
+    <string name="record_rule_type_contact_name">संपर्क: %s</string>
+    <string name="record_rule_type_contact_desc">नियम हटाने के लिए देर तक दबाएँ।</string>
+
+    <!-- Output directory bottom sheet -->
+    <string name="output_dir_bottom_sheet_change_dir">निर्देशिका बदलें</string>
+    <string name="output_dir_bottom_sheet_filename_template">फ़ाइल नाम टेम्पलेट</string>
+    <string name="output_dir_bottom_sheet_edit_template">टेम्पलेट संपादित करें</string>
+    <string name="output_dir_bottom_sheet_file_retention">फ़ाइल प्रतिधारण</string>
+    <string name="output_dir_bottom_sheet_edit_retention">प्रतिधारण संपादित करें</string>
+    <string name="retention_keep_all">सभी रखना</string>
+    <plurals name="retention_days">
+        <item quantity="one">%d दिन रखें</item>
+        <item quantity="other">%d दिन रखें</item>
+    </plurals>
+    <string name="retention_unusable">फ़ाइल प्रतिधारण अक्षम है क्योंकि वर्तमान फ़ाइल नाम टेम्पलेट सुविधा के साथ असंगत है।</string>
+
+    <!-- Output format bottom sheet -->
+    <string name="output_format_bottom_sheet_output_format">आउटपुट स्वरूप</string>
+    <string name="output_format_bottom_sheet_compression_level">संपीड़न स्तर</string>
+    <string name="output_format_bottom_sheet_bitrate">बिटरेट</string>
+    <string name="output_format_bottom_sheet_sample_rate">नमूना दर</string>
+    <string name="output_format_bottom_sheet_custom_param">कस्टम</string>
+
+    <string name="bottom_sheet_reset">डिफ़ॉल्ट पर पुनः सेट करें</string>
+
+    <!-- Filename template dialog -->
+    <string name="filename_template_dialog_title">फ़ाइल नाम टेम्पलेट</string>
+    <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
+    <string name="filename_template_dialog_message">आउटपुट फ़ाइल नाम के लिए एक कस्टम टेम्पलेट दर्ज करें। चर घुंघराले ब्रेसिज़ के साथ निर्दिष्ट किए गए हैं (eg. <annotation type="template">{var}</annotation>)। फ़ॉलबैक को वर्गाकार कोष्ठक के साथ निर्दिष्ट किया गया है (eg. <annotation type="template">[{contact_name}|Unknown]</annotation>)।\n\nSupported variables: <annotation type="supported_vars">PLACEHOLDER</annotation>। सिंटैक्स के संपूर्ण विवरण के लिए <annotation type='template_docs'>दस्तावेज़ीकरण</annotation> देखें।</string>
+    <string name="filename_template_dialog_warning_subdirectories">एंड्रॉइड स्टोरेज एक्सेस फ्रेमवर्क के खराब प्रदर्शन के कारण, उपनिर्देशिकाओं का उपयोग किया जा रहा है (<annotation type="template">/</annotation> character) कुछ डिवाइस पर रिकॉर्डिंग सहेजते समय महत्वपूर्ण विलंब हो सकता है। देरी कॉल के अंत में होती है और इसके परिणामस्वरूप कॉल ऑडियो का कोई नुकसान नहीं होना चाहिए।</string>
+    <string name="filename_template_dialog_error_empty">टेम्प्लेट खाली नहीं हो सकता</string>
+    <string name="filename_template_dialog_error_unknown_variable">अज्ञात टेम्पलेट वैरिएबल: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">वेरिएबल में कोई तर्क नहीं हो सकता: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_argument">अमान्य चर तर्क: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_syntax">टेम्प्लेट सिंटैक्स अमान्य है</string>
+    <string name="filename_template_dialog_action_reset_to_default">डिफ़ॉल्ट पर पुनः सेट करें</string>
+
+    <!-- File retention dialog -->
+    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_message">रिकॉर्डिंग रखने के लिए दिनों की संख्या दर्ज करें।</string>
+    <string name="file_retention_error_too_large">संख्या बहुत बड़ी है</string>
+
+    <!-- Format parameter dialog -->
+    <string name="format_param_dialog_title">कस्टम पैरामीटर</string>
+    <string name="format_param_dialog_message">[%1$s, %2$s] श्रेणी में एक मान दर्ज करें।</string>
+
+    <!-- Format parameter -->
+    <string name="format_param_bitrate">%s kbps</string>
+    <string name="format_param_compression_level">लेवल %s</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_persistent_name">बैकग्राउंड सेवाएँ</string>
+    <string name="notification_channel_persistent_desc">बैकग्राउंड कॉल रिकॉर्डिंग के लिए लगातार अधिसूचना</string>
+    <string name="notification_channel_failure_name">विफलता अलर्ट</string>
+    <string name="notification_channel_failure_desc">कॉल रिकॉर्डिंग के दौरान त्रुटियों के लिए अलर्ट</string>
+    <string name="notification_channel_success_name">सफलता सचेतक</string>
+    <string name="notification_channel_success_desc">सफल कॉल रिकॉर्डिंग के लिए अलर्ट</string>
+    <string name="notification_recording_initializing">कॉल रिकॉर्डिंग प्रारंभ हो रही है</string>
+    <string name="notification_recording_in_progress">कॉल रिकॉर्डिंग चल रही है</string>
+    <string name="notification_recording_finalizing">कॉल रिकॉर्डिंग को अंतिम रूप दिया जा रहा है</string>
+    <string name="notification_recording_paused">कॉल रिकॉर्डिंग रोक दी गई</string>
+    <string name="notification_recording_on_hold">होल्ड पर कॉल करें</string>
+    <string name="notification_recording_failed">कॉल रिकॉर्ड करने में विफल</string>
+    <string name="notification_recording_succeeded">कॉल सफलतापूर्वक रिकॉर्ड की गई</string>
+    <string name="notification_message_delete_at_end">कॉल के अंत में रिकॉर्डिंग हटा दी जाएगी. रिकॉर्डिंग रखने के लिए रीस्टोर पर टैप करें।</string>
+    <string name="notification_internal_android_error">आंतरिक एंड्रॉइड घटक (%s) में रिकॉर्डिंग विफल रही। यह डिवाइस या फ़र्मवेयर कॉल रिकॉर्डिंग का समर्थन नहीं कर सकता है।</string>
+    <string name="notification_action_open">खुला</string>
+    <string name="notification_action_share">शेयर करना</string>
+    <string name="notification_action_delete">मिटाना</string>
+    <string name="notification_action_restore">पुनर्स्थापित करना</string>
+    <string name="notification_action_pause">विराम</string>
+    <string name="notification_action_resume">फिर शुरू करना</string>
+
+    <!-- Quick settings tile -->
+    <string name="quick_settings_label">कॉल रिकॉर्डिंग</string>
+
+    <!-- Snackbar alerts -->
+    <string name="documentsui_not_found">Android का अंतर्निहित फ़ाइल प्रबंधक (DocumentsUI) अनुपलब्ध है।</string>
+</resources>
