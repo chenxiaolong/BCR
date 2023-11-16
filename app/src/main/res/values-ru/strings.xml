@@ -12,7 +12,7 @@
     <string name="pref_record_rules_name">Правила автоматической записи</string>
     <string name="pref_record_rules_desc">Настройте, какие звонки должны автоматически записываться.</string>
 
-    <string name="pref_output_dir_name">Папка для сохранения</string>
+    <string name="pref_output_dir_name">Папка для хранения</string>
     <string name="pref_output_dir_desc">Выберите папку, в которой будут храниться записи. Нажмите и удерживайте для открытия в файловом менеджере.</string>
 
     <string name="pref_output_format_name">Формат записи</string>
@@ -21,7 +21,7 @@
     <string name="pref_inhibit_batt_opt_name">Отключить оптимизацию батареи.</string>
     <string name="pref_inhibit_batt_opt_desc">Снижает вероятность того, что приложение будет остановлено системой.</string>
 
-    <string name="pref_write_metadata_name">Записать файл с метаданными</string>
+    <string name="pref_write_metadata_name">Сохранить файл с метаданными</string>
     <string name="pref_write_metadata_desc">В отдельный JSON файл будут записаны подробные данные о звонке.</string>
 
     <!-- About "preference" -->
