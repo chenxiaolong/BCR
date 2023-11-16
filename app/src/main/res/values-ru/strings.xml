@@ -44,11 +44,11 @@
     <string name="record_rule_type_contact_desc">Нажмите и удерживайте для удаления правила.</string>
 
     <!-- Output directory bottom sheet -->
-    <string name="output_dir_bottom_sheet_change_dir">Сменить папку</string>
+    <string name="output_dir_bottom_sheet_change_dir">Изменить папку</string>
     <string name="output_dir_bottom_sheet_filename_template">Шаблон имени файла</string>
     <string name="output_dir_bottom_sheet_edit_template">Редактировать шаблон</string>
     <string name="output_dir_bottom_sheet_file_retention">Хранение файлов</string>
-    <string name="output_dir_bottom_sheet_edit_retention">Сменить срок хранения</string>
+    <string name="output_dir_bottom_sheet_edit_retention">Изменить срок хранения</string>
     <string name="retention_keep_all">Сохранить все</string>
     <plurals name="retention_days">
         <item quantity="one">Хранить %d день</item>
