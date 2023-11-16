@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update Slovak translations ([PR #456 @pvagner])
+* Update all dependencies ([PR #457 @PatrykMis])
 
 ### Version 1.55
 
