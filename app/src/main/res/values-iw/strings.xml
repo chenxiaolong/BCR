@@ -51,12 +51,12 @@
     <string name="output_dir_bottom_sheet_edit_retention">עריכת שמירה</string>
     <string name="retention_keep_all">שמור הכול</string>
     <plurals name="retention_days">
-        <item quantity="one">לשמור %d יום</item>
-        <item quantity="other">לשמור %d ימים</item>
+    <item quantity="one">לשמור %d יום</item>
+    <item quantity="other">לשמור %d ימים</item>
     </plurals>
     <string name="retention_unusable">שמירת קבצים אינה זמינה מכיוון שתבנית שם הקובץ הנוכחית אינה תואמת לתכונה.</string>
 
-        Output format bottom sheet -->
+    <!-- Output format bottom sheet -->
     <string name="output_format_bottom_sheet_output_format">פורמט הקובץ</string>
     <string name="output_format_bottom_sheet_compression_level">רמת דחיסה</string>
     <string name="output_format_bottom_sheet_bitrate">קצב סיביות</string>
