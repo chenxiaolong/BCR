@@ -1,38 +1,48 @@
 <resources>
     <string name="app_name_full">Basic Call Recorder</string>
+
     <!-- Preference headers -->
     <string name="pref_header_general">Основное</string>
     <string name="pref_header_about">Информация</string>
+
     <!-- General preferences -->
-    <string name="pref_record_rules_name">Правила автоматической записи</string>
-    <string name="pref_record_rules_desc">Настройте, какие вызовы должны автоматически записываться.</string>
     <string name="pref_call_recording_name">Запись звонков</string>
     <string name="pref_call_recording_desc">Запись входящих и исходящих телефонных звонков. Для записи в фоновом режиме требуются разрешения на использование микрофона и уведомлений.</string>
-    <string name="pref_output_dir_name">Папка для сохранения</string>
-    <string name="pref_output_dir_desc">Выберите папку, в которой будут храниться записи.</string>
-    <string name="pref_output_format_name">Выходной формат</string>
-    <string name="pref_output_format_desc">Выберите формат кодирования записей.</string>
-    <string name="pref_inhibit_batt_opt_name">Отключить оптимизацию батареи</string>
+
+    <string name="pref_record_rules_name">Правила автоматической записи</string>
+    <string name="pref_record_rules_desc">Настройте, какие звонки должны автоматически записываться.</string>
+
+    <string name="pref_output_dir_name">Папка для хранения</string>
+    <string name="pref_output_dir_desc">Выберите папку, в которой будут храниться записи. Нажмите и удерживайте для открытия в файловом менеджере.</string>
+
+    <string name="pref_output_format_name">Формат записи</string>
+    <string name="pref_output_format_desc">Выберите формат записи для звонков.</string>
+
+    <string name="pref_inhibit_batt_opt_name">Отключить оптимизацию батареи.</string>
     <string name="pref_inhibit_batt_opt_desc">Снижает вероятность того, что приложение будет остановлено системой.</string>
-    <string name="pref_write_metadata_name">Записать файл метаданных</string>
-    <string name="pref_write_metadata_desc">Создать файл JSON рядом с аудиофайлом, содержащий сведения о вызове.</string>
+
+    <string name="pref_write_metadata_name">Сохранить файл с метаданными</string>
+    <string name="pref_write_metadata_desc">В отдельный JSON файл будут записаны подробные данные о звонке.</string>
+
     <!-- About "preference" -->
     <string name="pref_version_name">Версия</string>
+
     <!-- Record rules bottom sheet -->
     <string name="pref_header_rules">Правила</string>
     <string name="pref_add_rule_name">Добавить правило</string>
     <string name="pref_add_rule_desc">Добавить правило автоматической записи для контакта.</string>
     <string name="record_rules_rule_added">Добавлено новое правило. Нажмите и удерживайте правило, чтобы удалить его.</string>
     <string name="record_rules_rule_exists">Правило уже существует.</string>
-    <string name="record_rules_info">Если правило включено, то по умолчанию запись разговора ведется автоматически и может быть удалена вручную из уведомления. Если правило выключено, запись будет удалена по окончании разговора, если она не будет сохранена с помощью кнопки "Восстановить" в уведомлении.</string>
+    <string name="record_rules_info">Если правило включено, то по умолчанию запись разговора ведется автоматически и может быть удалена вручную из уведомления. Если правило выключено, запись будет удалена по окончании разговора, если она не была сохранена с помощью кнопки "Восстановить" в уведомлении.</string>
     <string name="record_rule_type_all_calls_name">Все звонки</string>
-    <string name="record_rule_type_all_calls_desc">Для более детальных правил требуется разрешение контактов.</string>
-    <string name="record_rule_type_all_other_calls_name">Все остальные вызовы</string>
-    <string name="record_rule_type_all_other_calls_desc">Вызовы, не соответствующие никакому другому правилу.</string>
-    <string name="record_rule_type_unknown_calls_name">Неизвестные вызовы</string>
+    <string name="record_rule_type_all_calls_desc">Требуется разрешение на чтение контактов для более тонкой настройки правил.</string>
+    <string name="record_rule_type_all_other_calls_name">Все остальные звонки</string>
+    <string name="record_rule_type_all_other_calls_desc">Звонки, не соответствующие никакому другому правилу.</string>
+    <string name="record_rule_type_unknown_calls_name">Звонки от неизвестных</string>
     <string name="record_rule_type_unknown_calls_desc">Звонки, которые не соответствуют ни одному контакту.</string>
     <string name="record_rule_type_contact_name">Контакт: %s</string>
-    <string name="record_rule_type_contact_desc">Длительное нажатие для удаления правила.</string>
+    <string name="record_rule_type_contact_desc">Нажмите и удерживайте для удаления правила.</string>
+
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Изменить папку</string>
     <string name="output_dir_bottom_sheet_filename_template">Шаблон имени файла</string>
@@ -41,63 +51,72 @@
     <string name="output_dir_bottom_sheet_edit_retention">Изменить срок хранения</string>
     <string name="retention_keep_all">Сохранить все</string>
     <plurals name="retention_days">
-        <item quantity="one">Держите %d день</item>
-        <item quantity="few">Держите %d дня</item>
-        <item quantity="many">Держите %d дней</item>
+        <item quantity="one">Хранить %d день</item>
+        <item quantity="few">Хранить %d дня</item>
+        <item quantity="many">Хранить %d дней</item>
     </plurals>
     <string name="retention_unusable">Хранение файлов отключено, так как текущий шаблон имени файла несовместим с этой функцией.</string>
+
     <!-- Output format bottom sheet -->
-    <string name="output_format_bottom_sheet_output_format">Выходной формат</string>
+    <string name="output_format_bottom_sheet_output_format">Формат записи</string>
     <string name="output_format_bottom_sheet_compression_level">Уровень сжатия</string>
     <string name="output_format_bottom_sheet_bitrate">Битрейт</string>
     <string name="output_format_bottom_sheet_sample_rate">Частота дискретизации</string>
     <string name="output_format_bottom_sheet_custom_param">Пользовательский</string>
+
     <string name="bottom_sheet_reset">Восстановить параметры по умолчанию</string>
+
     <!-- Filename template dialog -->
-    <string name="filename_template_dialog_title">@string/output_dir_bottom_sheet_filename_template</string>
+    <string name="filename_template_dialog_title">Шаблон имени файла</string>
     <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
-    <string name="filename_template_dialog_message">Введите пользовательский шаблон для имени выходного файла. Переменные указываются фигурными скобками (например, <annotation type="template">{var}</annotation>). Резервные варианты указываются в квадратных скобках (например, <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nПоддерживаемые переменные: <annotation type="supported_vars">PLACEHOLDER</annotation>. Смотри <annotation type="template_docs">документацию</annotation> для полного описания синтаксиса.</string>
-    <string name="filename_template_dialog_warning_subdirectories">Из-за низкой производительности Android Storage Access Framework использование подкаталогов (<annotation type="template">/</annotation>) может привести к значительным задержкам при сохранении записи на некоторых устройствах. Задержка возникает в конце вызова и не должна приводить к потере звука вызова.</string>
+    <string name="filename_template_dialog_message">Введите пользовательский шаблон для файла записи. Переменные указываются в фигурных скобках (например, <annotation type="template">{var}</annotation>). Резервные варианты указываются в квадратных скобках (например, <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nПоддерживаемые переменные: <annotation type="supported_vars">PLACEHOLDER</annotation>. Смотрите <annotation type="template_docs">документацию</annotation> для полного описания синтаксиса.</string>
+    <string name="filename_template_dialog_warning_subdirectories">Из-за низкой производительности Android Storage Access Framework использование подкаталогов (<annotation type="template">/</annotation>) может привести к значительным задержкам при сохранении записи на некоторых устройствах. Задержка возникает в конце звонка и не должна приводить к потере звука в записи звонка.</string>
     <string name="filename_template_dialog_error_empty">Шаблон не может быть пустым</string>
-    <string name="filename_template_dialog_error_unknown_variable">Неизвестная переменная для шаблона: <annotation type="template">PLACEHOLDER</annotation></string>
-    <string name="filename_template_dialog_error_has_argument">Переменная не может иметь аргумент: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_unknown_variable">Неизвестная переменная шаблона: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">Переменная не может содержать аргумент: <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_invalid_argument">Недопустимый аргумент переменной: <annotation type="template">PLACEHOLDER</annotation></string>
-    <string name="filename_template_dialog_error_invalid_syntax">Недопустимый синтаксис шаблона</string>
+    <string name="filename_template_dialog_error_invalid_syntax">Недопустимый индекс шаблона</string>
     <string name="filename_template_dialog_action_reset_to_default">Сброс к настройкам по умолчанию</string>
+
     <!-- File retention dialog -->
     <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
     <string name="file_retention_dialog_message">Введите количество дней для хранения записей.</string>
-    <string name="file_retention_error_too_large">Номер слишком большой</string>
+    <string name="file_retention_error_too_large">Слишком большое число</string>
+
     <!-- Format parameter dialog -->
     <string name="format_param_dialog_title">Пользовательский параметр</string>
     <string name="format_param_dialog_message">Введите значение в диапазоне [%1$s, %2$s].</string>
+
     <!-- Format parameter -->
     <string name="format_param_bitrate">%s kbps</string>
     <string name="format_param_compression_level">Уровень %s</string>
+
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Фоновые сервисы</string>
-    <string name="notification_channel_persistent_desc">Постоянное уведомление о записи разговоров в фоновом режиме</string>
-    <string name="notification_recording_in_progress">Происходит запись разговора</string>
-    <string name="notification_recording_finalizing">Завершение записи разговора</string>
-    <string name="notification_channel_failure_desc">Оповещение об ошибках во время записи разговора</string>
-    <string name="notification_recording_failed">Не удалось записать разговор</string>
+    <string name="notification_channel_persistent_desc">Постоянное уведомление о записи звонков в фоновом режиме</string>
+    <string name="notification_channel_failure_name">Предупреждения о сбоях</string>
+    <string name="notification_channel_failure_desc">Предупреждения о сбоях при записи звонков.</string>
+    <string name="notification_channel_success_name">Оповещение об успешном выполнении</string>
+    <string name="notification_channel_success_desc">Оповещение об успешной записи звонка</string>
+    <string name="notification_recording_initializing">Инициализация записи звонка</string>
+    <string name="notification_recording_in_progress">Ведется запись звонка</string>
+    <string name="notification_recording_finalizing">Завершение записи зврека</string>
+    <string name="notification_recording_paused">Запись звонка приостановлена</string>
+    <string name="notification_recording_on_hold">Звонок на удержании</string>
+    <string name="notification_recording_failed">Не удалось записать звонок</string>
+    <string name="notification_recording_succeeded">Звонок успешно записан</string>
+    <string name="notification_message_delete_at_end">Запись звонка будет удалена по окончанию разговора. Нажмите «Восстановить», чтобы сохранить запись.</string>
+    <string name="notification_internal_android_error">Сбой записи во внутреннем компоненте Android (%s). Ваше устройство или прошивка может не поддерживать запись звонков.</string>
     <string name="notification_action_open">Открыть</string>
     <string name="notification_action_share">Поделиться</string>
     <string name="notification_action_delete">Удалить</string>
-    <string name="notification_channel_failure_name">Предупреждение о сбое</string>
-    <string name="notification_channel_success_name">Оповещение об успешном выполнении</string>
-    <string name="notification_channel_success_desc">Оповещение об успешной записи разговора</string>
-    <string name="notification_recording_initializing">Инициализация записи разговоров</string>
-    <string name="notification_recording_paused">Запись разговора приостановлена</string>
-    <string name="notification_recording_on_hold">Запись разговора на удержании</string>
-    <string name="notification_recording_succeeded">Успешно записан разговор</string>
-    <string name="notification_message_delete_at_end">По окончании разговора запись будет удалена. Нажмите «Восстановить», чтобы сохранить запись.</string>
     <string name="notification_action_restore">Восстановить</string>
-    <string name="notification_internal_android_error">Сбой записи во внутреннем компоненте Android (%s). Это устройство или прошивка может не поддерживает запись вызовов.</string>
     <string name="notification_action_pause">Пауза</string>
     <string name="notification_action_resume">Возобновить</string>
+
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Запись звонков</string>
+
     <!-- Snackbar alerts -->
     <string name="documentsui_not_found">Встроенный файловый менеджер Android (DocumentsUI) недоступен.</string>
 </resources>
