@@ -123,6 +123,7 @@ android {
             "en",
             "es",
             "fr",
+            "hi",
             "iw",
             "pl",
             "ru",
