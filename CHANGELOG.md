@@ -12,6 +12,7 @@
 * Update Slovak translations ([PR #456 @pvagner])
 * Update all dependencies ([PR #457 @PatrykMis])
 * Update Russian translations ([PR #458 @groozchique])
+* Add Hindi translations and improve documentation ([PR #459 @y0geshx])
 
 ### Version 1.55
 
@@ -760,3 +761,4 @@ Non-user-facing changes:
 [PR #456 @pvagner]: https://github.com/chenxiaolong/BCR/pull/456
 [PR #457 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/457
 [PR #458 @groozchique]: https://github.com/chenxiaolong/BCR/pull/458
+[PR #459 @y0geshx]: https://github.com/chenxiaolong/BCR/pull/459
