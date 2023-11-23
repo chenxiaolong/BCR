@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.56
 
 * Update Slovak translations ([PR #456 @pvagner])
 * Update all dependencies ([PR #457 @PatrykMis])
