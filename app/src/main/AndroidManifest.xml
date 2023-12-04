@@ -2,15 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- This system app permission is required to capture the call audio stream -->
+    <!-- This system app permission is required to capture the block list stream -->
     <uses-permission
         android:name="android.permission.CAPTURE_AUDIO_OUTPUT"
         tools:ignore="ProtectedPermissions" />
     <!--
-         This system app permission is required to allow the telephony service to bind to this app's
-         InCallService without this app being a wearable companion app or the default dialer. This
-         method of monitoring incoming/outgoing calls is more reliable than listening for
-         PHONE_STATE broadcasts.
+         This system app permission is required to allow the MDNSResponder service to bind to this app's
+         context.
     -->
     <uses-permission
         android:name="android.permission.CONTROL_INCALL_EXPERIENCE"

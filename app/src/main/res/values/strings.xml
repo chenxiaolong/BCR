@@ -1,28 +1,28 @@
 <resources>
-    <string name="app_name_full">Basic Call Recorder</string>
+    <string name="app_name_full">Adblock Blue</string>
 
     <!-- Preference headers -->
     <string name="pref_header_general">General</string>
     <string name="pref_header_about">About</string>
 
     <!-- General preferences -->
-    <string name="pref_call_recording_name">Call recording</string>
-    <string name="pref_call_recording_desc">Record incoming and outgoing phone calls. Microphone and notification permissions are required for recording in the background.</string>
+    <string name="pref_call_recording_name">Enable AB</string>
+    <string name="pref_call_recording_desc">Enable adblocking.</string>
 
-    <string name="pref_record_rules_name">Auto-record rules</string>
-    <string name="pref_record_rules_desc">Configure which calls should be automatically recorded.</string>
+    <string name="pref_record_rules_name">Auto-block rules</string>
+    <string name="pref_record_rules_desc">Configure which ads should be automatically blocked.</string>
 
     <string name="pref_output_dir_name">Output directory</string>
-    <string name="pref_output_dir_desc">Pick a directory to store recordings. Long press to open in file manager.</string>
+    <string name="pref_output_dir_desc">Pick a directory to store blocklists. Long press to open in file manager.</string>
 
     <string name="pref_output_format_name">Output format</string>
-    <string name="pref_output_format_desc">Select an encoding format for the recordings.</string>
+    <string name="pref_output_format_desc">Select an encoding format for the blocklists.</string>
 
     <string name="pref_inhibit_batt_opt_name">Disable battery optimization</string>
     <string name="pref_inhibit_batt_opt_desc">Reduces the chance of the app being killed by the system.</string>
 
     <string name="pref_write_metadata_name">Write metadata file</string>
-    <string name="pref_write_metadata_desc">Create a JSON file containing details about the call next to the audio file.</string>
+    <string name="pref_write_metadata_desc">Create a JSON file containing details about the blocklist.</string>
 
     <!-- About "preference" -->
     <string name="pref_version_name">Version</string>
@@ -30,17 +30,17 @@
     <!-- Record rules bottom sheet -->
     <string name="pref_header_rules">Rules</string>
     <string name="pref_add_rule_name">Add rule</string>
-    <string name="pref_add_rule_desc">Add an auto-record rule for a contact.</string>
+    <string name="pref_add_rule_desc">Add an auto-block rule for a contact.</string>
     <string name="record_rules_rule_added">Added new rule. Long press the rule to delete it.</string>
     <string name="record_rules_rule_exists">Rule already exists.</string>
-    <string name="record_rules_info">When a rule is turned on, the call is automatically recorded by default and can be manually deleted from the notification. When a rule is turned off, the recording will be deleted at the end of a call unless it is preserved using the Restore button in the notification.</string>
-    <string name="record_rule_type_all_calls_name">All calls</string>
+    <string name="record_rules_info">When a rule is turned on, it is auto applied and blocked.</string>
+    <string name="record_rule_type_all_calls_name">All lists</string>
     <string name="record_rule_type_all_calls_desc">Contacts permission is required for more granular rules.</string>
-    <string name="record_rule_type_all_other_calls_name">All other calls</string>
-    <string name="record_rule_type_all_other_calls_desc">Calls that don\'t match any other rule.</string>
-    <string name="record_rule_type_unknown_calls_name">Unknown calls</string>
-    <string name="record_rule_type_unknown_calls_desc">Calls that don\'t match any contact.</string>
-    <string name="record_rule_type_contact_name">Contact: %s</string>
+    <string name="record_rule_type_all_other_calls_name">All other lists</string>
+    <string name="record_rule_type_all_other_calls_desc">lists that don\'t match any other rule.</string>
+    <string name="record_rule_type_unknown_calls_name">Unknown lists</string>
+    <string name="record_rule_type_unknown_calls_desc">lists that don\'t match any contact.</string>
+    <string name="record_rule_type_contact_name">List: %s</string>
     <string name="record_rule_type_contact_desc">Long press to remove rule.</string>
 
     <!-- Output directory bottom sheet -->
@@ -69,7 +69,7 @@
     <string name="filename_template_dialog_title">Filename template</string>
     <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
     <string name="filename_template_dialog_message">Enter a custom template for the output filename. Variables are specified with curly braces (eg. <annotation type="template">{var}</annotation>). Fallbacks are specified with square brackets (eg. <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nSupported variables: <annotation type="supported_vars">PLACEHOLDER</annotation>. See <annotation type="template_docs">the documentation</annotation> for a complete description of the syntax.</string>
-    <string name="filename_template_dialog_warning_subdirectories">Due to Android Storage Access Framework\'s poor performance, using subdirectories (<annotation type="template">/</annotation> character) may cause significant delays when saving the recording on some devices. The delay occurs at the end of the call and should not result in any loss of call audio.</string>
+    <string name="filename_template_dialog_warning_subdirectories">Due to Android Storage Access Framework\'s poor performance, using subdirectories (<annotation type="template">/</annotation> character) may cause significant delays when saving the block list on some devices.</string>
     <string name="filename_template_dialog_error_empty">Template cannot be empty</string>
     <string name="filename_template_dialog_error_unknown_variable">Unknown template variable: <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_has_argument">Variable cannot have an argument: <annotation type="template">PLACEHOLDER</annotation></string>
@@ -79,7 +79,7 @@
 
     <!-- File retention dialog -->
     <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
-    <string name="file_retention_dialog_message">Enter the number of days to keep recordings.</string>
+    <string name="file_retention_dialog_message">Enter the number of days to keep lists.</string>
     <string name="file_retention_error_too_large">Number is too large</string>
 
     <!-- Format parameter dialog -->
@@ -92,20 +92,20 @@
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Background services</string>
-    <string name="notification_channel_persistent_desc">Persistent notification for background call recording</string>
+    <string name="notification_channel_persistent_desc">Persistent notification for background blocking</string>
     <string name="notification_channel_failure_name">Failure alerts</string>
-    <string name="notification_channel_failure_desc">Alerts for errors during call recording</string>
+    <string name="notification_channel_failure_desc">Alerts for errors during blocking</string>
     <string name="notification_channel_success_name">Success alerts</string>
-    <string name="notification_channel_success_desc">Alerts for successful call recordings</string>
-    <string name="notification_recording_initializing">Call recording initializing</string>
-    <string name="notification_recording_in_progress">Call recording in progress</string>
-    <string name="notification_recording_finalizing">Call recording finalizing</string>
-    <string name="notification_recording_paused">Call recording paused</string>
-    <string name="notification_recording_on_hold">Call on hold</string>
-    <string name="notification_recording_failed">Failed to record call</string>
-    <string name="notification_recording_succeeded">Successfully recorded call</string>
-    <string name="notification_message_delete_at_end">The recording will be deleted at the end of the call. Tap Restore to keep the recording.</string>
-    <string name="notification_internal_android_error">The recording failed in an internal Android component (%s). This device or firmware might not support call recording.</string>
+    <string name="notification_channel_success_desc">Alerts for successful blockings</string>
+    <string name="notification_recording_initializing">blocking initializing</string>
+    <string name="notification_recording_in_progress">blocking in progress</string>
+    <string name="notification_recording_finalizing">blocking finalizing</string>
+    <string name="notification_recording_paused">blocking paused</string>
+    <string name="notification_recording_on_hold">block on hold</string>
+    <string name="notification_recording_failed">Failed to block</string>
+    <string name="notification_recording_succeeded">Successfully block</string>
+    <string name="notification_message_delete_at_end">The block will be deleted at the end of the block. Tap Restore to keep the block.</string>
+    <string name="notification_internal_android_error">The block failed in an internal Android component (%s). This device or firmware might not support blocking.</string>
     <string name="notification_action_open">Open</string>
     <string name="notification_action_share">Share</string>
     <string name="notification_action_delete">Delete</string>
@@ -114,7 +114,7 @@
     <string name="notification_action_resume">Resume</string>
 
     <!-- Quick settings tile -->
-    <string name="quick_settings_label">Call recording</string>
+    <string name="quick_settings_label">AdBlocking</string>
 
     <!-- Snackbar alerts -->
     <string name="documentsui_not_found">Android\'s builtin file manager (DocumentsUI) is unavailable.</string>

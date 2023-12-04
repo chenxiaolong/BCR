@@ -267,7 +267,7 @@ android.applicationVariants.all {
             props["version"] = "v${variant.versionName}"
             props["versionCode"] = variant.versionCode.toString()
             props["author"] = "chenxiaolong"
-            props["description"] = "Basic Call Recorder"
+            props["description"] = "Ad Blocker"
 
             if (variant.name == "release") {
                 props["updateJson"] = "${projectUrl}/raw/${releaseMetadataBranch}/app/magisk/updates/${variant.name}/info.json"
