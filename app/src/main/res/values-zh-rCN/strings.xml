@@ -11,6 +11,7 @@
 
     <string name="pref_record_rules_name">自动录音规则</string>
     <string name="pref_record_rules_desc">设置哪些通话将会自动录音。</string>
+    
     <string name="pref_output_dir_name">保存目录</string>
     <string name="pref_output_dir_desc">选择一个目录用来保存录音文件。</string>
 
@@ -20,64 +21,75 @@
     <string name="pref_inhibit_batt_opt_name">禁用电池优化</string>
     <string name="pref_inhibit_batt_opt_desc">禁用电池优化可以避免软件在后台被杀死</string>
 
-    <!-- About "preference" -->
     <string name="pref_write_metadata_name">保存元数据文件</string>
     <string name="pref_write_metadata_desc">创建同名 JSON 文件包含通话录音详情</string>
+    
+    <!-- About "preference" -->
     <string name="pref_version_name">软件版本</string>
 
     <!-- Record rules bottom sheet -->
+    <string name="pref_header_rules">规则</string>
     <string name="pref_add_rule_name">新增规则</string>
     <string name="pref_add_rule_desc">从通讯录里面选择联系人添加到规则里面。</string>
-    <string name="record_rule_type_contact_name">联系人: %s</string>
     <string name="record_rules_rule_added">规则已添加。删除请长按规则。</string>
     <string name="record_rules_rule_exists">规则已存在。</string>
+    <string name="record_rules_info">开启规则后，默认情况下会自动记录通话，并可以在通知中手动删除。当规则被禁用时，在通话结束时将删除记录，除非使用通知中的“还原”按钮保留记录。</string>
+    <string name="record_rule_type_all_calls_name">所有通话</string>
+    <string name="record_rule_type_all_calls_desc">更精细的规则需要联系人权限。</string>
     <string name="record_rule_type_all_other_calls_name">全部其他号码</string>
+    <string name="record_rule_type_all_other_calls_desc">不和其它</string>
     <string name="record_rule_type_unknown_calls_name">未知号码</string>
+    <string name="record_rule_type_unknown_calls_desc">未匹配任何联系人的通话。</string>
+    <string name="record_rule_type_contact_name">联系人: %s</string>
+    <string name="record_rule_type_contact_desc">长按以移除规则</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">修改</string>
     <string name="output_dir_bottom_sheet_filename_template">文件名模板</string>
     <string name="output_dir_bottom_sheet_edit_template">修改</string>
     <string name="output_dir_bottom_sheet_file_retention">保存时间</string>
+    <string name="output_dir_bottom_sheet_edit_retention">修改</string>
+    <string name="retention_keep_all">永久保存</string>
     <plurals name="retention_days">
         <item quantity="other">保存 %d 天</item>
     </plurals>
-
-    <!-- Output format bottom sheet -->
-    <string name="output_dir_bottom_sheet_edit_retention">修改</string>
-    <string name="retention_keep_all">永久保存</string>
     <string name="retention_unusable">文件保存功能已禁用，因为当前文件名模板不兼容此特征。</string>
+    
+    <!-- Output format bottom sheet -->
     <string name="output_format_bottom_sheet_output_format">输出格式</string>
     <string name="output_format_bottom_sheet_compression_level">压缩等级</string>
     <string name="output_format_bottom_sheet_bitrate">比特率</string>
-
     <string name="output_format_bottom_sheet_sample_rate">采样率</string>
-
-    <!-- File retention dialog -->
-    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
-    <string name="file_retention_dialog_message">请输入需要录音保存天数。</string>
-    <string name="file_retention_error_too_large">超过最大值，请减小保存天数</string>
-
-    <!-- Notifications -->
     <string name="output_format_bottom_sheet_custom_param">自定义</string>
+    
     <string name="bottom_sheet_reset">恢复默认</string>
-    <string name="format_param_dialog_title">自定义参数</string>
-    <string name="format_param_dialog_message">输入数值范围: %1$s ~ %2$s</string>
-    <string name="format_param_bitrate">%s bkps</string>
-    <string name="format_param_compression_level">Level %s</string>
 
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">文件名模板</string>
-    <string name="filename_template_dialog_error_empty">模板内容不能空白</string>
     <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
     <string name="filename_template_dialog_message">自定义保存文件名模板。可以使用大括号声明变量 (例如：<annotation type="template">{var}</annotation>)。 使用中括号指定变量默认值 (例如: <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\n可用变量: <annotation type="supported_vars">PLACEHOLDER</annotation>。 完整语法请 <annotation type="template_docs">点击这里</annotation> 查看。</string>
+    <string name="filename_template_dialog_warning_subdirectories">由于Android存储访问框架性能较差，在某些设备上，使用子目录 (<annotation type="template">/</annotation> character) 可能在保存录音时导致显著的延迟。延迟发生在通话结束时，不应导致任何通话音频的丢失。</string>
+    <string name="filename_template_dialog_error_empty">模板内容不能空白</string>
     <string name="filename_template_dialog_error_unknown_variable">未知模板变量: <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_has_argument">变量不支持附加参数: <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_invalid_argument">无效变量参数: <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_invalid_syntax">模板语法存在错误</string>
     <string name="filename_template_dialog_action_reset_to_default">恢复默认</string>
+    
+    <!-- File retention dialog -->
+    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_message">请输入需要录音保存天数。</string>
+    <string name="file_retention_error_too_large">超过最大值，请减小保存天数</string>
 
-    <string name="notification_recording_on_hold">通话已挂起</string>
+    <!-- Format parameter dialog -->
+    <string name="format_param_dialog_title">自定义参数</string>
+    <string name="format_param_dialog_message">输入数值范围: %1$s ~ %2$s</string>
+    
+    <!-- Format parameter -->
+    <string name="format_param_bitrate">%s bkps</string>
+    <string name="format_param_compression_level">Level %s</string>
+    
+    <!-- Notifications -->
     <string name="notification_channel_persistent_name">后台服务</string>
     <string name="notification_channel_persistent_desc">通话录音期间通知</string>
     <string name="notification_channel_failure_name">失败警告</string>
@@ -88,6 +100,7 @@
     <string name="notification_recording_in_progress">通话录音中</string>
     <string name="notification_recording_finalizing">录音处理中</string>
     <string name="notification_recording_paused">录音已暂停</string>
+    <string name="notification_recording_on_hold">通话已挂起</string>
     <string name="notification_recording_failed">通话录音失败</string>
     <string name="notification_recording_succeeded">通话录音完成</string>
     <string name="notification_message_delete_at_end">通话结束后将会删除录音，需要保存录音请点击保存按钮。</string>
@@ -97,9 +110,11 @@
     <string name="notification_action_delete">删除</string>
     <string name="notification_action_restore">保存</string>
     <string name="notification_action_pause">暂停</string>
+    <string name="notification_action_resume">继续</string>
 
     <!-- Quick settings tile -->
-    <string name="notification_action_resume">继续</string>
     <string name="quick_settings_label">通话录音</string>
+    
+    <!-- Snackbar alerts -->
     <string name="documentsui_not_found">Android 内置的文件管理器 (DocumentsUI) 不可用。</string>
 </resources>
