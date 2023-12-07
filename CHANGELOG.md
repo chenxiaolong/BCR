@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update Chinese translations ([PR #469 @Pr0pHesyer])
+
 ### Version 1.56
 
 * Update Slovak translations ([PR #456 @pvagner])
@@ -766,3 +768,4 @@ Non-user-facing changes:
 [PR #458 @groozchique]: https://github.com/chenxiaolong/BCR/pull/458
 [PR #459 @y0geshx]: https://github.com/chenxiaolong/BCR/pull/459
 [PR #460 @htht2001]: https://github.com/chenxiaolong/BCR/pull/460
+[PR #469 @Pr0pHesyer]: https://github.com/chenxiaolong/BCR/pull/469
