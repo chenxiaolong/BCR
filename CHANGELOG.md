@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update Chinese translations ([PR #469 @Pr0pHesyer])
+* Update Portuguese (Portugal) translations ([PR #474 @MicroDJS])
 
 ### Version 1.56
 
@@ -769,3 +770,4 @@ Non-user-facing changes:
 [PR #459 @y0geshx]: https://github.com/chenxiaolong/BCR/pull/459
 [PR #460 @htht2001]: https://github.com/chenxiaolong/BCR/pull/460
 [PR #469 @Pr0pHesyer]: https://github.com/chenxiaolong/BCR/pull/469
+[PR #474 @MicroDJS]: https://github.com/chenxiaolong/BCR/pull/474
