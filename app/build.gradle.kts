@@ -126,6 +126,7 @@ android {
             "hi",
             "iw",
             "pl",
+            "pt-rPT",
             "ru",
             "sk",
             "tr",
