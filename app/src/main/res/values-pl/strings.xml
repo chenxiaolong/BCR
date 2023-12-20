@@ -52,6 +52,8 @@
     <string name="retention_keep_all">Pozostaw wszystkie</string>
     <plurals name="retention_days">
         <item quantity="one">Pozostaw z %d dnia</item>
+        <item quantity="few">Pozostaw z %d dni</item>
+        <item quantity="many">Pozostaw z %d dni</item>
         <item quantity="other">Pozostaw z %d dni</item>
     </plurals>
     <string name="retention_unusable">Przechowywanie plików jest wyłączone, ponieważ bieżący szablon nazwy pliku jest niezgodny z tą funkcją.</string>
