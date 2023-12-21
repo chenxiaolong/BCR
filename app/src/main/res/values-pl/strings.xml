@@ -28,13 +28,20 @@
     <string name="pref_version_name">Wersja</string>
     
     <!-- Record rules bottom sheet -->
+    <string name="pref_header_rules">Reguły</string>
     <string name="pref_add_rule_name">Dodaj regułę</string>
     <string name="pref_add_rule_desc">Dodaj regułę automatycznego rejestrowania dla kontaktu.</string>
     <string name="record_rules_rule_added">Dodano nową regułę. Naciśnij i przytrzymaj regułę, aby ją usunąć.</string>
     <string name="record_rules_rule_exists">Reguła już istnieje.</string>
+    <string name="record_rules_info">Gdy reguła jest włączona, połączenie jest domyślnie automatycznie nagrywane i można je ręcznie usunąć z powiadomienia. Gdy reguła jest wyłączona, nagranie zostanie usunięte po zakończeniu połączenia, chyba że zostanie zachowane za pomocą przycisku Przywróć w powiadomieniu.</string>
+    <string name="record_rule_type_all_calls_name">Wszystkie połączenia</string>
+    <string name="record_rule_type_all_calls_desc">Uprawnienie kontakty jest wymagane w przypadku bardziej szczegółowych reguł.</string>
     <string name="record_rule_type_all_other_calls_name">Wszystkie inne połączenia</string>
+    <string name="record_rule_type_all_other_calls_desc">Połączenia które nie pasują do żadnej innej reguły.</string>
     <string name="record_rule_type_unknown_calls_name">Nieznane połączenia</string>
+    <string name="record_rule_type_unknown_calls_desc">Połączenia, które nie pasują do żadnego kontaktu.</string>
     <string name="record_rule_type_contact_name">Kontakt: %s</string>
+    <string name="record_rule_type_contact_desc">Naciśnij i przytrzymaj, aby usunąć regułę.</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Zmień katalog</string>
