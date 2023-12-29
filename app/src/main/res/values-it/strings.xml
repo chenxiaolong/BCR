@@ -1,0 +1,121 @@
+<resources>
+    <string name="app_name_full">Basic Call Recorder</string>
+
+    <!-- Preference headers -->
+    <string name="pref_header_general">Generale</string>
+    <string name="pref_header_about">Informazioni</string>
+
+    <!-- General preferences -->
+    <string name="pref_call_recording_name">Registrazione chiamate</string>
+    <string name="pref_call_recording_desc">Registra le chiamate in entrata e in uscita. Sono richiesti i permessi per accedere al microfono e le notifiche per registrare in background.</string>
+
+    <string name="pref_record_rules_name">Regole per registrazione automatica</string>
+    <string name="pref_record_rules_desc">Configura quali chiamate dovrebbero essere automaticamente registrate.</string>
+
+    <string name="pref_output_dir_name">Cartella</string>
+    <string name="pref_output_dir_desc">Scegli una cartella in cui conservare le regitrazioni. Tieni premuto per mostrare il file manager.</string>
+
+    <string name="pref_output_format_name">Formato output</string>
+    <string name="pref_output_format_desc">Seleziona un formato di encoding per le registrazioni.</string>
+
+    <string name="pref_inhibit_batt_opt_name">Disabilita l\'ottimizzazione della batteria</string>
+    <string name="pref_inhibit_batt_opt_desc">Riduce le chance che l\'app sia killata dal sistema.</string>
+
+    <string name="pref_write_metadata_name">Scrivi un file con i metadati</string>
+    <string name="pref_write_metadata_desc">Crea un file JSON contenente i dettagli sulla chiamata insieme al file audio.</string>
+
+    <!-- About "preference" -->
+    <string name="pref_version_name">Versione</string>
+
+    <!-- Record rules bottom sheet -->
+    <string name="pref_header_rules">Regole</string>
+    <string name="pref_add_rule_name">Aggiungi regola</string>
+    <string name="pref_add_rule_desc">Aggiungi una regola automatica per un contatto.</string>
+    <string name="record_rules_rule_added">Nuova regola aggiunta. Tieni premuto per cancellarla.</string>
+    <string name="record_rules_rule_exists">La regola già esiste.</string>
+    <string name="record_rules_info">Quando una regola è attiva, la chiamata verrà registrata automaticamente e potrà essere cancellata dalla notifica. Quando una regola non è attiva, la registrazione verrà cancellata alla fine della chiamata a meno che non premi Ripristina nella notifica.</string>
+    <string name="record_rule_type_all_calls_name">Tutte le chiamate</string>
+    <string name="record_rule_type_all_calls_desc">Per aggiungere regole granulari è necessario consentire il permesso per leggere i Contatti.</string>
+    <string name="record_rule_type_all_other_calls_name">Tuttle le altre chiamate</string>
+    <string name="record_rule_type_all_other_calls_desc">Chiamate che non rientrano nelle altre regole.</string>
+    <string name="record_rule_type_unknown_calls_name">Sconosciuto</string>
+    <string name="record_rule_type_unknown_calls_desc">Chiamate che non rientrano in nessun contatto.</string>
+    <string name="record_rule_type_contact_name">Contatto: %s</string>
+    <string name="record_rule_type_contact_desc">Tieni premuto per rimuovere la regola.</string>
+
+    <!-- Output directory bottom sheet -->
+    <string name="output_dir_bottom_sheet_change_dir">Cambia cartella</string>
+    <string name="output_dir_bottom_sheet_filename_template">Template nome file</string>
+    <string name="output_dir_bottom_sheet_edit_template">Modifica template</string>
+    <string name="output_dir_bottom_sheet_file_retention">Retenzione File</string>
+    <string name="output_dir_bottom_sheet_edit_retention">Modifica retenzione</string>
+    <string name="retention_keep_all">Mantieni tutto</string>
+    <plurals name="retention_days">
+        <item quantity="one">Mantieni per %d giorno</item>
+        <item quantity="other">Mantieni per %d giorni</item>
+    </plurals>
+    <string name="retention_unusable">La retenzione file è disabilitata perchè il template per il nome file non è compatibile con questa funzione.</string>
+
+    <!-- Output format bottom sheet -->
+    <string name="output_format_bottom_sheet_output_format">Formato audio</string>
+    <string name="output_format_bottom_sheet_compression_level">Livello di compressione</string>
+    <string name="output_format_bottom_sheet_bitrate">Bitrate</string>
+    <string name="output_format_bottom_sheet_sample_rate">Sample rate</string>
+    <string name="output_format_bottom_sheet_custom_param">Personalizzato</string>
+
+    <string name="bottom_sheet_reset">Ripristina alle impostazioni predefinite</string>
+
+    <!-- Filename template dialog -->
+    <string name="filename_template_dialog_title">Template nome file</string>
+    <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
+    <string name="filename_template_dialog_message">Inserisci un template personalizzato per il nome file. Le variabili sono specificate all\'interno di parentesi graffe (eg. <annotation type="template">{var}</annotation>). Le riserve sono specificate tra parentesi quadre (eg. <annotation type="template">[{contact_name}|Sconosciuto]</annotation>).\n\nVariabili supportate: <annotation type="supported_vars">PLACEHOLDER</annotation>. Guarda <annotation type="template_docs">la documentazione</annotation> per una completa descrizione della sintassi.</string>
+    <string name="filename_template_dialog_warning_subdirectories">A causa delle scarse performance dell\'Android Storage Access Framework\'s, usare le sottocartelle (il carattere <annotation type="template">/</annotation>) potrebbe causare un significativo ritardo quando si salva la registrazione su alcuni dispositivi. Il ritardo avverrà alla fine della chiamata e non dovrebbe risultare in nessuna perdita di audio della chiamata.</string>
+    <string name="filename_template_dialog_error_empty">Il template non può essere vuoto</string>
+    <string name="filename_template_dialog_error_unknown_variable">Variabile sconosciuta: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">La variabile non può avere un argomento: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_argument">Argomento variabile non valido: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_syntax">La sintassi del template non è valida</string>
+    <string name="filename_template_dialog_action_reset_to_default">Ripristina alle impostazioni predefinite</string>
+
+    <!-- File retention dialog -->
+    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_message">Inserisci il numero di giorni per i quali mantenere le registrazioni.</string>
+    <string name="file_retention_error_too_large">Il numero è troppo grande</string>
+
+    <!-- Format parameter dialog -->
+    <string name="format_param_dialog_title">Parametro personalizzato</string>
+    <string name="format_param_dialog_message">Inserisci un valore nel range [%1$s, %2$s].</string>
+
+    <!-- Format parameter -->
+    <string name="format_param_bitrate">%s kbps</string>
+    <string name="format_param_compression_level">Livello %s</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_persistent_name">Servizi in background</string>
+    <string name="notification_channel_persistent_desc">Notifica persistente per registrare le chiamate</string>
+    <string name="notification_channel_failure_name">Failure alerts</string>
+    <string name="notification_channel_failure_desc">Avvisi per errori durante la registrazione della chiamata</string>
+    <string name="notification_channel_success_name">Avvisi di successo</string>
+    <string name="notification_channel_success_desc">Avvisi per la registrazione chiamata a buon fine</string>
+    <string name="notification_recording_initializing">Inizializzazione registrazione chiamata</string>
+    <string name="notification_recording_in_progress">Registrazione chiamata in corso</string>
+    <string name="notification_recording_finalizing">Finalizzando registrazione chiamata</string>
+    <string name="notification_recording_paused">Registrazione chiamata in pausa</string>
+    <string name="notification_recording_on_hold">Registrazione in attesa</string>
+    <string name="notification_recording_failed">Registrazione chiamata fallita</string>
+    <string name="notification_recording_succeeded">Chiamata registrata correttamente</string>
+    <string name="notification_message_delete_at_end">La registrazione sarà cancellata alla fine della chiamata. Premi ripristina per mantenere la registrazione.</string>
+    <string name="notification_internal_android_error">La registrazione è fallita a causa di un componente interno di Android  (%s). Questo dispositivo o firmware potrebbe essere non supportare la registrazione delle chiamate.</string>
+    <string name="notification_action_open">Apri</string>
+    <string name="notification_action_share">Condividi</string>
+    <string name="notification_action_delete">Cancella</string>
+    <string name="notification_action_restore">Ripristina</string>
+    <string name="notification_action_pause">Pausa</string>
+    <string name="notification_action_resume">Riprendi</string>
+
+    <!-- Quick settings tile -->
+    <string name="quick_settings_label">Registrazione chiamate</string>
+
+    <!-- Snackbar alerts -->
+    <string name="documentsui_not_found">Il file manager di Android (DocumentsUI) non è disponibile.</string>
+</resources>
