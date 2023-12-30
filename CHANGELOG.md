@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update Polish translations ([PR #476 @phyrz91])
+* Add Italian translations ([PR #480 @DHD2280])
 
 ### Version 1.57
 
@@ -776,3 +777,4 @@ Non-user-facing changes:
 [PR #469 @Pr0pHesyer]: https://github.com/chenxiaolong/BCR/pull/469
 [PR #474 @MicroDJS]: https://github.com/chenxiaolong/BCR/pull/474
 [PR #476 @phyrz91]: https://github.com/chenxiaolong/BCR/pull/476
+[PR #480 @DHD2280]: https://github.com/chenxiaolong/BCR/pull/480
