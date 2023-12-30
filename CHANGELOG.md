@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.58
 
 * Update Polish translations ([PR #476 @phyrz91])
 * Add Italian translations ([PR #480 @DHD2280])
