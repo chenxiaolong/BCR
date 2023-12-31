@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.59
 
 * Fix removal of Android's call log permission restriction for fresh installs in Android 14 ([PR #481 @chenxiaolong])
 
