@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Fix removal of Android's call log permission restriction for fresh installs in Android 14 ([PR #481 @chenxiaolong])
+
 ### Version 1.58
 
 * Update Polish translations ([PR #476 @phyrz91])
@@ -780,3 +782,4 @@ Non-user-facing changes:
 [PR #474 @MicroDJS]: https://github.com/chenxiaolong/BCR/pull/474
 [PR #476 @phyrz91]: https://github.com/chenxiaolong/BCR/pull/476
 [PR #480 @DHD2280]: https://github.com/chenxiaolong/BCR/pull/480
+[PR #481 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/481
