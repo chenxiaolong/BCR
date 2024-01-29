@@ -9,6 +9,10 @@
 
 ### Unreleased
 
+Behind the scenes changes:
+
+* Fix missing Gradle verification checksums when building from source on non-Linux OSs ([Issue #491], [PR #493 @chenxiaolong])
+
 ### Version 1.59
 
 * Fix removal of Android's call log permission restriction for fresh installs in Android 14 ([PR #481 @chenxiaolong])
@@ -566,6 +570,7 @@ Non-user-facing changes:
 [Issue #422]: https://github.com/chenxiaolong/BCR/issues/422
 [Issue #429]: https://github.com/chenxiaolong/BCR/issues/429
 [Issue #433]: https://github.com/chenxiaolong/BCR/issues/433
+[Issue #491]: https://github.com/chenxiaolong/BCR/issues/491
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -785,3 +790,4 @@ Non-user-facing changes:
 [PR #476 @phyrz91]: https://github.com/chenxiaolong/BCR/pull/476
 [PR #480 @DHD2280]: https://github.com/chenxiaolong/BCR/pull/480
 [PR #481 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/481
+[PR #493 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/493
