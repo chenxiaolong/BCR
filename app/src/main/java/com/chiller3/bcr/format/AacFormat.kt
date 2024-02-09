@@ -24,6 +24,11 @@ object AacFormat : Format() {
             128_000u,
         ),
     )
+    override val sampleRateInfo: SampleRateInfo = DiscreteSampleRateInfo(
+        // This what Android's C2 software encoder (C2SoftAacEnc.cpp) supports.
+        uintArrayOf(8_000u, 11_025u, 12_000u, 16_000u, 22_050u, 24_000u, 32_000u, 44_100u, 48_000u),
+        16_000u,
+    )
     // https://datatracker.ietf.org/doc/html/rfc6381#section-3.1
     override val mimeTypeContainer: String = "audio/mp4"
     override val mimeTypeAudio: String = MediaFormat.MIMETYPE_AUDIO_AAC

@@ -13,6 +13,9 @@ sealed class Format {
     /** Details about the format parameter range and default value. */
     abstract val paramInfo: FormatParamInfo
 
+    /** Defaults about the supported sample rates. */
+    abstract val sampleRateInfo: SampleRateInfo
+
     /** The MIME type of the container storing the encoded audio stream. */
     abstract val mimeTypeContainer: String
 
@@ -98,9 +101,10 @@ sealed class Format {
         /**
          * Get the saved format from the preferences or fall back to the default.
          *
-         * The parameter, if set, is clamped to the format's allowed parameter range.
+         * The parameter, if set, is clamped to the format's allowed parameter range. Similarly, the
+         * sample rate, if set, is set to the nearest valid value.
          */
-        fun fromPreferences(prefs: Preferences): Pair<Format, UInt?> {
+        fun fromPreferences(prefs: Preferences): Triple<Format, UInt?, UInt?> {
             // Use the saved format if it is valid and supported on the current device. Otherwise,
             // fall back to the default.
             val format = prefs.format
@@ -108,12 +112,17 @@ sealed class Format {
                 ?: default
 
             // Convert the saved value to the nearest valid value (eg. in case the bitrate range is
-            // changed in a future version)
+            // changed in a future version).
             val param = prefs.getFormatParam(format)?.let {
                 format.paramInfo.toNearest(it)
             }
 
-            return Pair(format, param)
+            // Same with the sample rate.
+            val sampleRate = prefs.getFormatSampleRate(format)?.let {
+                format.sampleRateInfo.toNearest(it)
+            }
+
+            return Triple(format, param, sampleRate)
         }
     }
 }

@@ -86,9 +86,16 @@
     <string name="format_param_dialog_title">Custom parameter</string>
     <string name="format_param_dialog_message">Enter a value in the range [%1$s, %2$s].</string>
 
+    <!-- Format sample rate dialog -->
+    <string name="format_sample_rate_dialog_title">Custom sample rate</string>
+    <string name="format_sample_rate_dialog_message">Enter a sample rate in the range [%1$s, %2$s].</string>
+
     <!-- Format parameter -->
     <string name="format_param_bitrate">%s kbps</string>
     <string name="format_param_compression_level">Level %s</string>
+
+    <!-- Format sample rate -->
+    <string name="format_sample_rate">%s Hz</string>
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Background services</string>

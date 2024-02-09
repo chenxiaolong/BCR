@@ -24,6 +24,11 @@ object OpusFormat : Format() {
             48_000u,
         ),
     )
+    override val sampleRateInfo: SampleRateInfo = DiscreteSampleRateInfo(
+        // This what Android's C2 software encoder (C2SoftOpusEnc.cpp) supports.
+        uintArrayOf(8_000u, 12_000u, 16_000u, 24_000u, 48_000u),
+        16_000u,
+    )
     // https://datatracker.ietf.org/doc/html/rfc7845#section-9
     override val mimeTypeContainer: String = "audio/ogg"
     override val mimeTypeAudio: String = MediaFormat.MIMETYPE_AUDIO_OPUS

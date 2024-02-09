@@ -13,6 +13,7 @@ import com.chiller3.bcr.R
 import com.chiller3.bcr.databinding.BottomSheetChipBinding
 import com.chiller3.bcr.databinding.OutputFormatBottomSheetBinding
 import com.chiller3.bcr.dialog.FormatParamDialogFragment
+import com.chiller3.bcr.dialog.FormatSampleRateDialogFragment
 import com.chiller3.bcr.format.*
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.ChipGroup
@@ -28,8 +29,8 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
     private val chipIdToParam = HashMap<Int, UInt?>()
     private val paramToChipId = HashMap<UInt?, Int>()
 
-    private val chipIdToSampleRate = HashMap<Int, SampleRate>()
-    private val sampleRateToChipId = HashMap<SampleRate, Int>()
+    private val chipIdToSampleRate = HashMap<Int, UInt?>()
+    private val sampleRateToChipId = HashMap<UInt?, Int>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,14 +55,14 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
 
         binding.paramGroup.setOnCheckedStateChangeListener(this)
 
-        for (sampleRate in SampleRate.all) {
-            addSampleRateChip(inflater, sampleRate)
-        }
-
         binding.sampleRateGroup.setOnCheckedStateChangeListener(this)
 
         setFragmentResultListener(FormatParamDialogFragment.TAG) { _, _ ->
             refreshParam()
+        }
+
+        setFragmentResultListener(FormatSampleRateDialogFragment.TAG) { _, _ ->
+            refreshSampleRate()
         }
 
         refreshFormat()
@@ -103,25 +104,34 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
         paramToChipId[value] = chipBinding.root.id
     }
 
-    private fun addSampleRateChip(inflater: LayoutInflater, sampleRate: SampleRate) {
+    private fun addSampleRateChip(inflater: LayoutInflater, sampleRateInfo: SampleRateInfo,
+                                  rate: UInt?, canClose: Boolean) {
         val chipBinding = addChip(inflater, binding.sampleRateGroup)
-        chipBinding.root.text = sampleRate.toString()
-        chipIdToSampleRate[chipBinding.root.id] = sampleRate
-        sampleRateToChipId[sampleRate] = chipBinding.root.id
+        if (canClose) {
+            chipBinding.root.isCloseIconVisible = true
+            chipBinding.root.setOnCloseIconClickListener(::onChipClosed)
+        }
+        if (rate != null) {
+            chipBinding.root.text = sampleRateInfo.format(requireContext(), rate)
+        } else {
+            chipBinding.root.setText(R.string.output_format_bottom_sheet_custom_param)
+        }
+        chipIdToSampleRate[chipBinding.root.id] = rate
+        sampleRateToChipId[rate] = chipBinding.root.id
     }
 
     /**
      * Update UI based on currently selected format in the preferences.
      *
-     * Calls [refreshParam] via [onCheckedChanged].
+     * Calls [refreshParam] and [refreshSampleRate] via [onCheckedChanged].
      */
     private fun refreshFormat() {
-        val (format, _) = Format.fromPreferences(prefs)
+        val (format, _, _) = Format.fromPreferences(prefs)
         binding.nameGroup.check(formatToChipId[format]!!)
     }
 
     private fun refreshParam() {
-        val (format, param) = Format.fromPreferences(prefs)
+        val (format, param, _) = Format.fromPreferences(prefs)
         val selectedParam = param ?: format.paramInfo.default
 
         chipIdToParam.clear()
@@ -142,10 +152,8 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
                 }
 
                 if (selectedParam !in format.paramInfo.presets) {
-                    // TODO: Cancellable
                     addParamChip(layoutInflater, format.paramInfo, selectedParam, true)
                 } else {
-                    // TODO: New custom
                     addParamChip(layoutInflater, format.paramInfo, null, false)
                 }
 
@@ -158,8 +166,26 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
     }
 
     private fun refreshSampleRate() {
-        val sampleRate = SampleRate.fromPreferences(prefs)
-        binding.sampleRateGroup.check(sampleRateToChipId[sampleRate]!!)
+        val (format, _, sampleRate) = Format.fromPreferences(prefs)
+        val selectedSampleRate = sampleRate ?: format.sampleRateInfo.default
+
+        chipIdToSampleRate.clear()
+        sampleRateToChipId.clear()
+        binding.sampleRateGroup.removeAllViews()
+
+        for (preset in format.sampleRateInfo.presets) {
+            addSampleRateChip(layoutInflater, format.sampleRateInfo, preset, false)
+        }
+
+        if (format.sampleRateInfo is RangedSampleRateInfo) {
+            if (selectedSampleRate !in format.sampleRateInfo.presets) {
+                addSampleRateChip(layoutInflater, format.sampleRateInfo, selectedSampleRate, true)
+            } else {
+                addSampleRateChip(layoutInflater, format.sampleRateInfo, null, false)
+            }
+        }
+
+        binding.sampleRateGroup.check(sampleRateToChipId[selectedSampleRate]!!)
     }
 
     private fun onChipClosed(chip: View) {
@@ -167,6 +193,10 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
             val format = chipIdToFormat[binding.nameGroup.checkedChipId]!!
             prefs.setFormatParam(format, null)
             refreshParam()
+        } else if (chip.id in chipIdToSampleRate) {
+            val format = chipIdToFormat[binding.nameGroup.checkedChipId]!!
+            prefs.setFormatSampleRate(format, null)
+            refreshSampleRate()
         }
     }
 
@@ -175,6 +205,7 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
             binding.nameGroup -> {
                 prefs.format = chipIdToFormat[checkedIds.first()]!!
                 refreshParam()
+                refreshSampleRate()
             }
             binding.paramGroup -> {
                 val format = chipIdToFormat[binding.nameGroup.checkedChipId]!!
@@ -187,7 +218,14 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
                 }
             }
             binding.sampleRateGroup -> {
-                prefs.sampleRate = chipIdToSampleRate[checkedIds.first()]!!
+                val format = chipIdToFormat[binding.nameGroup.checkedChipId]!!
+                val sampleRate = chipIdToSampleRate[checkedIds.first()]
+                if (sampleRate != null) {
+                    prefs.setFormatSampleRate(format, sampleRate)
+                } else {
+                    FormatSampleRateDialogFragment().show(
+                        parentFragmentManager.beginTransaction(), FormatSampleRateDialogFragment.TAG)
+                }
             }
         }
     }
@@ -196,7 +234,6 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
         when (v) {
             binding.reset -> {
                 prefs.resetAllFormats()
-                prefs.sampleRate = null
                 refreshFormat()
                 // Need to explicitly refresh the parameter when the default format is already chosen
                 refreshParam()

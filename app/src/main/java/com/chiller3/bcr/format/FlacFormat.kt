@@ -14,6 +14,11 @@ object FlacFormat : Format() {
         8u,
         uintArrayOf(0u, 5u, 8u),
     )
+    override val sampleRateInfo: SampleRateInfo = RangedSampleRateInfo(
+        1u..655_350u,
+        16_000u,
+        uintArrayOf(8_000u, 16_000u, 48_000u),
+    )
     override val mimeTypeContainer: String = MediaFormat.MIMETYPE_AUDIO_FLAC
     override val mimeTypeAudio: String = MediaFormat.MIMETYPE_AUDIO_FLAC
     override val passthrough: Boolean = false

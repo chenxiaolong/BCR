@@ -21,7 +21,6 @@ import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.NoParamInfo
 import com.chiller3.bcr.format.RangedParamInfo
 import com.chiller3.bcr.format.RangedParamType
-import com.chiller3.bcr.format.SampleRate
 import com.chiller3.bcr.output.CallMetadata
 import com.chiller3.bcr.output.CallMetadataCollector
 import com.chiller3.bcr.output.DaysRetention
@@ -128,7 +127,7 @@ class RecorderThread(
     // Format
     private val format: Format
     private val formatParam: UInt?
-    private val sampleRate = SampleRate.fromPreferences(prefs)
+    private val sampleRate: UInt
 
     // Logging
     private lateinit var logcatPath: OutputPath
@@ -141,6 +140,7 @@ class RecorderThread(
         val savedFormat = Format.fromPreferences(prefs)
         format = savedFormat.first
         formatParam = savedFormat.second
+        sampleRate = savedFormat.third ?: format.sampleRateInfo.default
     }
 
     fun onCallDetailsChanged(call: Call, details: Call.Details) {
@@ -483,8 +483,7 @@ class RecorderThread(
     private fun recordUntilCancelled(pfd: ParcelFileDescriptor): RecordingInfo {
         AndroidProcess.setThreadPriority(AndroidProcess.THREAD_PRIORITY_URGENT_AUDIO)
 
-        val minBufSize = AudioRecord.getMinBufferSize(
-            sampleRate.value.toInt(), CHANNEL_CONFIG, ENCODING)
+        val minBufSize = AudioRecord.getMinBufferSize(sampleRate.toInt(), CHANNEL_CONFIG, ENCODING)
         if (minBufSize < 0) {
             throw Exception("Failure when querying minimum buffer size: $minBufSize")
         }
@@ -492,7 +491,7 @@ class RecorderThread(
 
         val audioRecord = AudioRecord(
             MediaRecorder.AudioSource.VOICE_CALL,
-            sampleRate.value.toInt(),
+            sampleRate.toInt(),
             CHANNEL_CONFIG,
             ENCODING,
             // On some devices, MediaCodec occasionally has sudden spikes in processing time, so use

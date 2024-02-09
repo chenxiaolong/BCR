@@ -39,6 +39,10 @@ class RecorderApplication : Application() {
                 oldCrashHandler?.uncaughtException(t, e)
             }
         }
+
+        // Migrate legacy preferences.
+        val prefs = Preferences(this)
+        prefs.migrateSampleRate()
     }
 
     companion object {

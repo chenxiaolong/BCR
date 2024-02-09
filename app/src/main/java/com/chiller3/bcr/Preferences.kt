@@ -11,7 +11,6 @@ import androidx.preference.PreferenceManager
 import com.chiller3.bcr.extension.DOCUMENTSUI_AUTHORITY
 import com.chiller3.bcr.extension.safTreeToDocument
 import com.chiller3.bcr.format.Format
-import com.chiller3.bcr.format.SampleRate
 import com.chiller3.bcr.output.Retention
 import com.chiller3.bcr.rule.RecordRule
 import com.chiller3.bcr.template.Template
@@ -40,6 +39,7 @@ class Preferences(private val context: Context) {
         private const val PREF_RECORD_RULE_PREFIX = "record_rule_"
         private const val PREF_FORMAT_NAME = "codec_name"
         private const val PREF_FORMAT_PARAM_PREFIX = "codec_param_"
+        private const val PREF_FORMAT_SAMPLE_RATE_PREFIX = "codec_sample_rate_"
         const val PREF_OUTPUT_RETENTION = "output_retention"
         const val PREF_SAMPLE_RATE = "sample_rate"
         private const val PREF_NEXT_NOTIFICATION_ID = "next_notification_id"
@@ -58,7 +58,9 @@ class Preferences(private val context: Context) {
         )
 
         fun isFormatKey(key: String): Boolean =
-            key == PREF_FORMAT_NAME || key.startsWith(PREF_FORMAT_PARAM_PREFIX)
+            key == PREF_FORMAT_NAME
+                    || key.startsWith(PREF_FORMAT_PARAM_PREFIX)
+                    || key.startsWith(PREF_FORMAT_SAMPLE_RATE_PREFIX)
     }
 
     internal val prefs = PreferenceManager.getDefaultSharedPreferences(context)
@@ -66,13 +68,13 @@ class Preferences(private val context: Context) {
     /**
      * Get a unsigned integer preference value.
      *
-     * @return Will never be [UInt.MAX_VALUE]
+     * @return Will never be [sentinel]
      */
-    private fun getOptionalUint(key: String): UInt? {
+    private fun getOptionalUint(key: String, sentinel: UInt): UInt? {
         // Use a sentinel value because doing contains + getInt results in TOCTOU issues
-        val value = prefs.getInt(key, -1)
+        val value = prefs.getInt(key, sentinel.toInt())
 
-        return if (value == -1) {
+        return if (value == sentinel.toInt()) {
             null
         } else {
             value.toUInt()
@@ -82,14 +84,13 @@ class Preferences(private val context: Context) {
     /**
      * Set an unsigned integer preference to [value].
      *
-     * @param value Must not be [UInt.MAX_VALUE]
+     * @param value Must not be [sentinel]
      *
-     * @throws IllegalArgumentException if [value] is [UInt.MAX_VALUE]
+     * @throws IllegalArgumentException if [value] is [sentinel]
      */
-    private fun setOptionalUint(key: String, value: UInt?) {
-        // -1 (when casted to int) is used as a sentinel value
-        if (value == UInt.MAX_VALUE) {
-            throw IllegalArgumentException("$key value cannot be ${UInt.MAX_VALUE}")
+    private fun setOptionalUint(key: String, sentinel: UInt, value: UInt?) {
+        if (value == sentinel) {
+            throw IllegalArgumentException("$key value cannot be $sentinel")
         }
 
         prefs.edit {
@@ -205,8 +206,11 @@ class Preferences(private val context: Context) {
      * Must not be [UInt.MAX_VALUE].
      */
     var outputRetention: Retention?
-        get() = getOptionalUint(PREF_OUTPUT_RETENTION)?.let { Retention.fromRawPreferenceValue(it) }
-        set(retention) = setOptionalUint(PREF_OUTPUT_RETENTION, retention?.toRawPreferenceValue())
+        get() = getOptionalUint(PREF_OUTPUT_RETENTION, UInt.MAX_VALUE)?.let {
+            Retention.fromRawPreferenceValue(it)
+        }
+        set(retention) = setOptionalUint(PREF_OUTPUT_RETENTION, UInt.MAX_VALUE,
+            retention?.toRawPreferenceValue())
 
     /**
      * Whether call recording is enabled.
@@ -242,7 +246,8 @@ class Preferences(private val context: Context) {
     /**
      * The saved output format.
      *
-     * Use [getFormatParam]/[setFormatParam] to get/set the format-specific parameter.
+     * Use [getFormatParam]/[setFormatParam] to get/set the format-specific parameter. Use
+     * [getFormatSampleRate]/[setFormatSampleRate] to get/set the format-specific sample rate.
      */
     var format: Format?
         get() = prefs.getString(PREF_FORMAT_NAME, null)?.let { Format.getByName(it) }
@@ -258,7 +263,7 @@ class Preferences(private val context: Context) {
      * Get the format-specific parameter for [format].
      */
     fun getFormatParam(format: Format): UInt? =
-        getOptionalUint(PREF_FORMAT_PARAM_PREFIX + format.name)
+        getOptionalUint(PREF_FORMAT_PARAM_PREFIX + format.name, UInt.MAX_VALUE)
 
     /**
      * Set the format-specific parameter for [format].
@@ -268,7 +273,23 @@ class Preferences(private val context: Context) {
      * @throws IllegalArgumentException if [param] is [UInt.MAX_VALUE]
      */
     fun setFormatParam(format: Format, param: UInt?) =
-        setOptionalUint(PREF_FORMAT_PARAM_PREFIX + format.name, param)
+        setOptionalUint(PREF_FORMAT_PARAM_PREFIX + format.name, UInt.MAX_VALUE, param)
+
+    /**
+     * Get the format-specific sample rate for [format].
+     */
+    fun getFormatSampleRate(format: Format): UInt? =
+        getOptionalUint(PREF_FORMAT_SAMPLE_RATE_PREFIX + format.name, 0U)
+
+    /**
+     * Set the format-specific sample rate for [format].
+     *
+     * @param rate Must not be 0
+     *
+     * @throws IllegalArgumentException if [rate] is 0
+     */
+    fun setFormatSampleRate(format: Format, rate: UInt?) =
+        setOptionalUint(PREF_FORMAT_SAMPLE_RATE_PREFIX + format.name, 0U, rate)
 
     /**
      * Remove the default format preference and the parameters for all formats.
@@ -281,15 +302,6 @@ class Preferences(private val context: Context) {
             }
         }
     }
-
-    /**
-     * The recording and output sample rate.
-     *
-     * Must not be [UInt.MAX_VALUE].
-     */
-    var sampleRate: SampleRate?
-        get() = getOptionalUint(PREF_SAMPLE_RATE)?.let { SampleRate(it) }
-        set(sampleRate) = setOptionalUint(PREF_SAMPLE_RATE, sampleRate?.value)
 
     /**
      * Whether to write call metadata file.
@@ -307,4 +319,18 @@ class Preferences(private val context: Context) {
             prefs.edit { putInt(PREF_NEXT_NOTIFICATION_ID, nextId + 1) }
             nextId
         }
+
+    /**
+     * Migrate legacy global sample rate to format-specific sample rate.
+     *
+     * This migration will be removed in version 1.65.
+     */
+    fun migrateSampleRate() {
+        val sampleRate = getOptionalUint(PREF_SAMPLE_RATE, UInt.MAX_VALUE)
+        if (sampleRate != null) {
+            val (format, _, _) = Format.fromPreferences(this)
+            setFormatSampleRate(format, sampleRate)
+            setOptionalUint(PREF_SAMPLE_RATE, UInt.MAX_VALUE, null)
+        }
+    }
 }
