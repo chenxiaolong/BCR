@@ -88,7 +88,7 @@
     <string name="format_param_dialog_message">Введите значение в диапазоне [%1$s, %2$s].</string>
 
     <!-- Format parameter -->
-    <string name="format_param_bitrate">%s kbps</string>
+    <string name="format_param_bitrate_kbps">%s kbps</string>
     <string name="format_param_compression_level">Уровень %s</string>
 
     <!-- Notifications -->

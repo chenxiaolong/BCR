@@ -92,7 +92,14 @@ sealed class Format {
     companion object {
         const val KEY_X_FRAME_SIZE_IN_BYTES = "x-frame-size-in-bytes"
 
-        val all: Array<Format> = arrayOf(OpusFormat, AacFormat, FlacFormat, WaveFormat)
+        val all: Array<Format> = arrayOf(
+            OpusFormat,
+            AacFormat,
+            FlacFormat,
+            WaveFormat,
+            AmrWbFormat,
+            AmrNbFormat,
+        )
         private val default: Format = all.first { it.supported }
 
         /** Find output format by name. */

@@ -91,7 +91,8 @@
     <string name="format_sample_rate_dialog_message">Enter a sample rate in the range [%1$s, %2$s].</string>
 
     <!-- Format parameter -->
-    <string name="format_param_bitrate">%s kbps</string>
+    <string name="format_param_bitrate_bps">%s bps</string>
+    <string name="format_param_bitrate_kbps">%s kbps</string>
     <string name="format_param_compression_level">Level %s</string>
 
     <!-- Format sample rate -->

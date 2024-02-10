@@ -6,6 +6,7 @@ import android.media.MediaCodec
 import android.media.MediaFormat
 import android.system.Os
 import android.system.OsConstants
+import com.chiller3.bcr.writeFully
 import java.io.FileDescriptor
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -41,7 +42,7 @@ class WaveContainer(private val fd: FileDescriptor) : Container {
             val fileSize = Os.lseek(fd, 0, OsConstants.SEEK_CUR)
             val header = buildHeader(fileSize)
             Os.lseek(fd, 0, OsConstants.SEEK_SET)
-            Os.write(fd, header)
+            writeFully(fd, header)
         }
     }
 
@@ -76,7 +77,7 @@ class WaveContainer(private val fd: FileDescriptor) : Container {
             throw IllegalStateException("Invalid track: $trackIndex")
         }
 
-        Os.write(fd, byteBuffer)
+        writeFully(fd, byteBuffer)
     }
 
     private fun buildHeader(fileSize: Long): ByteBuffer =

@@ -90,7 +90,7 @@ Supported variables: <annotation type="supported_vars">PLACEHOLDER</annotation>.
     <string name="format_param_dialog_message">הזן ערך בטווח [%1$s, %2$s].</string>
 
     <!-- Format parameter -->
-    <string name="format_param_bitrate">%s kbps</string>
+    <string name="format_param_bitrate_kbps">%s kbps</string>
     <string name="format_param_compression_level">רמה %s</string>
 
     <!-- Notifications -->

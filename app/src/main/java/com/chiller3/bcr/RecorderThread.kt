@@ -403,7 +403,7 @@ class RecorderThread(
 
             val metadataFile = dirUtils.createFileInOutputDir(path, MIME_METADATA)
             dirUtils.openFile(metadataFile, true).use {
-                Os.write(it.fileDescriptor, metadataBytes, 0, metadataBytes.size)
+                writeFully(it.fileDescriptor, metadataBytes, 0, metadataBytes.size)
             }
 
             return OutputFile(

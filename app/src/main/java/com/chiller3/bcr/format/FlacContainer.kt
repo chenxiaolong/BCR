@@ -7,6 +7,7 @@ import android.media.MediaFormat
 import android.system.Os
 import android.system.OsConstants
 import android.util.Log
+import com.chiller3.bcr.writeFully
 import java.io.FileDescriptor
 import java.io.IOException
 import java.nio.ByteBuffer
@@ -76,7 +77,7 @@ class FlacContainer(private val fd: FileDescriptor) : Container {
             throw IllegalStateException("Invalid track: $trackIndex")
         }
 
-        Os.write(fd, byteBuffer)
+        writeFully(fd, byteBuffer)
 
         if ((bufferInfo.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
             lastPresentationTimeUs = bufferInfo.presentationTimeUs
@@ -140,9 +141,7 @@ class FlacContainer(private val fd: FileDescriptor) : Container {
         buf[25] = (frames and 0xffu).toUByte()
 
         Os.lseek(fd, 21, OsConstants.SEEK_SET)
-        if (Os.write(fd, buf.asByteArray(), 21, 5) != 5) {
-            throw IOException("EOF reached when writing frame count")
-        }
+        writeFully(fd, buf.asByteArray(), 21, 5)
     }
 
     companion object {

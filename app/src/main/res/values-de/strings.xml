@@ -76,7 +76,7 @@
     <string name="format_param_dialog_message">Gebe einen Wert von [%1$s, %2$s] ein.</string>
 
     <!-- Format parameter -->
-    <string name="format_param_bitrate">%s kbps</string>
+    <string name="format_param_bitrate_kbps">%s kbps</string>
     <string name="format_param_compression_level">Komprimierungsstufe %s</string>
 
     <!-- Notifications -->

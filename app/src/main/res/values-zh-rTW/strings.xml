@@ -76,7 +76,7 @@
     <string name="format_param_dialog_message">輸入範圍 [%1$s, %2$s] 內的值。</string>
 
     <!-- Format parameter -->
-    <string name="format_param_bitrate">%s kbps</string>
+    <string name="format_param_bitrate_kbps">%s kbps</string>
     <string name="format_param_compression_level">等級 %s</string>
 
     <!-- Notifications -->
