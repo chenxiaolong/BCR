@@ -18,6 +18,7 @@
 Behind the scenes changes:
 
 * Fix missing Gradle verification checksums when building from source on non-Linux OSs ([Issue #491], [PR #493 @chenxiaolong])
+* Update dependencies ([PR #498 @chenxiaolong])
 
 ### Version 1.59
 
@@ -800,3 +801,4 @@ Non-user-facing changes:
 [PR #493 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/493
 [PR #496 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/496
 [PR #497 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/497
+[PR #498 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/498
