@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.60
 
 * Make the sample rate option format-specific instead of global ([PR #496 @chenxiaolong])
   * The default sample rate is now also 16 kHz for every format
