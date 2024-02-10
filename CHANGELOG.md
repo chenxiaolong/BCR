@@ -9,6 +9,9 @@
 
 ### Unreleased
 
+* Make the sample rate option format-specific instead of global ([PR #496 @chenxiaolong])
+  * The default sample rate is now also 16 kHz for every format
+
 Behind the scenes changes:
 
 * Fix missing Gradle verification checksums when building from source on non-Linux OSs ([Issue #491], [PR #493 @chenxiaolong])
@@ -791,3 +794,4 @@ Non-user-facing changes:
 [PR #480 @DHD2280]: https://github.com/chenxiaolong/BCR/pull/480
 [PR #481 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/481
 [PR #493 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/493
+[PR #496 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/496
