@@ -12,7 +12,7 @@
 ### Version 1.60
 
 * Make the sample rate option format-specific instead of global ([PR #496 @chenxiaolong])
-  * The default sample rate is now also 16 kHz for every format
+  * The default sample rate is now also 16 kHz for every format that supports it
 * Add support for AMR-WB and AMR-NB ([Issue #264], [PR #497 @chenxiaolong])
   * The patents have now expired in North America and Europe.
   * Note that this is a lossy recording even though the raw phone call audio signal is AMR. The modem always decodes the raw AMR audio to PCM. When AMR output in BCR is selected, the PCM audio is reencoded back to AMR.
