@@ -11,6 +11,9 @@
 
 * Make the sample rate option format-specific instead of global ([PR #496 @chenxiaolong])
   * The default sample rate is now also 16 kHz for every format
+* Add support for AMR-WB and AMR-NB ([Issue #264], [PR #497 @chenxiaolong])
+  * The patents have now expired in North America and Europe.
+  * Note that this is a lossy recording even though the raw phone call audio signal is AMR. The modem always decodes the raw AMR audio to PCM. When AMR output in BCR is selected, the PCM audio is reencoded back to AMR.
 
 Behind the scenes changes:
 
@@ -549,6 +552,7 @@ Non-user-facing changes:
 [Issue #252]: https://github.com/chenxiaolong/BCR/issues/252
 [Issue #253]: https://github.com/chenxiaolong/BCR/issues/253
 [Issue #260]: https://github.com/chenxiaolong/BCR/issues/260
+[Issue #264]: https://github.com/chenxiaolong/BCR/issues/264
 [Issue #275]: https://github.com/chenxiaolong/BCR/issues/275
 [Issue #288]: https://github.com/chenxiaolong/BCR/issues/288
 [Issue #290]: https://github.com/chenxiaolong/BCR/issues/290
@@ -795,3 +799,4 @@ Non-user-facing changes:
 [PR #481 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/481
 [PR #493 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/493
 [PR #496 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/496
+[PR #497 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/497
