@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update Turkish translations ([PR #503 @symbuzzer])
+
 ### Version 1.60
 
 * Make the sample rate option format-specific instead of global ([PR #496 @chenxiaolong])
@@ -804,3 +806,4 @@ Non-user-facing changes:
 [PR #496 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/496
 [PR #497 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/497
 [PR #498 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/498
+[PR #503 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/503
