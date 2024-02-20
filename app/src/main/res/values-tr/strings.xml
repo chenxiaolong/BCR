@@ -85,11 +85,19 @@
     <!-- Format parameter dialog -->
     <string name="format_param_dialog_title">Özel parametre</string>
     <string name="format_param_dialog_message">Bu aralıkta bir değer girin [%1$s, %2$s].</string>
-
+    
+    <!-- Format sample rate dialog -->
+    <string name="format_sample_rate_dialog_title">Özel örnekleme hızı</string>
+    <string name="format_sample_rate_dialog_message">Bu aralıkta bir örnekleme hızı değeri girin [%1$s, %2$s].</string>
+    
     <!-- Format parameter -->
+    <string name="format_param_bitrate_bps">%s bps</string>
     <string name="format_param_bitrate_kbps">%s kbps</string>
     <string name="format_param_compression_level">Seviye %s</string>
 
+    <!-- Format sample rate -->
+    <string name="format_sample_rate">%s Hz</string>
+    
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Arka plan servisleri</string>
     <string name="notification_channel_persistent_desc">Arka plan arama kaydı için kalıcı bildirim</string>
