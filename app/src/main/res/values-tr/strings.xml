@@ -88,7 +88,7 @@
     
     <!-- Format sample rate dialog -->
     <string name="format_sample_rate_dialog_title">Özel örnekleme hızı</string>
-    <string name="format_sample_rate_dialog_message">Bu aralıkta bir örnekleme hızı değeri girin [%1$s, %2$s].</string>
+    <string name="format_sample_rate_dialog_message_range">[%1$s, %2$s]</string>
     
     <!-- Format parameter -->
     <string name="format_param_bitrate_bps">%s bps</string>

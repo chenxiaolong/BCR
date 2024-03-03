@@ -8,8 +8,18 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import java.io.FileDescriptor
 
-object OpusFormat : Format() {
+class OpusFormat : Format() {
+    init {
+        require(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            "Only supported on Android 10 and newer"
+        }
+    }
+
     override val name: String = "OGG/Opus"
+    // https://datatracker.ietf.org/doc/html/rfc7845#section-9
+    override val mimeTypeContainer: String = "audio/ogg"
+    override val mimeTypeAudio: String = MediaFormat.MIMETYPE_AUDIO_OPUS
+    override val passthrough: Boolean = false
     override val paramInfo: FormatParamInfo = RangedParamInfo(
         RangedParamType.Bitrate,
         6_000u..510_000u,
@@ -24,16 +34,8 @@ object OpusFormat : Format() {
             48_000u,
         ),
     )
-    override val sampleRateInfo: SampleRateInfo = DiscreteSampleRateInfo(
-        // This what Android's C2 software encoder (C2SoftOpusEnc.cpp) supports.
-        uintArrayOf(8_000u, 12_000u, 16_000u, 24_000u, 48_000u),
-        16_000u,
-    )
-    // https://datatracker.ietf.org/doc/html/rfc7845#section-9
-    override val mimeTypeContainer: String = "audio/ogg"
-    override val mimeTypeAudio: String = MediaFormat.MIMETYPE_AUDIO_OPUS
-    override val passthrough: Boolean = false
-    override val supported: Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
+    override val sampleRateInfo: SampleRateInfo =
+        SampleRateInfo.fromCodec(baseMediaFormat, 16_000u)
 
     override fun updateMediaFormat(mediaFormat: MediaFormat, param: UInt) {
         mediaFormat.apply {

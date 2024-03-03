@@ -1,20 +1,12 @@
-@file:OptIn(ExperimentalUnsignedTypes::class)
-
 package com.chiller3.bcr.format
 
 import android.media.MediaFormat
+import com.chiller3.bcr.extension.SAMPLE_RATE_HZ_MAX_COMPAT
+import com.chiller3.bcr.extension.SAMPLE_RATE_HZ_MIN_COMPAT
 import java.io.FileDescriptor
 
-object WaveFormat : Format() {
+data object WaveFormat : Format() {
     override val name: String = "WAV/PCM"
-    override val paramInfo: FormatParamInfo = NoParamInfo
-    override val sampleRateInfo: SampleRateInfo = RangedSampleRateInfo(
-        // WAV sample rate field is a 4-byte integer and there's nothing that theoretically prevents
-        // using an absurdly large sample rate.
-        1u..UInt.MAX_VALUE,
-        16_000u,
-        uintArrayOf(8_000u, 16_000u, 48_000u),
-    )
     // Should be "audio/vnd.wave" [1], but Android only recognizes "audio/x-wav" [2] for the
     // purpose of picking an appropriate file extension when creating a file via SAF.
     // [1] https://datatracker.ietf.org/doc/html/rfc2361
@@ -22,7 +14,14 @@ object WaveFormat : Format() {
     override val mimeTypeContainer: String = "audio/x-wav"
     override val mimeTypeAudio: String = "audio/x-wav"
     override val passthrough: Boolean = true
-    override val supported: Boolean = true
+    override val paramInfo: FormatParamInfo = NoParamInfo
+    override val sampleRateInfo: SampleRateInfo = RangedSampleRateInfo(
+        // WAV sample rate field is a 4-byte integer and there's nothing that theoretically prevents
+        // using an absurdly large sample rate. However, let's stick to a range that AudioRecord
+        // actually supports.
+        arrayOf(SAMPLE_RATE_HZ_MIN_COMPAT.toUInt()..SAMPLE_RATE_HZ_MAX_COMPAT.toUInt()),
+        16_000u,
+    )
 
     override fun updateMediaFormat(mediaFormat: MediaFormat, param: UInt) {
         // Not needed

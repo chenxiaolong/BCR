@@ -2,6 +2,7 @@ package com.chiller3.bcr.format
 
 import android.media.AudioFormat
 import android.media.MediaFormat
+import android.util.Log
 import com.chiller3.bcr.Preferences
 import com.chiller3.bcr.extension.frameSizeInBytesCompat
 import java.io.FileDescriptor
@@ -9,12 +10,6 @@ import java.io.FileDescriptor
 sealed class Format {
     /** User-facing name of the format. */
     abstract val name: String
-
-    /** Details about the format parameter range and default value. */
-    abstract val paramInfo: FormatParamInfo
-
-    /** Defaults about the supported sample rates. */
-    abstract val sampleRateInfo: SampleRateInfo
 
     /** The MIME type of the container storing the encoded audio stream. */
     abstract val mimeTypeContainer: String
@@ -29,8 +24,17 @@ sealed class Format {
     /** Whether the format takes the PCM samples as is without encoding. */
     abstract val passthrough: Boolean
 
-    /** Whether the format is supported on the current device. */
-    abstract val supported: Boolean
+    /** Details about the format parameter range and default value. */
+    abstract val paramInfo: FormatParamInfo
+
+    /** Defaults about the supported sample rates. */
+    abstract val sampleRateInfo: SampleRateInfo
+
+    /** Bare minimum [MediaFormat] containing only [MediaFormat.KEY_MIME]. */
+    protected val baseMediaFormat: MediaFormat
+        get() = MediaFormat().apply {
+            setString(MediaFormat.KEY_MIME, mimeTypeAudio)
+        }
 
     /**
      * Create a [MediaFormat] representing the encoded audio with parameters matching the specified
@@ -47,8 +51,7 @@ sealed class Format {
             paramInfo.validate(param)
         }
 
-        val format = MediaFormat().apply {
-            setString(MediaFormat.KEY_MIME, mimeTypeAudio)
+        val format = baseMediaFormat.apply {
             setInteger(MediaFormat.KEY_CHANNEL_COUNT, audioFormat.channelCount)
             setInteger(MediaFormat.KEY_SAMPLE_RATE, audioFormat.sampleRate)
             setInteger(KEY_X_FRAME_SIZE_IN_BYTES, audioFormat.frameSizeInBytesCompat)
@@ -90,17 +93,31 @@ sealed class Format {
     abstract fun getContainer(fd: FileDescriptor): Container
 
     companion object {
+        private val TAG = Format::class.java.simpleName
+
         const val KEY_X_FRAME_SIZE_IN_BYTES = "x-frame-size-in-bytes"
 
-        val all: Array<Format> = arrayOf(
-            OpusFormat,
-            AacFormat,
-            FlacFormat,
-            WaveFormat,
-            AmrWbFormat,
-            AmrNbFormat,
-        )
-        private val default: Format = all.first { it.supported }
+        val all: List<Format> by lazy {
+            val formats = mutableListOf<Format>()
+
+            for (constructor in arrayOf(
+                ::OpusFormat,
+                ::AacFormat,
+                ::FlacFormat,
+                { WaveFormat },
+                ::AmrWbFormat,
+                ::AmrNbFormat,
+            )) {
+                try {
+                    formats.add(constructor())
+                } catch (e: IllegalArgumentException) {
+                    Log.w(TAG, "Failed to initialize with $constructor", e)
+                }
+            }
+
+            formats
+        }
+        private val default: Format = all.first()
 
         /** Find output format by name. */
         fun getByName(name: String): Format? = all.find { it.name == name }
@@ -112,11 +129,8 @@ sealed class Format {
          * sample rate, if set, is set to the nearest valid value.
          */
         fun fromPreferences(prefs: Preferences): Triple<Format, UInt?, UInt?> {
-            // Use the saved format if it is valid and supported on the current device. Otherwise,
-            // fall back to the default.
-            val format = prefs.format
-                ?.let { if (it.supported) { it } else { null } }
-                ?: default
+            // Use the saved format if it is (still) valid.
+            val format = prefs.format ?: default
 
             // Convert the saved value to the nearest valid value (eg. in case the bitrate range is
             // changed in a future version).

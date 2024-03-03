@@ -4,6 +4,9 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.InputType
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.BulletSpan
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
@@ -42,11 +45,35 @@ class FormatSampleRateDialogFragment : DialogFragment() {
 
         binding = DialogTextInputBinding.inflate(layoutInflater)
 
-        binding.message.text = getString(
-            R.string.format_sample_rate_dialog_message,
-            sampleRateInfo.format(context, sampleRateInfo.range.first),
-            sampleRateInfo.format(context, sampleRateInfo.range.last),
-        )
+        binding.message.text = SpannableStringBuilder().apply {
+            append(getString(R.string.format_sample_rate_dialog_message_desc))
+
+            // BulletSpan operates on unscaled pixels for some reason.
+            val density = resources.displayMetrics.density
+            val gapPx = (density * 4).toInt()
+            val radiusPx = (density * 2).toInt()
+
+            for (range in sampleRateInfo.ranges) {
+                append('\n')
+
+                val start = length
+
+                append(getString(
+                    R.string.format_sample_rate_dialog_message_range,
+                    sampleRateInfo.format(context, range.first),
+                    sampleRateInfo.format(context, range.last),
+                ))
+
+                val end = length
+
+                setSpan(
+                    BulletSpan(gapPx, binding.message.currentTextColor, radiusPx),
+                    start,
+                    end,
+                    Spannable.SPAN_INCLUSIVE_EXCLUSIVE,
+                )
+            }
+        }
 
         // Try to detect if the displayed format is a prefix or suffix since it may not be the same
         // in every language.
@@ -72,11 +99,12 @@ class FormatSampleRateDialogFragment : DialogFragment() {
 
             if (it!!.isNotEmpty()) {
                 try {
-                    val newValue = it.toString().toUInt()
-                    if (newValue in sampleRateInfo.range) {
-                        value = newValue
+                    value = it.toString().toUInt().apply {
+                        sampleRateInfo.validate(this)
                     }
                 } catch (e: NumberFormatException) {
+                    // Ignore
+                } catch (e: IllegalArgumentException) {
                     // Ignore
                 }
             }

@@ -44,10 +44,6 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
         binding.reset.setOnClickListener(this)
 
         for (format in Format.all) {
-            if (!format.supported) {
-                continue
-            }
-
             addFormatChip(inflater, format)
         }
 

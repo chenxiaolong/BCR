@@ -88,7 +88,8 @@
 
     <!-- Format sample rate dialog -->
     <string name="format_sample_rate_dialog_title">Custom sample rate</string>
-    <string name="format_sample_rate_dialog_message">Enter a sample rate in the range [%1$s, %2$s].</string>
+    <string name="format_sample_rate_dialog_message_desc">Enter a sample rate within one of these ranges:</string>
+    <string name="format_sample_rate_dialog_message_range">[%1$s, %2$s]</string>
 
     <!-- Format parameter -->
     <string name="format_param_bitrate_bps">%s bps</string>

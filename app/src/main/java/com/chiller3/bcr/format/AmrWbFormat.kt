@@ -5,8 +5,11 @@ package com.chiller3.bcr.format
 import android.media.MediaFormat
 import java.io.FileDescriptor
 
-data object AmrWbFormat : Format() {
+class AmrWbFormat : Format() {
     override val name: String = "AMR-WB"
+    override val mimeTypeContainer: String = MediaFormat.MIMETYPE_AUDIO_AMR_WB
+    override val mimeTypeAudio: String = mimeTypeContainer
+    override val passthrough: Boolean = false
     override val paramInfo: FormatParamInfo = RangedParamInfo(
         RangedParamType.Bitrate,
         6_600u..23_850u,
@@ -19,14 +22,8 @@ data object AmrWbFormat : Format() {
             23_850u,
         ),
     )
-    override val sampleRateInfo: SampleRateInfo = DiscreteSampleRateInfo(
-        uintArrayOf(16_000u),
-        16_000u,
-    )
-    override val mimeTypeContainer: String = MediaFormat.MIMETYPE_AUDIO_AMR_WB
-    override val mimeTypeAudio: String = mimeTypeContainer
-    override val passthrough: Boolean = false
-    override val supported: Boolean = true
+    override val sampleRateInfo: SampleRateInfo =
+        SampleRateInfo.fromCodec(baseMediaFormat, 16_000u)
 
     override fun updateMediaFormat(mediaFormat: MediaFormat, param: UInt) {
         mediaFormat.apply {

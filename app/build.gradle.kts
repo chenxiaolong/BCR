@@ -299,6 +299,22 @@ android.applicationVariants.all {
         }
     }
 
+    val configXml = tasks.register("configXml${capitalized}") {
+        inputs.property("variant.applicationId", variant.applicationId)
+
+        val outputFile = variantDir.map { it.file("config-${variant.applicationId}.xml") }
+        outputs.file(outputFile)
+
+        doLast {
+            outputFile.get().asFile.writeText("""
+                <?xml version="1.0" encoding="utf-8"?>
+                <config>
+                    <hidden-api-whitelisted-app package="${variant.applicationId}" />
+                </config>
+            """.trimIndent())
+        }
+    }
+
     val addonD = tasks.register("addonD${capitalized}") {
         inputs.property("variant.applicationId", variant.applicationId)
 
@@ -357,6 +373,9 @@ android.applicationVariants.all {
         }
         from(permissionsXml.map { it.outputs }) {
             into("system/etc/permissions")
+        }
+        from(configXml.map { it.outputs }) {
+            into("system/etc/sysconfig")
         }
         from(variant.outputs.map { it.outputFile }) {
             into("system/priv-app/${variant.applicationId}")
