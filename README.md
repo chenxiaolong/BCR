@@ -307,13 +307,13 @@ Both the zip file and the APK contained within are digitally signed. **NOTE**: T
 
 ### Verifying zip file signature
 
-First save the public key to a file that lists which keys should be trusted.
+First, run the following command to save the public key to a file that lists which keys should be trusted:
 
 ```bash
 echo 'bcr ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDOe6/tBnO7xZhAWXRj3ApUYgn+XZ0wnQiXM8B7tPgv4' > bcr_trusted_keys
 ```
 
-Then, verify the signature of the zip file using the list of trusted keys.
+Then, run the following command to verify the signature of the zip file using the list of trusted keys:
 
 ```bash
 ssh-keygen -Y verify -f bcr_trusted_keys -I bcr -n file -s BCR-<version>-release.zip.sig < BCR-<version>-release.zip
