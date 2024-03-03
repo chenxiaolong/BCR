@@ -11,6 +11,8 @@
 
 * Update Turkish translations ([PR #503 @symbuzzer])
 * Fix crash if the call log reports an empty phone number for private calls ([Issue #455], [PR #505 @chenxiaolong])
+* Always save log file when an error occurs ([PR #506 @chenxiaolong])
+  * It is no longer necessary to manually enable debug mode unless you also want to save the logs for successful recordings.
 
 ### Version 1.60
 
@@ -810,3 +812,4 @@ Non-user-facing changes:
 [PR #498 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/498
 [PR #503 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/503
 [PR #505 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/505
+[PR #506 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/506
