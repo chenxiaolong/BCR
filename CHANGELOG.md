@@ -9,6 +9,9 @@
 
 ### Unreleased
 
+* Automatically detect sample rates supported by the output format's encoder ([Issue #507], [PR #508 @chenxiaolong])
+  * Fixes recording failures on Redmi devices due to the OEM removing support for all non-48kHz sample rates from Android's standard Opus encoder.
+
 ### Version 1.61
 
 * Update Turkish translations ([PR #503 @symbuzzer])
@@ -589,6 +592,7 @@ Non-user-facing changes:
 [Issue #433]: https://github.com/chenxiaolong/BCR/issues/433
 [Issue #455]: https://github.com/chenxiaolong/BCR/issues/455
 [Issue #491]: https://github.com/chenxiaolong/BCR/issues/491
+[Issue #507]: https://github.com/chenxiaolong/BCR/issues/507
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -815,3 +819,4 @@ Non-user-facing changes:
 [PR #503 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/503
 [PR #505 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/505
 [PR #506 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/506
+[PR #508 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/508
