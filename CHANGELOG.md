@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update Turkish translations ([PR #503 @symbuzzer])
+* Fix crash if the call log reports an empty phone number for private calls ([Issue #455], [PR #505 @chenxiaolong])
 
 ### Version 1.60
 
@@ -582,6 +583,7 @@ Non-user-facing changes:
 [Issue #422]: https://github.com/chenxiaolong/BCR/issues/422
 [Issue #429]: https://github.com/chenxiaolong/BCR/issues/429
 [Issue #433]: https://github.com/chenxiaolong/BCR/issues/433
+[Issue #455]: https://github.com/chenxiaolong/BCR/issues/455
 [Issue #491]: https://github.com/chenxiaolong/BCR/issues/491
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
@@ -807,3 +809,4 @@ Non-user-facing changes:
 [PR #497 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/497
 [PR #498 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/498
 [PR #503 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/503
+[PR #505 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/505
