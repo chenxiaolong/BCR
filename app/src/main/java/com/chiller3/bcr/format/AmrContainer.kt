@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalUnsignedTypes::class)
-
 package com.chiller3.bcr.format
 
 import android.media.MediaCodec
