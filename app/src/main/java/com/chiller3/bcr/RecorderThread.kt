@@ -29,6 +29,7 @@ import com.chiller3.bcr.output.OutputDirUtils
 import com.chiller3.bcr.output.OutputFile
 import com.chiller3.bcr.output.OutputFilenameGenerator
 import com.chiller3.bcr.output.OutputPath
+import com.chiller3.bcr.output.PhoneNumber
 import com.chiller3.bcr.output.Retention
 import com.chiller3.bcr.rule.RecordRule
 import org.json.JSONObject
@@ -153,14 +154,14 @@ class RecorderThread(
             return
         }
 
-        val numbers = hashSetOf<String>()
+        val numbers = hashSetOf<PhoneNumber>()
 
         if (parentCall.details.hasProperty(Call.Details.PROPERTY_CONFERENCE)) {
             for (childCall in parentCall.children) {
-                childCall.details?.phoneNumber?.let { numbers.add(it.toString()) }
+                childCall.details?.phoneNumber?.let { numbers.add(it) }
             }
         } else {
-            parentCall.details?.phoneNumber?.let { numbers.add(it.toString()) }
+            parentCall.details?.phoneNumber?.let { numbers.add(it) }
         }
 
         Log.i(tag, "Evaluating record rules for ${numbers.size} phone number(s)")

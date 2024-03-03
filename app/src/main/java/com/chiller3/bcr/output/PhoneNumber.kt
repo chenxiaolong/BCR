@@ -7,6 +7,10 @@ import android.util.Log
 import java.util.Locale
 
 data class PhoneNumber(private val number: String) {
+    init {
+        require(number.isNotEmpty()) { "Number cannot be empty" }
+    }
+
     fun format(context: Context, format: Format) = when (format) {
         Format.DIGITS_ONLY -> number.filter { Character.digit(it, 10) != -1 }
         Format.COUNTRY_SPECIFIC -> {
