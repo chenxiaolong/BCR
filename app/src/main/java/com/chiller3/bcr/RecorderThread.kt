@@ -59,7 +59,6 @@ class RecorderThread(
 ) : Thread(RecorderThread::class.java.simpleName) {
     private val tag = "${RecorderThread::class.java.simpleName}/${id}"
     private val prefs = Preferences(context)
-    private val isDebug = prefs.isDebugMode
 
     enum class State {
         NOT_STARTED,
@@ -256,7 +255,16 @@ class RecorderThread(
             Log.i(tag, "Recording thread completed")
 
             try {
-                stopLogcat()?.let { additionalFiles.add(it) }
+                val logcatOutput = stopLogcat()
+
+                // Log files are always kept when an error occurs to avoid the hassle of having the
+                // user manually enable debug mode and needing to reproduce the problem.
+                if (prefs.isDebugMode || errorMsg != null) {
+                    additionalFiles.add(logcatOutput)
+                } else {
+                    Log.d(tag, "No need to preserve logcat")
+                    logcatOutput.toDocumentFile(context).delete()
+                }
             } catch (e: Exception) {
                 Log.w(tag, "Failed to dump logcat", e)
             }
@@ -305,10 +313,6 @@ class RecorderThread(
     }
 
     private fun startLogcat() {
-        if (!isDebug) {
-            return
-        }
-
         assert(!this::logcatProcess.isInitialized) { "logcat already started" }
 
         Log.d(tag, "Starting log file (${BuildConfig.VERSION_NAME})")
@@ -324,11 +328,7 @@ class RecorderThread(
             .start()
     }
 
-    private fun stopLogcat(): OutputFile? {
-        if (!isDebug) {
-            return null
-        }
-
+    private fun stopLogcat(): OutputFile {
         assert(this::logcatProcess.isInitialized) { "logcat not started" }
 
         var uri = logcatFile.uri
