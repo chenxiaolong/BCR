@@ -24,7 +24,7 @@ BCR is a simple Android call recording app for rooted devices or devices running
 * No persistent notification unless a recording is in progress
 * No network access permission
 * Works with call screening on Pixel devices (records the caller, but not the automated system)
-* Supports both Magisk and KernelSU 
+* Supports both Magisk and KernelSU
 
 ## Non-features
 
@@ -307,16 +307,22 @@ Both the zip file and the APK contained within are digitally signed. **NOTE**: T
 
 ### Verifying zip file signature
 
-First, run the following command to save the public key to a file that lists which keys should be trusted:
+To verify the signature of the zip file, run the following two commands. This will save the trusted key to a file named `bcr_trusted_keys` and then use it to verify the signature. Make sure to replace `<version>` with the actual version number.
+
+For Unix-like systems and Windows (Command Prompt):
 
 ```bash
-echo 'bcr ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDOe6/tBnO7xZhAWXRj3ApUYgn+XZ0wnQiXM8B7tPgv4' > bcr_trusted_keys
+echo bcr ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDOe6/tBnO7xZhAWXRj3ApUYgn+XZ0wnQiXM8B7tPgv4 > bcr_trusted_keys
+
+ssh-keygen -Y verify -f bcr_trusted_keys -I bcr -n file -s BCR-<version>-release.zip.sig < BCR-<version>-release.zip
 ```
 
-Then, run the following command to verify the signature of the zip file using the list of trusted keys:
+For Windows (PowerShell):
 
-```bash
-ssh-keygen -Y verify -f bcr_trusted_keys -I bcr -n file -s BCR-<version>-release.zip.sig < BCR-<version>-release.zip
+```powershell
+echo 'bcr ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDOe6/tBnO7xZhAWXRj3ApUYgn+XZ0wnQiXM8B7tPgv4' | Out-File -Encoding ascii bcr_trusted_keys
+
+Start-Process -Wait -NoNewWindow -RedirectStandardInput BCR-<version>-release.zip ssh-keygen -ArgumentList "-Y verify -f bcr_trusted_keys -I bcr -n file -s BCR-<version>-release.zip.sig"
 ```
 
 If the file is successfully verified, the output will be:
