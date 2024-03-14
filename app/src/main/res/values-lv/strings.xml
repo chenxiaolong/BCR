@@ -1,0 +1,122 @@
+<resources>
+    <string name="app_name_full">Basic Call Recorder</string>
+
+    <!-- Preference headers -->
+    <string name="pref_header_general">Vispārējie</string>
+    <string name="pref_header_about">Informācija</string>
+
+    <!-- General preferences -->
+    <string name="pref_call_recording_name">Zvanu ieraksts</string>
+    <string name="pref_call_recording_desc">Ienākošo un izejošo tālruņa zvanu ieraksts. Lai ierakstītu fona režīmā, ir nepieciešamas atļaujas izmantot mikrofonu un paziņojumus.</string>
+
+    <string name="pref_record_rules_name">Automātiskās ierakstīšanas nosacījumi</string>
+    <string name="pref_record_rules_desc">Iestatiet, kuri zvani ierakstāmi automātiski.</string>
+
+    <string name="pref_output_dir_name">Mape, kura ievietot ierakstus</string>
+    <string name="pref_output_dir_desc">Atlasiet mapi, kurā tiks ievietoti ieraksti. Nospiediet un turiet, lai atvērtu failu pārvaldniekā.</string>
+
+    <string name="pref_output_format_name">Ieraksta formāts</string>
+    <string name="pref_output_format_desc">Izvēlieties zvanu ierakstīšanas formātu.</string>
+
+    <string name="pref_inhibit_batt_opt_name">Atspējot akumulatora optimizāciju.</string>
+    <string name="pref_inhibit_batt_opt_desc">Samazina iespēju, ka operētājsistēma apturēs lietojumprogrammu.</string>
+
+    <string name="pref_write_metadata_name">Saglabāt failu ar metadatiem</string>
+    <string name="pref_write_metadata_desc">Atsevišķā JSON failā tiks ierakstīti detalizēti dati par zvanu.</string>
+
+    <!-- About "preference" -->
+    <string name="pref_version_name">Versija</string>
+
+    <!-- Record rules bottom sheet -->
+    <string name="pref_header_rules">Nosacījumi</string>
+    <string name="pref_add_rule_name">Pievienot nosacījumu</string>
+    <string name="pref_add_rule_desc">Pievienojiet kontakta automātiskās ierakstīšanas nosacījumu.</string>
+    <string name="record_rules_rule_added">Pievienots jauns nosacījums. Nospiediet un turiet uz nosacījuma, lai to dzēstu.</string>
+    <string name="record_rules_rule_exists">Nosacījums jau pastāv.</string>
+    <string name="record_rules_info">Ja nosacījums ir iespējots, tad pēc noklusējuma sarunas ierakstīšana tiek veikta automātiski, un to var pašrocīgi dzēst no paziņojuma. Ja nosacījums ir atspējots, ieraksts tiks izdzēsts sarunas beigās, ja vien tas netiks saglabāts, izmantojot paziņojumā esošo pogu "Atjaunot".</string>
+    <string name="record_rule_type_all_calls_name">Visus zvanus</string>
+    <string name="record_rule_type_all_calls_desc">Lai precizāk iestatītu nosacījumus, nepieciešama atļauja lasīt kontaktus.</string>
+    <string name="record_rule_type_all_other_calls_name">Visus pārējos zvanus</string>
+    <string name="record_rule_type_all_other_calls_desc">Zvanus, kuri neatbilst nevienam citam nosacījumam.</string>
+    <string name="record_rule_type_unknown_calls_name">Zvanus no neatpazītajiem/nezināmajiem</string>
+    <string name="record_rule_type_unknown_calls_desc">Zvanus, kuri neatbilst nevienam kontaktam.</string>
+    <string name="record_rule_type_contact_name">Kontakts: %s</string>
+    <string name="record_rule_type_contact_desc">Nospiediet un turiet, lai dzēstu nosacījumu.</string>
+
+    <!-- Output directory bottom sheet -->
+    <string name="output_dir_bottom_sheet_change_dir">Nomainīt mapi</string>
+    <string name="output_dir_bottom_sheet_filename_template">Faila nosaukuma šablons</string>
+    <string name="output_dir_bottom_sheet_edit_template">Rediģēt šablonu</string>
+    <string name="output_dir_bottom_sheet_file_retention">Failu saglabāšana</string>
+    <string name="output_dir_bottom_sheet_edit_retention">Mainīt glabāšanas laiku</string>
+    <string name="retention_keep_all">Saglabāt visus</string>
+    <plurals name="retention_days">
+        <item quantity="one">Glabāt %d dienu</item>
+        <item quantity="few">Glabāt %d dienas</item>
+        <item quantity="many">Glabāt %d dienas</item>
+    </plurals>
+    <string name="retention_unusable">Failu saglabāšana ir atspējota, jo pašreizējais faila nosaukuma šablons nav saderīgs ar šo funkciju.</string>
+
+    <!-- Output format bottom sheet -->
+    <string name="output_format_bottom_sheet_output_format">Ieraksta formāts</string>
+    <string name="output_format_bottom_sheet_compression_level">Saspiešanas pakāpe</string>
+    <string name="output_format_bottom_sheet_bitrate">Bitreits</string>
+    <string name="output_format_bottom_sheet_sample_rate">Paraugu ņemšanas frekvence (sample rate)</string>
+    <string name="output_format_bottom_sheet_custom_param">Pielāgojami iestatījumi</string>
+
+    <string name="bottom_sheet_reset">Atjaunot noklusējuma iestatījumus</string>
+
+    <!-- Filename template dialog -->
+    <string name="filename_template_dialog_title">Faila nosaukuma šablons</string>
+    <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
+    <string name="filename_template_dialog_message">Ieraksta failam izveidojiet pielāgotu šablonu. Mainīgie norādāmi figūriekavās (piemēram, <annotation type="template">{var}</annotation>). Rezerves opcijas ietveramas kvadrātiekavās (piemēram, <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nAtbalstītie mainīgie: <annotation type="supported_vars">PLACEHOLDER</annotation>. Izsmeļoša sintakses apraksta iegūšanai skatīt <annotation type="template_docs">dokumentāciju</annotation>.</string>
+    <string name="filename_template_dialog_warning_subdirectories">Dēļ Android Storage Access Framework švakas veiktspējas zemāka līmeņa mapju / apakšdirektoriju (<annotation type="template">/</annotation>) izmantošana dažās ierīcēs var radīt būtisku aizturi ieraksta saglabāšanā. Aizture notiek zvana/sarunas beigās, un tai nevajadzētu izraisīt skaņas zudumu zvana ierakstā.</string>
+    <string name="filename_template_dialog_error_empty">Šablons nedrīkst būt tukšs</string>
+    <string name="filename_template_dialog_error_unknown_variable">Nezināms šablona mainīgais: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">Mainīgais nedrīkst saturēt argumentu: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_argument">Nederīgs mainīgā arguments: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_syntax">Nederīga šablona sintakse</string>
+    <string name="filename_template_dialog_action_reset_to_default">Atstatīt uz noklusējuma iestatījumiem</string>
+
+    <!-- File retention dialog -->
+    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_message">Ievadiet dienu skaitu ierakstu glabāšanai.</string>
+    <string name="file_retention_error_too_large">Skaits pārāk liels</string>
+
+    <!-- Format parameter dialog -->
+    <string name="format_param_dialog_title">Pielāgojams parametrs</string>
+    <string name="format_param_dialog_message">Ievadiet vērtību diapazonā [%1$s, %2$s].</string>
+
+    <!-- Format parameter -->
+    <string name="format_param_bitrate_kbps">%s kbps</string>
+    <string name="format_param_compression_level">Līmenis %s</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_persistent_name">Fona servisi</string>
+    <string name="notification_channel_persistent_desc">Pastāvīgs paziņojums par zvanu ierakstu fonā</string>
+    <string name="notification_channel_failure_name">Brīdinājumi par kļūmēm</string>
+    <string name="notification_channel_failure_desc">Brīdinājumi par kļūmēm, ierakstot zvanus.</string>
+    <string name="notification_channel_success_name">Paziņojums par veiksmīgu izpildi</string>
+    <string name="notification_channel_success_desc">Paziņojums par veiksmīgu zvana ierakstīšanu</string>
+    <string name="notification_recording_initializing">Zvana ierakstīšanas inicializēšana</string>
+    <string name="notification_recording_in_progress">Tiek ierakstīts zvans</string>
+    <string name="notification_recording_finalizing">Zvana ierakstīšana tiek pabeigta</string>
+    <string name="notification_recording_paused">Zvana ierakstīšana ir apturēta/pauzēta</string>
+    <string name="notification_recording_on_hold">Zvans aizturēts</string>
+    <string name="notification_recording_failed">Zvanu ierakstīt neizdevās</string>
+    <string name="notification_recording_succeeded">Zvans ierakstīts veiksmīgi</string>
+    <string name="notification_message_delete_at_end">Zvana ieraksts tiks izdzēsts sarunas beigās. Noklikšķiniet uz "Atjaunot", lai ierakstu saglabātu.</string>
+    <string name="notification_internal_android_error">Ierakstīšanas kļūme Android iekšējā komponentē (%s). Jūsu aparatūra vai programmatūra (ROMs), iespējams, neatbalsta zvanu ierakstīšanu.</string>
+    <string name="notification_action_open">Atvērt</string>
+    <string name="notification_action_share">Kopīgot</string>
+    <string name="notification_action_delete">Dzēst</string>
+    <string name="notification_action_restore">Atjaunot(restore)</string>
+    <string name="notification_action_pause">Pauze</string>
+    <string name="notification_action_resume">Atsākt(resume)</string>
+
+    <!-- Quick settings tile -->
+    <string name="quick_settings_label">Zvanu ieraksts</string>
+
+    <!-- Snackbar alerts -->
+    <string name="documentsui_not_found">Oriģinālais Android failu pārvaldnieks (DocumentsUI) nav pieejams.</string>
+</resources>
