@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name_full">Vienkāršs zvanu ierakstītājs</string>
+    <string name="app_name_full">Vienkāršs zvanu ierakstītājs BCR</string>
 
     <!-- Preference headers -->
     <string name="pref_header_general">Iestatījumi</string>
@@ -38,8 +38,8 @@
     <string name="record_rule_type_all_calls_desc">Lai precizāk iestatītu nosacījumus, nepieciešama atļauja lasīt kontaktus.</string>
     <string name="record_rule_type_all_other_calls_name">Visus pārējos zvanus</string>
     <string name="record_rule_type_all_other_calls_desc">Zvanus, kuri neatbilst nevienam citam nosacījumam.</string>
-    <string name="record_rule_type_unknown_calls_name">Zvanus no neatpazītajiem/nezināmajiem</string>
-    <string name="record_rule_type_unknown_calls_desc">Zvanus, kuri neatbilst nevienam kontaktam.</string>
+    <string name="record_rule_type_unknown_calls_name">Zvanus no neatpazītiem numuriem</string>
+    <string name="record_rule_type_unknown_calls_desc">Zvanus no numuriem, kuri nav kontaktos / telefongrāmatā.</string>
     <string name="record_rule_type_contact_name">Kontakts: %s</string>
     <string name="record_rule_type_contact_desc">Nospiediet un turiet, lai nosacījumu dzēstu.</string>
 
@@ -48,20 +48,19 @@
     <string name="output_dir_bottom_sheet_filename_template">Faila nosaukuma šablons</string>
     <string name="output_dir_bottom_sheet_edit_template">Rediģēt šablonu</string>
     <string name="output_dir_bottom_sheet_file_retention">Failu saglabāšana</string>
-    <string name="output_dir_bottom_sheet_edit_retention">Mainīt glabāšanas laiku</string>
+    <string name="output_dir_bottom_sheet_edit_retention">Rediģēt glabāšanas iestatījumus</string>
     <string name="retention_keep_all">Saglabāt visus</string>
     <plurals name="retention_days">
         <item quantity="one">Glabāt %d dienu</item>
-        <item quantity="few">Glabāt %d dienas</item>
-        <item quantity="many">Glabāt %d dienas</item>
+        <item quantity="other">Glabāt %d dienas</item>
     </plurals>
     <string name="retention_unusable">Failu saglabāšana ir atspējota, jo pašreizējais faila nosaukuma šablons nav saderīgs ar šo funkciju.</string>
 
     <!-- Output format bottom sheet -->
     <string name="output_format_bottom_sheet_output_format">Ieraksta formāts</string>
-    <string name="output_format_bottom_sheet_compression_level">Saspiešanas pakāpe</string>
+    <string name="output_format_bottom_sheet_compression_level">Saspiešanas līmenis</string>
     <string name="output_format_bottom_sheet_bitrate">Bitreits</string>
-    <string name="output_format_bottom_sheet_sample_rate">Paraugu ņemšanas frekvence (sample rate)</string>
+    <string name="output_format_bottom_sheet_sample_rate">Paraugu ņemšanas frekvence (samplereits)</string>
     <string name="output_format_bottom_sheet_custom_param">Pielāgojami iestatījumi</string>
 
     <string name="bottom_sheet_reset">Atjaunot noklusējuma iestatījumus</string>
@@ -84,13 +83,22 @@
     <string name="file_retention_error_too_large">Skaits pārāk liels</string>
 
     <!-- Format parameter dialog -->
-    <string name="format_param_dialog_title">Pielāgojams parametrs</string>
+    <string name="format_param_dialog_title">Pielāgots parametrs</string>
     <string name="format_param_dialog_message">Ievadiet vērtību diapazonā [%1$s, %2$s].</string>
 
+    <!-- Format sample rate dialog -->
+    <string name="format_sample_rate_dialog_title">Pielāgota diskretizācijas frekvence (sample rate)</string>
+    <string name="format_sample_rate_dialog_message_desc">Ievadiet diskretizācijas frekvenci šajā diapazonā:</string>
+    <string name="format_sample_rate_dialog_message_range">[%1$s, %2$s]</string>
+    
     <!-- Format parameter -->
+    <string name="format_param_bitrate_bps">%s bps</string>
     <string name="format_param_bitrate_kbps">%s kbps</string>
-    <string name="format_param_compression_level">Līmenis %s</string>
+    <string name="format_param_compression_level">Kompresijas līmenis %s</string>
 
+    <!-- Format sample rate -->
+    <string name="format_sample_rate">%s Hz</string>
+    
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Fona servisi</string>
     <string name="notification_channel_persistent_desc">Pastāvīgs paziņojums par zvanu ierakstu fonā</string>
@@ -110,8 +118,8 @@
     <string name="notification_action_open">Atvērt</string>
     <string name="notification_action_share">Kopīgot</string>
     <string name="notification_action_delete">Dzēst</string>
-    <string name="notification_action_restore">Atjaunot(restore)</string>
-    <string name="notification_action_pause">Pauze</string>
+    <string name="notification_action_restore">Saglabāt manuāli</string>
+    <string name="notification_action_pause">Pauzēt/apturēt</string>
     <string name="notification_action_resume">Atsākt(resume)</string>
 
     <!-- Quick settings tile -->
