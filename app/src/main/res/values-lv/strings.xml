@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name_full">Basic Call Recorder</string>
+    <string name="app_name_full">Vienkāršs zvanu ierakstītājs</string>
 
     <!-- Preference headers -->
-    <string name="pref_header_general">Vispārējie</string>
-    <string name="pref_header_about">Informācija</string>
+    <string name="pref_header_general">Iestatījumi</string>
+    <string name="pref_header_about">Par programmu</string>
 
     <!-- General preferences -->
     <string name="pref_call_recording_name">Zvanu ieraksts</string>
@@ -12,17 +12,17 @@
     <string name="pref_record_rules_name">Automātiskās ierakstīšanas nosacījumi</string>
     <string name="pref_record_rules_desc">Iestatiet, kuri zvani ierakstāmi automātiski.</string>
 
-    <string name="pref_output_dir_name">Mape, kura ievietot ierakstus</string>
-    <string name="pref_output_dir_desc">Atlasiet mapi, kurā tiks ievietoti ieraksti. Nospiediet un turiet, lai atvērtu failu pārvaldniekā.</string>
+    <string name="pref_output_dir_name">Ierakstu mape</string>
+    <string name="pref_output_dir_desc">Atlasiet mapi, kurā ievietot ierakstus. Nospiediet un turiet, lai atvērtu failu pārvaldniekā.</string>
 
     <string name="pref_output_format_name">Ieraksta formāts</string>
     <string name="pref_output_format_desc">Izvēlieties zvanu ierakstīšanas formātu.</string>
 
-    <string name="pref_inhibit_batt_opt_name">Atspējot akumulatora optimizāciju.</string>
+    <string name="pref_inhibit_batt_opt_name">Atspējota akumulatora optimizācija.</string>
     <string name="pref_inhibit_batt_opt_desc">Samazina iespēju, ka operētājsistēma apturēs lietojumprogrammu.</string>
 
-    <string name="pref_write_metadata_name">Saglabāt failu ar metadatiem</string>
-    <string name="pref_write_metadata_desc">Atsevišķā JSON failā tiks ierakstīti detalizēti dati par zvanu.</string>
+    <string name="pref_write_metadata_name">Veidot metadatu failu</string>
+    <string name="pref_write_metadata_desc">Tiks veidots atsevišķs JSON fails ar detalizētiem datiem par zvanu.</string>
 
     <!-- About "preference" -->
     <string name="pref_version_name">Versija</string>
@@ -33,7 +33,7 @@
     <string name="pref_add_rule_desc">Pievienojiet kontakta automātiskās ierakstīšanas nosacījumu.</string>
     <string name="record_rules_rule_added">Pievienots jauns nosacījums. Nospiediet un turiet uz nosacījuma, lai to dzēstu.</string>
     <string name="record_rules_rule_exists">Nosacījums jau pastāv.</string>
-    <string name="record_rules_info">Ja nosacījums ir iespējots, tad pēc noklusējuma sarunas ierakstīšana tiek veikta automātiski, un to var pašrocīgi dzēst no paziņojuma. Ja nosacījums ir atspējots, ieraksts tiks izdzēsts sarunas beigās, ja vien tas netiks saglabāts, izmantojot paziņojumā esošo pogu "Atjaunot".</string>
+    <string name="record_rules_info">Ja nosacījums ir iespējots, tad pēc noklusējuma sarunas ierakstīšana tiek veikta automātiski, un to var pašrocīgi dzēst no paziņojuma. Ja nosacījums ir atspējots, ieraksts tiks izdzēsts sarunas beigās, ja vien tas netiks saglabāts, izmantojot paziņojumā esošo pogu "Saglabāt manuāli".</string>
     <string name="record_rule_type_all_calls_name">Visus zvanus</string>
     <string name="record_rule_type_all_calls_desc">Lai precizāk iestatītu nosacījumus, nepieciešama atļauja lasīt kontaktus.</string>
     <string name="record_rule_type_all_other_calls_name">Visus pārējos zvanus</string>
@@ -41,7 +41,7 @@
     <string name="record_rule_type_unknown_calls_name">Zvanus no neatpazītajiem/nezināmajiem</string>
     <string name="record_rule_type_unknown_calls_desc">Zvanus, kuri neatbilst nevienam kontaktam.</string>
     <string name="record_rule_type_contact_name">Kontakts: %s</string>
-    <string name="record_rule_type_contact_desc">Nospiediet un turiet, lai dzēstu nosacījumu.</string>
+    <string name="record_rule_type_contact_desc">Nospiediet un turiet, lai nosacījumu dzēstu.</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Nomainīt mapi</string>
@@ -105,7 +105,7 @@
     <string name="notification_recording_on_hold">Zvans aizturēts</string>
     <string name="notification_recording_failed">Zvanu ierakstīt neizdevās</string>
     <string name="notification_recording_succeeded">Zvans ierakstīts veiksmīgi</string>
-    <string name="notification_message_delete_at_end">Zvana ieraksts tiks izdzēsts sarunas beigās. Noklikšķiniet uz "Atjaunot", lai ierakstu saglabātu.</string>
+    <string name="notification_message_delete_at_end">Zvana ieraksts tiks izdzēsts sarunas beigās. Noklikšķiniet uz "Saglabāt manuāli", lai ierakstu saglabātu.</string>
     <string name="notification_internal_android_error">Ierakstīšanas kļūme Android iekšējā komponentē (%s). Jūsu aparatūra vai programmatūra (ROMs), iespējams, neatbalsta zvanu ierakstīšanu.</string>
     <string name="notification_action_open">Atvērt</string>
     <string name="notification_action_share">Kopīgot</string>
