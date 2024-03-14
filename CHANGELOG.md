@@ -11,6 +11,8 @@
 
 * Automatically detect sample rates supported by the output format's encoder ([Issue #507], [PR #508 @chenxiaolong])
   * Fixes recording failures on Redmi devices due to the OEM removing support for all non-48kHz sample rates from Android's standard Opus encoder.
+* Fix crash when Android returns a null SubscriptionInfo ([Issue #513], [PR #516 @chenxiaolong])
+  * This can happen for third party applications, like SIP clients, that integrate with Android's telephony framework.
 
 ### Version 1.61
 
@@ -593,6 +595,7 @@ Non-user-facing changes:
 [Issue #455]: https://github.com/chenxiaolong/BCR/issues/455
 [Issue #491]: https://github.com/chenxiaolong/BCR/issues/491
 [Issue #507]: https://github.com/chenxiaolong/BCR/issues/507
+[Issue #513]: https://github.com/chenxiaolong/BCR/issues/513
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -820,3 +823,4 @@ Non-user-facing changes:
 [PR #505 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/505
 [PR #506 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/506
 [PR #508 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/508
+[PR #516 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/516
