@@ -231,7 +231,7 @@ class CallMetadataCollector(
             val subscriptionInfo = subscriptionManager.getActiveSubscriptionInfo(subscriptionId)
 
             simCount = subscriptionManager.activeSubscriptionInfoCount
-            simSlot = subscriptionInfo.simSlotIndex + 1
+            simSlot = subscriptionInfo?.let { it.simSlotIndex + 1 }
         }
 
         val (callLogNumber, callLogName) = getCallLogDetails(parentDetails, allowBlockingCalls)
