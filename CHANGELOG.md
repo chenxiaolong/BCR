@@ -13,6 +13,7 @@
   * Fixes recording failures on Redmi devices due to the OEM removing support for all non-48kHz sample rates from Android's standard Opus encoder.
 * Fix crash when Android returns a null SubscriptionInfo ([Issue #513], [PR #516 @chenxiaolong])
   * This can happen for third party applications, like SIP clients, that integrate with Android's telephony framework.
+* Update Turkish translations ([PR #517 @symbuzzer])
 
 ### Version 1.61
 
@@ -824,3 +825,4 @@ Non-user-facing changes:
 [PR #506 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/506
 [PR #508 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/508
 [PR #516 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/516
+[PR #517 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/517
