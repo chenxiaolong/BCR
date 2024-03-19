@@ -29,6 +29,7 @@ class Preferences(private val context: Context) {
         const val PREF_OUTPUT_FORMAT = "output_format"
         const val PREF_INHIBIT_BATT_OPT = "inhibit_batt_opt"
         const val PREF_WRITE_METADATA = "write_metadata"
+        const val PREF_RECORD_TELECOM_APPS = "record_telecom_apps"
         const val PREF_VERSION = "version"
 
         const val PREF_ADD_RULE = "add_rule"
@@ -309,6 +310,13 @@ class Preferences(private val context: Context) {
     var writeMetadata: Boolean
         get() = prefs.getBoolean(PREF_WRITE_METADATA, false)
         set(enabled) = prefs.edit { putBoolean(PREF_WRITE_METADATA, enabled) }
+
+    /**
+     * Whether to record calls from telecom-integrated apps.
+     */
+    var recordTelecomApps: Boolean
+        get() = prefs.getBoolean(PREF_RECORD_TELECOM_APPS, false)
+        set(enabled) = prefs.edit { putBoolean(PREF_RECORD_TELECOM_APPS, enabled) }
 
     /**
      * Get a unique notification ID that increments on every call.

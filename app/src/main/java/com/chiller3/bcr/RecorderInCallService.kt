@@ -18,6 +18,8 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
     companion object {
         private val TAG = RecorderInCallService::class.java.simpleName
 
+        private const val PHONE_PACKAGE = "com.android.phone"
+
         private val ACTION_PAUSE = "${RecorderInCallService::class.java.canonicalName}.pause"
         private val ACTION_RESUME = "${RecorderInCallService::class.java.canonicalName}.resume"
         private val ACTION_RESTORE = "${RecorderInCallService::class.java.canonicalName}.restore"
@@ -234,6 +236,12 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         } else if (!Permissions.haveRequired(this)) {
             Log.v(TAG, "Required permissions have not been granted")
         } else if (!callsToRecorders.containsKey(call)) {
+            val callPackage = call.details.accountHandle.componentName.packageName
+            if (callPackage != PHONE_PACKAGE && !prefs.recordTelecomApps) {
+                Log.w(TAG, "Ignoring call associated with package: $callPackage")
+                return
+            }
+
             val recorder = try {
                 RecorderThread(this, this, call)
             } catch (e: Exception) {
