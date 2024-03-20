@@ -14,6 +14,8 @@
 * Fix crash when Android returns a null SubscriptionInfo ([Issue #513], [PR #516 @chenxiaolong])
   * This can happen for third party applications, like SIP clients, that integrate with Android's telephony framework.
 * Update Turkish translations ([PR #517 @symbuzzer])
+* Disable recording telecom-integrated applications by default ([Issue #513], [PR #518 @chenxiaolong])
+  * This includes apps, like SIP clients, where recording is unlikely to work properly on any device.
 
 ### Version 1.61
 
@@ -826,3 +828,4 @@ Non-user-facing changes:
 [PR #508 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/508
 [PR #516 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/516
 [PR #517 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/517
+[PR #518 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/518
