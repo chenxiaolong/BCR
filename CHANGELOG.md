@@ -16,6 +16,7 @@
 * Update Turkish translations ([PR #517 @symbuzzer])
 * Disable recording telecom-integrated applications by default ([Issue #513], [PR #518 @chenxiaolong])
   * This includes apps, like SIP clients, where recording is unlikely to work properly on any device.
+* Discard recordings that contain complete silence ([Issue #513], [PR #519 @chenxiaolong])
 
 ### Version 1.61
 
@@ -829,3 +830,4 @@ Non-user-facing changes:
 [PR #516 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/516
 [PR #517 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/517
 [PR #518 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/518
+[PR #519 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/519
