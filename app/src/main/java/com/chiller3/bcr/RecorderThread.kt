@@ -180,7 +180,7 @@ class RecorderThread(
     override fun run() {
         var success = false
         var errorMsg: String? = null
-        var resultUri: Uri? = null
+        var outputDocFile: DocumentFile? = null
         val additionalFiles = ArrayList<OutputFile>()
 
         startLogcat()
@@ -197,14 +197,13 @@ class RecorderThread(
                 evaluateRules()
 
                 val initialPath = outputPath
-                val outputFile = dirUtils.createFileInDefaultDir(
+                outputDocFile = dirUtils.createFileInDefaultDir(
                     initialPath.value, format.mimeTypeContainer)
-                resultUri = outputFile.uri
 
                 var recordingInfo: RecordingInfo? = null
 
                 try {
-                    dirUtils.openFile(outputFile, true).use {
+                    dirUtils.openFile(outputDocFile, true).use {
                         recordingInfo = recordUntilCancelled(it)
                         Os.fsync(it.fileDescriptor)
                     }
@@ -217,11 +216,11 @@ class RecorderThread(
 
                     if (keepRecording != false) {
                         dirUtils.tryMoveToOutputDir(
-                            outputFile,
+                            outputDocFile,
                             finalPath.value,
                             format.mimeTypeContainer,
                         )?.let {
-                            resultUri = it.uri
+                            outputDocFile = it
                         }
 
                         writeMetadataFile(finalPath.value, recordingInfo)?.let {
@@ -229,8 +228,8 @@ class RecorderThread(
                         }
                     } else {
                         Log.i(tag, "Deleting recording: $finalPath")
-                        outputFile.delete()
-                        resultUri = null
+                        outputDocFile!!.delete()
+                        outputDocFile = null
                     }
 
                     processRetention()
@@ -241,15 +240,27 @@ class RecorderThread(
         } catch (e: Exception) {
             Log.e(tag, "Error during recording", e)
 
-            errorMsg = buildString {
-                val elem = e.stackTrace.find { it.className.startsWith("android.media.") }
-                if (elem != null) {
-                    append(context.getString(R.string.notification_internal_android_error,
-                        "${elem.className}.${elem.methodName}"))
-                    append("\n\n")
+            errorMsg = if (e is PureSilenceException) {
+                outputDocFile?.delete()
+                outputDocFile = null
+
+                additionalFiles.forEach {
+                    it.toDocumentFile(context).delete()
                 }
 
-                append(e.localizedMessage)
+                context.getString(R.string.notification_pure_silence_error,
+                    parentCall.details.accountHandle.componentName.packageName)
+            } else {
+                buildString {
+                    val elem = e.stackTrace.find { it.className.startsWith("android.media.") }
+                    if (elem != null) {
+                        append(context.getString(R.string.notification_internal_android_error,
+                            "${elem.className}.${elem.methodName}"))
+                        append("\n\n")
+                    }
+
+                    append(e.localizedMessage)
+                }
             }
         } finally {
             Log.i(tag, "Recording thread completed")
@@ -269,10 +280,10 @@ class RecorderThread(
                 Log.w(tag, "Failed to dump logcat", e)
             }
 
-            val outputFile = resultUri?.let {
+            val outputFile = outputDocFile?.let {
                 OutputFile(
-                    it,
-                    outputFilenameGenerator.redactor.redact(it),
+                    it.uri,
+                    outputFilenameGenerator.redactor.redact(it.uri),
                     format.mimeTypeContainer,
                 )
             }
@@ -567,6 +578,7 @@ class RecorderThread(
         var bufferOverruns = 0
         var wasEverPaused = false
         var wasEverHolding = false
+        var wasPureSilence = true
         val frameSize = audioRecord.format.frameSizeInBytesCompat
 
         // Use a slightly larger buffer to reduce the chance of problems under load
@@ -597,6 +609,15 @@ class RecorderThread(
                 continue
             } else {
                 buffer.limit(n)
+
+                if (wasPureSilence) {
+                    for (i in 0 until n / 2) {
+                        if (buffer.getShort(2 * i) != 0.toShort()) {
+                            wasPureSilence = false
+                            break
+                        }
+                    }
+                }
 
                 val encodeBegin = System.nanoTime()
 
@@ -629,6 +650,10 @@ class RecorderThread(
                         "record=${recordElapsed / 1_000_000.0}ms, " +
                         "encode=${encodeElapsed / 1_000_000.0}ms")
             }
+        }
+
+        if (wasPureSilence) {
+            throw PureSilenceException()
         }
 
         // Signal EOF with empty buffer
@@ -684,6 +709,9 @@ class RecorderThread(
             append(", Was ever holding: $wasEverHolding")
         }
     }
+
+    private class PureSilenceException(cause: Throwable? = null)
+        : Exception("Audio contained pure silence", cause)
 
     interface OnRecordingCompletedListener {
         /**

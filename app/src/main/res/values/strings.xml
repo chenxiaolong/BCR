@@ -118,6 +118,7 @@
     <string name="notification_recording_succeeded">Successfully recorded call</string>
     <string name="notification_message_delete_at_end">The recording will be deleted at the end of the call. Tap Restore to keep the recording.</string>
     <string name="notification_internal_android_error">The recording failed in an internal Android component (%s). This device or firmware might not support call recording.</string>
+    <string name="notification_pure_silence_error">The recording was discarded because the audio was completely silent. This device might not support recording calls associated with the \'%s\' app.</string>
     <string name="notification_action_open">Open</string>
     <string name="notification_action_share">Share</string>
     <string name="notification_action_delete">Delete</string>
