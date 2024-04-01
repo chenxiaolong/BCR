@@ -36,7 +36,7 @@
     <string name="record_rules_info">Quando una regola è attiva, la chiamata verrà registrata automaticamente e potrà essere cancellata dalla notifica. Quando una regola non è attiva, la registrazione verrà cancellata alla fine della chiamata a meno che non premi Ripristina nella notifica.</string>
     <string name="record_rule_type_all_calls_name">Tutte le chiamate</string>
     <string name="record_rule_type_all_calls_desc">Per aggiungere regole granulari è necessario consentire il permesso per leggere i Contatti.</string>
-    <string name="record_rule_type_all_other_calls_name">Tuttle le altre chiamate</string>
+    <string name="record_rule_type_all_other_calls_name">Tutte le altre chiamate</string>
     <string name="record_rule_type_all_other_calls_desc">Chiamate che non rientrano nelle altre regole.</string>
     <string name="record_rule_type_unknown_calls_name">Sconosciuto</string>
     <string name="record_rule_type_unknown_calls_desc">Chiamate che non rientrano in nessun contatto.</string>
