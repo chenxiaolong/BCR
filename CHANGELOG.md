@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.62
 
 * Automatically detect sample rates supported by the output format's encoder ([Issue #507], [PR #508 @chenxiaolong])
   * Fixes recording failures on Redmi devices due to the OEM removing support for all non-48kHz sample rates from Android's standard Opus encoder.
