@@ -7,6 +7,8 @@
     to update the actual links at the bottom of the file.
 -->
 
+### Unreleased
+
 ### Version 1.62
 
 * Automatically detect sample rates supported by the output format's encoder ([Issue #507], [PR #508 @chenxiaolong])
@@ -833,3 +835,5 @@ Non-user-facing changes:
 [PR #517 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/517
 [PR #518 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/518
 [PR #519 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/519
+[PR #522 @nicorac]: https://github.com/chenxiaolong/BCR/pull/522
+[PR #523 @anenasa]: https://github.com/chenxiaolong/BCR/pull/523
