@@ -18,6 +18,7 @@
   * This includes apps, like SIP clients, where recording is unlikely to work properly on any device.
 * Discard recordings that contain complete silence ([Issue #513], [PR #519 @chenxiaolong])
 * Fix typo in Italian translations ([PR #522 @nicorac])
+* Update Traditional Chinese (zh-TW) translations ([PR #523 @anenasa])
 
 ### Version 1.61
 
