@@ -17,6 +17,7 @@
 * Disable recording telecom-integrated applications by default ([Issue #513], [PR #518 @chenxiaolong])
   * This includes apps, like SIP clients, where recording is unlikely to work properly on any device.
 * Discard recordings that contain complete silence ([Issue #513], [PR #519 @chenxiaolong])
+* Fix typo in Italian translations ([PR #522 @nicorac])
 
 ### Version 1.61
 
