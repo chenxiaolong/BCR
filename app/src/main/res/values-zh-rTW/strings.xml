@@ -13,25 +13,38 @@
     <string name="pref_record_rules_desc">設定要自動錄製哪些通話。</string>
 
     <string name="pref_output_dir_name">輸出目錄</string>
-    <string name="pref_output_dir_desc">選擇儲存錄音檔的目錄。</string>
+    <string name="pref_output_dir_desc">選擇儲存錄音檔的目錄。長按以檔案管理員開啟。</string>
 
     <string name="pref_output_format_name">輸出格式</string>
-    <string name="pref_output_format_desc">選擇錄音檔的格式。</string>
+    <string name="pref_output_format_desc">選擇錄音檔的編碼格式。</string>
 
     <string name="pref_inhibit_batt_opt_name">停用電池最佳化</string>
     <string name="pref_inhibit_batt_opt_desc">減少本應用程式被系統終止的可能性。</string>
+
+    <string name="pref_write_metadata_name">寫入詮釋資料</string>
+    <string name="pref_write_metadata_desc">在音訊檔案旁建立包含通話詳細資料的 JSON 檔案。</string>
+
+    <string name="pref_record_telecom_apps_name">錄製電信整合應用程式</string>
+    <string name="pref_record_telecom_apps_desc">錄製整合 Android 電信系統的第三方應用程式的通話。這種通話的錄音檔很可能無聲。</string>
 
     <!-- About "preference" -->
     <string name="pref_version_name">版本</string>
 
     <!-- Record rules bottom sheet -->
+    <string name="pref_header_rules">規則</string>
     <string name="pref_add_rule_name">加入規則</string>
-    <string name="pref_add_rule_desc">為聯絡人加入自動錄音規則。</string>
+    <string name="pref_add_rule_desc">加入聯絡人的自動錄音規則。</string>
     <string name="record_rules_rule_added">已加入新規則。長按規則以將其刪除。</string>
     <string name="record_rules_rule_exists">規則已存在。</string>
+    <string name="record_rules_info">若啟用規則，預設會自動錄製通話，並可以在通知中手動刪除。若停用規則，通話結束時會刪除錄音檔，可按下通知中的還原按鈕保留錄音檔。</string>
+    <string name="record_rule_type_all_calls_name">所有通話</string>
+    <string name="record_rule_type_all_calls_desc">更精細的規則需要聯絡人權限。</string>
     <string name="record_rule_type_all_other_calls_name">所有其他通話</string>
+    <string name="record_rule_type_all_other_calls_desc">不符合任何規則的通話。</string>
     <string name="record_rule_type_unknown_calls_name">未知通話</string>
+    <string name="record_rule_type_unknown_calls_desc">不符合任何聯絡人的通話。</string>
     <string name="record_rule_type_contact_name">聯絡人：%s</string>
+    <string name="record_rule_type_contact_desc">長按以移除規則。</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">變更目錄</string>
@@ -59,6 +72,7 @@
     <string name="filename_template_dialog_title">檔案名稱模板</string>
     <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
     <string name="filename_template_dialog_message">輸入輸出檔案名稱的自訂模板。使用大括號指定變數（例如 <annotation type="template">{var}</annotation>）。使用中括號指定後備（例如 <annotation type="template">[{contact_name}|未知]</annotation>）。\n\n支援的變數：<annotation type="supported_vars">PLACEHOLDER</annotation>。請參閱<annotation type="template_docs">文件</annotation>了解語法的完整描述。</string>
+    <string name="filename_template_dialog_warning_subdirectories">由於 Android Storage Access Framework 效能不佳，使用子目錄（<annotation type="template">/</annotation> 字元）可能在某些裝置上儲存錄音檔時產生顯著的延遲。延遲發生於通話結束時，不會損失通話音訊。</string>
     <string name="filename_template_dialog_error_empty">模板不能為空</string>
     <string name="filename_template_dialog_error_unknown_variable">未知模板變數：<annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_has_argument">變數不能有引數：<annotation type="template">PLACEHOLDER</annotation></string>
@@ -75,9 +89,18 @@
     <string name="format_param_dialog_title">自訂參數</string>
     <string name="format_param_dialog_message">輸入範圍 [%1$s, %2$s] 內的值。</string>
 
+    <!-- Format sample rate dialog -->
+    <string name="format_sample_rate_dialog_title">自訂採樣率</string>
+    <string name="format_sample_rate_dialog_message_desc">輸入以下範圍內的採樣率：</string>
+    <string name="format_sample_rate_dialog_message_range">[%1$s, %2$s]</string>
+
     <!-- Format parameter -->
+    <string name="format_param_bitrate_bps">%s bps</string>
     <string name="format_param_bitrate_kbps">%s kbps</string>
     <string name="format_param_compression_level">等級 %s</string>
+
+    <!-- Format sample rate -->
+    <string name="format_sample_rate">%s Hz</string>
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">背景服務</string>
@@ -86,13 +109,16 @@
     <string name="notification_channel_failure_desc">通話錄音錯誤的通知</string>
     <string name="notification_channel_success_name">成功通知</string>
     <string name="notification_channel_success_desc">通話錄音成功的通知</string>
+    <string name="notification_recording_initializing">正在初始化通話錄音</string>
     <string name="notification_recording_in_progress">正在通話錄音</string>
+    <string name="notification_recording_finalizing">正在結束通話錄音</string>
     <string name="notification_recording_paused">通話錄音已暫停</string>
     <string name="notification_recording_on_hold">保留的通話</string>
     <string name="notification_recording_failed">通話錄音失敗</string>
     <string name="notification_recording_succeeded">成功錄製通話</string>
     <string name="notification_message_delete_at_end">通話結束時錄音檔會被刪除。按一下還原來保留錄音檔。</string>
     <string name="notification_internal_android_error">錄音在 Android 內部組件 (%s) 失敗。此裝置或韌體可能不支援通話錄音。</string>
+    <string name="notification_pure_silence_error">錄音檔被捨棄，因為音訊完全無聲。這個裝置可能不支援錄製「%s」應用程式的通話。</string>
     <string name="notification_action_open">開啟</string>
     <string name="notification_action_share">分享</string>
     <string name="notification_action_delete">刪除</string>
@@ -102,4 +128,7 @@
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">通話錄音</string>
+
+    <!-- Snackbar alerts -->
+    <string name="documentsui_not_found">Android 內建檔案管理員 (DocumentsUI) 無法使用。</string>
 </resources>
