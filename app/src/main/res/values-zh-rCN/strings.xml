@@ -86,7 +86,7 @@
     <string name="format_param_dialog_message">输入数值范围: %1$s ~ %2$s</string>
     
     <!-- Format parameter -->
-    <string name="format_param_bitrate">%s bkps</string>
+    <string name="format_param_bitrate_kbps">%s bkps</string>
     <string name="format_param_compression_level">Level %s</string>
     
     <!-- Notifications -->

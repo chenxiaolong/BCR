@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.provider.ContactsContract
 import androidx.annotation.RequiresPermission
+import com.chiller3.bcr.output.PhoneNumber
 
 private val PROJECTION = arrayOf(
     ContactsContract.PhoneLookup.LOOKUP_KEY,
@@ -17,12 +18,14 @@ data class ContactInfo(
 )
 
 @RequiresPermission(Manifest.permission.READ_CONTACTS)
-fun findContactsByPhoneNumber(context: Context, number: String): Iterator<ContactInfo> {
+fun findContactsByPhoneNumber(context: Context, number: PhoneNumber): Iterator<ContactInfo> {
+    val rawNumber = number.toString()
+
     // Same heuristic as InCallUI's PhoneNumberHelper.isUriNumber()
-    val numberIsSip = number.contains("@") || number.contains("%40")
+    val numberIsSip = rawNumber.contains("@") || rawNumber.contains("%40")
 
     val uri = ContactsContract.PhoneLookup.ENTERPRISE_CONTENT_FILTER_URI.buildUpon()
-        .appendPath(number)
+        .appendPath(rawNumber)
         .appendQueryParameter(
             ContactsContract.PhoneLookup.QUERY_PARAMETER_SIP_ADDRESS,
             numberIsSip.toString())

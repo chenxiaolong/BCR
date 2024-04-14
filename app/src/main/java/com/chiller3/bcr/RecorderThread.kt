@@ -21,7 +21,6 @@ import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.NoParamInfo
 import com.chiller3.bcr.format.RangedParamInfo
 import com.chiller3.bcr.format.RangedParamType
-import com.chiller3.bcr.format.SampleRate
 import com.chiller3.bcr.output.CallMetadata
 import com.chiller3.bcr.output.CallMetadataCollector
 import com.chiller3.bcr.output.DaysRetention
@@ -30,6 +29,7 @@ import com.chiller3.bcr.output.OutputDirUtils
 import com.chiller3.bcr.output.OutputFile
 import com.chiller3.bcr.output.OutputFilenameGenerator
 import com.chiller3.bcr.output.OutputPath
+import com.chiller3.bcr.output.PhoneNumber
 import com.chiller3.bcr.output.Retention
 import com.chiller3.bcr.rule.RecordRule
 import org.json.JSONObject
@@ -59,7 +59,6 @@ class RecorderThread(
 ) : Thread(RecorderThread::class.java.simpleName) {
     private val tag = "${RecorderThread::class.java.simpleName}/${id}"
     private val prefs = Preferences(context)
-    private val isDebug = prefs.isDebugMode
 
     enum class State {
         NOT_STARTED,
@@ -128,7 +127,7 @@ class RecorderThread(
     // Format
     private val format: Format
     private val formatParam: UInt?
-    private val sampleRate = SampleRate.fromPreferences(prefs)
+    private val sampleRate: UInt
 
     // Logging
     private lateinit var logcatPath: OutputPath
@@ -141,6 +140,7 @@ class RecorderThread(
         val savedFormat = Format.fromPreferences(prefs)
         format = savedFormat.first
         formatParam = savedFormat.second
+        sampleRate = savedFormat.third ?: format.sampleRateInfo.default
     }
 
     fun onCallDetailsChanged(call: Call, details: Call.Details) {
@@ -153,14 +153,14 @@ class RecorderThread(
             return
         }
 
-        val numbers = hashSetOf<String>()
+        val numbers = hashSetOf<PhoneNumber>()
 
         if (parentCall.details.hasProperty(Call.Details.PROPERTY_CONFERENCE)) {
             for (childCall in parentCall.children) {
-                childCall.details?.phoneNumber?.let { numbers.add(it.toString()) }
+                childCall.details?.phoneNumber?.let { numbers.add(it) }
             }
         } else {
-            parentCall.details?.phoneNumber?.let { numbers.add(it.toString()) }
+            parentCall.details?.phoneNumber?.let { numbers.add(it) }
         }
 
         Log.i(tag, "Evaluating record rules for ${numbers.size} phone number(s)")
@@ -180,7 +180,7 @@ class RecorderThread(
     override fun run() {
         var success = false
         var errorMsg: String? = null
-        var resultUri: Uri? = null
+        var outputDocFile: DocumentFile? = null
         val additionalFiles = ArrayList<OutputFile>()
 
         startLogcat()
@@ -197,14 +197,13 @@ class RecorderThread(
                 evaluateRules()
 
                 val initialPath = outputPath
-                val outputFile = dirUtils.createFileInDefaultDir(
+                outputDocFile = dirUtils.createFileInDefaultDir(
                     initialPath.value, format.mimeTypeContainer)
-                resultUri = outputFile.uri
 
                 var recordingInfo: RecordingInfo? = null
 
                 try {
-                    dirUtils.openFile(outputFile, true).use {
+                    dirUtils.openFile(outputDocFile, true).use {
                         recordingInfo = recordUntilCancelled(it)
                         Os.fsync(it.fileDescriptor)
                     }
@@ -217,11 +216,11 @@ class RecorderThread(
 
                     if (keepRecording != false) {
                         dirUtils.tryMoveToOutputDir(
-                            outputFile,
+                            outputDocFile,
                             finalPath.value,
                             format.mimeTypeContainer,
                         )?.let {
-                            resultUri = it.uri
+                            outputDocFile = it
                         }
 
                         writeMetadataFile(finalPath.value, recordingInfo)?.let {
@@ -229,8 +228,8 @@ class RecorderThread(
                         }
                     } else {
                         Log.i(tag, "Deleting recording: $finalPath")
-                        outputFile.delete()
-                        resultUri = null
+                        outputDocFile!!.delete()
+                        outputDocFile = null
                     }
 
                     processRetention()
@@ -241,29 +240,50 @@ class RecorderThread(
         } catch (e: Exception) {
             Log.e(tag, "Error during recording", e)
 
-            errorMsg = buildString {
-                val elem = e.stackTrace.find { it.className.startsWith("android.media.") }
-                if (elem != null) {
-                    append(context.getString(R.string.notification_internal_android_error,
-                        "${elem.className}.${elem.methodName}"))
-                    append("\n\n")
+            errorMsg = if (e is PureSilenceException) {
+                outputDocFile?.delete()
+                outputDocFile = null
+
+                additionalFiles.forEach {
+                    it.toDocumentFile(context).delete()
                 }
 
-                append(e.localizedMessage)
+                context.getString(R.string.notification_pure_silence_error,
+                    parentCall.details.accountHandle.componentName.packageName)
+            } else {
+                buildString {
+                    val elem = e.stackTrace.find { it.className.startsWith("android.media.") }
+                    if (elem != null) {
+                        append(context.getString(R.string.notification_internal_android_error,
+                            "${elem.className}.${elem.methodName}"))
+                        append("\n\n")
+                    }
+
+                    append(e.localizedMessage)
+                }
             }
         } finally {
             Log.i(tag, "Recording thread completed")
 
             try {
-                stopLogcat()?.let { additionalFiles.add(it) }
+                val logcatOutput = stopLogcat()
+
+                // Log files are always kept when an error occurs to avoid the hassle of having the
+                // user manually enable debug mode and needing to reproduce the problem.
+                if (prefs.isDebugMode || errorMsg != null) {
+                    additionalFiles.add(logcatOutput)
+                } else {
+                    Log.d(tag, "No need to preserve logcat")
+                    logcatOutput.toDocumentFile(context).delete()
+                }
             } catch (e: Exception) {
                 Log.w(tag, "Failed to dump logcat", e)
             }
 
-            val outputFile = resultUri?.let {
+            val outputFile = outputDocFile?.let {
                 OutputFile(
-                    it,
-                    outputFilenameGenerator.redactor.redact(it),
+                    it.uri,
+                    outputFilenameGenerator.redactor.redact(it.uri),
                     format.mimeTypeContainer,
                 )
             }
@@ -304,10 +324,6 @@ class RecorderThread(
     }
 
     private fun startLogcat() {
-        if (!isDebug) {
-            return
-        }
-
         assert(!this::logcatProcess.isInitialized) { "logcat already started" }
 
         Log.d(tag, "Starting log file (${BuildConfig.VERSION_NAME})")
@@ -323,11 +339,7 @@ class RecorderThread(
             .start()
     }
 
-    private fun stopLogcat(): OutputFile? {
-        if (!isDebug) {
-            return null
-        }
-
+    private fun stopLogcat(): OutputFile {
         assert(this::logcatProcess.isInitialized) { "logcat not started" }
 
         var uri = logcatFile.uri
@@ -403,7 +415,7 @@ class RecorderThread(
 
             val metadataFile = dirUtils.createFileInOutputDir(path, MIME_METADATA)
             dirUtils.openFile(metadataFile, true).use {
-                Os.write(it.fileDescriptor, metadataBytes, 0, metadataBytes.size)
+                writeFully(it.fileDescriptor, metadataBytes, 0, metadataBytes.size)
             }
 
             return OutputFile(
@@ -483,8 +495,7 @@ class RecorderThread(
     private fun recordUntilCancelled(pfd: ParcelFileDescriptor): RecordingInfo {
         AndroidProcess.setThreadPriority(AndroidProcess.THREAD_PRIORITY_URGENT_AUDIO)
 
-        val minBufSize = AudioRecord.getMinBufferSize(
-            sampleRate.value.toInt(), CHANNEL_CONFIG, ENCODING)
+        val minBufSize = AudioRecord.getMinBufferSize(sampleRate.toInt(), CHANNEL_CONFIG, ENCODING)
         if (minBufSize < 0) {
             throw Exception("Failure when querying minimum buffer size: $minBufSize")
         }
@@ -492,7 +503,7 @@ class RecorderThread(
 
         val audioRecord = AudioRecord(
             MediaRecorder.AudioSource.VOICE_CALL,
-            sampleRate.value.toInt(),
+            sampleRate.toInt(),
             CHANNEL_CONFIG,
             ENCODING,
             // On some devices, MediaCodec occasionally has sudden spikes in processing time, so use
@@ -567,6 +578,7 @@ class RecorderThread(
         var bufferOverruns = 0
         var wasEverPaused = false
         var wasEverHolding = false
+        var wasPureSilence = true
         val frameSize = audioRecord.format.frameSizeInBytesCompat
 
         // Use a slightly larger buffer to reduce the chance of problems under load
@@ -597,6 +609,15 @@ class RecorderThread(
                 continue
             } else {
                 buffer.limit(n)
+
+                if (wasPureSilence) {
+                    for (i in 0 until n / 2) {
+                        if (buffer.getShort(2 * i) != 0.toShort()) {
+                            wasPureSilence = false
+                            break
+                        }
+                    }
+                }
 
                 val encodeBegin = System.nanoTime()
 
@@ -629,6 +650,10 @@ class RecorderThread(
                         "record=${recordElapsed / 1_000_000.0}ms, " +
                         "encode=${encodeElapsed / 1_000_000.0}ms")
             }
+        }
+
+        if (wasPureSilence) {
+            throw PureSilenceException()
         }
 
         // Signal EOF with empty buffer
@@ -684,6 +709,9 @@ class RecorderThread(
             append(", Was ever holding: $wasEverHolding")
         }
     }
+
+    private class PureSilenceException(cause: Throwable? = null)
+        : Exception("Audio contained pure silence", cause)
 
     interface OnRecordingCompletedListener {
         /**

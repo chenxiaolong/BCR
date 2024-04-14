@@ -24,7 +24,7 @@ BCR is a simple Android call recording app for rooted devices or devices running
 * No persistent notification unless a recording is in progress
 * No network access permission
 * Works with call screening on Pixel devices (records the caller, but not the automated system)
-* Supports both Magisk and KernelSU 
+* Supports both Magisk and KernelSU
 
 ## Non-features
 
@@ -59,11 +59,13 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
 
 3. Reboot and open BCR.
 
+    If other call recorders are installed, make sure to disable their phone call recording functionality. On most devices, a phone call cannot be recorded by two apps at the same time. However, it is fine to have BCR record phone calls and another app record eg. VOIP calls.
+
 4. Enable call recording and pick an output directory.
 
     If no output directory is selected or if the output directory is no longer accessible, then recordings will be saved to `/sdcard/Android/data/com.chiller3.bcr/files`. Note that on Android 12+, `/sdcard/Android/data/` is only accessible via USB or DocumentsUI (AOSP's built in file manager).
 
-    When enabling call recording the first time, BCR will prompt for microphone, notification (Android 13+), call log, contacts, and phone permissions. Only microphone and notification permissions are required basic call recording functionality. If additional permissions are granted, more information is added to the output filename. For example, the contacts permission will allow the contact name to be added to the filename.
+    When enabling call recording the first time, BCR will prompt for microphone, notification (Android 13+), call log, contacts, and phone permissions. Only microphone and notification permissions are required for basic call recording functionality. If additional permissions are granted, more information is added to the output filename. For example, the contacts permission will allow the contact name to be added to the filename.
 
     See the [permissions section](#permissions) below for more details about the permissions.
 
@@ -307,16 +309,22 @@ Both the zip file and the APK contained within are digitally signed. **NOTE**: T
 
 ### Verifying zip file signature
 
-First save the public key to a file that lists which keys should be trusted.
+To verify the signature of the zip file, run the following two commands. This will save the trusted key to a file named `bcr_trusted_keys` and then use it to verify the signature. Make sure to replace `<version>` with the actual version number.
+
+For Unix-like systems and Windows (Command Prompt):
 
 ```bash
-echo 'bcr ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDOe6/tBnO7xZhAWXRj3ApUYgn+XZ0wnQiXM8B7tPgv4' > bcr_trusted_keys
+echo bcr ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDOe6/tBnO7xZhAWXRj3ApUYgn+XZ0wnQiXM8B7tPgv4 > bcr_trusted_keys
+
+ssh-keygen -Y verify -f bcr_trusted_keys -I bcr -n file -s BCR-<version>-release.zip.sig < BCR-<version>-release.zip
 ```
 
-Then, verify the signature of the zip file using the list of trusted keys.
+For Windows (PowerShell):
 
-```bash
-ssh-keygen -Y verify -f bcr_trusted_keys -I bcr -n file -s BCR-<version>-release.zip.sig < BCR-<version>-release.zip
+```powershell
+echo 'bcr ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDOe6/tBnO7xZhAWXRj3ApUYgn+XZ0wnQiXM8B7tPgv4' | Out-File -Encoding ascii bcr_trusted_keys
+
+Start-Process -Wait -NoNewWindow -RedirectStandardInput BCR-<version>-release.zip ssh-keygen -ArgumentList "-Y verify -f bcr_trusted_keys -I bcr -n file -s BCR-<version>-release.zip.sig"
 ```
 
 If the file is successfully verified, the output will be:

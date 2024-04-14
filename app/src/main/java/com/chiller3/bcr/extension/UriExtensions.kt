@@ -5,7 +5,7 @@ import android.net.Uri
 import android.provider.DocumentsContract
 import android.telecom.PhoneAccount
 
-val DOCUMENTSUI_AUTHORITY = "com.android.externalstorage.documents"
+const val DOCUMENTSUI_AUTHORITY = "com.android.externalstorage.documents"
 
 val Uri.formattedString: String
     get() = when (scheme) {

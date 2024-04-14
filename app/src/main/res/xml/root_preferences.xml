@@ -41,6 +41,12 @@
             app:title="@string/pref_write_metadata_name"
             app:summary="@string/pref_write_metadata_desc"
             app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="record_telecom_apps"
+            app:title="@string/pref_record_telecom_apps_name"
+            app:summary="@string/pref_record_telecom_apps_desc"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory

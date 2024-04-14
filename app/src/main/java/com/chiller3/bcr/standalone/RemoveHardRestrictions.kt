@@ -211,8 +211,7 @@ private fun removeRestriction(packageName: String, permission: String, userId: I
         throw IllegalArgumentException("Package $packageName is not installed for user $userId")
     }
 
-    val (getFlags, updateFlags) = if (Build.VERSION.SDK_INT in
-        Build.VERSION_CODES.R..Build.VERSION_CODES.TIRAMISU) {
+    val (getFlags, updateFlags) = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         val permissionManager = PermissionManagerProxy.instance
 
         Pair(
@@ -222,7 +221,7 @@ private fun removeRestriction(packageName: String, permission: String, userId: I
                     packageName, permission, mask, set, false, userId)
             },
         )
-    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+    } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q) {
         Pair(
             { packageManager.getPermissionFlags(permission, packageName, userId) },
             { mask: Int, set: Int ->

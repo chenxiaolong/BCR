@@ -87,7 +87,7 @@
     <string name="format_param_dialog_message">[%1$s, %2$s] श्रेणी में एक मान दर्ज करें।</string>
 
     <!-- Format parameter -->
-    <string name="format_param_bitrate">%s kbps</string>
+    <string name="format_param_bitrate_kbps">%s kbps</string>
     <string name="format_param_compression_level">लेवल %s</string>
 
     <!-- Notifications -->

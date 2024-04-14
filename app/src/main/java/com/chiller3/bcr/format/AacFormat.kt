@@ -7,8 +7,12 @@ import android.media.MediaFormat
 import android.media.MediaMuxer
 import java.io.FileDescriptor
 
-object AacFormat : Format() {
+class AacFormat : Format() {
     override val name: String = "M4A/AAC"
+    // https://datatracker.ietf.org/doc/html/rfc6381#section-3.1
+    override val mimeTypeContainer: String = "audio/mp4"
+    override val mimeTypeAudio: String = MediaFormat.MIMETYPE_AUDIO_AAC
+    override val passthrough: Boolean = false
     override val paramInfo: FormatParamInfo = RangedParamInfo(
         RangedParamType.Bitrate,
         // The format has no hard limits, so the lower bound is ffmpeg's recommended minimum bitrate
@@ -24,11 +28,8 @@ object AacFormat : Format() {
             128_000u,
         ),
     )
-    // https://datatracker.ietf.org/doc/html/rfc6381#section-3.1
-    override val mimeTypeContainer: String = "audio/mp4"
-    override val mimeTypeAudio: String = MediaFormat.MIMETYPE_AUDIO_AAC
-    override val passthrough: Boolean = false
-    override val supported: Boolean = true
+    override val sampleRateInfo: SampleRateInfo =
+        SampleRateInfo.fromCodec(baseMediaFormat, 16_000u)
 
     override fun updateMediaFormat(mediaFormat: MediaFormat, param: UInt) {
         mediaFormat.apply {

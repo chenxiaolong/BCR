@@ -55,7 +55,7 @@ class CallMetadataCollector(
 
         Log.d(TAG, "Performing manual contact lookup")
 
-        for (contact in findContactsByPhoneNumber(context, number.toString())) {
+        for (contact in findContactsByPhoneNumber(context, number)) {
             Log.d(TAG, "Found contact display name via manual lookup")
             return contact.displayName
         }
@@ -144,7 +144,12 @@ class CallMetadataCollector(
                         if (index != -1) {
                             number = cursor.getStringOrNull(index)?.let {
                                 Log.d(TAG, "${prefix}Found call log phone number")
-                                PhoneNumber(it)
+                                try {
+                                    PhoneNumber(it)
+                                } catch (e: IllegalArgumentException) {
+                                    Log.w(TAG, "${prefix}Invalid call log phone number", e)
+                                    null
+                                }
                             }
                         } else {
                             Log.d(TAG, "${prefix}Call log entry has no phone number")
@@ -226,7 +231,7 @@ class CallMetadataCollector(
             val subscriptionInfo = subscriptionManager.getActiveSubscriptionInfo(subscriptionId)
 
             simCount = subscriptionManager.activeSubscriptionInfoCount
-            simSlot = subscriptionInfo.simSlotIndex + 1
+            simSlot = subscriptionInfo?.let { it.simSlotIndex + 1 }
         }
 
         val (callLogNumber, callLogName) = getCallLogDetails(parentDetails, allowBlockingCalls)

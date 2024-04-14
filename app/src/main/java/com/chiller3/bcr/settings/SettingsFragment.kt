@@ -17,7 +17,6 @@ import com.chiller3.bcr.extension.formattedString
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.NoParamInfo
 import com.chiller3.bcr.format.RangedParamInfo
-import com.chiller3.bcr.format.SampleRate
 import com.chiller3.bcr.output.Retention
 import com.chiller3.bcr.rule.RecordRulesActivity
 import com.chiller3.bcr.view.LongClickablePreference
@@ -111,16 +110,18 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
     }
 
     private fun refreshOutputFormat() {
-        val (format, formatParamSaved) = Format.fromPreferences(prefs)
+        val (format, formatParamSaved, sampleRateSaved) = Format.fromPreferences(prefs)
         val formatParam = formatParamSaved ?: format.paramInfo.default
+        val sampleRate = sampleRateSaved ?: format.sampleRateInfo.default
+
         val summary = getString(R.string.pref_output_format_desc)
         val prefix = when (val info = format.paramInfo) {
             is RangedParamInfo -> "${info.format(requireContext(), formatParam)}, "
             NoParamInfo -> ""
         }
-        val sampleRate = SampleRate.fromPreferences(prefs)
+        val sampleRateText = format.sampleRateInfo.format(requireContext(), sampleRate)
 
-        prefOutputFormat.summary = "${summary}\n\n${format.name} (${prefix}${sampleRate})"
+        prefOutputFormat.summary = "${summary}\n\n${format.name} (${prefix}${sampleRateText})"
     }
 
     private fun refreshVersion() {

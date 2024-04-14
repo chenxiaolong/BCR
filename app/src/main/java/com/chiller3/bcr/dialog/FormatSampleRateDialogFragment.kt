@@ -4,6 +4,9 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.InputType
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.BulletSpan
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
@@ -14,14 +17,12 @@ import com.chiller3.bcr.Preferences
 import com.chiller3.bcr.R
 import com.chiller3.bcr.databinding.DialogTextInputBinding
 import com.chiller3.bcr.format.Format
-import com.chiller3.bcr.format.RangedParamInfo
-import com.chiller3.bcr.format.RangedParamType
+import com.chiller3.bcr.format.RangedSampleRateInfo
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.lang.NumberFormatException
 
-class FormatParamDialogFragment : DialogFragment() {
+class FormatSampleRateDialogFragment : DialogFragment() {
     companion object {
-        val TAG: String = FormatParamDialogFragment::class.java.simpleName
+        val TAG: String = FormatSampleRateDialogFragment::class.java.simpleName
 
         const val RESULT_SUCCESS = "success"
     }
@@ -37,41 +38,46 @@ class FormatParamDialogFragment : DialogFragment() {
         prefs = Preferences(context)
         format = Format.fromPreferences(prefs).first
 
-        val paramInfo = format.paramInfo
-        if (paramInfo !is RangedParamInfo) {
+        val sampleRateInfo = format.sampleRateInfo
+        if (sampleRateInfo !is RangedSampleRateInfo) {
             throw IllegalStateException("Selected format is not configurable")
-        }
-
-        val multiplier = when (paramInfo.type) {
-            RangedParamType.CompressionLevel -> 1U
-            RangedParamType.Bitrate -> {
-                if (paramInfo.range.first % 1_000U == 0U && paramInfo.range.last % 1_000U == 0U) {
-                    1000U
-                } else {
-                    1U
-                }
-            }
         }
 
         binding = DialogTextInputBinding.inflate(layoutInflater)
 
-        binding.message.text = getString(
-            R.string.format_param_dialog_message,
-            paramInfo.format(context, paramInfo.range.first),
-            paramInfo.format(context, paramInfo.range.last),
-        )
+        binding.message.text = SpannableStringBuilder().apply {
+            append(getString(R.string.format_sample_rate_dialog_message_desc))
 
-        // Try to detect if the displayed format is a prefix or suffix since it's not the same in
-        // every language (eg. "Level 8" vs "8级")
-        val translated = when (paramInfo.type) {
-            RangedParamType.CompressionLevel ->
-                getString(R.string.format_param_compression_level, "\u0000")
-            RangedParamType.Bitrate -> if (multiplier == 1_000U) {
-                getString(R.string.format_param_bitrate_kbps, "\u0000")
-            } else {
-                getString(R.string.format_param_bitrate_bps, "\u0000")
+            // BulletSpan operates on unscaled pixels for some reason.
+            val density = resources.displayMetrics.density
+            val gapPx = (density * 4).toInt()
+            val radiusPx = (density * 2).toInt()
+
+            for (range in sampleRateInfo.ranges) {
+                append('\n')
+
+                val start = length
+
+                append(getString(
+                    R.string.format_sample_rate_dialog_message_range,
+                    sampleRateInfo.format(context, range.first),
+                    sampleRateInfo.format(context, range.last),
+                ))
+
+                val end = length
+
+                setSpan(
+                    BulletSpan(gapPx, binding.message.currentTextColor, radiusPx),
+                    start,
+                    end,
+                    Spannable.SPAN_INCLUSIVE_EXCLUSIVE,
+                )
             }
         }
+
+        // Try to detect if the displayed format is a prefix or suffix since it may not be the same
+        // in every language.
+        val translated = getString(R.string.format_sample_rate, "\u0000")
         val placeholder = translated.indexOf('\u0000')
         val hasPrefix = placeholder > 0
         val hasSuffix = placeholder < translated.length - 1
@@ -93,11 +99,12 @@ class FormatParamDialogFragment : DialogFragment() {
 
             if (it!!.isNotEmpty()) {
                 try {
-                    val newValue = it.toString().toUInt().times(multiplier.toULong())
-                    if (newValue in paramInfo.range) {
-                        value = newValue.toUInt()
+                    value = it.toString().toUInt().apply {
+                        sampleRateInfo.validate(this)
                     }
                 } catch (e: NumberFormatException) {
+                    // Ignore
+                } catch (e: IllegalArgumentException) {
                     // Ignore
                 }
             }
@@ -106,10 +113,10 @@ class FormatParamDialogFragment : DialogFragment() {
         }
 
         return MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.format_param_dialog_title)
+            .setTitle(R.string.format_sample_rate_dialog_title)
             .setView(binding.root)
             .setPositiveButton(android.R.string.ok) { _, _ ->
-                prefs.setFormatParam(format, value!!)
+                prefs.setFormatSampleRate(format, value!!)
                 success = true
             }
             .setNegativeButton(android.R.string.cancel, null)

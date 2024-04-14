@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.util.Log
 import com.chiller3.bcr.findContactsByPhoneNumber
+import com.chiller3.bcr.output.PhoneNumber
 
 sealed class RecordRule {
     abstract val record: Boolean
@@ -105,7 +106,7 @@ sealed class RecordRule {
          * @throws IllegalArgumentException if [rules] does not contain [AllCalls]
          */
         fun evaluate(context: Context, rules: List<RecordRule>,
-                     numbers: Collection<String>): Boolean {
+                     numbers: Collection<PhoneNumber>): Boolean {
             val contactsAllowed = context.checkSelfPermission(Manifest.permission.READ_CONTACTS) ==
                     PackageManager.PERMISSION_GRANTED
             val contactLookupKeys = if (contactsAllowed) {

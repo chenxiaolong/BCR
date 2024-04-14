@@ -9,6 +9,48 @@
 
 ### Unreleased
 
+### Version 1.62
+
+* Automatically detect sample rates supported by the output format's encoder ([Issue #507], [PR #508 @chenxiaolong])
+  * Fixes recording failures on Redmi devices due to the OEM removing support for all non-48kHz sample rates from Android's standard Opus encoder.
+* Fix crash when Android returns a null SubscriptionInfo ([Issue #513], [PR #516 @chenxiaolong])
+  * This can happen for third party applications, like SIP clients, that integrate with Android's telephony framework.
+* Update Turkish translations ([PR #517 @symbuzzer])
+* Disable recording telecom-integrated applications by default ([Issue #513], [PR #518 @chenxiaolong])
+  * This includes apps, like SIP clients, where recording is unlikely to work properly on any device.
+* Discard recordings that contain complete silence ([Issue #513], [PR #519 @chenxiaolong])
+* Fix typo in Italian translations ([PR #522 @nicorac])
+* Update Traditional Chinese (zh-TW) translations ([PR #523 @anenasa])
+
+### Version 1.61
+
+* Update Turkish translations ([PR #503 @symbuzzer])
+* Fix crash if the call log reports an empty phone number for private calls ([Issue #455], [PR #505 @chenxiaolong])
+* Always save log file when an error occurs ([PR #506 @chenxiaolong])
+  * It is no longer necessary to manually enable debug mode unless you also want to save the logs for successful recordings.
+
+### Version 1.60
+
+* Make the sample rate option format-specific instead of global ([PR #496 @chenxiaolong])
+  * The default sample rate is now also 16 kHz for every format that supports it
+* Add support for AMR-WB and AMR-NB ([Issue #264], [PR #497 @chenxiaolong])
+  * The patents have now expired in North America and Europe.
+  * Note that this is a lossy recording even though the raw phone call audio signal is AMR. The modem always decodes the raw AMR audio to PCM. When AMR output in BCR is selected, the PCM audio is reencoded back to AMR.
+
+Behind the scenes changes:
+
+* Fix missing Gradle verification checksums when building from source on non-Linux OSs ([Issue #491], [PR #493 @chenxiaolong])
+* Update dependencies ([PR #498 @chenxiaolong])
+
+### Version 1.59
+
+* Fix removal of Android's call log permission restriction for fresh installs in Android 14 ([PR #481 @chenxiaolong])
+
+### Version 1.58
+
+* Update Polish translations ([PR #476 @phyrz91])
+* Add Italian translations ([PR #480 @DHD2280])
+
 ### Version 1.57
 
 * Update Chinese translations ([PR #469 @Pr0pHesyer])
@@ -533,6 +575,7 @@ Non-user-facing changes:
 [Issue #252]: https://github.com/chenxiaolong/BCR/issues/252
 [Issue #253]: https://github.com/chenxiaolong/BCR/issues/253
 [Issue #260]: https://github.com/chenxiaolong/BCR/issues/260
+[Issue #264]: https://github.com/chenxiaolong/BCR/issues/264
 [Issue #275]: https://github.com/chenxiaolong/BCR/issues/275
 [Issue #288]: https://github.com/chenxiaolong/BCR/issues/288
 [Issue #290]: https://github.com/chenxiaolong/BCR/issues/290
@@ -557,6 +600,10 @@ Non-user-facing changes:
 [Issue #422]: https://github.com/chenxiaolong/BCR/issues/422
 [Issue #429]: https://github.com/chenxiaolong/BCR/issues/429
 [Issue #433]: https://github.com/chenxiaolong/BCR/issues/433
+[Issue #455]: https://github.com/chenxiaolong/BCR/issues/455
+[Issue #491]: https://github.com/chenxiaolong/BCR/issues/491
+[Issue #507]: https://github.com/chenxiaolong/BCR/issues/507
+[Issue #513]: https://github.com/chenxiaolong/BCR/issues/513
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -773,3 +820,20 @@ Non-user-facing changes:
 [PR #460 @htht2001]: https://github.com/chenxiaolong/BCR/pull/460
 [PR #469 @Pr0pHesyer]: https://github.com/chenxiaolong/BCR/pull/469
 [PR #474 @MicroDJS]: https://github.com/chenxiaolong/BCR/pull/474
+[PR #476 @phyrz91]: https://github.com/chenxiaolong/BCR/pull/476
+[PR #480 @DHD2280]: https://github.com/chenxiaolong/BCR/pull/480
+[PR #481 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/481
+[PR #493 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/493
+[PR #496 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/496
+[PR #497 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/497
+[PR #498 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/498
+[PR #503 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/503
+[PR #505 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/505
+[PR #506 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/506
+[PR #508 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/508
+[PR #516 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/516
+[PR #517 @symbuzzer]: https://github.com/chenxiaolong/BCR/pull/517
+[PR #518 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/518
+[PR #519 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/519
+[PR #522 @nicorac]: https://github.com/chenxiaolong/BCR/pull/522
+[PR #523 @anenasa]: https://github.com/chenxiaolong/BCR/pull/523
