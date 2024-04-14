@@ -24,6 +24,9 @@
     <string name="pref_write_metadata_name">Zapisuj plik metadanych</string>
     <string name="pref_write_metadata_desc">Twórz plik  JSON zawierający szczegóły o połączeniu obok pliku audio.</string>
 
+    <string name="pref_record_telecom_apps_name">Nagrywaj aplikacje zintegrowane</string>
+    <string name="pref_record_telecom_apps_desc">Nagrywaj rozmowy z aplikacji innych firm, które integrują się z systemem telekomunikacyjnym Androida. Nagrania tych rozmów prawdopodobnie będą zawierać wyłącznie ciszę.</string>
+
     <!-- About "preference" -->
     <string name="pref_version_name">Wersja</string>
     
@@ -88,9 +91,18 @@
     <string name="format_param_dialog_title">Parametr niestandardowy</string>
     <string name="format_param_dialog_message">Wprowadź wartość z zakresu [%1$s, %2$s].</string>
 
+    <!-- Format sample rate dialog -->
+    <string name="format_sample_rate_dialog_title">Niestandardowa częstotliwość próbkowania</string>
+    <string name="format_sample_rate_dialog_message_desc">Wprowadź częstotliwość próbkowania w jednym z następujących zakresów:</string>
+    <string name="format_sample_rate_dialog_message_range">[%1$s, %2$s]</string>
+
     <!-- Format parameter -->
+    <string name="format_param_bitrate_bps">%s bps</string>
     <string name="format_param_bitrate_kbps">%s kbps</string>
     <string name="format_param_compression_level">Poziom %s</string>
+
+    <!-- Format sample rate -->
+    <string name="format_sample_rate">%s Hz</string>
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Usługi w tle</string>
@@ -103,11 +115,12 @@
     <string name="notification_recording_in_progress">Trwa nagrywanie rozmowy</string>
     <string name="notification_recording_finalizing">Finalizowanie nagrywania rozmowy</string>
     <string name="notification_recording_paused">Nagrywanie rozmowy wstrzymane</string>
-        <string name="notification_recording_on_hold">Rozmowa zawieszona</string>
+    <string name="notification_recording_on_hold">Rozmowa zawieszona</string>
     <string name="notification_recording_failed">Nie udało się nagrać rozmowy</string>
     <string name="notification_recording_succeeded">Pomyślnie nagrano rozmowę</string>
     <string name="notification_message_delete_at_end">Nagranie zostanie usunięte po zakończeniu rozmowy. Stuknij Przywróć, aby zachować nagranie.</string>
     <string name="notification_internal_android_error">Podczas nagrywania wystąpił błąd w wewnętrznym komponencie Androida (%s). To urządzenie lub system może nie obsługiwać nagrywania rozmów.</string>
+    <string name="notification_pure_silence_error">Nagranie zostało odrzucone, ponieważ dźwięk był zupełnie cichy. To urządzenie może nie obsługiwać nagrywania połączeń związanych z aplikacją \'%s\'.</string>
     <string name="notification_action_open">Otwórz</string>
     <string name="notification_action_share">Udostępnij</string>
     <string name="notification_action_delete">Usuń</string>
