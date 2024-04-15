@@ -9,6 +9,9 @@
 
 ### Unreleased
 
+* Fix removal of restrictions for `READ_CALL_LOG` permission on Android 14 QPR2 ([PR #528 @chenxiaolong])
+  * This only affects fresh installs of BCR. Android normally blocks users from granting this permission, even from Android's Settings app. The removal of this restriction now works on Android 14 QPR2 and newer.
+
 ### Version 1.62
 
 * Automatically detect sample rates supported by the output format's encoder ([Issue #507], [PR #508 @chenxiaolong])
@@ -837,3 +840,4 @@ Non-user-facing changes:
 [PR #519 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/519
 [PR #522 @nicorac]: https://github.com/chenxiaolong/BCR/pull/522
 [PR #523 @anenasa]: https://github.com/chenxiaolong/BCR/pull/523
+[PR #528 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/528
