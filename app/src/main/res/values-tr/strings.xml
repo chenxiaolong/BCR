@@ -23,6 +23,9 @@
 
     <string name="pref_write_metadata_name">Metadata dosyası oluştur</string>
     <string name="pref_write_metadata_desc">Ses dosyasının yanında aramayla ilgili ayrıntıları içeren bir JSON dosyası oluşturun.</string>
+
+    <string name="pref_record_telecom_apps_name">Telekom ile entegre uygulamaları kaydedin</string>
+    <string name="pref_record_telecom_apps_desc">Android\'in telekom sistemiyle entegre olan üçüncü taraf uygulamalardan gelen aramaları kaydedin. Bu aramaların kayıtları büyük ihtimalle sadece sessizlik içerecektir.</string>
     
     <!-- About "preference" -->
     <string name="pref_version_name">Sürüm</string>
@@ -115,6 +118,7 @@
     <string name="notification_recording_succeeded">Arama kaydı başarılı</string>
     <string name="notification_message_delete_at_end">Görüşme sonunda kayıt silinecektir. Kaydı tutmak için Geri Yükle\'ye dokunun.</string>
     <string name="notification_internal_android_error">Kayıt, dahili bir Android bileşeninde (%s) başarısız oldu. Bu cihaz, donanımsal veya yazılımsal olarak arama kaydını desteklemiyor olabilir.</string>
+    <string name="notification_pure_silence_error">Kayıt tamamen sessiz olduğundan iptal edildi. Bu cihaz, \'%s\' uygulamasıyla ilişkili çağrıların kaydedilmesini desteklemiyor olabilir.</string>
     <string name="notification_action_open">Aç</string>
     <string name="notification_action_share">Paylaş</string>
     <string name="notification_action_delete">Sil</string>

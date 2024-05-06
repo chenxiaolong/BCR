@@ -126,14 +126,36 @@ private class PackageManagerProxy private constructor(private val iFace: IInterf
 private class PermissionManagerProxy private constructor(private val iFace: IInterface) {
     companion object {
         private val CLS = Class.forName("android.permission.IPermissionManager")
-        private val METHOD_GET_PERMISSION_FLAGS =
+        private val METHOD_GET_PERMISSION_FLAGS_14_QPR2 by lazy {
+            CLS.getDeclaredMethod(
+                "getPermissionFlags",
+                String::class.java,
+                String::class.java,
+                Int::class.java,
+                Int::class.java,
+            )
+        }
+        private val METHOD_GET_PERMISSION_FLAGS by lazy {
             CLS.getDeclaredMethod(
                 "getPermissionFlags",
                 String::class.java,
                 String::class.java,
                 Int::class.java,
             )
-        private val METHOD_UPDATE_PERMISSION_FLAGS =
+        }
+        private val METHOD_UPDATE_PERMISSION_FLAGS_14_QPR2 by lazy {
+            CLS.getDeclaredMethod(
+                "updatePermissionFlags",
+                String::class.java,
+                String::class.java,
+                Int::class.java,
+                Int::class.java,
+                Boolean::class.java,
+                Int::class.java,
+                Int::class.java,
+            )
+        }
+        private val METHOD_UPDATE_PERMISSION_FLAGS by lazy {
             CLS.getDeclaredMethod(
                 "updatePermissionFlags",
                 String::class.java,
@@ -143,6 +165,7 @@ private class PermissionManagerProxy private constructor(private val iFace: IInt
                 Boolean::class.java,
                 Int::class.java,
             )
+        }
 
         val instance by lazy {
             PermissionManagerProxy(getService(CLS, "permissionmgr"))
@@ -150,6 +173,20 @@ private class PermissionManagerProxy private constructor(private val iFace: IInt
     }
 
     fun getPermissionFlags(packageName: String, permissionName: String, userId: Int): Int {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                return METHOD_GET_PERMISSION_FLAGS_14_QPR2(
+                    iFace,
+                    packageName,
+                    permissionName,
+                    Context.DEVICE_ID_DEFAULT,
+                    userId
+                ) as Int
+            }
+        } catch (e: NoSuchMethodException) {
+            // 14 QPR2 has a breaking change in the interface, but no version bump.
+        }
+
         return METHOD_GET_PERMISSION_FLAGS(iFace, packageName, permissionName, userId) as Int
     }
 
@@ -161,6 +198,25 @@ private class PermissionManagerProxy private constructor(private val iFace: IInt
         checkAdjustPolicyFlagPermission: Boolean,
         userId: Int,
     ) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                METHOD_UPDATE_PERMISSION_FLAGS_14_QPR2.invoke(
+                    iFace,
+                    packageName,
+                    permissionName,
+                    flagMask,
+                    flagValues,
+                    checkAdjustPolicyFlagPermission,
+                    Context.DEVICE_ID_DEFAULT,
+                    userId,
+                )
+
+                return
+            }
+        } catch (e: NoSuchMethodException) {
+            // 14 QPR2 has a breaking change in the interface, but no version bump.
+        }
+
         METHOD_UPDATE_PERMISSION_FLAGS.invoke(
             iFace,
             packageName,
