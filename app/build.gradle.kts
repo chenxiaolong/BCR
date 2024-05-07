@@ -327,7 +327,8 @@ android.applicationVariants.all {
         val backupFiles = variant.outputs.map {
             "priv-app/${variant.applicationId}/${it.outputFile.name}"
         } + listOf(
-            "etc/permissions/privapp-permissions-${variant.applicationId}.xml"
+            "etc/permissions/privapp-permissions-${variant.applicationId}.xml",
+            "etc/sysconfig/config-${variant.applicationId}.xml",
         )
 
         doLast {
