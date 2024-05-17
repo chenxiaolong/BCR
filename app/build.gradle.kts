@@ -132,6 +132,7 @@ android {
             "sk",
             "tr",
             "uk",
+            "vi",
             "zh-rCN",
             "zh-rTW",
         ))

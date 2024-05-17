@@ -1,0 +1,134 @@
+<resources>
+    <string name="app_name_full">Ghi âm cuộc gọi cơ bản</string>
+
+    <!-- Preference headers -->
+    <string name="pref_header_general">Chung</string>
+    <string name="pref_header_about">Giới thiệu</string>
+
+    <!-- General preferences -->
+    <string name="pref_call_recording_name">Ghi âm cuộc gọi</string>
+    <string name="pref_call_recording_desc">Ghi âm các cuộc gọi đến và đi. Cần cấp quyền truy cập micro và thông báo để ghi âm trong nền.</string>
+
+    <string name="pref_record_rules_name">Quy tắc tự động ghi âm</string>
+    <string name="pref_record_rules_desc">Cấu hình các cuộc gọi nào sẽ được ghi âm tự động.</string>
+
+    <string name="pref_output_dir_name">Thư mục đầu ra</string>
+    <string name="pref_output_dir_desc">Chọn một thư mục để lưu trữ các bản ghi âm. Nhấn giữ để mở trong trình quản lý tệp.</string>
+
+    <string name="pref_output_format_name">Định dạng đầu ra</string>
+    <string name="pref_output_format_desc">Chọn một định dạng mã hóa cho các bản ghi âm.</string>
+
+    <string name="pref_inhibit_batt_opt_name">Tắt tối ưu hóa pin</string>
+    <string name="pref_inhibit_batt_opt_desc">Giảm khả năng ứng dụng bị hệ thống tắt.</string>
+
+    <string name="pref_write_metadata_name">Ghi tệp metadata</string>
+    <string name="pref_write_metadata_desc">Tạo một tệp JSON chứa chi tiết về cuộc gọi bên cạnh tệp âm thanh.</string>
+
+    <string name="pref_record_telecom_apps_name">Ghi âm ứng dụng tích hợp dịch vụ viễn thông</string>
+    <string name="pref_record_telecom_apps_desc">Ghi âm các cuộc gọi từ các ứng dụng bên thứ ba tích hợp với hệ thống viễn thông của Android. Các bản ghi âm của những cuộc gọi này có thể không có âm thanh.</string>
+
+    <!-- About "preference" -->
+    <string name="pref_version_name">Phiên bản</string>
+
+    <!-- Record rules bottom sheet -->
+    <string name="pref_header_rules">Quy tắc</string>
+    <string name="pref_add_rule_name">Thêm quy tắc</string>
+    <string name="pref_add_rule_desc">Thêm quy tắc tự động ghi âm cho một liên hệ.</string>
+    <string name="record_rules_rule_added">Đã thêm quy tắc mới. Nhấn giữ quy tắc để xóa.</string>
+    <string name="record_rules_rule_exists">Quy tắc đã tồn tại.</string>
+    <string name="record_rules_info">Khi một quy tắc được bật, cuộc gọi sẽ được tự động ghi âm theo mặc định và có thể xóa thủ công từ thông báo. Khi một quy tắc bị tắt, bản ghi âm sẽ bị xóa khi cuộc gọi kết thúc trừ khi nó được giữ lại bằng cách sử dụng nút Khôi phục trong thông báo.</string>
+    <string name="record_rule_type_all_calls_name">Tất cả cuộc gọi</string>
+    <string name="record_rule_type_all_calls_desc">Cần cấp quyền truy cập liên hệ để có quy tắc chi tiết hơn.</string>
+    <string name="record_rule_type_all_other_calls_name">Tất cả các cuộc gọi khác</string>
+    <string name="record_rule_type_all_other_calls_desc">Các cuộc gọi không khớp với bất kỳ quy tắc nào khác.</string>
+    <string name="record_rule_type_unknown_calls_name">Cuộc gọi không xác định</string>
+    <string name="record_rule_type_unknown_calls_desc">Các cuộc gọi không khớp với bất kỳ liên hệ nào.</string>
+    <string name="record_rule_type_contact_name">Liên hệ: %s</string>
+    <string name="record_rule_type_contact_desc">Nhấn giữ để xóa quy tắc.</string>
+
+    <!-- Output directory bottom sheet -->
+    <string name="output_dir_bottom_sheet_change_dir">Thay đổi thư mục</string>
+    <string name="output_dir_bottom_sheet_filename_template">Mẫu tên tệp</string>
+    <string name="output_dir_bottom_sheet_edit_template">Chỉnh sửa mẫu</string>
+    <string name="output_dir_bottom_sheet_file_retention">Lưu trữ tệp</string>
+    <string name="output_dir_bottom_sheet_edit_retention">Chỉnh sửa lưu trữ</string>
+    <string name="retention_keep_all">Giữ tất cả</string>
+    <plurals name="retention_days">
+        <item quantity="one">Giữ %d ngày</item>
+        <item quantity="other">Giữ %d ngày</item>
+    </plurals>
+    <string name="retention_unusable">Lưu trữ tệp bị tắt vì mẫu tên tệp hiện tại không tương thích với tính năng này.</string>
+
+    <!-- Định dạng đầu ra -->
+    <string name="output_format_bottom_sheet_output_format">Định dạng đầu ra</string>
+    <string name="output_format_bottom_sheet_compression_level">Mức nén</string>
+    <string name="output_format_bottom_sheet_bitrate">Bitrate</string>
+    <string name="output_format_bottom_sheet_sample_rate">Tần số mẫu</string>
+    <string name="output_format_bottom_sheet_custom_param">Tùy chỉnh</string>
+
+    <string name="bottom_sheet_reset">Đặt lại về mặc định</string>
+
+    <!-- Filename template dialog -->
+    <string name="filename_template_dialog_title">Mẫu tên tệp</string>
+    <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
+    <string name="filename_template_dialog_message">Nhập một mẫu tùy chỉnh cho tên tệp đầu ra. Các biến được chỉ định bằng dấu ngoặc nhọn (ví dụ: <annotation type="template">{var}</annotation>). Các giá trị mặc định được chỉ định bằng dấu ngoặc vuông (ví dụ: <annotation type="template">[{contact_name}|Không xác định]</annotation>).\n\nCác biến được hỗ trợ: <annotation type="supported_vars">PLACEHOLDER</annotation>. Xem <annotation type="template_docs">tài liệu</annotation> để biết mô tả đầy đủ về cú pháp.</string>
+    <string name="filename_template_dialog_warning_subdirectories">Do hiệu suất kém của Khung truy cập lưu trữ Android, sử dụng các thư mục con (ký tự <annotation type="template">/</annotation>) có thể gây ra sự chậm trễ đáng kể khi lưu bản ghi trên một số thiết bị. Sự chậm trễ xảy ra khi cuộc gọi kết thúc và không làm mất âm thanh cuộc gọi.</string>
+    <string name="filename_template_dialog_error_empty">Mẫu không được để trống</string>
+    <string name="filename_template_dialog_error_unknown_variable">Biến mẫu không xác định: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">Biến không thể có đối số: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_argument">Đối số biến không hợp lệ: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_syntax">Cú pháp mẫu không hợp lệ</string>
+    <string name="filename_template_dialog_action_reset_to_default">Đặt lại về mặc định</string>
+
+    <!-- File retention dialog -->
+    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_message">Nhập số ngày giữ các bản ghi âm.</string>
+    <string name="file_retention_error_too_large">Số quá lớn</string>
+
+    <!-- Format parameter dialog -->
+    <string name="format_param_dialog_title">Tham số tùy chỉnh</string>
+    <string name="format_param_dialog_message">Nhập một giá trị trong khoảng [%1$s, %2$s].</string>
+
+    <!-- Format sample rate dialog -->
+    <string name="format_sample_rate_dialog_title">Tần số mẫu tùy chỉnh</string>
+    <string name="format_sample_rate_dialog_message_desc">Nhập một tần số mẫu trong một trong các khoảng sau:</string>
+    <string name="format_sample_rate_dialog_message_range">[%1$s, %2$s]</string>
+
+    <!-- Format parameter -->
+    <string name="format_param_bitrate_bps">%s bps</string>
+    <string name="format_param_bitrate_kbps">%s kbps</string>
+    <string name="format_param_compression_level">Mức %s</string>
+
+    <!-- Format sample rate -->
+    <string name="format_sample_rate">%s Hz</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_persistent_name">Dịch vụ nền</string>
+    <string name="notification_channel_persistent_desc">Thông báo liên tục cho ghi âm cuộc gọi nền</string>
+    <string name="notification_channel_failure_name">Cảnh báo lỗi</string>
+    <string name="notification_channel_failure_desc">Cảnh báo lỗi trong quá trình ghi âm cuộc gọi</string>
+    <string name="notification_channel_success_name">Cảnh báo thành công</string>
+    <string name="notification_channel_success_desc">Cảnh báo cho ghi âm cuộc gọi thành công</string>
+    <string name="notification_recording_initializing">Đang khởi tạo ghi âm cuộc gọi</string>
+    <string name="notification_recording_in_progress">Đang ghi âm cuộc gọi</string>
+    <string name="notification_recording_finalizing">Đang hoàn tất ghi âm cuộc gọi</string>
+    <string name="notification_recording_paused">Ghi âm cuộc gọi đã tạm dừng</string>
+    <string name="notification_recording_on_hold">Cuộc gọi đang giữ</string>
+    <string name="notification_recording_failed">Ghi âm cuộc gọi thất bại</string>
+    <string name="notification_recording_succeeded">Ghi âm cuộc gọi thành công</string>
+    <string name="notification_message_delete_at_end">Bản ghi âm sẽ bị xóa khi cuộc gọi kết thúc. Nhấn Khôi phục để giữ bản ghi âm.</string>
+    <string name="notification_internal_android_error">Ghi âm thất bại trong một thành phần nội bộ của Android (%s). Thiết bị hoặc phần mềm này có thể không hỗ trợ ghi âm cuộc gọi.</string>
+    <string name="notification_pure_silence_error">Bản ghi âm đã bị loại bỏ vì âm thanh hoàn toàn im lặng. Thiết bị này có thể không hỗ trợ ghi âm các cuộc gọi liên quan đến ứng dụng \'%s\'.</string>
+    <string name="notification_action_open">Mở</string>
+    <string name="notification_action_share">Chia sẻ</string>
+    <string name="notification_action_delete">Xóa</string>
+    <string name="notification_action_restore">Khôi phục</string>
+    <string name="notification_action_pause">Tạm dừng</string>
+    <string name="notification_action_resume">Tiếp tục</string>
+
+    <!-- Quick settings tile -->
+    <string name="quick_settings_label">Ghi âm cuộc gọi</string>
+
+    <!-- Snackbar alerts -->
+    <string name="documentsui_not_found">Trình quản lý tệp tích hợp của Android (DocumentsUI) không khả dụng.</string>
+</resources>
