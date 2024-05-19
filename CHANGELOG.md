@@ -13,6 +13,7 @@
   * This only affects fresh installs of BCR. Android normally blocks users from granting this permission, even from Android's Settings app. The removal of this restriction now works on Android 14 QPR2 and newer.
 * Update Turkish translations ([PR #521 @symbuzzer])
 * Update Polish translations ([PR #540 @phyrz91])
+* Add Vietnamese translations ([PR #543 @hdzungx])
 
 ### Version 1.62
 
@@ -845,3 +846,4 @@ Non-user-facing changes:
 [PR #523 @anenasa]: https://github.com/chenxiaolong/BCR/pull/523
 [PR #528 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/528
 [PR #540 @phyrz91]: https://github.com/chenxiaolong/BCR/pull/540
+[PR #543 @hdzungx]: https://github.com/chenxiaolong/BCR/pull/543
