@@ -25,8 +25,16 @@
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <!--
+        We use android:usesNonSdkApi to bypass Android's hidden API restrictions instead of creating
+        a sysconfig file with <hidden-api-whitelisted-app>. This is necessary because some custom
+        Android builds have a bug where the sysconfig file is only sometimes respected, leading to
+        intermittent app crashes.
+    -->
+    <!--suppress AndroidUnknownAttribute -->
     <application
         android:name=".RecorderApplication"
+        android:usesNonSdkApi="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
