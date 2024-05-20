@@ -2,7 +2,6 @@ import org.eclipse.jgit.api.ArchiveCommand
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.archive.TarFormat
 import org.eclipse.jgit.lib.ObjectId
-import org.jetbrains.kotlin.backend.common.pop
 import org.json.JSONObject
 
 plugins {
@@ -33,8 +32,8 @@ fun describeVersion(git: Git): VersionTriple {
 
     return if (describeStr != null) {
         val pieces = describeStr.split('-').toMutableList()
-        val commit = git.repository.resolve(pieces.pop().substring(1))
-        val count = pieces.pop().toInt()
+        val commit = git.repository.resolve(pieces.removeLast().substring(1))
+        val count = pieces.removeLast().toInt()
         val tag = pieces.joinToString("-")
 
         Triple(tag, count, commit)
