@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.63
 
 * Fix removal of restrictions for `READ_CALL_LOG` permission on Android 14 QPR2 ([PR #528 @chenxiaolong])
   * This only affects fresh installs of BCR. Android normally blocks users from granting this permission, even from Android's Settings app. The removal of this restriction now works on Android 14 QPR2 and newer.
