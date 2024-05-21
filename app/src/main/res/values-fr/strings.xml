@@ -24,6 +24,9 @@
     <string name="pref_write_metadata_name">Écriture fichier metadata</string>
     <string name="pref_write_metadata_desc">Créer un fichier JSON contenant les détails des appels avec le fichier audio.</string>
 
+    <string name="pref_record_telecom_apps_name">Enregistrer les applications tierces</string>
+    <string name="pref_record_telecom_apps_desc">Enregistrer les appels provenant des applications tierces. Ces enregistrements d\'appel devrait contenir uniquement du silence.</string>
+
     <!-- About "preference" -->
     <string name="pref_version_name">Version</string>
 
@@ -86,9 +89,18 @@
     <string name="format_param_dialog_title">Paramètres personnalisés</string>
     <string name="format_param_dialog_message">Entrer une valeur dans l\'intervalle [%1$s, %2$s].</string>
 
+    <!-- Format sample rate dialog -->
+    <string name="format_sample_rate_dialog_title">Fréquence d\'échantillonnage personnalisée</string>
+    <string name="format_sample_rate_dialog_message_desc">Entrer une valeur dans cette intervalle :</string>
+    <string name="format_sample_rate_dialog_message_range">[%1$s, %2$s]</string>
+
     <!-- Format parameter -->
+    <string name="format_param_bitrate_bps">%s bps</string>
     <string name="format_param_bitrate_kbps">%s kbps</string>
     <string name="format_param_compression_level">Niveau %s</string>
+    
+    <!-- Format sample rate -->
+    <string name="format_sample_rate">%s Hz</string>
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Service d\'arrière plan</string>
