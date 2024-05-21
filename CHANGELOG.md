@@ -16,6 +16,7 @@
 * Add Vietnamese translations ([PR #543 @hdzungx])
 * Fix sysconfig file being deleted during OS upgrades when BCR is installed from recovery ([PR #541 @chenxiaolong])
 * Update all dependencies ([PR #529 @chenxiaolong])
+* Update French translations ([PR #548 @NSO73])
 
 ### Version 1.62
 
@@ -851,3 +852,4 @@ Non-user-facing changes:
 [PR #540 @phyrz91]: https://github.com/chenxiaolong/BCR/pull/540
 [PR #541 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/541
 [PR #543 @hdzungx]: https://github.com/chenxiaolong/BCR/pull/543
+[PR #548 @NSO73]: https://github.com/chenxiaolong/BCR/pull/548
