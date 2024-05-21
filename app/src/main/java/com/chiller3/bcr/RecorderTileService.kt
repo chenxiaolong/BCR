@@ -1,5 +1,6 @@
 package com.chiller3.bcr
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.SharedPreferences
@@ -33,6 +34,7 @@ class RecorderTileService : TileService(), SharedPreferences.OnSharedPreferenceC
         prefs.unregisterOnSharedPreferenceChangeListener(this)
     }
 
+    @SuppressLint("StartActivityAndCollapseDeprecated")
     override fun onClick() {
         super.onClick()
 
