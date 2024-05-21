@@ -17,6 +17,9 @@
 * Fix sysconfig file being deleted during OS upgrades when BCR is installed from recovery ([PR #541 @chenxiaolong])
 * Update all dependencies ([PR #529 @chenxiaolong])
 * Update French translations ([PR #548 @NSO73])
+* Work around bug in some custom ROMs where Android sometimes ignores the sysconfig file needed to access hidden/system APIs ([Issue #539], [Issue #546], [PR #549 @chenxiaolong])
+  * This affected BCR installations that were flashed via recovery or bundled with the ROM.
+  * **NOTE**: Folks bundling BCR into their Android builds should remove the sysconfig file as it is no longer necessary.
 
 ### Version 1.62
 
@@ -613,6 +616,8 @@ Non-user-facing changes:
 [Issue #491]: https://github.com/chenxiaolong/BCR/issues/491
 [Issue #507]: https://github.com/chenxiaolong/BCR/issues/507
 [Issue #513]: https://github.com/chenxiaolong/BCR/issues/513
+[Issue #539]: https://github.com/chenxiaolong/BCR/issues/539
+[Issue #546]: https://github.com/chenxiaolong/BCR/issues/546
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -853,3 +858,4 @@ Non-user-facing changes:
 [PR #541 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/541
 [PR #543 @hdzungx]: https://github.com/chenxiaolong/BCR/pull/543
 [PR #548 @NSO73]: https://github.com/chenxiaolong/BCR/pull/548
+[PR #549 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/549
