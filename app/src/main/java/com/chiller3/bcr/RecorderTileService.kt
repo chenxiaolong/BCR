@@ -10,6 +10,7 @@ import android.service.quicksettings.TileService
 import android.util.Log
 import androidx.preference.PreferenceManager
 import com.chiller3.bcr.settings.SettingsActivity
+import com.chiller3.bcr.R
 
 class RecorderTileService : TileService(), SharedPreferences.OnSharedPreferenceChangeListener {
     private lateinit var prefs: Preferences
@@ -76,7 +77,7 @@ class RecorderTileService : TileService(), SharedPreferences.OnSharedPreferenceC
         } else {
             tile.state = Tile.STATE_INACTIVE
         }
-
+        tile.label = getString(R.string.quick_settings_label)
         tile.updateTile()
     }
 
