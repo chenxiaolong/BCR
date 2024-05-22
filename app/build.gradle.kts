@@ -118,6 +118,7 @@ android {
         versionCode = gitVersionCode
         versionName = gitVersionName
         resourceConfigurations.addAll(listOf(
+            "ar",
             "de",
             "en",
             "es",
@@ -130,6 +131,7 @@ android {
             "ru",
             "sk",
             "tr",
+            "ur",
             "uk",
             "vi",
             "zh-rCN",
