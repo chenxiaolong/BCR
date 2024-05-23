@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Add Arabic and Urdu translations ([PR #550 @TheDeathDragon])
+
 ### Version 1.63
 
 * Fix removal of restrictions for `READ_CALL_LOG` permission on Android 14 QPR2 ([PR #528 @chenxiaolong])
@@ -861,3 +863,4 @@ Non-user-facing changes:
 [PR #543 @hdzungx]: https://github.com/chenxiaolong/BCR/pull/543
 [PR #548 @NSO73]: https://github.com/chenxiaolong/BCR/pull/548
 [PR #549 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/549
+[PR #550 @TheDeathDragon]: https://github.com/chenxiaolong/BCR/pull/550
