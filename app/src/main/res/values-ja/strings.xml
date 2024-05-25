@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BCR</string>
+    <string name="app_name_full">Basic Call Recorder</string>
+    <string name="pref_header_general">一般</string>
+    <string name="pref_header_about">バージョン情報</string>
+    <string name="pref_call_recording_name">通話録音</string>
+    <string name="filename_template_dialog_error_empty">テンプレートを空にすることはできません</string>
+    <string name="filename_template_dialog_error_unknown_variable">不明なテンプレート変数: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">変数には引数を含めることはできません: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_argument">無効な変数引数: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_syntax">テンプレート構文が無効です</string>
+    <string name="filename_template_dialog_action_reset_to_default">デフォルトにリセットする</string>
+    <string name="file_retention_dialog_title">\@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_message">録音を保存する日数を入力します。</string>
+    <string name="file_retention_error_too_large">数値が大きすぎます</string>
+    <string name="format_param_dialog_title">カスタムパラメータ</string>
+    <string name="format_sample_rate_dialog_title">カスタムサンプルレート</string>
+    <string name="format_sample_rate_dialog_message_desc">次のいずれかの範囲内のサンプル レートを入力します:</string>
+    <string name="notification_recording_initializing">通話録音の初期化中</string>
+    <string name="notification_recording_in_progress">通話録音中</string>
+    <string name="notification_recording_finalizing">通話録音を終了中</string>
+    <string name="notification_recording_paused">通話録音が一時停止されました</string>
+    <string name="notification_recording_on_hold">保留中の通話</string>
+    <string name="notification_recording_failed">通話の録音に失敗しました</string>
+    <string name="notification_recording_succeeded">通話が正常に録音されました</string>
+    <string name="notification_message_delete_at_end">録音は通話終了時に削除されます。 録音を維持するには、「復元」をタップします。</string>
+    <string name="notification_action_open">開く</string>
+    <string name="notification_action_share">共有</string>
+    <string name="notification_action_delete">削除</string>
+    <string name="notification_action_restore">復元</string>
+    <string name="notification_action_pause">一時停止</string>
+    <string name="notification_action_resume">再開</string>
+    <string name="quick_settings_label">通話録音</string>
+    <string name="pref_call_recording_desc">電話の発着信を録音します。 バックグラウンドで録音するにはマイクと通知の許可が必要です。</string>
+    <string name="pref_record_rules_name">自動録音ルール</string>
+    <string name="pref_record_rules_desc">どの通話を自動的に録音するかを設定します。</string>
+    <string name="pref_output_dir_name">出力ディレクトリ</string>
+    <string name="pref_output_dir_desc">録音を保存するディレクトリを選択します。 長押しするとファイルマネージャーで開きます。</string>
+    <string name="pref_output_format_name">出力フォーマット</string>
+    <string name="pref_output_format_desc">録音のエンコード形式を選択します。</string>
+    <string name="pref_inhibit_batt_opt_name">バッテリーの最適化を無効にする</string>
+    <string name="pref_inhibit_batt_opt_desc">アプリがシステムによって強制終了される可能性が低くなります。</string>
+    <string name="filename_template_dialog_message">出力ファイル名のカスタム テンプレートを入力します。 変数は中括弧で指定します (例: <annotation type="template">{var}</annotation>)。 フォールバックは角かっこで指定します (例: <annotation type="template">[{contact_name}|Unknown]</annotation>)。  サポートされている変数: <annotation type="supported_vars">PLACEHOLDER</annotation>。 構文の詳細については、 <annotation type="template_docs">ドキュメント</annotation> を参照してください。</string>
+    <string name="format_param_dialog_message">[%1$s, %2$s] の範囲の値を入力します。</string>
+    <string name="format_param_bitrate_kbps">%s kbps</string>
+    <string name="format_param_compression_level">レベル %s</string>
+    <string name="notification_channel_persistent_name">バックグラウンドサービス</string>
+    <string name="notification_channel_persistent_desc">バックグラウンド通話録音の持続的な通知</string>
+    <string name="notification_channel_failure_name">障害アラート</string>
+    <string name="notification_channel_failure_desc">通話録音中のエラーのアラート</string>
+    <string name="notification_channel_success_name">成功アラート</string>
+    <string name="notification_channel_success_desc">通話録音が成功した場合のアラート</string>
+    <string name="notification_internal_android_error">内部 Android コンポーネント (%s) で記録に失敗しました。 このデバイスまたはファームウェアは通話録音をサポートしていない可能性があります。</string>
+    <string name="pref_write_metadata_name">メタデータファイルの書き込み</string>
+    <string name="pref_write_metadata_desc">音声ファイルと同じディレクトリに、通話に関する詳細を含む JSON ファイルを作成します。</string>
+    <string name="pref_record_telecom_apps_name">サードパーティ製通話アプリの録音</string>
+    <string name="pref_record_telecom_apps_desc">Android の通信システムと統合されているサードパーティ製アプリからの通話を録音します。 これらの通話の録音は、無音となってしまう可能性があります。</string>
+    <string name="pref_version_name">バージョン</string>
+    <string name="pref_header_rules">ルール</string>
+    <string name="pref_add_rule_name">ルールの追加</string>
+    <string name="pref_add_rule_desc">連絡先による自動録音ルールを追加します。</string>
+    <string name="record_rules_rule_added">新しいルールを追加しました。 ルールを長押しして削除します。</string>
+    <string name="record_rules_rule_exists">ルールはすでに存在します。</string>
+    <string name="record_rules_info">ルールがオンになっている場合、通話はデフォルトで自動的に録音され、通知から手動で削除できます。 ルールがオフになっている場合、通知の [復元] ボタンを使用して録音を保存しない限り、通話の終了時に録音は削除されます。</string>
+    <string name="record_rule_type_all_calls_name">すべての通話</string>
+    <string name="record_rule_type_all_calls_desc">より詳細なルールを適用するには、連絡先のアクセス許可が必要です。</string>
+    <string name="record_rule_type_all_other_calls_name">他のすべての通話</string>
+    <string name="record_rule_type_all_other_calls_desc">他のルールに一致しない通話。</string>
+    <string name="record_rule_type_unknown_calls_name">不明な通話</string>
+    <string name="record_rule_type_unknown_calls_desc">どの連絡先とも一致しない通話。</string>
+    <string name="record_rule_type_contact_name">連絡先: %s</string>
+    <string name="record_rule_type_contact_desc">長押ししてルールを削除します。</string>
+    <string name="output_dir_bottom_sheet_change_dir">ディレクトリを変更する</string>
+    <string name="output_dir_bottom_sheet_filename_template">ファイル名のテンプレート</string>
+    <string name="output_dir_bottom_sheet_edit_template">テンプレートの編集</string>
+    <string name="output_dir_bottom_sheet_file_retention">ファイルの保持</string>
+    <string name="output_dir_bottom_sheet_edit_retention">保持期間の編集</string>
+    <string name="retention_keep_all">すべて保持</string>
+    <string name="retention_unusable">現在のファイル名テンプレートがこの機能と互換性がないため、ファイルの保持は無効になっています。</string>
+    <string name="output_format_bottom_sheet_output_format">出力フォーマット</string>
+    <string name="output_format_bottom_sheet_compression_level">圧縮レベル</string>
+    <string name="output_format_bottom_sheet_bitrate">ビットレート</string>
+    <string name="output_format_bottom_sheet_sample_rate">サンプルレート</string>
+    <string name="output_format_bottom_sheet_custom_param">カスタム</string>
+    <string name="bottom_sheet_reset">デフォルトにリセット</string>
+    <string name="filename_template_dialog_title">ファイル名テンプレート</string>
+    <string name="filename_template_dialog_warning_subdirectories">Android Storage Access Framework のパフォーマンスが低いため、サブディレクトリ (<annotation type="template">/</annotation> 文字) を使用すると、一部のデバイスで録画を保存するときに大幅な遅延が発生する可能性があります。 遅延は通話の終了時に発生しますが、通話音声が失われることはありません。</string>
+    <string name="format_sample_rate_dialog_message_range">[%1$s, %2$s]</string>
+    <string name="format_param_bitrate_bps">%s bps</string>
+    <string name="format_sample_rate">%s Hz</string>
+    <string name="documentsui_not_found">Android の組み込みファイル マネージャー (DocumentsUI) は使用できません。</string>
+    <string name="notification_pure_silence_error">音声が完全に無音になったため、録音は破棄されました。 このデバイスは、「%s」アプリに関連付けられた通話の録音をサポートしていない可能性があります。</string>
+</resources>
