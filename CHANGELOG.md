@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Add Arabic and Urdu translations ([PR #550 @TheDeathDragon])
+* Add Japanese translations ([PR #552 @musenq])
 
 ### Version 1.63
 
@@ -864,3 +865,4 @@ Non-user-facing changes:
 [PR #548 @NSO73]: https://github.com/chenxiaolong/BCR/pull/548
 [PR #549 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/549
 [PR #550 @TheDeathDragon]: https://github.com/chenxiaolong/BCR/pull/550
+[PR #552 @musenq]: https://github.com/chenxiaolong/BCR/pull/552
