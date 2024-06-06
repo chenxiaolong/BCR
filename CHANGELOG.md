@@ -11,6 +11,7 @@
 
 * Add Arabic and Urdu translations ([PR #550 @TheDeathDragon])
 * Add Japanese translations ([PR #552 @musenq])
+* Fix race condition when adding record rules if BCR was unloaded from memory while a contact was being selected ([Issue #554], [PR #555 @chenxiaolong])
 
 ### Version 1.63
 
@@ -623,6 +624,7 @@ Non-user-facing changes:
 [Issue #513]: https://github.com/chenxiaolong/BCR/issues/513
 [Issue #539]: https://github.com/chenxiaolong/BCR/issues/539
 [Issue #546]: https://github.com/chenxiaolong/BCR/issues/546
+[Issue #554]: https://github.com/chenxiaolong/BCR/issues/554
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -866,3 +868,4 @@ Non-user-facing changes:
 [PR #549 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/549
 [PR #550 @TheDeathDragon]: https://github.com/chenxiaolong/BCR/pull/550
 [PR #552 @musenq]: https://github.com/chenxiaolong/BCR/pull/552
+[PR #555 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/555
