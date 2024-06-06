@@ -34,7 +34,6 @@ class RecordRulesFragment : PreferenceFragmentCompat(), Preference.OnPreferenceC
     private lateinit var prefAddRule: Preference
 
     private var ruleOffset by Delegates.notNull<Int>()
-    private var rules = emptyList<DisplayedRecordRule>()
 
     private val requestContact =
         registerForActivityResult(ActivityResultContracts.PickContact()) { uri ->
@@ -155,8 +154,6 @@ class RecordRulesFragment : PreferenceFragmentCompat(), Preference.OnPreferenceC
             }
             categoryRules.addPreference(p)
         }
-
-        rules = newRules
     }
 
     override fun onPreferenceClick(preference: Preference): Boolean {
