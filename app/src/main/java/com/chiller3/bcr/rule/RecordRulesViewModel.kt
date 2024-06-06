@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 sealed class DisplayedRecordRule : Comparable<DisplayedRecordRule> {
@@ -79,6 +81,8 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
     private val _rules = MutableStateFlow<List<DisplayedRecordRule>>(emptyList())
     val rules: StateFlow<List<DisplayedRecordRule>> = _rules
 
+    private val rulesMutex = Mutex()
+
     init {
         refreshRules()
     }
@@ -90,30 +94,34 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
     private fun refreshRules() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val rawRules = prefs.recordRules ?: Preferences.DEFAULT_RECORD_RULES
-                val displayRules = rawRules.map { rule ->
-                    when (rule) {
-                        is RecordRule.AllCalls -> DisplayedRecordRule.AllCalls(rule.record)
-                        is RecordRule.UnknownCalls -> DisplayedRecordRule.UnknownCalls(rule.record)
-                        is RecordRule.Contact -> DisplayedRecordRule.Contact(
-                            rule.lookupKey,
-                            getContactDisplayName(rule.lookupKey),
-                            rule.record,
-                        )
+                rulesMutex.withLock {
+                    val rawRules = prefs.recordRules ?: Preferences.DEFAULT_RECORD_RULES
+                    val displayRules = rawRules.map { rule ->
+                        when (rule) {
+                            is RecordRule.AllCalls -> DisplayedRecordRule.AllCalls(rule.record)
+                            is RecordRule.UnknownCalls -> DisplayedRecordRule.UnknownCalls(rule.record)
+                            is RecordRule.Contact -> DisplayedRecordRule.Contact(
+                                rule.lookupKey,
+                                getContactDisplayName(rule.lookupKey),
+                                rule.record,
+                            )
+                        }
                     }
-                }
 
-                // Update and re-save the rules since the display name may have changed, resulting
-                // in a new sort order.
-                updateAndSaveRules {
-                    displayRules
+                    // Update and re-save the rules since the display name may have changed,
+                    // resulting in a new sort order.
+                    saveRulesLocked(displayRules)
                 }
             }
         }
     }
 
-    private fun saveRules(newRules: List<DisplayedRecordRule>) {
-        val rawRules = newRules.map { displayedRule ->
+    private fun saveRulesLocked(newRules: List<DisplayedRecordRule>) {
+        val sortedRules = newRules.sorted()
+
+        _rules.update { sortedRules }
+
+        val rawRules = sortedRules.map { displayedRule ->
             when (displayedRule) {
                 is DisplayedRecordRule.AllCalls ->
                     RecordRule.AllCalls(displayedRule.record)
@@ -125,19 +133,10 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
         }
 
         if (rawRules == Preferences.DEFAULT_RECORD_RULES) {
+            Log.d(TAG, "New rules match defaults; clearing explicit settings")
             prefs.recordRules = null
         } else {
             prefs.recordRules = rawRules
-        }
-    }
-
-    private fun updateAndSaveRules(
-        block: (old: List<DisplayedRecordRule>) -> List<DisplayedRecordRule>,
-    ) {
-        _rules.update {
-            val newRules = block(it).sorted()
-            saveRules(newRules)
-            newRules
         }
     }
 
@@ -169,56 +168,76 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
                     return@withContext
                 }
 
-                val oldRules = rules.value
-                val existingRule = oldRules.find {
-                    it is DisplayedRecordRule.Contact && it.lookupKey == contact.lookupKey
-                }
+                rulesMutex.withLock {
+                    val oldRules = rules.value
+                    val existingRule = oldRules.find {
+                        it is DisplayedRecordRule.Contact && it.lookupKey == contact.lookupKey
+                    }
 
-                if (existingRule != null) {
-                    _messages.update { it + Message.RuleExists }
-                } else {
-                    val newRules = ArrayList(rules.value)
-                    newRules.add(
-                        DisplayedRecordRule.Contact(
-                            contact.lookupKey,
-                            contact.displayName,
-                            true
+                    if (existingRule != null) {
+                        Log.d(TAG, "Rule already exists for ${contact.lookupKey}")
+
+                        _messages.update { it + Message.RuleExists }
+                    } else {
+                        Log.d(TAG, "Adding new rule for ${contact.lookupKey}")
+
+                        val newRules = ArrayList(oldRules)
+                        newRules.add(
+                            DisplayedRecordRule.Contact(
+                                contact.lookupKey,
+                                contact.displayName,
+                                true
+                            )
                         )
-                    )
 
-                    updateAndSaveRules { newRules }
+                        saveRulesLocked(newRules)
 
-                    _messages.update { it + Message.RuleAdded }
+                        _messages.update { it + Message.RuleAdded }
+                    }
                 }
             }
         }
     }
 
     fun setRuleRecord(index: Int, record: Boolean) {
-        updateAndSaveRules {
-            it.mapIndexed { i, displayedRule ->
-                if (i == index) {
-                    when (displayedRule) {
-                        is DisplayedRecordRule.AllCalls -> displayedRule.copy(record = record)
-                        is DisplayedRecordRule.UnknownCalls -> displayedRule.copy(record = record)
-                        is DisplayedRecordRule.Contact -> displayedRule.copy(record = record)
-                    }
-                } else {
-                    displayedRule
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                rulesMutex.withLock {
+                    saveRulesLocked(rules.value.mapIndexed { i, displayedRule ->
+                        if (i == index) {
+                            when (displayedRule) {
+                                is DisplayedRecordRule.AllCalls -> displayedRule.copy(record = record)
+                                is DisplayedRecordRule.UnknownCalls -> displayedRule.copy(record = record)
+                                is DisplayedRecordRule.Contact -> displayedRule.copy(record = record)
+                            }
+                        } else {
+                            displayedRule
+                        }
+                    })
                 }
             }
         }
     }
 
     fun deleteRule(index: Int) {
-        updateAndSaveRules {
-            it.filterIndexed { i, _ -> i != index }
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                rulesMutex.withLock {
+                    saveRulesLocked(rules.value.filterIndexed { i, _ -> i != index })
+                }
+            }
         }
     }
 
     fun reset() {
-        prefs.recordRules = null
-        refreshRules()
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                rulesMutex.withLock {
+                    prefs.recordRules = null
+                    refreshRules()
+                }
+            }
+        }
     }
 
     companion object {
