@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.64
 
 * Add Arabic and Urdu translations ([PR #550 @TheDeathDragon])
 * Add Japanese translations ([PR #552 @musenq])
