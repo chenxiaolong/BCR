@@ -12,6 +12,7 @@
 * Add Arabic and Urdu translations ([PR #550 @TheDeathDragon])
 * Add Japanese translations ([PR #552 @musenq])
 * Fix race condition when adding record rules if BCR was unloaded from memory while a contact was being selected ([Issue #554], [PR #555 @chenxiaolong])
+* Remove unused internal settings field for the disable batter optimizations option ([PR #556 @chenxiaolong])
 
 ### Version 1.63
 
@@ -869,3 +870,4 @@ Non-user-facing changes:
 [PR #550 @TheDeathDragon]: https://github.com/chenxiaolong/BCR/pull/550
 [PR #552 @musenq]: https://github.com/chenxiaolong/BCR/pull/552
 [PR #555 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/555
+[PR #556 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/556
