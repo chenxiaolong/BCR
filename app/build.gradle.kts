@@ -376,6 +376,7 @@ android.applicationVariants.all {
         from(File(magiskDir, "boot_common.sh"))
         from(File(magiskDir, "post-fs-data.sh"))
         from(File(magiskDir, "service.sh"))
+        from(File(magiskDir, "customize.sh"))
 
         from(File(rootDir, "LICENSE"))
         from(File(rootDir, "README.md"))
