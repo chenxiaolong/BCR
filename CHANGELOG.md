@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Prevent addon.d script from being executed during A/B OTA updates when installed as a Magisk module ([PR #558 @harinworks])
+
 ### Version 1.64
 
 * Add Arabic and Urdu translations ([PR #550 @TheDeathDragon])
@@ -873,3 +875,4 @@ Non-user-facing changes:
 [PR #552 @musenq]: https://github.com/chenxiaolong/BCR/pull/552
 [PR #555 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/555
 [PR #556 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/556
+[PR #558 @harinworks]: https://github.com/chenxiaolong/BCR/pull/558
