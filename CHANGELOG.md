@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Prevent addon.d script from being executed during A/B OTA updates when installed as a Magisk module ([PR #558 @harinworks])
+* Log boot script output to logcat ([PR #560 @chenxiaolong])
 
 ### Version 1.64
 
@@ -876,3 +877,4 @@ Non-user-facing changes:
 [PR #555 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/555
 [PR #556 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/556
 [PR #558 @harinworks]: https://github.com/chenxiaolong/BCR/pull/558
+[PR #560 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/560
