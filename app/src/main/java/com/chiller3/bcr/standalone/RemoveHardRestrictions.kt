@@ -10,6 +10,7 @@ package com.chiller3.bcr.standalone
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.companion.virtual.VirtualDeviceManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
@@ -123,13 +124,32 @@ private class PackageManagerProxy private constructor(private val iFace: IInterf
             userId,
         )
     }
+}
 
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+private object VirtualDeviceManagerProxy {
+    private val CLS = VirtualDeviceManager::class.java
+
+    private val FIELD_PERSISTENT_DEVICE_ID_DEFAULT =
+        CLS.getDeclaredField("PERSISTENT_DEVICE_ID_DEFAULT")
+
+    val PERSISTENT_DEVICE_ID_DEFAULT: String
+        get() = FIELD_PERSISTENT_DEVICE_ID_DEFAULT.get(null) as String
 }
 
 @RequiresApi(Build.VERSION_CODES.R)
 private class PermissionManagerProxy private constructor(private val iFace: IInterface) {
     companion object {
         private val CLS = Class.forName("android.permission.IPermissionManager")
+        private val METHOD_GET_PERMISSION_FLAGS_14_QPR3 by lazy {
+            CLS.getDeclaredMethod(
+                "getPermissionFlags",
+                String::class.java,
+                String::class.java,
+                String::class.java,
+                Int::class.java,
+            )
+        }
         private val METHOD_GET_PERMISSION_FLAGS_14_QPR2 by lazy {
             CLS.getDeclaredMethod(
                 "getPermissionFlags",
@@ -143,6 +163,18 @@ private class PermissionManagerProxy private constructor(private val iFace: IInt
             CLS.getDeclaredMethod(
                 "getPermissionFlags",
                 String::class.java,
+                String::class.java,
+                Int::class.java,
+            )
+        }
+        private val METHOD_UPDATE_PERMISSION_FLAGS_14_QPR3 by lazy {
+            CLS.getDeclaredMethod(
+                "updatePermissionFlags",
+                String::class.java,
+                String::class.java,
+                Int::class.java,
+                Int::class.java,
+                Boolean::class.java,
                 String::class.java,
                 Int::class.java,
             )
@@ -177,18 +209,32 @@ private class PermissionManagerProxy private constructor(private val iFace: IInt
     }
 
     fun getPermissionFlags(packageName: String, permissionName: String, userId: Int): Int {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            try {
+                return METHOD_GET_PERMISSION_FLAGS_14_QPR3(
+                    iFace,
+                    packageName,
+                    permissionName,
+                    VirtualDeviceManagerProxy.PERSISTENT_DEVICE_ID_DEFAULT,
+                    userId,
+                ) as Int
+            } catch (e: NoSuchMethodException) {
+                // 14 QPR3 has a breaking change in the interface, but no version bump.
+            } catch (e: NoSuchFieldException) {
+                // PERSISTENT_DEVICE_ID_DEFAULT only exists in QPR3 too.
+            }
+
+            try {
                 return METHOD_GET_PERMISSION_FLAGS_14_QPR2(
                     iFace,
                     packageName,
                     permissionName,
                     Context.DEVICE_ID_DEFAULT,
-                    userId
+                    userId,
                 ) as Int
+            } catch (e: NoSuchMethodException) {
+                // 14 QPR2 has a breaking change in the interface, but no version bump.
             }
-        } catch (e: NoSuchMethodException) {
-            // 14 QPR2 has a breaking change in the interface, but no version bump.
         }
 
         return METHOD_GET_PERMISSION_FLAGS(iFace, packageName, permissionName, userId) as Int
@@ -202,8 +248,27 @@ private class PermissionManagerProxy private constructor(private val iFace: IInt
         checkAdjustPolicyFlagPermission: Boolean,
         userId: Int,
     ) {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            try {
+                METHOD_UPDATE_PERMISSION_FLAGS_14_QPR3.invoke(
+                    iFace,
+                    packageName,
+                    permissionName,
+                    flagMask,
+                    flagValues,
+                    checkAdjustPolicyFlagPermission,
+                    VirtualDeviceManagerProxy.PERSISTENT_DEVICE_ID_DEFAULT,
+                    userId,
+                )
+
+                return
+            } catch (e: NoSuchMethodException) {
+                // 14 QPR3 has a breaking change in the interface, but no version bump.
+            } catch (e: NoSuchFieldException) {
+                // PERSISTENT_DEVICE_ID_DEFAULT only exists in QPR3 too.
+            }
+
+            try {
                 METHOD_UPDATE_PERMISSION_FLAGS_14_QPR2.invoke(
                     iFace,
                     packageName,
@@ -216,9 +281,9 @@ private class PermissionManagerProxy private constructor(private val iFace: IInt
                 )
 
                 return
+            } catch (e: NoSuchMethodException) {
+                // 14 QPR2 has a breaking change in the interface, but no version bump.
             }
-        } catch (e: NoSuchMethodException) {
-            // 14 QPR2 has a breaking change in the interface, but no version bump.
         }
 
         METHOD_UPDATE_PERMISSION_FLAGS.invoke(
