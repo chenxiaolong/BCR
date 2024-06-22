@@ -17,9 +17,13 @@ import android.os.IBinder
 import android.os.IInterface
 import android.os.Process
 import android.system.ErrnoException
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.chiller3.bcr.BuildConfig
+import java.lang.invoke.MethodHandles
 import kotlin.system.exitProcess
+
+private val TAG = MethodHandles.lookup().lookupClass().simpleName
 
 private const val GET_SERVICE_ATTEMPTS = 30
 private const val IS_USER_UNLOCKED_ATTEMPTS = 3600
@@ -310,11 +314,11 @@ private fun removeRestriction(packageName: String, permission: String, userId: I
 private fun waitForLogin(userId: Int) {
     val userManager = UserManagerProxy.instance
 
-    System.err.println("Waiting for user $userId to unlock the device")
+    Log.i(TAG, "Waiting for user $userId to unlock the device")
 
     for (attempt in 1..IS_USER_UNLOCKED_ATTEMPTS) {
         if (userManager.isUserUnlockingOrUnlocked(userId)) {
-            println("User $userId is unlocking/unlocked")
+            Log.i(TAG, "User $userId is unlocking/unlocked")
             return
         }
 
@@ -329,7 +333,7 @@ private fun waitForLogin(userId: Int) {
 
 private fun mainInternal() {
     if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
-        println("Android 9 does not have hard-restricted permissions")
+        Log.i(TAG, "Android 9 does not have hard-restricted permissions")
         return
     }
 
@@ -340,9 +344,9 @@ private fun mainInternal() {
     val suffix = "from ${BuildConfig.APPLICATION_ID} for ${Manifest.permission.READ_CALL_LOG}"
 
     if (changed) {
-        println("Successfully removed hard restriction $suffix")
+        Log.i(TAG, "Successfully removed hard restriction $suffix")
     } else {
-        println("Hard restriction already removed $suffix")
+        Log.i(TAG, "Hard restriction already removed $suffix")
     }
 }
 
@@ -350,8 +354,7 @@ fun main() {
     try {
         mainInternal()
     } catch (e: Exception) {
-        System.err.println("Failed to remove hard restrictions")
-        e.printStackTrace()
+        Log.e(TAG, "Failed to remove hard restrictions", e)
         exitProcess(1)
     }
 }
