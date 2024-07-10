@@ -212,7 +212,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
 
         if (call.parent != null) {
             Log.v(TAG, "Ignoring state change of conference call child")
-        } else if (callState == Call.STATE_ACTIVE) {
+        } else if (callState == Call.STATE_ACTIVE || (prefs.recordDialingState && callState == Call.STATE_DIALING)) {
             startRecording(call)
         } else if (callState == Call.STATE_DISCONNECTING || callState == Call.STATE_DISCONNECTED) {
             // This is necessary because onCallRemoved() might not be called due to firmware bugs

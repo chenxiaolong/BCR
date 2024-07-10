@@ -48,6 +48,12 @@
             app:title="@string/pref_record_telecom_apps_name"
             app:summary="@string/pref_record_telecom_apps_desc"
             app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="record_dialing_state"
+            app:title="@string/pref_record_dialing_state_name"
+            app:summary="@string/pref_record_dialing_state_desc"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory

@@ -27,6 +27,9 @@
     <string name="pref_record_telecom_apps_name">Record telecom-integrated apps</string>
     <string name="pref_record_telecom_apps_desc">Record calls from third-party apps that integrate with Android\'s telecom system. Recordings of these calls will likely contain only silence.</string>
 
+    <string name="pref_record_dialing_state_name">Record calls before connection</string>
+    <string name="pref_record_dialing_state_desc">For outgoing calls, start recording as soon as dialing begins instead of waiting until the call connects.</string>
+
     <!-- About "preference" -->
     <string name="pref_version_name">Version</string>
 

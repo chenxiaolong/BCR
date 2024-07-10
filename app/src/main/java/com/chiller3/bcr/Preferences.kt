@@ -30,6 +30,7 @@ class Preferences(private val context: Context) {
         const val PREF_INHIBIT_BATT_OPT = "inhibit_batt_opt"
         const val PREF_WRITE_METADATA = "write_metadata"
         const val PREF_RECORD_TELECOM_APPS = "record_telecom_apps"
+        const val PREF_RECORD_DIALING_STATE = "record_dialing_state"
         const val PREF_VERSION = "version"
 
         const val PREF_ADD_RULE = "add_rule"
@@ -317,6 +318,13 @@ class Preferences(private val context: Context) {
     var recordTelecomApps: Boolean
         get() = prefs.getBoolean(PREF_RECORD_TELECOM_APPS, false)
         set(enabled) = prefs.edit { putBoolean(PREF_RECORD_TELECOM_APPS, enabled) }
+
+    /**
+     * Whether to start recording as soon as a call enters the DIALING state.
+     */
+    var recordDialingState: Boolean
+        get() = prefs.getBoolean(PREF_RECORD_DIALING_STATE, false)
+        set(enabled) = prefs.edit { putBoolean(PREF_RECORD_DIALING_STATE, enabled) }
 
     /**
      * Get a unique notification ID that increments on every call.
