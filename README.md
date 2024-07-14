@@ -309,29 +309,7 @@ Both the zip file and the APK contained within are digitally signed. **NOTE**: T
 
 ### Verifying zip file signature
 
-To verify the signature of the zip file, run the following two commands. This will save the trusted key to a file named `bcr_trusted_keys` and then use it to verify the signature. Make sure to replace `<version>` with the actual version number.
-
-For Unix-like systems and Windows (Command Prompt):
-
-```bash
-echo bcr ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDOe6/tBnO7xZhAWXRj3ApUYgn+XZ0wnQiXM8B7tPgv4 > bcr_trusted_keys
-
-ssh-keygen -Y verify -f bcr_trusted_keys -I bcr -n file -s BCR-<version>-release.zip.sig < BCR-<version>-release.zip
-```
-
-For Windows (PowerShell):
-
-```powershell
-echo 'bcr ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDOe6/tBnO7xZhAWXRj3ApUYgn+XZ0wnQiXM8B7tPgv4' | Out-File -Encoding ascii bcr_trusted_keys
-
-Start-Process -Wait -NoNewWindow -RedirectStandardInput BCR-<version>-release.zip ssh-keygen -ArgumentList "-Y verify -f bcr_trusted_keys -I bcr -n file -s BCR-<version>-release.zip.sig"
-```
-
-If the file is successfully verified, the output will be:
-
-```
-Good "file" signature for bcr with ED25519 key SHA256:Ct0HoRyrFLrnF9W+A/BKEiJmwx7yWkgaW/JvghKrboA
-```
+To verify the digital signatures of the downloads, follow [the steps here](https://github.com/chenxiaolong/chenxiaolong/blob/master/VERIFY_SSH_SIGNATURES.md).
 
 ### Verifying apk signature
 
