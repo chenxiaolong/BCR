@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.66
 
 * Add option to start recording an outgoing call while it is still in the `DIALING` state ([Issue #563], [PR #564 @chenxiaolong])
 * Update checksum for `tensorflow-lite-metadata-0.1.0-rc2.pom` dependency ([PR #565 @chenxiaolong])
