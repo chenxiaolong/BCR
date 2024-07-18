@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Add option to start recording an outgoing call while it is still in the `DIALING` state ([PR #564 @chenxiaolong])
+
 ### Version 1.65
 
 * Prevent addon.d script from being executed during A/B OTA updates when installed as a Magisk module ([PR #558 @harinworks])
@@ -882,3 +884,4 @@ Non-user-facing changes:
 [PR #558 @harinworks]: https://github.com/chenxiaolong/BCR/pull/558
 [PR #560 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/560
 [PR #561 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/561
+[PR #564 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/564
