@@ -7,6 +7,8 @@
     to update the actual links at the bottom of the file.
 -->
 
+### Unreleased
+
 ### Version 1.66
 
 * Add option to start recording an outgoing call while it is still in the `DIALING` state ([Issue #563], [PR #564 @chenxiaolong])
