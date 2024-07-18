@@ -9,7 +9,8 @@
 
 ### Unreleased
 
-* Add option to start recording an outgoing call while it is still in the `DIALING` state ([PR #564 @chenxiaolong])
+* Add option to start recording an outgoing call while it is still in the `DIALING` state ([Issue #563], [PR #564 @chenxiaolong])
+* Update checksum for `tensorflow-lite-metadata-0.1.0-rc2.pom` dependency ([PR #565 @chenxiaolong])
 
 ### Version 1.65
 
@@ -636,6 +637,7 @@ Non-user-facing changes:
 [Issue #539]: https://github.com/chenxiaolong/BCR/issues/539
 [Issue #546]: https://github.com/chenxiaolong/BCR/issues/546
 [Issue #554]: https://github.com/chenxiaolong/BCR/issues/554
+[Issue #563]: https://github.com/chenxiaolong/BCR/issues/563
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -885,3 +887,4 @@ Non-user-facing changes:
 [PR #560 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/560
 [PR #561 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/561
 [PR #564 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/564
+[PR #565 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/565
