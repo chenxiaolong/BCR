@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update French translations ([PR #567 @NSO73])
+
 ### Version 1.66
 
 * Add option to start recording an outgoing call while it is still in the `DIALING` state ([Issue #563], [PR #564 @chenxiaolong])
@@ -890,3 +892,4 @@ Non-user-facing changes:
 [PR #561 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/561
 [PR #564 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/564
 [PR #565 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/565
+[PR #567 @NSO73]: https://github.com/chenxiaolong/BCR/pull/567
