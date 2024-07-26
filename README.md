@@ -74,6 +74,12 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
     * If installed via Magisk, the module can be updated right from Magisk Manager's modules tab. Flashing the new version in Magisk manually also works just as well.
     * The `.apk` can also be extracted from the zip and be directly installed. With this method, the old version exists as a system app and the new version exists as a user-installed update to the system app. This method is more convenient if BCR is baked into the Android firmware image.
 
+## Recording announcement
+
+Unlike the built-in call recording functionality of the preinstalled dialer app on some devices, BCR does not announce that the call is being recorded to the other party. BCR never outputs audio of any kind to the call audio stream.
+
+If you live in a jurisdiction where two-party consent is required, you are responsible for informing the other party that the call is being recorded. If needed, auto-record rules can be used to discard recordings by default. However, note that if you choose to preserve the recording during the middle of the call, the recording will contain full call, not just the portion after the other party consented.
+
 ## Permissions
 
 * `CAPTURE_AUDIO_OUTPUT` (**automatically granted by system app permissions**)
