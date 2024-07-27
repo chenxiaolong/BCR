@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.67
 
 * Update French translations ([PR #567 @NSO73])
 * Add support for direct installation on devices that use static A/B partitions ([Issue #569], [PR #570 @chenxiaolong])
