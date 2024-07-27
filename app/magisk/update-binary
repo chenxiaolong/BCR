@@ -15,14 +15,18 @@ if [ -f /sbin/recovery ] || [ -f /system/bin/recovery ]; then
 
     ui_print 'Mounting system'
 
-    if [[ "$(getprop ro.boot.dynamic_partitions)" == true ]]; then
+    slot=$(getprop ro.boot.slot_suffix)
+
+    if [[ -e /dev/block/mapper/system"${slot}" ]]; then
         ui_print "- Device uses dynamic partitions"
-        slot=$(getprop ro.boot.slot_suffix)
         block_dev=/dev/block/mapper/system"${slot}"
         blockdev --setrw "${block_dev}"
-    else
+    elif [[ -e /dev/block/bootdevice/by-name/system"${slot}" ]]; then
         ui_print "- Device uses static partitions"
-        block_dev=/dev/block/bootdevice/by-name/system
+        block_dev=/dev/block/bootdevice/by-name/system"${slot}"
+    else
+        ui_print "- System block device not found"
+        exit 1
     fi
 
     ui_print "- System block device: ${block_dev}"
