@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update French translations ([PR #567 @NSO73])
+* Add support for direct installation on devices that use static A/B partitions ([Issue #569], [PR #570 @chenxiaolong])
 
 ### Version 1.66
 
@@ -642,6 +643,7 @@ Non-user-facing changes:
 [Issue #546]: https://github.com/chenxiaolong/BCR/issues/546
 [Issue #554]: https://github.com/chenxiaolong/BCR/issues/554
 [Issue #563]: https://github.com/chenxiaolong/BCR/issues/563
+[Issue #569]: https://github.com/chenxiaolong/BCR/issues/569
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -893,3 +895,4 @@ Non-user-facing changes:
 [PR #564 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/564
 [PR #565 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/565
 [PR #567 @NSO73]: https://github.com/chenxiaolong/BCR/pull/567
+[PR #570 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/570
