@@ -24,6 +24,12 @@
     <string name="pref_write_metadata_name">Сохранить файл с метаданными</string>
     <string name="pref_write_metadata_desc">В отдельный JSON файл будут записаны подробные данные о звонке.</string>
 
+    <string name="pref_record_telecom_apps_name">Запись интегрированных приложений</string>
+    <string name="pref_record_telecom_apps_desc">Записывать звонки из сторонних приложений, интегрированных в систему звонков Android. Такие записи, вероятно, будут содержать лишь тишину.</string>
+
+    <string name="pref_record_dialing_state_name">Начать запись до соединения</string>
+    <string name="pref_record_dialing_state_desc">Запись исходящего звонка начнется сразу же после набора номера, не дожидаясь соединения.</string>
+
     <!-- About "preference" -->
     <string name="pref_version_name">Версия</string>
 
@@ -63,7 +69,6 @@
     <string name="output_format_bottom_sheet_bitrate">Битрейт</string>
     <string name="output_format_bottom_sheet_sample_rate">Частота дискретизации</string>
     <string name="output_format_bottom_sheet_custom_param">Пользовательский</string>
-
     <string name="bottom_sheet_reset">Восстановить параметры по умолчанию</string>
 
     <!-- Filename template dialog -->
@@ -87,9 +92,18 @@
     <string name="format_param_dialog_title">Пользовательский параметр</string>
     <string name="format_param_dialog_message">Введите значение в диапазоне [%1$s, %2$s].</string>
 
+    <!-- Format sample rate dialog -->
+    <string name="format_sample_rate_dialog_title">Пользовательский параметр</string>
+    <string name="format_sample_rate_dialog_message_desc">Введите значение в диапазоне</string>
+    <string name="format_sample_rate_dialog_message_range">[%1$s, %2$s]</string>
+
     <!-- Format parameter -->
-    <string name="format_param_bitrate_kbps">%s kbps</string>
+    <string name="format_param_bitrate_bps">%s б/с</string>
+    <string name="format_param_bitrate_kbps">%s кбит/с</string>
     <string name="format_param_compression_level">Уровень %s</string>
+
+    <!-- Format sample rate -->
+    <string name="format_sample_rate">%s Гц</string>
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Фоновые сервисы</string>
@@ -107,6 +121,7 @@
     <string name="notification_recording_succeeded">Звонок успешно записан</string>
     <string name="notification_message_delete_at_end">Запись звонка будет удалена по окончанию разговора. Нажмите «Восстановить», чтобы сохранить запись.</string>
     <string name="notification_internal_android_error">Сбой записи во внутреннем компоненте Android (%s). Ваше устройство или прошивка может не поддерживать запись звонков.</string>
+    <string name="notification_pure_silence_error">Запись отменена из-за отсутствия звука в разговоре. Возможно, ваше устройство не поддерживает запись звонков из приложения \'%s\'.</string>
     <string name="notification_action_open">Открыть</string>
     <string name="notification_action_share">Поделиться</string>
     <string name="notification_action_delete">Удалить</string>
