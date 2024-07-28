@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update Russian translations ([PR #571 @bugreportion])
+
 ### Version 1.67
 
 * Update French translations ([PR #567 @NSO73])
@@ -898,3 +900,4 @@ Non-user-facing changes:
 [PR #565 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/565
 [PR #567 @NSO73]: https://github.com/chenxiaolong/BCR/pull/567
 [PR #570 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/570
+[PR #571 @bugreportion]: https://github.com/chenxiaolong/BCR/pull/571
