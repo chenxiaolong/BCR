@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update Russian translations ([PR #571 @bugreportion])
+* Use Material 3 switches for switch preferences ([PR #572 @chenxiaolong])
 
 ### Version 1.67
 
@@ -901,3 +902,4 @@ Non-user-facing changes:
 [PR #567 @NSO73]: https://github.com/chenxiaolong/BCR/pull/567
 [PR #570 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/570
 [PR #571 @bugreportion]: https://github.com/chenxiaolong/BCR/pull/571
+[PR #572 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/572
