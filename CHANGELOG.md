@@ -11,6 +11,8 @@
 
 * Update Russian translations ([PR #571 @bugreportion])
 * Use Material 3 switches for switch preferences ([PR #572 @chenxiaolong])
+* Add support for direct boot ([PR #573 @chenxiaolong])
+  * This allows recording calls from before the device is initially unlocked following a reboot.
 
 ### Version 1.67
 
