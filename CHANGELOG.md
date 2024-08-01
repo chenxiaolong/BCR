@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.68
 
 * Update Russian translations ([PR #571 @bugreportion])
 * Use Material 3 switches for switch preferences ([PR #572 @chenxiaolong])
@@ -905,3 +905,4 @@ Non-user-facing changes:
 [PR #570 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/570
 [PR #571 @bugreportion]: https://github.com/chenxiaolong/BCR/pull/571
 [PR #572 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/572
+[PR #573 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/573
