@@ -7,9 +7,11 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.chiller3.bcr.BuildConfig
+import com.chiller3.bcr.DirectBootMigrationService
 import com.chiller3.bcr.Permissions
 import com.chiller3.bcr.Preferences
 import com.chiller3.bcr.R
@@ -27,12 +29,14 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
     Preference.OnPreferenceClickListener, OnPreferenceLongClickListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
     private lateinit var prefs: Preferences
+    private lateinit var categoryDebug: PreferenceCategory
     private lateinit var prefCallRecording: SwitchPreferenceCompat
     private lateinit var prefRecordRules: Preference
     private lateinit var prefOutputDir: LongClickablePreference
     private lateinit var prefOutputFormat: Preference
     private lateinit var prefInhibitBatteryOpt: SwitchPreferenceCompat
     private lateinit var prefVersion: LongClickablePreference
+    private lateinit var prefMigrateDirectBoot: Preference
 
     private val requestPermissionRequired =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { granted ->
@@ -49,11 +53,14 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
         }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.root_preferences, rootKey)
-
         val context = requireContext()
 
+        preferenceManager.setStorageDeviceProtected()
+        setPreferencesFromResource(R.xml.root_preferences, rootKey)
+
         prefs = Preferences(context)
+
+        categoryDebug = findPreference(Preferences.CATEGORY_DEBUG)!!
 
         // If the desired state is enabled, set to disabled if runtime permissions have been
         // denied. The user will have to grant permissions again to re-enable the features.
@@ -83,6 +90,11 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
         prefVersion.onPreferenceClickListener = this
         prefVersion.onPreferenceLongClickListener = this
         refreshVersion()
+
+        prefMigrateDirectBoot = findPreference(Preferences.PREF_MIGRATE_DIRECT_BOOT)!!
+        prefMigrateDirectBoot.onPreferenceClickListener = this
+
+        refreshDebugPrefs()
     }
 
     override fun onStart() {
@@ -131,6 +143,10 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
             ""
         }
         prefVersion.summary = "${BuildConfig.VERSION_NAME} (${BuildConfig.BUILD_TYPE}${suffix})"
+    }
+
+    private fun refreshDebugPrefs() {
+        categoryDebug.isVisible = prefs.isDebugMode
     }
 
     private fun refreshInhibitBatteryOptState() {
@@ -184,6 +200,13 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
                 startActivity(Intent(Intent.ACTION_VIEW, uri))
                 return true
             }
+            prefMigrateDirectBoot -> {
+                val context = requireContext()
+                context.startForegroundService(
+                    Intent(context, DirectBootMigrationService::class.java)
+                )
+                return true
+            }
         }
 
         return false
@@ -206,6 +229,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
             prefVersion -> {
                 prefs.isDebugMode = !prefs.isDebugMode
                 refreshVersion()
+                refreshDebugPrefs()
                 return true
             }
         }

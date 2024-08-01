@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Environment
+import android.os.UserManager
 import android.provider.DocumentsContract
 import android.util.Log
 import androidx.core.content.edit
@@ -16,10 +17,11 @@ import com.chiller3.bcr.rule.RecordRule
 import com.chiller3.bcr.template.Template
 import java.io.File
 
-class Preferences(private val context: Context) {
+class Preferences(initialContext: Context) {
     companion object {
         private val TAG = Preferences::class.java.simpleName
 
+        const val CATEGORY_DEBUG = "debug"
         const val CATEGORY_RULES = "rules"
 
         const val PREF_CALL_RECORDING = "call_recording"
@@ -28,10 +30,12 @@ class Preferences(private val context: Context) {
         const val PREF_FILENAME_TEMPLATE = "filename_template"
         const val PREF_OUTPUT_FORMAT = "output_format"
         const val PREF_INHIBIT_BATT_OPT = "inhibit_batt_opt"
-        const val PREF_WRITE_METADATA = "write_metadata"
-        const val PREF_RECORD_TELECOM_APPS = "record_telecom_apps"
-        const val PREF_RECORD_DIALING_STATE = "record_dialing_state"
+        private const val PREF_WRITE_METADATA = "write_metadata"
+        private const val PREF_RECORD_TELECOM_APPS = "record_telecom_apps"
+        private const val PREF_RECORD_DIALING_STATE = "record_dialing_state"
         const val PREF_VERSION = "version"
+        private const val PREF_FORCE_DIRECT_BOOT = "force_direct_boot"
+        const val PREF_MIGRATE_DIRECT_BOOT = "migrate_direct_boot"
 
         const val PREF_ADD_RULE = "add_rule"
         const val PREF_RULE_PREFIX = "rule_"
@@ -45,6 +49,7 @@ class Preferences(private val context: Context) {
         const val PREF_OUTPUT_RETENTION = "output_retention"
         const val PREF_SAMPLE_RATE = "sample_rate"
         private const val PREF_NEXT_NOTIFICATION_ID = "next_notification_id"
+        private const val PREF_ALREADY_MIGRATED = "already_migrated";
 
         // Defaults
         val DEFAULT_FILENAME_TEMPLATE = Template(
@@ -63,8 +68,43 @@ class Preferences(private val context: Context) {
             key == PREF_FORMAT_NAME
                     || key.startsWith(PREF_FORMAT_PARAM_PREFIX)
                     || key.startsWith(PREF_FORMAT_SAMPLE_RATE_PREFIX)
+
+        fun migrateToDeviceProtectedStorage(context: Context) {
+            if (context.isDeviceProtectedStorage) {
+                Log.w(TAG, "Cannot migrate preferences in BFU state")
+                return
+            }
+
+            val deviceContext = context.createDeviceProtectedStorageContext()
+            var devicePrefs = PreferenceManager.getDefaultSharedPreferences(deviceContext)
+
+            if (devicePrefs.getBoolean(PREF_ALREADY_MIGRATED, false)) {
+                Log.i(TAG, "Already migrated preferences to device protected storage")
+                return
+            }
+
+            Log.i(TAG, "Migrating preferences to device protected storage")
+
+            // getDefaultSharedPreferencesName() is not public, but realistically, Android can't
+            // ever change the default shared preferences name without breaking nearly every app.
+            val sharedPreferencesName = context.packageName + "_preferences"
+
+            // This returns true if the shared preferences didn't exist.
+            if (!deviceContext.moveSharedPreferencesFrom(context, sharedPreferencesName)) {
+                Log.e(TAG, "Failed to migrate preferences to device protected storage")
+            }
+
+            devicePrefs = PreferenceManager.getDefaultSharedPreferences(deviceContext)
+            devicePrefs.edit { putBoolean(PREF_ALREADY_MIGRATED, true) }
+        }
     }
 
+    private val context = if (initialContext.isDeviceProtectedStorage) {
+        initialContext
+    } else {
+        initialContext.createDeviceProtectedStorageContext()
+    }
+    private val userManager = context.getSystemService(UserManager::class.java)
     internal val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
     /**
@@ -104,15 +144,36 @@ class Preferences(private val context: Context) {
         }
     }
 
+    /** Whether to show debug preferences and enable creation of debug logs for all calls. */
     var isDebugMode: Boolean
         get() = BuildConfig.FORCE_DEBUG_MODE || prefs.getBoolean(PREF_DEBUG_MODE, false)
         set(enabled) = prefs.edit { putBoolean(PREF_DEBUG_MODE, enabled) }
 
+    /** Whether to output to direct boot directories even if the device has been unlocked once. */
+    private var forceDirectBoot: Boolean
+        get() = prefs.getBoolean(PREF_FORCE_DIRECT_BOOT, false)
+        set(enabled) = prefs.edit { putBoolean(PREF_FORCE_DIRECT_BOOT, enabled) }
+
+    /** Whether we're running in direct boot mode. */
+    private val isDirectBoot: Boolean
+        get() = !userManager.isUserUnlocked || forceDirectBoot
+
+    /** Default output directory in the BFU state. */
+    val directBootInProgressDir: File = File(context.filesDir, "in_progress")
+
+    /** Target output directory in the BFU state. */
+    val directBootCompletedDir: File = File(context.filesDir, "completed")
+
     /**
      * Get the default output directory. The directory should always be writable and is suitable for
-     * use as a fallback.
+     * use as a fallback. In the BFU state, this returns the internal app directory backed by
+     * device-protected storage, which is not accessible by the user.
      */
-    val defaultOutputDir: File = context.getExternalFilesDir(null)!!
+    val defaultOutputDir: File = if (isDirectBoot) {
+        directBootInProgressDir
+    } else {
+        context.getExternalFilesDir(null)!!
+    }
 
     /**
      * The user-specified output directory.
@@ -121,10 +182,28 @@ class Preferences(private val context: Context) {
      * persisted URI permissions for the old URI will be revoked and persisted write permissions
      * for the new URI will be requested. If the old and new URI are the same, nothing is done. If
      * persisting permissions for the new URI fails, the saved output directory is not changed.
+     *
+     * In the BFU state, this always returns null to ensure that nothing tries to move files into
+     * credential-protected storage.
      */
     var outputDir: Uri?
-        get() = prefs.getString(PREF_OUTPUT_DIR, null)?.let { Uri.parse(it) }
+        get() = if (isDirectBoot) {
+            // We initially record to the in-progress directory and then atomically move them to the
+            // completed directory afterwards. This ensures that the recorder thread won't ever race
+            // with the direct boot migration service. Any completed recordings are guaranteed to be
+            // in the completed directory and will be moved by the service. Any recordings that are
+            // in-progress after the user unlocks for the first time will be moved to the user's
+            // output directory by the recorder thread since isUserUnlocked will be true by that
+            // point.
+            Uri.fromFile(directBootCompletedDir)
+        } else {
+            prefs.getString(PREF_OUTPUT_DIR, null)?.let { Uri.parse(it) }
+        }
         set(uri) {
+            if (isDirectBoot) {
+                throw IllegalStateException("Changing output directory while in direct boot")
+            }
+
             val oldUri = outputDir
             if (oldUri == uri) {
                 // URI is the same as before or both are null

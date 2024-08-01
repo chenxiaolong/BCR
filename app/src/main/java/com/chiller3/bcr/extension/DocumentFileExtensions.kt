@@ -148,11 +148,18 @@ fun DocumentFile.findNestedFile(path: List<String>): DocumentFile? {
  */
 fun DocumentFile.findOrCreateDirectories(path: List<String>): DocumentFile? {
     var file = this
+
+    // The root may not necessarily exist if it's a regular filesystem path.
+    if (uri.scheme == ContentResolver.SCHEME_FILE) {
+        uri.toFile().mkdirs()
+    }
+
     for (segment in path) {
         file = file.findFileFast(segment)
             ?: file.createDirectory(segment)
             ?: return null
     }
+
     return file
 }
 

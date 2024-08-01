@@ -40,6 +40,9 @@ class RecorderApplication : Application() {
             }
         }
 
+        // Move preferences to device-protected storage for direct boot support.
+        Preferences.migrateToDeviceProtectedStorage(this)
+
         // Migrate legacy preferences.
         val prefs = Preferences(this)
         prefs.migrateSampleRate()

@@ -16,6 +16,7 @@ import com.chiller3.bcr.extension.deleteIfEmptyDir
 import com.chiller3.bcr.extension.frameSizeInBytesCompat
 import com.chiller3.bcr.extension.listFilesWithPathsRecursively
 import com.chiller3.bcr.extension.phoneNumber
+import com.chiller3.bcr.extension.toDocumentFile
 import com.chiller3.bcr.format.Encoder
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.NoParamInfo
@@ -413,9 +414,14 @@ class RecorderThread(
             }
             val metadataBytes = metadataJson.toString(4).toByteArray()
 
-            val metadataFile = dirUtils.createFileInOutputDir(path, MIME_METADATA)
+            // Always create in the default directory and then move to ensure that we don't race
+            // with the direct boot file migration process.
+            var metadataFile = dirUtils.createFileInDefaultDir(path, MIME_METADATA)
             dirUtils.openFile(metadataFile, true).use {
                 writeFully(it.fileDescriptor, metadataBytes, 0, metadataBytes.size)
+            }
+            dirUtils.tryMoveToOutputDir(metadataFile, path, MIME_METADATA)?.let {
+                metadataFile = it
             }
 
             return OutputFile(
@@ -437,10 +443,7 @@ class RecorderThread(
      * files are ignored.
      */
     private fun processRetention() {
-        val directory = prefs.outputDir?.let {
-            // Only returns null on API <21
-            DocumentFile.fromTreeUri(context, it)!!
-        } ?: DocumentFile.fromFile(prefs.defaultOutputDir)
+        val directory = prefs.outputDirOrDefault.toDocumentFile(context)
 
         val retention = when (val r = Retention.fromPreferences(prefs)) {
             NoRetention -> {
@@ -681,8 +684,8 @@ class RecorderThread(
         private const val CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO
         private const val ENCODING = AudioFormat.ENCODING_PCM_16BIT
 
-        private const val MIME_LOGCAT = "text/plain"
-        private const val MIME_METADATA = "application/json"
+        const val MIME_LOGCAT = "text/plain"
+        const val MIME_METADATA = "application/json"
     }
 
     private data class RecordingInfo(

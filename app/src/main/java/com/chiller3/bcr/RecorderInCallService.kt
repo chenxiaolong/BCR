@@ -9,7 +9,6 @@ import android.os.Looper
 import android.telecom.Call
 import android.telecom.InCallService
 import android.util.Log
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.chiller3.bcr.output.OutputFile
 import kotlin.random.Random
@@ -50,7 +49,6 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
     private data class NotificationState(
         @StringRes val titleResId: Int,
         val message: String?,
-        @DrawableRes val iconResId: Int,
         // We don't store the intents because Intent does not override equals()
         val actionsResIds: List<Int>,
     )
@@ -386,7 +384,6 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
                 val state = NotificationState(
                     titleResId,
                     message.toString(),
-                    R.drawable.ic_launcher_quick_settings,
                     actionResIds,
                 )
                 if (state == allNotificationIds[notificationId]) {
@@ -397,7 +394,6 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
                 val notification = notifications.createPersistentNotification(
                     state.titleResId,
                     state.message,
-                    state.iconResId,
                     state.actionsResIds.zip(actionIntents),
                 )
 
@@ -415,12 +411,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
     }
 
     private fun notifySuccess(file: OutputFile, additionalFiles: List<OutputFile>) {
-        notifications.notifySuccess(
-            R.string.notification_recording_succeeded,
-            R.drawable.ic_launcher_quick_settings,
-            file,
-            additionalFiles,
-        )
+        notifications.notifyRecordingSuccess(file, additionalFiles)
     }
 
     private fun notifyFailure(
@@ -428,13 +419,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         file: OutputFile?,
         additionalFiles: List<OutputFile>,
     ) {
-        notifications.notifyFailure(
-            R.string.notification_recording_failed,
-            R.drawable.ic_launcher_quick_settings,
-            errorMsg,
-            file,
-            additionalFiles,
-        )
+        notifications.notifyRecordingFailure(errorMsg, file, additionalFiles)
     }
 
     private fun onRecorderExited(recorder: RecorderThread) {

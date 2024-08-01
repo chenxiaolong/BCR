@@ -7,6 +7,7 @@ import android.system.Int64Ref
 import android.system.Os
 import android.system.OsConstants
 import android.util.Log
+import android.webkit.MimeTypeMap
 import androidx.documentfile.provider.DocumentFile
 import com.chiller3.bcr.Preferences
 import com.chiller3.bcr.extension.NotEfficientlyMovableException
@@ -16,6 +17,7 @@ import com.chiller3.bcr.extension.findNestedFile
 import com.chiller3.bcr.extension.findOrCreateDirectories
 import com.chiller3.bcr.extension.moveToDirectory
 import com.chiller3.bcr.extension.renameToPreserveExt
+import com.chiller3.bcr.extension.toDocumentFile
 import java.io.FileNotFoundException
 import java.io.IOException
 
@@ -136,10 +138,26 @@ class OutputDirUtils(private val context: Context, private val redactor: Redacto
         try {
             val targetFile = sourceFile.moveToDirectory(targetParent)
             if (targetFile != null) {
-                val oldFilename = targetFile.name!!.substringBeforeLast('.')
+                val hasExt =
+                    !MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType).isNullOrEmpty()
+
+                // We behave like SAF where the target path does not contain the file extension, but
+                // querying the current filename does contain the file extension. Only chop off the
+                // extension for comparison if there's supposed to be an extension.
+                val (oldFilename, renameFunc) = if (hasExt) {
+                    Pair(
+                        targetFile.name!!.substringBeforeLast('.'),
+                        DocumentFile::renameToPreserveExt,
+                    )
+                } else {
+                    Pair(
+                        targetFile.name!!,
+                        DocumentFile::renameTo,
+                    )
+                }
                 val newFilename = targetPath.last()
 
-                if (oldFilename != newFilename && !targetFile.renameToPreserveExt(newFilename)) {
+                if (oldFilename != newFilename && !renameFunc(targetFile, newFilename)) {
                     // We intentionally don't report this error so that the user can be shown the
                     // valid, but incorrectly named, target file instead of the now non-existent
                     // source file.
@@ -178,23 +196,6 @@ class OutputDirUtils(private val context: Context, private val redactor: Redacto
     }
 
     /**
-     * Create [path] in the output directory.
-     *
-     * @param path The last element is the filename, which should not contain a file extension
-     * @param mimeType Determines the file extension
-     *
-     * @throws IOException if the file could not be created in the output directory
-     */
-    fun createFileInOutputDir(path: List<String>, mimeType: String): DocumentFile {
-        val userDir = prefs.outputDir?.let {
-            // Only returns null on API <21
-            DocumentFile.fromTreeUri(context, it)!!
-        } ?: DocumentFile.fromFile(prefs.defaultOutputDir)
-
-        return createFileWithFallback(userDir, path, mimeType)
-    }
-
-    /**
      * Try to move [sourceFile] to the user output directory at [path].
      *
      * @return Whether the user output directory is set and the file was successfully moved
@@ -204,11 +205,7 @@ class OutputDirUtils(private val context: Context, private val redactor: Redacto
         path: List<String>,
         mimeType: String,
     ): DocumentFile? {
-        val userDir = prefs.outputDir?.let {
-            // Only returns null on API <21
-            DocumentFile.fromTreeUri(context, it)!!
-        } ?: DocumentFile.fromFile(prefs.defaultOutputDir)
-
+        val userDir = prefs.outputDirOrDefault.toDocumentFile(context)
         val redactedSource = redactor.redact(sourceFile.uri)
 
         return try {

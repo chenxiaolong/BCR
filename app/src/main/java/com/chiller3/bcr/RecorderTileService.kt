@@ -8,7 +8,6 @@ import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import android.util.Log
-import androidx.preference.PreferenceManager
 import com.chiller3.bcr.settings.SettingsActivity
 
 class RecorderTileService : TileService(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -22,16 +21,14 @@ class RecorderTileService : TileService(), SharedPreferences.OnSharedPreferenceC
 
     override fun onStartListening() {
         super.onStartListening()
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        prefs.registerOnSharedPreferenceChangeListener(this)
+        prefs.prefs.registerOnSharedPreferenceChangeListener(this)
 
         refreshTileState()
     }
 
     override fun onStopListening() {
         super.onStopListening()
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        prefs.unregisterOnSharedPreferenceChangeListener(this)
+        prefs.prefs.unregisterOnSharedPreferenceChangeListener(this)
     }
 
     @SuppressLint("StartActivityAndCollapseDeprecated")

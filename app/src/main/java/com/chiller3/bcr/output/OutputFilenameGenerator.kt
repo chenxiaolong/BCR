@@ -311,7 +311,7 @@ class OutputFilenameGenerator(
             .appendOffset("+HHMMss", "+0000")
             .toFormatter()
 
-        private fun splitPath(pathString: String) = pathString
+        fun splitPath(pathString: String) = pathString
             .splitToSequence('/')
             .filter { it.isNotEmpty() && it != "." && it != ".." }
             .toList()

@@ -4,6 +4,7 @@
     <!-- Preference headers -->
     <string name="pref_header_general">General</string>
     <string name="pref_header_about">About</string>
+    <string name="pref_header_debug">Debug</string>
 
     <!-- General preferences -->
     <string name="pref_call_recording_name">Call recording</string>
@@ -32,6 +33,13 @@
 
     <!-- About "preference" -->
     <string name="pref_version_name">Version</string>
+
+    <!-- Debug preferences -->
+    <string name="pref_force_direct_boot_name">Force direct boot mode</string>
+    <string name="pref_force_direct_boot_desc">Pretend that the device is in the before first unlock state for testing.</string>
+
+    <string name="pref_migrate_direct_boot_name">Migrate direct boot recordings</string>
+    <string name="pref_migrate_direct_boot_desc">Migrate recordings made before the first unlock. This normally happens automatically after the first unlock.</string>
 
     <!-- Record rules bottom sheet -->
     <string name="pref_header_rules">Rules</string>
@@ -112,6 +120,9 @@
     <string name="notification_channel_failure_desc">Alerts for errors during call recording</string>
     <string name="notification_channel_success_name">Success alerts</string>
     <string name="notification_channel_success_desc">Alerts for successful call recordings</string>
+    <string name="notification_direct_boot_migration_in_progress">Migrating recordings</string>
+    <string name="notification_direct_boot_migration_failed">Failed to migrate recordings</string>
+    <string name="notification_direct_boot_migration_error">Some recordings saved before the device was initially unlocked could not be moved to the output directory.</string>
     <string name="notification_recording_initializing">Call recording initializing</string>
     <string name="notification_recording_in_progress">Call recording in progress</string>
     <string name="notification_recording_finalizing">Call recording finalizing</string>

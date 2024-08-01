@@ -18,6 +18,7 @@ BCR is a simple Android call recording app for rooted devices or devices running
   * FLAC - Lossless, larger files
   * WAV/PCM - Lossless, largest files, least CPU usage
 * Supports Android's Storage Access Framework (can record to SD cards, USB devices, etc.)
+* Direct boot aware (records calls prior to first unlock after a reboot)
 * Per-contact auto-record rules
 * Quick settings toggle
 * Material You dynamic theming
@@ -82,6 +83,18 @@ When BCR is enabled, avoid using the the dialer's built-in call recorder at all.
 
 If you live in a jurisdiction where two-party consent is required, you are responsible for informing the other party that the call is being recorded. If needed, auto-record rules can be used to discard recordings by default. However, note that if you choose to preserve the recording during the middle of the call, the recording will contain full call, not just the portion after the other party consented.
 
+## Direct boot
+
+BCR is direct boot aware, meaning that it's capable of running and recording calls before the device is initially unlocked following a reboot. In this state, most of BCR's functionality will still work, aside from features that require the contact list or call log. In practice, this means:
+
+* If auto-record rules are set up, they are mostly ignored. All contacts are treated as unknown numbers.
+* It's not possible to manually preserve the recording if an auto-record rule is set to discard it because BCR's notification is not accessible before the initial unlock.
+* The output filename, if using the default template, will only contain the caller ID, not the contact name or call log name.
+
+However, if the device is unlocked before the call ends, then none of these limitations apply.
+
+Note that the output directory is not available before the device is unlocked for the first time. Recordings made while in the state are stored in an internal directory that's not accessible by the user. After the device is unlocked, BCR will move the files to the output directory. This may take a few moments to complete.
+
 ## Permissions
 
 * `CAPTURE_AUDIO_OUTPUT` (**automatically granted by system app permissions**)
@@ -100,6 +113,8 @@ If you live in a jurisdiction where two-party consent is required, you are respo
   * This is also required to show the correct phone number when using call redirection apps.
 * `READ_CONTACTS` (**optional**)
   * If allowed, the contact name can be added to the output filename. It also allows auto-record rules to be set per contact.
+* `RECEIVE_BOOT_COMPLETED`, `FOREGROUND_SERVICE_SPECIAL_USE` (**automatically granted at install time**)
+  * Needed to automatically move recordings made before the initial device unlock to the output directory.
 * `READ_PHONE_STATE` (**optional**)
   * If allowed, the SIM slot for devices with multiple active SIMs is added to the output filename.
 * `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` (**optional**)

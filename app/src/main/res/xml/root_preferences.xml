@@ -66,4 +66,23 @@
             app:title="@string/pref_version_name"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="debug"
+        app:title="@string/pref_header_debug"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreferenceCompat
+            app:key="force_direct_boot"
+            app:title="@string/pref_force_direct_boot_name"
+            app:summary="@string/pref_force_direct_boot_desc"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            app:key="migrate_direct_boot"
+            app:persistent="false"
+            app:title="@string/pref_migrate_direct_boot_name"
+            app:summary="@string/pref_migrate_direct_boot_desc"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
 </PreferenceScreen>
