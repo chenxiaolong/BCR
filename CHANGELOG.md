@@ -9,6 +9,9 @@
 
 ### Unreleased
 
+* Switch direct boot file migration service from a foreground service to a background service ([Issue #574], [Issue #576], [PR #577 @chenxiaolong])
+  * This works around Android bugs on some devices that sometimes result in a notification that doesn't auto-dismiss or a crash after a reboot.
+
 ### Version 1.68
 
 * Update Russian translations ([PR #571 @bugreportion])
@@ -653,6 +656,8 @@ Non-user-facing changes:
 [Issue #554]: https://github.com/chenxiaolong/BCR/issues/554
 [Issue #563]: https://github.com/chenxiaolong/BCR/issues/563
 [Issue #569]: https://github.com/chenxiaolong/BCR/issues/569
+[Issue #574]: https://github.com/chenxiaolong/BCR/issues/574
+[Issue #576]: https://github.com/chenxiaolong/BCR/issues/576
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -908,3 +913,4 @@ Non-user-facing changes:
 [PR #571 @bugreportion]: https://github.com/chenxiaolong/BCR/pull/571
 [PR #572 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/572
 [PR #573 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/573
+[PR #577 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/577
