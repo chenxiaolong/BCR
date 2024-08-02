@@ -104,21 +104,12 @@ class DirectBootMigrationService : Service() {
 
     private fun startThread() {
         Log.i(TAG, "Starting direct boot file migration")
-
-        val notification = notifications.createPersistentNotification(
-            R.string.notification_direct_boot_migration_in_progress,
-            null,
-            emptyList(),
-        )
-        startForeground(prefs.nextNotificationId, notification)
-
         thread.start()
     }
 
     private fun tryStop() {
         if (!thread.isAlive) {
             Log.d(TAG, "Stopping service")
-            stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
         }
     }

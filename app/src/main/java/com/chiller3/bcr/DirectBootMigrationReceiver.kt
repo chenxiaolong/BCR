@@ -10,6 +10,6 @@ class DirectBootMigrationReceiver : BroadcastReceiver() {
             return
         }
 
-        context.startForegroundService(Intent(context, DirectBootMigrationService::class.java))
+        context.startService(Intent(context, DirectBootMigrationService::class.java))
     }
 }

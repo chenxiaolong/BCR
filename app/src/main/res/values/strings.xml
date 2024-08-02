@@ -120,7 +120,6 @@
     <string name="notification_channel_failure_desc">Alerts for errors during call recording</string>
     <string name="notification_channel_success_name">Success alerts</string>
     <string name="notification_channel_success_desc">Alerts for successful call recordings</string>
-    <string name="notification_direct_boot_migration_in_progress">Migrating recordings</string>
     <string name="notification_direct_boot_migration_failed">Failed to migrate recordings</string>
     <string name="notification_direct_boot_migration_error">Some recordings saved before the device was initially unlocked could not be moved to the output directory.</string>
     <string name="notification_recording_initializing">Call recording initializing</string>
