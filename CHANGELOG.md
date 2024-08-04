@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Fix crash when manually triggering the direct boot file migration via the hidden debug settings ([PR #578 @chenxiaolong])
+
 ### Version 1.69
 
 * Switch direct boot file migration service from a foreground service to a background service ([Issue #574], [Issue #576], [PR #577 @chenxiaolong])
@@ -916,3 +918,4 @@ Non-user-facing changes:
 [PR #572 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/572
 [PR #573 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/573
 [PR #577 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/577
+[PR #578 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/578
