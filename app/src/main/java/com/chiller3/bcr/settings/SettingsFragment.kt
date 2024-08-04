@@ -202,9 +202,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
             }
             prefMigrateDirectBoot -> {
                 val context = requireContext()
-                context.startForegroundService(
-                    Intent(context, DirectBootMigrationService::class.java)
-                )
+                context.startService(Intent(context, DirectBootMigrationService::class.java))
                 return true
             }
         }
