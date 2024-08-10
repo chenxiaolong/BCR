@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Fix crash when manually triggering the direct boot file migration via the hidden debug settings ([PR #578 @chenxiaolong])
+* Move pure silence warning notification to a separate notification channel so that it can be disabled ([Issue #579], [PR #583 @chenxiaolong])
 
 ### Version 1.69
 
@@ -662,6 +663,7 @@ Non-user-facing changes:
 [Issue #569]: https://github.com/chenxiaolong/BCR/issues/569
 [Issue #574]: https://github.com/chenxiaolong/BCR/issues/574
 [Issue #576]: https://github.com/chenxiaolong/BCR/issues/576
+[Issue #579]: https://github.com/chenxiaolong/BCR/issues/579
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -919,3 +921,4 @@ Non-user-facing changes:
 [PR #573 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/573
 [PR #577 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/577
 [PR #578 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/578
+[PR #583 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/583
