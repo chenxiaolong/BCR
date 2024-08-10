@@ -5,7 +5,6 @@ import android.content.Context
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
-import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.system.Os
 import android.telecom.Call
@@ -36,7 +35,7 @@ import com.chiller3.bcr.rule.RecordRule
 import org.json.JSONObject
 import java.lang.Process
 import java.nio.ByteBuffer
-import java.time.*
+import java.time.Duration
 import android.os.Process as AndroidProcess
 
 /**
@@ -72,7 +71,6 @@ class RecorderThread(
     @Volatile var state = State.NOT_STARTED
         private set
     @Volatile private var isCancelled = false
-    private var captureFailed = false
 
     /**
      * Whether to preserve the recording.
@@ -179,8 +177,7 @@ class RecorderThread(
     }
 
     override fun run() {
-        var success = false
-        var errorMsg: String? = null
+        var status: Status = Status.Cancelled
         var outputDocFile: DocumentFile? = null
         val additionalFiles = ArrayList<OutputFile>()
 
@@ -208,6 +205,8 @@ class RecorderThread(
                         recordingInfo = recordUntilCancelled(it)
                         Os.fsync(it.fileDescriptor)
                     }
+
+                    status = Status.Succeeded
                 } finally {
                     state = State.FINALIZING
                     listener.onRecordingStateChanged(this)
@@ -231,37 +230,36 @@ class RecorderThread(
                         Log.i(tag, "Deleting recording: $finalPath")
                         outputDocFile!!.delete()
                         outputDocFile = null
+
+                        status = Status.Discarded(DiscardReason.Intentional)
                     }
 
                     processRetention()
                 }
-
-                success = !captureFailed
             }
         } catch (e: Exception) {
             Log.e(tag, "Error during recording", e)
 
-            errorMsg = if (e is PureSilenceException) {
+            if (e is PureSilenceException) {
                 outputDocFile?.delete()
                 outputDocFile = null
 
                 additionalFiles.forEach {
                     it.toDocumentFile(context).delete()
                 }
+                additionalFiles.clear()
 
-                context.getString(R.string.notification_pure_silence_error,
-                    parentCall.details.accountHandle.componentName.packageName)
+                val packageName = parentCall.details.accountHandle.componentName.packageName
+                status = Status.Discarded(DiscardReason.Silence(packageName))
             } else {
-                buildString {
-                    val elem = e.stackTrace.find { it.className.startsWith("android.media.") }
-                    if (elem != null) {
-                        append(context.getString(R.string.notification_internal_android_error,
-                            "${elem.className}.${elem.methodName}"))
-                        append("\n\n")
-                    }
-
-                    append(e.localizedMessage)
+                val mediaFrame = e.stackTrace.find { it.className.startsWith("android.media.") }
+                val component = if (mediaFrame != null) {
+                    FailureComponent.AndroidMedia(mediaFrame)
+                } else {
+                    FailureComponent.Other
                 }
+
+                status = Status.Failed(component, e)
             }
         } finally {
             Log.i(tag, "Recording thread completed")
@@ -271,7 +269,7 @@ class RecorderThread(
 
                 // Log files are always kept when an error occurs to avoid the hassle of having the
                 // user manually enable debug mode and needing to reproduce the problem.
-                if (prefs.isDebugMode || errorMsg != null) {
+                if (prefs.isDebugMode || status is Status.Failed) {
                     additionalFiles.add(logcatOutput)
                 } else {
                     Log.d(tag, "No need to preserve logcat")
@@ -291,12 +289,7 @@ class RecorderThread(
 
             state = State.COMPLETED
             listener.onRecordingStateChanged(this)
-
-            if (success) {
-                listener.onRecordingCompleted(this, outputFile, additionalFiles)
-            } else {
-                listener.onRecordingFailed(this, errorMsg, outputFile, additionalFiles)
-            }
+            listener.onRecordingCompleted(this, outputFile, additionalFiles, status)
         }
     }
 
@@ -306,8 +299,7 @@ class RecorderThread(
      * output file.
      *
      * If called before [start], the thread will not record any audio not create an output file. In
-     * this scenario, [OnRecordingCompletedListener.onRecordingFailed] will be called with a null
-     * [Uri].
+     * this scenario, the status will be reported as [Status.Cancelled].
      */
     fun cancel() {
         Log.d(tag, "Requested cancellation")
@@ -581,6 +573,7 @@ class RecorderThread(
         var bufferOverruns = 0
         var wasEverPaused = false
         var wasEverHolding = false
+        var wasReadSamplesError = false
         var wasPureSilence = true
         val frameSize = audioRecord.format.frameSizeInBytesCompat
 
@@ -605,7 +598,7 @@ class RecorderThread(
             if (n < 0) {
                 Log.e(tag, "Error when reading samples from $audioRecord: $n")
                 isCancelled = true
-                captureFailed = true
+                wasReadSamplesError = true
             } else if (n == 0) {
                 // Wait for the wall clock equivalent of the minimum buffer size
                 sleep(bufferNs / 1_000_000L / factor)
@@ -655,7 +648,9 @@ class RecorderThread(
             }
         }
 
-        if (wasPureSilence) {
+        if (wasReadSamplesError) {
+            throw ReadSamplesException()
+        } else if (wasPureSilence) {
             throw PureSilenceException()
         }
 
@@ -713,8 +708,33 @@ class RecorderThread(
         }
     }
 
+    private class ReadSamplesException(cause: Throwable? = null)
+        : Exception("Failed to read audio samples", cause)
+
     private class PureSilenceException(cause: Throwable? = null)
         : Exception("Audio contained pure silence", cause)
+
+    sealed interface FailureComponent {
+        data class AndroidMedia(val stackFrame: StackTraceElement) : FailureComponent
+
+        data object Other : FailureComponent
+    }
+
+    sealed interface DiscardReason {
+        data object Intentional : DiscardReason
+
+        data class Silence(val callPackage: String) : DiscardReason
+    }
+
+    sealed interface Status {
+        data object Succeeded : Status
+
+        data class Failed(val component: FailureComponent, val exception: Exception?) : Status
+
+        data class Discarded(val reason: DiscardReason) : Status
+
+        data object Cancelled : Status
+    }
 
     interface OnRecordingCompletedListener {
         /**
@@ -723,32 +743,26 @@ class RecorderThread(
         fun onRecordingStateChanged(thread: RecorderThread)
 
         /**
-         * Called when the recording completes successfully. [file] is the output file. If [file] is
-         * null, then the recording was started in the paused state and the output file was deleted
-         * because the user never resumed it.
+         * Called when the recording completes, successfully or otherwise. [file] is the output
+         * file.
+         *
+         * [file] may be null in several scenarios:
+         * * The call matched a record rule that defaults to discarding the recording
+         * * The user intentionally chose to discard the recording via the notification
+         * * The output file could not be created
+         * * The thread was cancelled before it started
+         *
+         * Note that for most errors, the output file is *not* deleted.
          *
          * [additionalFiles] are additional files associated with the main output file and should be
-         * deleted along with the main file.
+         * deleted along with the main file if the user chooses to do so via the notification. These
+         * files may exist even if [file] is null (eg. the log file).
          */
         fun onRecordingCompleted(
             thread: RecorderThread,
             file: OutputFile?,
             additionalFiles: List<OutputFile>,
-        )
-
-        /**
-         * Called when an error occurs during recording. If [file] is not null, it points to the
-         * output file containing partially recorded audio. If [file] is null, then either the
-         * output file could not be created or the thread was cancelled before it was started.
-         *
-         * [additionalFiles] are additional files associated with the main output file and should be
-         * deleted along with the main file.
-         */
-        fun onRecordingFailed(
-            thread: RecorderThread,
-            errorMsg: String?,
-            file: OutputFile?,
-            additionalFiles: List<OutputFile>,
+            status: Status,
         )
     }
 }

@@ -29,6 +29,7 @@ class Notifications(
         const val CHANNEL_ID_PERSISTENT = "persistent"
         const val CHANNEL_ID_FAILURE = "failure"
         const val CHANNEL_ID_SUCCESS = "success"
+        const val CHANNEL_ID_SILENCE = "silence"
 
         private val LEGACY_CHANNEL_IDS = arrayOf("alerts")
 
@@ -107,6 +108,17 @@ class Notifications(
     }
 
     /**
+     * Create a high priority notification channel for pure silence warnings.
+     */
+    private fun createPureSilenceWarningsChannel() = NotificationChannel(
+        CHANNEL_ID_SILENCE,
+        context.getString(R.string.notification_channel_silence_name),
+        NotificationManager.IMPORTANCE_HIGH,
+    ).apply {
+        description = context.getString(R.string.notification_channel_silence_desc)
+    }
+
+    /**
      * Ensure notification channels are up-to-date.
      *
      * Legacy notification channels are deleted without migrating settings.
@@ -116,6 +128,7 @@ class Notifications(
             createPersistentChannel(),
             createFailureAlertsChannel(),
             createSuccessAlertsChannel(),
+            createPureSilenceWarningsChannel(),
         ))
         LEGACY_CHANNEL_IDS.forEach { notificationManager.deleteNotificationChannel(it) }
     }
@@ -339,6 +352,24 @@ class Notifications(
             additionalFiles,
         )
         vibrateIfEnabled(CHANNEL_ID_FAILURE)
+    }
+
+    /**
+     * Send a pure silence warning notification.
+     *
+     * This will explicitly vibrate the device if the user enabled vibration for
+     * [CHANNEL_ID_SILENCE]. This is necessary because Android itself will not vibrate for a
+     * notification during a phone call.
+     */
+    fun notifyRecordingPureSilence(packageName: String) {
+        sendRecordingNotification(
+            CHANNEL_ID_SILENCE,
+            R.string.notification_recording_failed,
+            context.getString(R.string.notification_pure_silence_error, packageName),
+            null,
+            emptyList(),
+        )
+        vibrateIfEnabled(CHANNEL_ID_SILENCE)
     }
 
     /** Send a direct boot file migration failure alert notification. */

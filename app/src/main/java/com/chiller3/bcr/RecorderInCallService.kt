@@ -243,7 +243,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
             val recorder = try {
                 RecorderThread(this, this, call)
             } catch (e: Exception) {
-                notifyFailure(e.message, null, emptyList())
+                notifications.notifyRecordingFailure(e.message, null, emptyList())
                 throw e
             }
             callsToRecorders[call] = recorder
@@ -410,18 +410,6 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         }
     }
 
-    private fun notifySuccess(file: OutputFile, additionalFiles: List<OutputFile>) {
-        notifications.notifyRecordingSuccess(file, additionalFiles)
-    }
-
-    private fun notifyFailure(
-        errorMsg: String?,
-        file: OutputFile?,
-        additionalFiles: List<OutputFile>,
-    ) {
-        notifications.notifyRecordingFailure(errorMsg, file, additionalFiles)
-    }
-
     private fun onRecorderExited(recorder: RecorderThread) {
         // This may be an early exit if an error occurred while recording. Remove from the map to
         // make sure the thread doesn't receive any more call-related callbacks.
@@ -449,30 +437,48 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         thread: RecorderThread,
         file: OutputFile?,
         additionalFiles: List<OutputFile>,
+        status: RecorderThread.Status,
     ) {
-        Log.i(TAG, "Recording completed: ${thread.id}: ${file?.redacted}")
+        Log.i(TAG, "Recording completed: ${thread.id}: ${file?.redacted}: $status")
         handler.post {
             onRecorderExited(thread)
 
-            // If the recording was initially paused and the user never resumed it, there's no
-            // output file, so nothing needs to be shown.
-            if (file != null) {
-                notifySuccess(file, additionalFiles)
+            when (status) {
+                RecorderThread.Status.Succeeded -> {
+                    notifications.notifyRecordingSuccess(file!!, additionalFiles)
+                }
+                is RecorderThread.Status.Failed -> {
+                    val message = buildString {
+                        when (status.component) {
+                            is RecorderThread.FailureComponent.AndroidMedia -> {
+                                val frame = status.component.stackFrame
+
+                                append(getString(R.string.notification_internal_android_error,
+                                    "${frame.className}.${frame.methodName}"))
+                            }
+                            RecorderThread.FailureComponent.Other -> {}
+                        }
+
+                        status.exception?.localizedMessage?.let {
+                            if (isNotEmpty()) {
+                                append("\n\n")
+                            }
+                            append(it)
+                        }
+                    }
+
+                    notifications.notifyRecordingFailure(message, file, additionalFiles)
+                }
+                is RecorderThread.Status.Discarded -> {
+                    when (status.reason) {
+                        RecorderThread.DiscardReason.Intentional -> {}
+                        is RecorderThread.DiscardReason.Silence -> {
+                            notifications.notifyRecordingPureSilence(status.reason.callPackage)
+                        }
+                    }
+                }
+                RecorderThread.Status.Cancelled -> {}
             }
-        }
-    }
-
-    override fun onRecordingFailed(
-        thread: RecorderThread,
-        errorMsg: String?,
-        file: OutputFile?,
-        additionalFiles: List<OutputFile>,
-    ) {
-        Log.w(TAG, "Recording failed: ${thread.id}: ${file?.redacted}")
-        handler.post {
-            onRecorderExited(thread)
-
-            notifyFailure(errorMsg, file, additionalFiles)
         }
     }
 }
