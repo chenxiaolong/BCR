@@ -4,6 +4,7 @@
     <!-- Preference headers -->
     <string name="pref_header_general">Général</string>
     <string name="pref_header_about">À propos</string>
+    <string name="pref_header_debug">Débogage</string>
 
     <!-- General preferences -->
     <string name="pref_call_recording_name">Enregistrement d\'appel</string>
@@ -28,17 +29,24 @@
     <string name="pref_record_telecom_apps_desc">Enregistrer les appels provenant des applications tierces. Ces enregistrements d\'appel devraient contenir uniquement du silence.</string>
 
     <string name="pref_record_dialing_state_name">Enregistrer l\'appel avant décrochage</string>
-    <string name="pref_record_dialing_state_desc">Pour les appels sorant, démarrer l\'enregistrement dès le début d\'appel, avant que le correspondant décroche.</string>
+    <string name="pref_record_dialing_state_desc">Pour les appels sortant, démarrer l\'enregistrement dès le début d\'appel, avant que le correspondant décroche.</string>
 
     <!-- About "preference" -->
     <string name="pref_version_name">Version</string>
+
+    <!-- Debug preferences -->
+    <string name="pref_force_direct_boot_name">Forcer le mode démarrage direct</string>
+    <string name="pref_force_direct_boot_desc">Simuler l\'appareil dans l\'état précédant le premier déverrouillage pour les tests.</string>
+
+    <string name="pref_migrate_direct_boot_name">Déplacer les enregistrements du démarrage direct</string>
+    <string name="pref_migrate_direct_boot_desc">Déplacer les enregistrements réalisés avant le premier déverrouillage. Cela devrait se produire normalement après le premier déverrouillage.</string>
 
     <!-- Record rules bottom sheet -->
     <string name="pref_header_rules">Règles</string>
     <string name="pref_add_rule_name">Ajouter une règle</string>
     <string name="pref_add_rule_desc">Ajouter une règle d\auto-enregistrement pour un contact.</string>
     <string name="record_rules_rule_added">Règle ajoutée. Maintenir appuyé pour la supprimer.</string>
-    <string name="record_rules_rule_exists">Règle déja existante.</string>
+    <string name="record_rules_rule_exists">Règle déjà existante.</string>
     <string name="record_rules_info">Quand une règle est active, l\'appel est automatiquement enregistré et peut être supprimé manuellement via la notification. Quand une règle est inactive, l\'enregistrement sera supprimé automatiquement à la fin de l\'appel et peut être restauré manuellement via la notification.</string>
     <string name="record_rule_type_all_calls_name">Tous les appels</string>
     <string name="record_rule_type_all_calls_desc">La permission contacts est requise pour les règles spécifiques.</string>
@@ -75,7 +83,7 @@
     <string name="filename_template_dialog_title">Modèle du fichier</string>
     <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
     <string name="filename_template_dialog_message">Entrer un modèle personnalisé pour le nom des fichiers. Les variables sont spécifiées entre accolades (ex : <annotation type="template">{var}</annotation>). Les fallbacks sont spécifiés entre crochets (ex : <annotation type="template">[{contact_name}|Inconnu]</annotation>).\n\nVariables supportées : <annotation type="supported_vars">PLACEHOLDER</annotation>. Lire <annotation type="template_docs">la documentation</annotation> pour une description complète de la syntaxe.</string>
-    <string name="filename_template_dialog_warning_subdirectories">À cause des piètres performances du Framework Android Storage Access, utiliser des sous-dossiers (charactère <annotation type="template">/</annotation>) peut causer un délais lors de l\'enregistrement sur certains mobiles. Le délais se ressent à la fin de l\'appel mais ne cause aucun problème pour l\'enregistrement.</string>
+    <string name="filename_template_dialog_warning_subdirectories">À cause des piètres performances du Framework Android Storage Access, utiliser des sous-dossiers (caractère <annotation type="template">/</annotation>) peut causer un délais lors de l\'enregistrement sur certains mobiles. Le délais se ressent à la fin de l\'appel mais ne cause aucun problème pour l\'enregistrement.</string>
     <string name="filename_template_dialog_error_empty">Le modèle ne peut pas être vide</string>
     <string name="filename_template_dialog_error_unknown_variable">Variable inconnue : <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_has_argument">La variable ne peut pas avoir d\'argument : <annotation type="template">PLACEHOLDER</annotation></string>
@@ -101,7 +109,7 @@
     <string name="format_param_bitrate_bps">%s bps</string>
     <string name="format_param_bitrate_kbps">%s kbps</string>
     <string name="format_param_compression_level">Niveau %s</string>
-    
+
     <!-- Format sample rate -->
     <string name="format_sample_rate">%s Hz</string>
 
@@ -112,6 +120,10 @@
     <string name="notification_channel_failure_desc">Notifications pour les erreurs pendant les enregistrements</string>
     <string name="notification_channel_success_name">Notifications de réussite</string>
     <string name="notification_channel_success_desc">Notifications pour les enregistrements réussis</string>
+    <string name="notification_channel_silence_name">Notifications silence total</string>
+    <string name="notification_channel_silence_desc">Notifications pour les enregistrements contenant uniquement du silence</string>
+    <string name="notification_direct_boot_migration_failed">Échec du déplacement des enregistrements</string>
+    <string name="notification_direct_boot_migration_error">Certains enregistrements présents avant le déverrouillage n\'ont pas pu être déplacés dans le dossier de stockage.</string>
     <string name="notification_recording_initializing">Enregistrement initialisé</string>
     <string name="notification_recording_in_progress">Enregistrement en cours</string>
     <string name="notification_recording_finalizing">Enregistrement finalisé</string>
@@ -130,7 +142,7 @@
     <string name="notification_action_resume">Reprendre</string>
 
     <!-- Quick settings tile -->
-    <string name="quick_settings_label">Enregsitrement d\'appel</string>
+    <string name="quick_settings_label">Enregistrements d\'appels</string>
 
     <!-- Snackbar alerts -->
     <string name="documentsui_not_found">Le gestionnaire de fichier Android (DocumentsUI) n\'est pas disponible.</string>
