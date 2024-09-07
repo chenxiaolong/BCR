@@ -54,7 +54,6 @@
     <string name="output_dir_bottom_sheet_edit_retention">編輯保留時間</string>
     <string name="retention_keep_all">全部保留</string>
     <plurals name="retention_days">
-        <item quantity="one">保留 %d 天</item>
         <item quantity="other">保留 %d 天</item>
     </plurals>
     <string name="retention_unusable">檔案保留已停用，因為目前的檔案名稱模板與此功能不相容。</string>

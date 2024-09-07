@@ -54,7 +54,6 @@
     <string name="output_dir_bottom_sheet_edit_retention">Chỉnh sửa lưu trữ</string>
     <string name="retention_keep_all">Giữ tất cả</string>
     <plurals name="retention_days">
-        <item quantity="one">Giữ %d ngày</item>
         <item quantity="other">Giữ %d ngày</item>
     </plurals>
     <string name="retention_unusable">Lưu trữ tệp bị tắt vì mẫu tên tệp hiện tại không tương thích với tính năng này.</string>

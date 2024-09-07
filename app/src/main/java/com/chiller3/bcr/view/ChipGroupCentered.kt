@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import androidx.core.view.ViewCompat
 import com.google.android.material.chip.ChipGroup
 import java.lang.Integer.max
 import java.lang.Integer.min

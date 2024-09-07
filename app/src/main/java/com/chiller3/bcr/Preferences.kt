@@ -49,7 +49,7 @@ class Preferences(initialContext: Context) {
         const val PREF_OUTPUT_RETENTION = "output_retention"
         const val PREF_SAMPLE_RATE = "sample_rate"
         private const val PREF_NEXT_NOTIFICATION_ID = "next_notification_id"
-        private const val PREF_ALREADY_MIGRATED = "already_migrated";
+        private const val PREF_ALREADY_MIGRATED = "already_migrated"
 
         // Defaults
         val DEFAULT_FILENAME_TEMPLATE = Template(

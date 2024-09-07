@@ -23,7 +23,7 @@ sealed interface Retention {
     }
 }
 
-object NoRetention : Retention {
+data object NoRetention : Retention {
     override fun toFormattedString(context: Context): String =
         context.getString(R.string.retention_keep_all)
 

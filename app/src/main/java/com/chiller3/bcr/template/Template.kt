@@ -398,7 +398,7 @@ class Template(template: String) {
         data class AfterPrefix(val literal: String, val atStart: Boolean) : VariableRefLocation
 
         /** The location of the variable reference is arbitrary (dependent on other variables). */
-        object Arbitrary : VariableRefLocation
+        data object Arbitrary : VariableRefLocation
     }
 
     /**

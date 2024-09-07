@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">کال ریکارڈنگ</string>
     <string name="app_name_full">کال ریکارڈنگ</string>
     <string name="pref_header_general">جنرل</string>
     <string name="pref_header_about">کے بارے میں</string>
