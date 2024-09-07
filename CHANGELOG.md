@@ -12,6 +12,7 @@
 * Fix crash when manually triggering the direct boot file migration via the hidden debug settings ([PR #578 @chenxiaolong])
 * Move pure silence warning notification to a separate notification channel so that it can be disabled ([Issue #579], [PR #583 @chenxiaolong])
 * Update French translations ([PR #590 @NSO73])
+* Target API 35 ([PR #597 @chenxiaolong])
 
 ### Version 1.69
 
@@ -924,3 +925,4 @@ Non-user-facing changes:
 [PR #578 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/578
 [PR #583 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/583
 [PR #590 @NSO73]: https://github.com/chenxiaolong/BCR/pull/590
+[PR #597 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/597
