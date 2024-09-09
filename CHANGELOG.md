@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.70
 
 * Fix crash when manually triggering the direct boot file migration via the hidden debug settings ([PR #578 @chenxiaolong])
 * Move pure silence warning notification to a separate notification channel so that it can be disabled ([Issue #579], [PR #583 @chenxiaolong])
