@@ -7,7 +7,7 @@
 #
 # [1] https://cs.android.com/android/platform/superproject/+/android-13.0.0_r42:frameworks/base/services/core/java/com/android/server/pm/parsing/PackageCacher.java;l=139
 
-source "${0%/*}/boot_common.sh" /data/local/tmp/bcr_clear_package_manager_caches.log
+source "${0%/*}/boot_common.sh" /data/local/tmp/bcr_post-fs-data.log
 
 header Timestamps
 ls -ldZ "${cli_apk%/*}"
