@@ -13,7 +13,7 @@
 * Move pure silence warning notification to a separate notification channel so that it can be disabled ([Issue #579], [PR #583 @chenxiaolong])
 * Update French translations ([PR #590 @NSO73])
 * Target API 35 ([PR #597 @chenxiaolong])
-* Work around OxygenOS on OnePlus devices setting the wrong SELinux on BCR's data directory, causing settings to be lost ([Issue #582], [Issue #591], [Issue #598], [PR #600 @chenxiaolong])
+* Work around OxygenOS on OnePlus devices setting the wrong SELinux label on BCR's data directory, causing settings to be lost ([Issue #582], [Issue #591], [Issue #598], [PR #600 @chenxiaolong])
 
 ### Version 1.69
 
