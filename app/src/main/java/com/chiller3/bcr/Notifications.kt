@@ -192,8 +192,8 @@ class Notifications(
 
         val file = outputFile.uri.toFile()
 
-        return file.relativeToOrNull(prefs.directBootInProgressDir) != null
-                && file.relativeToOrNull(prefs.directBootCompletedDir) != null
+        return file.startsWith(prefs.directBootInProgressDir)
+                || file.startsWith(prefs.directBootCompletedDir)
     }
 
     /**
