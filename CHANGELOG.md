@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.71
 
 * Fix notification not showing after recording to the default output directory ([PR #603 @chenxiaolong])
 
