@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Fix notification not showing after recording to the default output directory ([PR #603 @chenxiaolong])
+
 ### Version 1.70
 
 * Fix crash when manually triggering the direct boot file migration via the hidden debug settings ([PR #578 @chenxiaolong])
@@ -933,3 +935,4 @@ Non-user-facing changes:
 [PR #590 @NSO73]: https://github.com/chenxiaolong/BCR/pull/590
 [PR #597 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/597
 [PR #600 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/600
+[PR #603 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/603
