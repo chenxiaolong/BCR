@@ -21,6 +21,7 @@ import com.chiller3.bcr.DirectBootMigrationService
 import com.chiller3.bcr.Permissions
 import com.chiller3.bcr.Preferences
 import com.chiller3.bcr.R
+import com.chiller3.bcr.dialog.MinDurationDialogFragment
 import com.chiller3.bcr.extension.formattedString
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.format.NoParamInfo
@@ -40,6 +41,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
     private lateinit var prefRecordRules: Preference
     private lateinit var prefOutputDir: LongClickablePreference
     private lateinit var prefOutputFormat: Preference
+    private lateinit var prefMinDuration: Preference
     private lateinit var prefInhibitBatteryOpt: SwitchPreferenceCompat
     private lateinit var prefVersion: LongClickablePreference
     private lateinit var prefMigrateDirectBoot: Preference
@@ -120,6 +122,10 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
         prefOutputFormat.onPreferenceClickListener = this
         refreshOutputFormat()
 
+        prefMinDuration = findPreference(Preferences.PREF_MIN_DURATION)!!
+        prefMinDuration.onPreferenceClickListener = this
+        refreshMinDuration()
+
         prefInhibitBatteryOpt = findPreference(Preferences.PREF_INHIBIT_BATT_OPT)!!
         prefInhibitBatteryOpt.onPreferenceChangeListener = this
 
@@ -171,6 +177,16 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
         val sampleRateText = format.sampleRateInfo.format(requireContext(), sampleRate)
 
         prefOutputFormat.summary = "${summary}\n\n${format.name} (${prefix}${sampleRateText})"
+    }
+
+    private fun refreshMinDuration() {
+        val minDuration = prefs.minDuration
+
+        prefMinDuration.summary = if (minDuration == 0) {
+            getString(R.string.pref_min_duration_desc_zero)
+        } else {
+            resources.getQuantityString(R.plurals.pref_min_duration_desc, minDuration, minDuration)
+        }
     }
 
     private fun refreshVersion() {
@@ -232,6 +248,11 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
                 )
                 return true
             }
+            prefMinDuration -> {
+                MinDurationDialogFragment().show(
+                    parentFragmentManager.beginTransaction(), MinDurationDialogFragment.TAG)
+                return true
+            }
             prefVersion -> {
                 val uri = Uri.parse(BuildConfig.PROJECT_URL_AT_COMMIT)
                 startActivity(Intent(Intent.ACTION_VIEW, uri))
@@ -276,7 +297,7 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
         when {
             key == null -> return
             // Update the switch state if it was toggled outside of the preference (eg. from the
-            // quick settings toggle)
+            // quick settings toggle).
             key == prefCallRecording.key -> {
                 val current = prefCallRecording.isChecked
                 val expected = sharedPreferences.getBoolean(key, current)
@@ -284,13 +305,17 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
                     prefCallRecording.isChecked = expected
                 }
             }
-            // Update the output directory state when it's changed by the bottom sheet
+            // Update the output directory state when it's changed by the bottom sheet.
             key == Preferences.PREF_OUTPUT_DIR || key == Preferences.PREF_OUTPUT_RETENTION -> {
                 refreshOutputDir()
             }
-            // Update the output format state when it's changed by the bottom sheet
+            // Update the output format state when it's changed by the bottom sheet.
             Preferences.isFormatKey(key) || key == Preferences.PREF_SAMPLE_RATE -> {
                 refreshOutputFormat()
+            }
+            // Update when it's changed by the dialog.
+            key == Preferences.PREF_MIN_DURATION -> {
+                refreshMinDuration()
             }
         }
     }

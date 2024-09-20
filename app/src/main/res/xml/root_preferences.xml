@@ -30,6 +30,12 @@
             app:summary="@string/pref_output_format_desc"
             app:iconSpaceReserved="false" />
 
+        <Preference
+            app:key="min_duration"
+            app:persistent="false"
+            app:title="@string/pref_min_duration_name"
+            app:iconSpaceReserved="false" />
+
         <SwitchPreferenceCompat
             app:key="inhibit_batt_opt"
             app:persistent="false"

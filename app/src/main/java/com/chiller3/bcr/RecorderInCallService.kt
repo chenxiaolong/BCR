@@ -142,7 +142,11 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
                 }
                 ACTION_RESTORE, ACTION_DELETE -> {
                     notificationIdsToRecorders[notificationId]?.keepRecording =
-                        action == ACTION_RESTORE
+                        if (action == ACTION_RESTORE) {
+                            RecorderThread.KeepState.KEEP
+                        } else {
+                            RecorderThread.KeepState.DISCARD
+                        }
                 }
                 else -> throw IllegalArgumentException("Invalid action: $action")
             }
@@ -369,14 +373,29 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
 
                 if (canShowDelete) {
                     recorder.keepRecording?.let {
-                        if (it) {
-                            actionResIds.add(R.string.notification_action_delete)
-                            actionIntents.add(createActionIntent(notificationId, ACTION_DELETE))
-                        } else {
-                            message.append("\n\n")
-                            message.append(getString(R.string.notification_message_delete_at_end))
-                            actionResIds.add(R.string.notification_action_restore)
-                            actionIntents.add(createActionIntent(notificationId, ACTION_RESTORE))
+                        when (it) {
+                            RecorderThread.KeepState.KEEP -> {
+                                actionResIds.add(R.string.notification_action_delete)
+                                actionIntents.add(createActionIntent(notificationId, ACTION_DELETE))
+                            }
+                            RecorderThread.KeepState.DISCARD -> {
+                                message.append("\n\n")
+                                message.append(getString(R.string.notification_message_delete_at_end))
+                                actionResIds.add(R.string.notification_action_restore)
+                                actionIntents.add(createActionIntent(notificationId, ACTION_RESTORE))
+                            }
+                            RecorderThread.KeepState.DISCARD_TOO_SHORT -> {
+                                val minDuration = prefs.minDuration
+
+                                message.append("\n\n")
+                                message.append(resources.getQuantityString(
+                                    R.plurals.notification_message_delete_at_end_too_short,
+                                    minDuration,
+                                    minDuration,
+                                ))
+                                actionResIds.add(R.string.notification_action_restore)
+                                actionIntents.add(createActionIntent(notificationId, ACTION_RESTORE))
+                            }
                         }
                     }
                 }

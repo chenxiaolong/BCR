@@ -19,6 +19,13 @@
     <string name="pref_output_format_name">Output format</string>
     <string name="pref_output_format_desc">Select an encoding format for the recordings.</string>
 
+    <string name="pref_min_duration_name">Minimum recording duration</string>
+    <plurals name="pref_min_duration_desc">
+        <item quantity="one">Keep recordings at least %d second long.</item>
+        <item quantity="other">Keep recordings at least %d seconds long.</item>
+    </plurals>
+    <string name="pref_min_duration_desc_zero">Keep recordings of any length.</string>
+
     <string name="pref_inhibit_batt_opt_name">Disable battery optimization</string>
     <string name="pref_inhibit_batt_opt_desc">Reduces the chance of the app being killed by the system.</string>
 
@@ -113,6 +120,14 @@
     <!-- Format sample rate -->
     <string name="format_sample_rate">%s Hz</string>
 
+    <!-- Min duration dialog -->
+    <string name="min_duration_dialog_title">@string/pref_min_duration_name</string>
+    <string name="min_duration_dialog_message">Enter the minimum duration for a recording to be kept, excluding pauses and call holding. This can always be overridden during a call from the notification.</string>
+    <plurals name="min_duration_dialog_seconds">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
+
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Background services</string>
     <string name="notification_channel_persistent_desc">Persistent notification for background call recording</string>
@@ -132,6 +147,10 @@
     <string name="notification_recording_failed">Failed to record call</string>
     <string name="notification_recording_succeeded">Successfully recorded call</string>
     <string name="notification_message_delete_at_end">The recording will be deleted at the end of the call. Tap Restore to keep the recording.</string>
+    <plurals name="notification_message_delete_at_end_too_short">
+        <item quantity="one">The recording will be deleted at the end of the call if it is shorter than %d second. Tap Restore to keep the recording.</item>
+        <item quantity="other">The recording will be deleted at the end of the call if it is shorter than %d seconds. Tap Restore to keep the recording.</item>
+    </plurals>
     <string name="notification_internal_android_error">The recording failed in an internal Android component (%s). This device or firmware might not support call recording.</string>
     <string name="notification_pure_silence_error">The recording was discarded because the audio was completely silent. This device might not support recording calls associated with the \'%s\' app.</string>
     <string name="notification_action_open">Open</string>

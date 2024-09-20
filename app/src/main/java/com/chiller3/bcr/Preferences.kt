@@ -29,6 +29,7 @@ class Preferences(initialContext: Context) {
         const val PREF_OUTPUT_DIR = "output_dir"
         const val PREF_FILENAME_TEMPLATE = "filename_template"
         const val PREF_OUTPUT_FORMAT = "output_format"
+        const val PREF_MIN_DURATION = "min_duration"
         const val PREF_INHIBIT_BATT_OPT = "inhibit_batt_opt"
         private const val PREF_WRITE_METADATA = "write_metadata"
         private const val PREF_RECORD_TELECOM_APPS = "record_telecom_apps"
@@ -383,6 +384,14 @@ class Preferences(initialContext: Context) {
             }
         }
     }
+
+    /**
+     * Minimum recording duration for it to be kept if the record rules would have allowed it to be
+     * kept in the first place.
+     */
+    var minDuration: Int
+        get() = prefs.getInt(PREF_MIN_DURATION, 0)
+        set(seconds) = prefs.edit { putInt(PREF_MIN_DURATION, seconds) }
 
     /**
      * Whether to write call metadata file.

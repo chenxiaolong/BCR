@@ -36,6 +36,7 @@ import org.json.JSONObject
 import java.lang.Process
 import java.nio.ByteBuffer
 import java.time.Duration
+import java.util.concurrent.atomic.AtomicReference
 import android.os.Process as AndroidProcess
 
 /**
@@ -72,6 +73,12 @@ class RecorderThread(
         private set
     @Volatile private var isCancelled = false
 
+    enum class KeepState {
+        KEEP,
+        DISCARD,
+        DISCARD_TOO_SHORT,
+    }
+
     /**
      * Whether to preserve the recording.
      *
@@ -79,15 +86,27 @@ class RecorderThread(
      * this field is set to the computed value. The value can be changed, including from other
      * threads, in case the user wants to override the rules during the middle of the call.
      */
-    @Volatile var keepRecording: Boolean? = null
+    private val _keepRecording = AtomicReference<KeepState>()
+    var keepRecording: KeepState?
+        get() = _keepRecording.get()
         set(value) {
             require(value != null)
 
-            field = value
+            _keepRecording.set(value)
             Log.d(tag, "Keep state updated: $value")
 
             listener.onRecordingStateChanged(this)
         }
+
+    private fun keepRecordingCompareAndSet(expected: KeepState?, value: KeepState?) {
+        require(value != null)
+
+        if (_keepRecording.compareAndSet(expected, value)) {
+            Log.d(tag, "Keep state updated: $value")
+
+            listener.onRecordingStateChanged(this)
+        }
+    }
 
     /**
      * Whether the user paused the recording.
@@ -123,6 +142,8 @@ class RecorderThread(
     val outputPath: OutputPath
         get() = outputFilenameGenerator.generate(callMetadataCollector.callMetadata)
 
+    private val minDuration: Int
+
     // Format
     private val format: Format
     private val formatParam: UInt?
@@ -135,6 +156,8 @@ class RecorderThread(
 
     init {
         Log.i(tag, "Created thread for call: $parentCall")
+
+        minDuration = prefs.minDuration
 
         val savedFormat = Format.fromPreferences(prefs)
         format = savedFormat.first
@@ -165,13 +188,26 @@ class RecorderThread(
         Log.i(tag, "Evaluating record rules for ${numbers.size} phone number(s)")
 
         val rules = prefs.recordRules ?: Preferences.DEFAULT_RECORD_RULES
-        keepRecording = try {
+        val keep = try {
             RecordRule.evaluate(context, rules, numbers)
         } catch (e: Exception) {
             Log.w(tag, "Failed to evaluate record rules", e)
             // Err on the side of caution
             true
         }
+
+        keepRecordingCompareAndSet(
+            null,
+            if (keep) {
+                if (minDuration > 0) {
+                    KeepState.DISCARD_TOO_SHORT
+                } else {
+                    KeepState.KEEP
+                }
+            } else {
+                KeepState.DISCARD
+            },
+        )
 
         listener.onRecordingStateChanged(this)
     }
@@ -214,7 +250,7 @@ class RecorderThread(
                     callMetadataCollector.update(true)
                     val finalPath = outputPath
 
-                    if (keepRecording != false) {
+                    if (keepRecording == KeepState.KEEP) {
                         dirUtils.tryMoveToOutputDir(
                             outputDocFile,
                             finalPath.value,
@@ -645,6 +681,11 @@ class RecorderThread(
                         "total=${totalElapsed / 1_000_000.0}ms, " +
                         "record=${recordElapsed / 1_000_000.0}ms, " +
                         "encode=${encodeElapsed / 1_000_000.0}ms")
+            }
+
+            val secondsEncoded = numFramesEncoded / audioRecord.sampleRate / audioRecord.channelCount
+            if (secondsEncoded >= minDuration) {
+                keepRecordingCompareAndSet(KeepState.DISCARD_TOO_SHORT, KeepState.KEEP)
             }
         }
 
