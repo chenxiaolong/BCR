@@ -27,10 +27,9 @@
     <!-- About "preference" -->
     <string name="pref_version_name">Versão</string>
 
-    <!-- Record rules bottom sheet -->
+    <!-- Record rules activity -->
     <string name="pref_header_rules">Regras</string>
-    <string name="pref_add_rule_name">Adicionar Regra</string>
-    <string name="pref_add_rule_desc">Adicione uma regra de auto-gravação para um contacto.</string>
+    <string name="pref_add_contact_rule_desc">Adicione uma regra de auto-gravação para um contacto.</string>
     <string name="record_rules_rule_added">Adicionou nova regra. Pressione longamente para eliminar.</string>
     <string name="record_rules_rule_exists">Regra já existe.</string>
     <string name="record_rules_info">Quando uma regra está ativada, a chamada é gravada automaticamente por padrão e pode ser eliminada manualmente a partir da notificação. Quando uma regra está desativada, a gravação será eliminada no final da chamada, a menos que seja preservada usando o botão Restaurar na notificação.</string>
@@ -41,7 +40,7 @@
     <string name="record_rule_type_unknown_calls_name">Chamadas Desconhecidas</string>
     <string name="record_rule_type_unknown_calls_desc">Chamadas que não correspondem a nenhum contacto.</string>
     <string name="record_rule_type_contact_name">Contacto: %s</string>
-    <string name="record_rule_type_contact_desc">Pressione longamente para remover a regra.</string>
+    <string name="record_rule_removable_desc">Pressione longamente para remover a regra.</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Alterar Diretório</string>

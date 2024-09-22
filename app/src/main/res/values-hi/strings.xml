@@ -27,10 +27,9 @@
     <!-- About "preference" -->
     <string name="pref_version_name">वर्जन:</string>
 
-    <!-- Record rules bottom sheet -->
+    <!-- Record rules activity -->
     <string name="pref_header_rules">नियम</string>
-    <string name="pref_add_rule_name">नियम जोड़ें</string>
-    <string name="pref_add_rule_desc">किसी संपर्क के लिए ऑटो-रिकॉर्ड नियम जोड़ें।</string>
+    <string name="pref_add_contact_rule_desc">किसी संपर्क के लिए ऑटो-रिकॉर्ड नियम जोड़ें।</string>
     <string name="record_rules_rule_added">नया नियम जोड़ा गया। नियम को हटाने के लिए उसे देर तक दबाएँ।</string>
     <string name="record_rules_rule_exists">नियम पहले से मौजूद है।</string>
     <string name="record_rules_info">जब कोई नियम चालू होता है, तो कॉल डिफ़ॉल्ट रूप से स्वचालित रूप से रिकॉर्ड हो जाती है और अधिसूचना से मैन्युअल रूप से हटाया जा सकता है। जब कोई नियम बंद कर दिया जाता है, तो कॉल के अंत में रिकॉर्डिंग हटा दी जाएगी जब तक कि इसे अधिसूचना में पुनर्स्थापना बटन का उपयोग करके संरक्षित नहीं किया जाता है।</string>
@@ -41,7 +40,7 @@
     <string name="record_rule_type_unknown_calls_name">अज्ञात कॉल</string>
     <string name="record_rule_type_unknown_calls_desc">ऐसी कॉलें जो किसी भी संपर्क से मेल नहीं खातीं।</string>
     <string name="record_rule_type_contact_name">संपर्क: %s</string>
-    <string name="record_rule_type_contact_desc">नियम हटाने के लिए देर तक दबाएँ।</string>
+    <string name="record_rule_removable_desc">नियम हटाने के लिए देर तक दबाएँ।</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">निर्देशिका बदलें</string>

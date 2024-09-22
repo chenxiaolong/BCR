@@ -17,8 +17,7 @@
     <string name="pref_write_metadata_desc">کال کے بارے میں تفصیلات شامل کرنے والی ایک JSON فائل بنائیں اور اسے آڈیو فائل کے بجائے رکھیں۔</string>
     <string name="pref_version_name">ورژن</string>
     <string name="pref_header_rules">قواعد</string>
-    <string name="pref_add_rule_name">قاعدہ شامل کریں</string>
-    <string name="pref_add_rule_desc">ایک اتو ریکارڈ قاعدہ شخص کے لئے شامل کریں۔</string>
+    <string name="pref_add_contact_rule_desc">ایک اتو ریکارڈ قاعدہ شخص کے لئے شامل کریں۔</string>
     <string name="record_rules_rule_added">نیا قاعدہ شامل کر دیا گیا۔ اسے حذف کرنے کے لئے لانگ پریس کریں۔</string>
     <string name="record_rules_rule_exists">قاعدہ پہلے سے موجود ہے۔</string>
     <string name="record_rules_info">جب ایک قاعدہ چالو ہوتا ہے، کال خود بخود بطور افتراضی ریکارڈ ہوتی ہے اور اسے اطلاع کی زریعے سے دستیاب ریکارڈ کیسے بھی حذف کیا جا سکتا ہے۔ جب ایک قاعدہ بند ہوتا ہے، کال کے آخر میں ریکارڈ حذف کر دیا جائے گا مگر اگر آپ اطلاع کے ریاست بٹن کا استعمال کرکے اسے بحفظ کریں تو۔</string>
@@ -29,7 +28,7 @@
     <string name="record_rule_type_unknown_calls_name">نامعلوم کالوں</string>
     <string name="record_rule_type_unknown_calls_desc">کسی بھی رابطے سے مطابقت نہ کرنے والی کالیں</string>
     <string name="record_rule_type_contact_name">رابطہ: %s</string>
-    <string name="record_rule_type_contact_desc">قاعدہ ہٹانے کے لئے لانگ پریس کریں۔</string>
+    <string name="record_rule_removable_desc">قاعدہ ہٹانے کے لئے لانگ پریس کریں۔</string>
     <string name="output_dir_bottom_sheet_change_dir">ڈائریکٹری تبدیل کریں</string>
     <string name="output_dir_bottom_sheet_filename_template">فائل کا نام ٹیمپلیٹ</string>
     <string name="output_dir_bottom_sheet_edit_template">ٹیمپلیٹ میں ترمیم کریں</string>

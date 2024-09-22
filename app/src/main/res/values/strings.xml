@@ -48,10 +48,15 @@
     <string name="pref_migrate_direct_boot_name">Migrate direct boot recordings</string>
     <string name="pref_migrate_direct_boot_desc">Migrate recordings made before the first unlock. This normally happens automatically after the first unlock.</string>
 
-    <!-- Record rules bottom sheet -->
+    <!-- Pick contact group activity -->
+    <string name="pick_contact_group_title">Pick contact group</string>
+
+    <!-- Record rules activity -->
     <string name="pref_header_rules">Rules</string>
-    <string name="pref_add_rule_name">Add rule</string>
-    <string name="pref_add_rule_desc">Add an auto-record rule for a contact.</string>
+    <string name="pref_add_contact_rule_name">Add contact rule</string>
+    <string name="pref_add_contact_rule_desc">Add an auto-record rule for a contact.</string>
+    <string name="pref_add_contact_group_rule_name">Add contact group rule</string>
+    <string name="pref_add_contact_group_rule_desc">Add an auto-record rule for a contact group.</string>
     <string name="record_rules_rule_added">Added new rule. Long press the rule to delete it.</string>
     <string name="record_rules_rule_exists">Rule already exists.</string>
     <string name="record_rules_info">When a rule is turned on, the call is automatically recorded by default and can be manually deleted from the notification. When a rule is turned off, the recording will be deleted at the end of a call unless it is preserved using the Restore button in the notification.</string>
@@ -62,7 +67,8 @@
     <string name="record_rule_type_unknown_calls_name">Unknown calls</string>
     <string name="record_rule_type_unknown_calls_desc">Calls that don\'t match any contact.</string>
     <string name="record_rule_type_contact_name">Contact: %s</string>
-    <string name="record_rule_type_contact_desc">Long press to remove rule.</string>
+    <string name="record_rule_type_contact_group_name">Contact group: %s</string>
+    <string name="record_rule_removable_desc">Long press to remove rule.</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Change directory</string>

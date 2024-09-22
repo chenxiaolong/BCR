@@ -27,10 +27,9 @@
     <!-- About "preference" -->
     <string name="pref_version_name">מספר גרסה</string>
 
-    <!-- Record rules bottom sheet -->
+    <!-- Record rules activity -->
     <string name="pref_header_rules">כללים</string>
-    <string name="pref_add_rule_name">הוסף כלל</string>
-    <string name="pref_add_rule_desc">הוסף כלל הקלטה אוטומטית עבור איש קשר.</string>
+    <string name="pref_add_contact_rule_desc">הוסף כלל הקלטה אוטומטית עבור איש קשר.</string>
     <string name="record_rules_rule_added">כלל חדש נוסף. לחץ לחיצה ארוכה על הכלל כדי למחוק אותו.</string>
     <string name="record_rules_rule_exists">הכלל כבר קיים.</string>
     <string name="record_rules_info">כאשר כלל מופעל, השיחה מוקלטת באופן אוטומטי כברירת מחדל וניתן למחוק אותה באופן ידני מההודעה. כאשר כלל מבוטל, ההקלטה תימחק בסוף שיחה, אלא אם כן היא נשמרת באמצעות לחצן שחזר בהודעה.</string>
@@ -41,7 +40,7 @@
     <string name="record_rule_type_unknown_calls_name">שיחות לא מזוהות</string>
     <string name="record_rule_type_unknown_calls_desc">שיחות שאינן מאנשי הקשר.</string>
     <string name="record_rule_type_contact_name">איש קשר: %s</string>
-    <string name="record_rule_type_contact_desc">לחץ לחיצה ארוכה כדי להסיר כלל.</string>
+    <string name="record_rule_removable_desc">לחץ לחיצה ארוכה כדי להסיר כלל.</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">שינוי תיקיה</string>

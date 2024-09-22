@@ -108,6 +108,10 @@
         </activity>
 
         <activity
+            android:name=".rule.PickContactGroupActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".rule.RecordRulesActivity"
             android:exported="false" />
     </application>

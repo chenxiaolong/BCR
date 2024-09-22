@@ -7,9 +7,12 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.chiller3.bcr.ContactGroupInfo
+import com.chiller3.bcr.GroupLookup
 import com.chiller3.bcr.Preferences
-import com.chiller3.bcr.findContactByLookupKey
 import com.chiller3.bcr.findContactsByUri
+import com.chiller3.bcr.getContactByLookupKey
+import com.chiller3.bcr.getContactGroupById
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,48 +25,68 @@ import kotlinx.coroutines.withContext
 sealed class DisplayedRecordRule : Comparable<DisplayedRecordRule> {
     abstract var record: Boolean
 
+    protected abstract val sortCategory: Int
+
     /**
-     * [Contact] comes first, sorted by display name, followed by [UnknownCalls] and [AllCalls].
+     * Rule types are sorted by [sortCategory]. Rules within the same category are sorted by the
+     * display name if possible.
      */
     override fun compareTo(other: DisplayedRecordRule): Int {
         when (this) {
-            is AllCalls -> {
-                return when (other) {
-                    is AllCalls -> record.compareTo(other.record)
-                    else -> 1
-                }
+            is AllCalls -> if (other is AllCalls) {
+                return record.compareTo(other.record)
             }
-            is UnknownCalls -> {
-                return when (other) {
-                    is UnknownCalls -> record.compareTo(other.record)
-                    is AllCalls -> -1
-                    is Contact -> 1
-                }
+            is UnknownCalls -> if (other is UnknownCalls) {
+                return record.compareTo(other.record)
             }
-            is Contact -> {
-                return when (other) {
-                    is Contact -> compareValuesBy(
-                        this,
-                        other,
-                        { it.displayName },
-                        { it.lookupKey },
-                        { it.record },
-                    )
-                    else -> -1
-                }
+            is Contact -> if (other is Contact) {
+                return compareValuesBy(
+                    this,
+                    other,
+                    { it.displayName },
+                    { it.lookupKey },
+                    { it.record },
+                )
+            }
+            is ContactGroup -> if (other is ContactGroup) {
+                return compareValuesBy(
+                    this,
+                    other,
+                    { it.title },
+                    { it.rowId },
+                    { it.sourceId },
+                    { it.record },
+                )
             }
         }
+
+        return sortCategory.compareTo(other.sortCategory)
     }
 
-    data class AllCalls(override var record: Boolean) : DisplayedRecordRule()
+    data class AllCalls(override var record: Boolean) : DisplayedRecordRule() {
+        override val sortCategory: Int = 4
+    }
 
-    data class UnknownCalls(override var record: Boolean) : DisplayedRecordRule()
+    data class UnknownCalls(override var record: Boolean) : DisplayedRecordRule() {
+        override val sortCategory: Int = 3
+    }
 
     data class Contact(
-        val lookupKey: String,
         val displayName: String?,
+        val lookupKey: String,
         override var record: Boolean,
-    ) : DisplayedRecordRule()
+    ) : DisplayedRecordRule() {
+        override val sortCategory: Int = 1
+    }
+
+    data class ContactGroup(
+        val title: String?,
+        val rowId: Long,
+        val sourceId: String,
+        override var record: Boolean,
+    ) : DisplayedRecordRule() {
+        override val sortCategory: Int = 2
+    }
 }
 
 sealed class Message {
@@ -101,8 +124,14 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
                             is RecordRule.AllCalls -> DisplayedRecordRule.AllCalls(rule.record)
                             is RecordRule.UnknownCalls -> DisplayedRecordRule.UnknownCalls(rule.record)
                             is RecordRule.Contact -> DisplayedRecordRule.Contact(
-                                rule.lookupKey,
                                 getContactDisplayName(rule.lookupKey),
+                                rule.lookupKey,
+                                rule.record,
+                            )
+                            is RecordRule.ContactGroup -> DisplayedRecordRule.ContactGroup(
+                                getContactGroupTitle(rule.sourceId),
+                                rule.rowId,
+                                rule.sourceId,
                                 rule.record,
                             )
                         }
@@ -123,12 +152,17 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
 
         val rawRules = sortedRules.map { displayedRule ->
             when (displayedRule) {
-                is DisplayedRecordRule.AllCalls ->
-                    RecordRule.AllCalls(displayedRule.record)
-                is DisplayedRecordRule.UnknownCalls ->
-                    RecordRule.UnknownCalls(displayedRule.record)
-                is DisplayedRecordRule.Contact ->
-                    RecordRule.Contact(displayedRule.lookupKey, displayedRule.record)
+                is DisplayedRecordRule.AllCalls -> RecordRule.AllCalls(displayedRule.record)
+                is DisplayedRecordRule.UnknownCalls -> RecordRule.UnknownCalls(displayedRule.record)
+                is DisplayedRecordRule.Contact -> RecordRule.Contact(
+                    displayedRule.lookupKey,
+                    displayedRule.record,
+                )
+                is DisplayedRecordRule.ContactGroup -> RecordRule.ContactGroup(
+                    displayedRule.rowId,
+                    displayedRule.sourceId,
+                    displayedRule.record,
+                )
             }
         }
 
@@ -147,9 +181,23 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
         }
 
         return try {
-            findContactByLookupKey(getApplication(), lookupKey)?.displayName
+            getContactByLookupKey(getApplication(), lookupKey)?.displayName
         } catch (e: Exception) {
             Log.w(TAG, "Failed to look up contact", e)
+            null
+        }
+    }
+
+    private fun getContactGroupTitle(sourceId: String): String? {
+        if (getApplication<Application>().checkSelfPermission(Manifest.permission.READ_CONTACTS)
+            != PackageManager.PERMISSION_GRANTED) {
+            return null
+        }
+
+        return try {
+            getContactGroupById(getApplication(), GroupLookup.SourceId(sourceId))?.title
+        } catch (e: Exception) {
+            Log.w(TAG, "Failed to look up contact group", e)
             null
         }
     }
@@ -184,9 +232,45 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
                         val newRules = ArrayList(oldRules)
                         newRules.add(
                             DisplayedRecordRule.Contact(
-                                contact.lookupKey,
                                 contact.displayName,
-                                true
+                                contact.lookupKey,
+                                true,
+                            )
+                        )
+
+                        saveRulesLocked(newRules)
+
+                        _messages.update { it + Message.RuleAdded }
+                    }
+                }
+            }
+        }
+    }
+
+    fun addContactGroupRule(group: ContactGroupInfo) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                rulesMutex.withLock {
+                    val oldRules = rules.value
+                    val existingRule = oldRules.find {
+                        it is DisplayedRecordRule.ContactGroup &&
+                                (it.rowId == group.rowId || it.sourceId == group.sourceId)
+                    }
+
+                    if (existingRule != null) {
+                        Log.d(TAG, "Rule already exists for ${group.rowId}, ${group.sourceId}")
+
+                        _messages.update { it + Message.RuleExists }
+                    } else {
+                        Log.d(TAG, "Adding new rule for ${group.rowId}, ${group.sourceId}")
+
+                        val newRules = ArrayList(oldRules)
+                        newRules.add(
+                            DisplayedRecordRule.ContactGroup(
+                                group.title,
+                                group.rowId,
+                                group.sourceId,
+                                true,
                             )
                         )
 
@@ -209,6 +293,7 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
                                 is DisplayedRecordRule.AllCalls -> displayedRule.copy(record = record)
                                 is DisplayedRecordRule.UnknownCalls -> displayedRule.copy(record = record)
                                 is DisplayedRecordRule.Contact -> displayedRule.copy(record = record)
+                                is DisplayedRecordRule.ContactGroup -> displayedRule.copy(record = record)
                             }
                         } else {
                             displayedRule

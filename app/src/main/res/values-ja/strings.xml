@@ -57,8 +57,7 @@
     <string name="pref_record_telecom_apps_desc">Android の通信システムと統合されているサードパーティ製アプリからの通話を録音します。 これらの通話の録音は、無音となってしまう可能性があります。</string>
     <string name="pref_version_name">バージョン</string>
     <string name="pref_header_rules">ルール</string>
-    <string name="pref_add_rule_name">ルールの追加</string>
-    <string name="pref_add_rule_desc">連絡先による自動録音ルールを追加します。</string>
+    <string name="pref_add_contact_rule_desc">連絡先による自動録音ルールを追加します。</string>
     <string name="record_rules_rule_added">新しいルールを追加しました。 ルールを長押しして削除します。</string>
     <string name="record_rules_rule_exists">ルールはすでに存在します。</string>
     <string name="record_rules_info">ルールがオンになっている場合、通話はデフォルトで自動的に録音され、通知から手動で削除できます。 ルールがオフになっている場合、通知の [復元] ボタンを使用して録音を保存しない限り、通話の終了時に録音は削除されます。</string>
@@ -69,7 +68,7 @@
     <string name="record_rule_type_unknown_calls_name">不明な通話</string>
     <string name="record_rule_type_unknown_calls_desc">どの連絡先とも一致しない通話。</string>
     <string name="record_rule_type_contact_name">連絡先: %s</string>
-    <string name="record_rule_type_contact_desc">長押ししてルールを削除します。</string>
+    <string name="record_rule_removable_desc">長押ししてルールを削除します。</string>
     <string name="output_dir_bottom_sheet_change_dir">ディレクトリを変更する</string>
     <string name="output_dir_bottom_sheet_filename_template">ファイル名のテンプレート</string>
     <string name="output_dir_bottom_sheet_edit_template">テンプレートの編集</string>

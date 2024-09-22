@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.util.Log
+import com.chiller3.bcr.GroupLookup
 import com.chiller3.bcr.findContactsByPhoneNumber
+import com.chiller3.bcr.getContactGroupMemberships
 import com.chiller3.bcr.output.PhoneNumber
 
 sealed class RecordRule {
@@ -14,10 +16,13 @@ sealed class RecordRule {
     /**
      * Check if the rule matches the set of contacts in [contactLookupKeys].
      *
-     * @param contactLookupKeys The set of contacts, if any, involved in the call. If null, then
-     * [Manifest.permission.READ_CONTACTS] was not granted.
+     * @param contactLookupKeys The set of contacts, if any, involved in the call.
+     * @param contactGroupIds The list of contact groups associated with [contactLookupKeys].
      */
-    abstract fun matches(contactLookupKeys: Collection<String>?): Boolean
+    abstract fun matches(
+        contactLookupKeys: Collection<String>,
+        contactGroupIds: Collection<GroupLookup>,
+    ): Boolean
 
     open fun toRawPreferences(editor: SharedPreferences.Editor, prefix: String) {
         editor.putString(prefix + PREF_SUFFIX_TYPE, javaClass.simpleName)
@@ -25,7 +30,10 @@ sealed class RecordRule {
     }
 
     data class AllCalls(override val record: Boolean) : RecordRule() {
-        override fun matches(contactLookupKeys: Collection<String>?): Boolean = true
+        override fun matches(
+            contactLookupKeys: Collection<String>,
+            contactGroupIds: Collection<GroupLookup>,
+        ): Boolean = true
 
         companion object {
             fun fromRawPreferences(prefs: SharedPreferences, prefix: String): AllCalls {
@@ -37,8 +45,10 @@ sealed class RecordRule {
     }
 
     data class UnknownCalls(override val record: Boolean) : RecordRule() {
-        override fun matches(contactLookupKeys: Collection<String>?): Boolean =
-            contactLookupKeys?.isEmpty() ?: false
+        override fun matches(
+            contactLookupKeys: Collection<String>,
+            contactGroupIds: Collection<GroupLookup>,
+        ): Boolean = contactLookupKeys.isEmpty()
 
         companion object {
             fun fromRawPreferences(prefs: SharedPreferences, prefix: String): UnknownCalls {
@@ -50,8 +60,10 @@ sealed class RecordRule {
     }
 
     data class Contact(val lookupKey: String, override val record: Boolean) : RecordRule() {
-        override fun matches(contactLookupKeys: Collection<String>?): Boolean =
-            contactLookupKeys != null && lookupKey in contactLookupKeys
+        override fun matches(
+            contactLookupKeys: Collection<String>,
+            contactGroupIds: Collection<GroupLookup>,
+        ): Boolean = lookupKey in contactLookupKeys
 
         override fun toRawPreferences(editor: SharedPreferences.Editor, prefix: String) {
             super.toRawPreferences(editor, prefix)
@@ -72,6 +84,49 @@ sealed class RecordRule {
         }
     }
 
+    data class ContactGroup(
+        val rowId: Long,
+        val sourceId: String,
+        override val record: Boolean,
+    ) : RecordRule() {
+        override fun matches(
+            contactLookupKeys: Collection<String>,
+            contactGroupIds: Collection<GroupLookup>,
+        ): Boolean = contactGroupIds.any {
+            when (it) {
+                is GroupLookup.RowId -> it.id == rowId
+                is GroupLookup.SourceId -> it.id == sourceId
+            }
+        }
+
+        override fun toRawPreferences(editor: SharedPreferences.Editor, prefix: String) {
+            super.toRawPreferences(editor, prefix)
+            editor.putLong(prefix + PREF_SUFFIX_CONTACT_GROUP_ROW_ID, rowId)
+            editor.putString(prefix + PREF_SUFFIX_CONTACT_GROUP_SOURCE_ID, sourceId)
+        }
+
+        companion object {
+            private const val PREF_SUFFIX_CONTACT_GROUP_ROW_ID = "contact_group_row_id"
+            private const val PREF_SUFFIX_CONTACT_GROUP_SOURCE_ID = "contact_group_source_id"
+
+            fun fromRawPreferences(prefs: SharedPreferences, prefix: String): ContactGroup {
+                val prefRowId = prefix + PREF_SUFFIX_CONTACT_GROUP_ROW_ID
+                val rowId = prefs.getLong(prefRowId, -1)
+                if (rowId == -1L) {
+                    throw IllegalStateException("Missing $prefRowId")
+                }
+
+                val prefSourceId = prefix + PREF_SUFFIX_CONTACT_GROUP_SOURCE_ID
+                val sourceId = prefs.getString(prefSourceId, null)
+                    ?: throw IllegalStateException("Missing $prefSourceId")
+
+                val record = prefs.getBoolean(prefix + PREF_SUFFIX_RECORD, false)
+
+                return ContactGroup(rowId, sourceId, record)
+            }
+        }
+    }
+
     companion object {
         private val TAG = RecordRule::class.java.simpleName
 
@@ -86,6 +141,8 @@ sealed class RecordRule {
                     UnknownCalls.fromRawPreferences(prefs, prefix)
                 Contact::class.java.simpleName ->
                     Contact.fromRawPreferences(prefs, prefix)
+                ContactGroup::class.java.simpleName ->
+                    ContactGroup.fromRawPreferences(prefs, prefix)
                 null -> null
                 else -> {
                     Log.w(TAG, "Unknown record rule type: $type")
@@ -109,24 +166,36 @@ sealed class RecordRule {
                      numbers: Collection<PhoneNumber>): Boolean {
             val contactsAllowed = context.checkSelfPermission(Manifest.permission.READ_CONTACTS) ==
                     PackageManager.PERMISSION_GRANTED
-            val contactLookupKeys = if (contactsAllowed) {
-                val keys = hashSetOf<String>()
+            var contactLookupKeys = emptySet<String>()
+            var contactGroupIds = emptySet<GroupLookup>()
 
-                for (number in numbers) {
-                    findContactsByPhoneNumber(context, number)
-                        .asSequence()
-                        .map { it.lookupKey }
-                        .toCollection(keys)
+            if (contactsAllowed) {
+                contactLookupKeys = hashSetOf<String>().apply {
+                    for (number in numbers) {
+                        findContactsByPhoneNumber(context, number)
+                            .asSequence()
+                            .map { it.lookupKey }
+                            .toCollection(this)
+                    }
                 }
 
-                keys
+                // Avoid doing group membership lookups if we don't need to.
+                if (rules.any { it is ContactGroup }) {
+                    contactGroupIds = hashSetOf<GroupLookup>().apply {
+                        for (lookupKey in contactLookupKeys) {
+                            getContactGroupMemberships(context, lookupKey)
+                                .asSequence()
+                                .toCollection(this)
+                        }
+                    }
+                }
             } else {
                 Log.i(TAG, "Contacts permission not granted")
-                null
             }
 
             for (rule in rules) {
-                if (rule.matches(contactLookupKeys)) {
+                if (rule.matches(contactLookupKeys, contactGroupIds)) {
+                    Log.i(TAG, "Matched rule: $rule")
                     return rule.record
                 }
             }

@@ -27,10 +27,9 @@
     <!-- About "preference" -->
     <string name="pref_version_name">软件版本</string>
 
-    <!-- Record rules bottom sheet -->
+    <!-- Record rules activity -->
     <string name="pref_header_rules">规则</string>
-    <string name="pref_add_rule_name">新增规则</string>
-    <string name="pref_add_rule_desc">从通讯录里面选择联系人添加到规则里面。</string>
+    <string name="pref_add_contact_rule_desc">从通讯录里面选择联系人添加到规则里面。</string>
     <string name="record_rules_rule_added">规则已添加。删除请长按规则。</string>
     <string name="record_rules_rule_exists">规则已存在。</string>
     <string name="record_rules_info">开启规则后，默认情况下会自动记录通话，并可以在通知中手动删除。当规则被禁用时，在通话结束时将删除记录，除非使用通知中的“还原”按钮保留记录。</string>
@@ -41,7 +40,7 @@
     <string name="record_rule_type_unknown_calls_name">未知号码</string>
     <string name="record_rule_type_unknown_calls_desc">未匹配任何联系人的通话。</string>
     <string name="record_rule_type_contact_name">联系人: %s</string>
-    <string name="record_rule_type_contact_desc">长按以移除规则</string>
+    <string name="record_rule_removable_desc">长按以移除规则</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">修改</string>

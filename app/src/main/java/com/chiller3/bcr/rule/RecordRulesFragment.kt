@@ -3,27 +3,21 @@ package com.chiller3.bcr.rule
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.MenuProvider
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
-import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.get
 import androidx.preference.size
-import androidx.recyclerview.widget.RecyclerView
+import com.chiller3.bcr.PreferenceBaseFragment
 import com.chiller3.bcr.Preferences
 import com.chiller3.bcr.R
 import com.chiller3.bcr.view.LongClickableSwitchPreference
@@ -32,52 +26,26 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 
-class RecordRulesFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClickListener,
+class RecordRulesFragment : PreferenceBaseFragment(), Preference.OnPreferenceClickListener,
     Preference.OnPreferenceChangeListener, OnPreferenceLongClickListener {
     private val viewModel: RecordRulesViewModel by viewModels()
 
     private lateinit var categoryRules: PreferenceCategory
-    private lateinit var prefAddRule: Preference
+    private lateinit var prefAddContactRule: Preference
+    private lateinit var prefAddContactGroupRule: Preference
 
     private var ruleOffset by Delegates.notNull<Int>()
 
+    // We don't bother using persisted URI permissions because we need the full READ_CONTACTS
+    // permission for this feature to work at all (eg. to perform lookups by number).
     private val requestContact =
         registerForActivityResult(ActivityResultContracts.PickContact()) { uri ->
-            // We don't bother using persisted URI permissions for the contact because we need the
-            // full READ_CONTACTS permission for this feature to work at all (lookups by number).
             uri?.let { viewModel.addContactRule(it) }
         }
-
-    override fun onCreateRecyclerView(
-        inflater: LayoutInflater,
-        parent: ViewGroup,
-        savedInstanceState: Bundle?
-    ): RecyclerView {
-        val view = super.onCreateRecyclerView(inflater, parent, savedInstanceState)
-
-        view.clipToPadding = false
-
-        ViewCompat.setOnApplyWindowInsetsListener(view) { v, windowInsets ->
-            val insets = windowInsets.getInsets(
-                WindowInsetsCompat.Type.systemBars()
-                        or WindowInsetsCompat.Type.displayCutout()
-            )
-
-            // This is a little bit ugly in landscape mode because the divider lines for categories
-            // extend into the inset area. However, it's worth applying the left/right padding here
-            // anyway because it allows the inset area to be used for scrolling instead of just
-            // being a useless dead zone.
-            v.updatePadding(
-                bottom = insets.bottom,
-                left = insets.left,
-                right = insets.right,
-            )
-
-            WindowInsetsCompat.CONSUMED
+    private val requestContactGroup =
+        registerForActivityResult(PickContactGroup()) { group ->
+            group?.let { viewModel.addContactGroupRule(it) }
         }
-
-        return view
-    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.record_rules_preferences, rootKey)
@@ -86,8 +54,11 @@ class RecordRulesFragment : PreferenceFragmentCompat(), Preference.OnPreferenceC
 
         ruleOffset = categoryRules.preferenceCount
 
-        prefAddRule = findPreference(Preferences.PREF_ADD_RULE)!!
-        prefAddRule.onPreferenceClickListener = this
+        prefAddContactRule = findPreference(Preferences.PREF_ADD_CONTACT_RULE)!!
+        prefAddContactRule.onPreferenceClickListener = this
+
+        prefAddContactGroupRule = findPreference(Preferences.PREF_ADD_CONTACT_GROUP_RULE)!!
+        prefAddContactGroupRule.onPreferenceClickListener = this
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -148,7 +119,8 @@ class RecordRulesFragment : PreferenceFragmentCompat(), Preference.OnPreferenceC
         val contactsGranted = context.checkSelfPermission(Manifest.permission.READ_CONTACTS) ==
                 PackageManager.PERMISSION_GRANTED
 
-        prefAddRule.isEnabled = contactsGranted
+        prefAddContactRule.isEnabled = contactsGranted
+        prefAddContactGroupRule.isEnabled = contactsGranted
 
         for (i in (ruleOffset until categoryRules.size).reversed()) {
             val p = categoryRules[i]
@@ -157,7 +129,7 @@ class RecordRulesFragment : PreferenceFragmentCompat(), Preference.OnPreferenceC
 
         for ((i, rule) in newRules.withIndex()) {
             val p = LongClickableSwitchPreference(context).apply {
-                key = Preferences.PREF_RULE_PREFIX + i
+                key = PREF_RULE_PREFIX + i
                 isPersistent = false
                 when (rule) {
                     is DisplayedRecordRule.AllCalls -> {
@@ -180,7 +152,16 @@ class RecordRulesFragment : PreferenceFragmentCompat(), Preference.OnPreferenceC
                             R.string.record_rule_type_contact_name,
                             rule.displayName ?: rule.lookupKey,
                         )
-                        summary = getString(R.string.record_rule_type_contact_desc)
+                        summary = getString(R.string.record_rule_removable_desc)
+                        isEnabled = contactsGranted
+                        onPreferenceLongClickListener = this@RecordRulesFragment
+                    }
+                    is DisplayedRecordRule.ContactGroup -> {
+                        title = getString(
+                            R.string.record_rule_type_contact_group_name,
+                            rule.title ?: rule.sourceId,
+                        )
+                        summary = getString(R.string.record_rule_removable_desc)
                         isEnabled = contactsGranted
                         onPreferenceLongClickListener = this@RecordRulesFragment
                     }
@@ -195,8 +176,12 @@ class RecordRulesFragment : PreferenceFragmentCompat(), Preference.OnPreferenceC
 
     override fun onPreferenceClick(preference: Preference): Boolean {
         when (preference) {
-            prefAddRule -> {
+            prefAddContactRule -> {
                 requestContact.launch(null)
+                return true
+            }
+            prefAddContactGroupRule -> {
+                requestContactGroup.launch(null)
                 return true
             }
         }
@@ -206,8 +191,8 @@ class RecordRulesFragment : PreferenceFragmentCompat(), Preference.OnPreferenceC
 
     override fun onPreferenceChange(preference: Preference, newValue: Any?): Boolean {
         when {
-            preference.key.startsWith(Preferences.PREF_RULE_PREFIX) -> {
-                val index = preference.key.substring(Preferences.PREF_RULE_PREFIX.length).toInt()
+            preference.key.startsWith(PREF_RULE_PREFIX) -> {
+                val index = preference.key.substring(PREF_RULE_PREFIX.length).toInt()
                 viewModel.setRuleRecord(index, newValue as Boolean)
                 return true
             }
@@ -218,8 +203,8 @@ class RecordRulesFragment : PreferenceFragmentCompat(), Preference.OnPreferenceC
 
     override fun onPreferenceLongClick(preference: Preference): Boolean {
         when {
-            preference.key.startsWith(Preferences.PREF_RULE_PREFIX) -> {
-                val index = preference.key.substring(Preferences.PREF_RULE_PREFIX.length).toInt()
+            preference.key.startsWith(PREF_RULE_PREFIX) -> {
+                val index = preference.key.substring(PREF_RULE_PREFIX.length).toInt()
                 viewModel.deleteRule(index)
                 return true
             }
@@ -236,5 +221,9 @@ class RecordRulesFragment : PreferenceFragmentCompat(), Preference.OnPreferenceC
                 }
             })
             .show()
+    }
+
+    companion object {
+        private const val PREF_RULE_PREFIX = "rule_"
     }
 }

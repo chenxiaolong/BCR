@@ -24,9 +24,8 @@
     <!-- About "preference" -->
     <string name="pref_version_name">Версія</string>
 
-    <!-- Record rules bottom sheet -->
-    <string name="pref_add_rule_name">Додати правило</string>
-    <string name="pref_add_rule_desc">Додайте правило автоматичного запису для контакту.</string>
+    <!-- Record rules activity -->
+    <string name="pref_add_contact_rule_desc">Додайте правило автоматичного запису для контакту.</string>
     <string name="record_rules_rule_added">Додано нове правило. Натисніть і утримуйте правило, щоб видалити його.</string>
     <string name="record_rules_rule_exists">Правило вже існує.</string>
     <string name="record_rule_type_all_other_calls_name">Усі інші дзвінки</string>

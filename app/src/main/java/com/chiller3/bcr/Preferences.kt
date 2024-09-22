@@ -38,8 +38,8 @@ class Preferences(initialContext: Context) {
         private const val PREF_FORCE_DIRECT_BOOT = "force_direct_boot"
         const val PREF_MIGRATE_DIRECT_BOOT = "migrate_direct_boot"
 
-        const val PREF_ADD_RULE = "add_rule"
-        const val PREF_RULE_PREFIX = "rule_"
+        const val PREF_ADD_CONTACT_RULE = "add_contact_rule"
+        const val PREF_ADD_CONTACT_GROUP_RULE = "add_contact_group_rule"
 
         // Not associated with a UI preference
         private const val PREF_DEBUG_MODE = "debug_mode"

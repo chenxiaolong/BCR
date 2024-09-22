@@ -30,10 +30,9 @@
     <!-- About "preference" -->
     <string name="pref_version_name">版本</string>
 
-    <!-- Record rules bottom sheet -->
+    <!-- Record rules activity -->
     <string name="pref_header_rules">規則</string>
-    <string name="pref_add_rule_name">加入規則</string>
-    <string name="pref_add_rule_desc">加入聯絡人的自動錄音規則。</string>
+    <string name="pref_add_contact_rule_desc">加入聯絡人的自動錄音規則。</string>
     <string name="record_rules_rule_added">已加入新規則。長按規則以將其刪除。</string>
     <string name="record_rules_rule_exists">規則已存在。</string>
     <string name="record_rules_info">若啟用規則，預設會自動錄製通話，並可以在通知中手動刪除。若停用規則，通話結束時會刪除錄音檔，可按下通知中的還原按鈕保留錄音檔。</string>
@@ -44,7 +43,7 @@
     <string name="record_rule_type_unknown_calls_name">未知通話</string>
     <string name="record_rule_type_unknown_calls_desc">不符合任何聯絡人的通話。</string>
     <string name="record_rule_type_contact_name">聯絡人：%s</string>
-    <string name="record_rule_type_contact_desc">長按以移除規則。</string>
+    <string name="record_rule_removable_desc">長按以移除規則。</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">變更目錄</string>

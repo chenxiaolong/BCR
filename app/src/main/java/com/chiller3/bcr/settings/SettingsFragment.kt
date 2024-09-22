@@ -5,20 +5,14 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
-import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
-import androidx.recyclerview.widget.RecyclerView
 import com.chiller3.bcr.BuildConfig
 import com.chiller3.bcr.DirectBootMigrationService
 import com.chiller3.bcr.Permissions
+import com.chiller3.bcr.PreferenceBaseFragment
 import com.chiller3.bcr.Preferences
 import com.chiller3.bcr.R
 import com.chiller3.bcr.dialog.MinDurationDialogFragment
@@ -32,7 +26,7 @@ import com.chiller3.bcr.view.LongClickablePreference
 import com.chiller3.bcr.view.OnPreferenceLongClickListener
 import com.google.android.material.snackbar.Snackbar
 
-class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChangeListener,
+class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChangeListener,
     Preference.OnPreferenceClickListener, OnPreferenceLongClickListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
     private lateinit var prefs: Preferences
@@ -59,37 +53,6 @@ class SettingsFragment : PreferenceFragmentCompat(), Preference.OnPreferenceChan
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             refreshInhibitBatteryOptState()
         }
-
-    override fun onCreateRecyclerView(
-        inflater: LayoutInflater,
-        parent: ViewGroup,
-        savedInstanceState: Bundle?
-    ): RecyclerView {
-        val view = super.onCreateRecyclerView(inflater, parent, savedInstanceState)
-
-        view.clipToPadding = false
-
-        ViewCompat.setOnApplyWindowInsetsListener(view) { v, windowInsets ->
-            val insets = windowInsets.getInsets(
-                WindowInsetsCompat.Type.systemBars()
-                        or WindowInsetsCompat.Type.displayCutout()
-            )
-
-            // This is a little bit ugly in landscape mode because the divider lines for categories
-            // extend into the inset area. However, it's worth applying the left/right padding here
-            // anyway because it allows the inset area to be used for scrolling instead of just
-            // being a useless dead zone.
-            v.updatePadding(
-                bottom = insets.bottom,
-                left = insets.left,
-                right = insets.right,
-            )
-
-            WindowInsetsCompat.CONSUMED
-        }
-
-        return view
-    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val context = requireContext()

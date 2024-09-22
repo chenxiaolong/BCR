@@ -24,9 +24,8 @@
     <!-- About "preference" -->
     <string name="pref_version_name">Version</string>
 
-    <!-- Record rules bottom sheet -->
-    <string name="pref_add_rule_name">Füge eine Regel hinzu</string>
-    <string name="pref_add_rule_desc">Füge eine automatische Aufnahmeregel für einen Kontakt hinzu.</string>
+    <!-- Record rules activity -->
+    <string name="pref_add_contact_rule_desc">Füge eine automatische Aufnahmeregel für einen Kontakt hinzu.</string>
     <string name="record_rules_rule_added">Neue Regel hinzugefügt. Lange gedrückt halten, um sie zu löschen.</string>
     <string name="record_rules_rule_exists">Regel existiert bereits.</string>
     <string name="record_rule_type_all_other_calls_name">Alle anderen Anrufe</string>

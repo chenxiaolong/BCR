@@ -13,8 +13,7 @@
     <string name="pref_inhibit_batt_opt_name"> تعطيل تحسين البطارية</string>
     <string name="pref_version_name">الاصدار</string>
     <string name="pref_header_rules">الارقام المراد تسجيل مكالماتها</string>
-    <string name="pref_add_rule_name">اضافه ارقام</string>
-    <string name="pref_add_rule_desc">اضافه الرقم لقائمه التسجيل</string>
+    <string name="pref_add_contact_rule_desc">اضافه الرقم لقائمه التسجيل</string>
     <string name="record_rules_rule_added">اضافه الرقم للتسجيل ، اضغط مطولا للحذف</string>
     <string name="record_rules_rule_exists">الرقم موجود سابقا</string>
     <string name="record_rules_info">عند تشغيل هذه الميزة، يتم تسجيل المكالمة تلقائيًا بشكل افتراضي ويمكن حذفها يدويًا من الإشعار. عند إيقاف تشغيل هذه الخاصية ، سيتم حذف التسجيل في نهاية المكالمة ما لم يتم الاحتفاظ به باستخدام زر الاستعادة في الإشعار.</string>
@@ -22,7 +21,7 @@
     <string name="record_rule_type_all_other_calls_name">جميع المكالمات الاخرئ</string>
     <string name="record_rule_type_unknown_calls_name">ارقام غير معروفه</string>
     <string name="record_rule_type_contact_name">الاسم: %s</string>
-    <string name="record_rule_type_contact_desc">ضغطه متواصله لحذف القيد</string>
+    <string name="record_rule_removable_desc">ضغطه متواصله لحذف القيد</string>
     <string name="output_dir_bottom_sheet_change_dir">تغيير المجلد</string>
     <string name="output_dir_bottom_sheet_filename_template">اسم القالب</string>
     <string name="output_dir_bottom_sheet_edit_template">تعديل القالب</string>

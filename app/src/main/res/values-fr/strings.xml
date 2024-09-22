@@ -41,10 +41,9 @@
     <string name="pref_migrate_direct_boot_name">Déplacer les enregistrements du démarrage direct</string>
     <string name="pref_migrate_direct_boot_desc">Déplacer les enregistrements réalisés avant le premier déverrouillage. Cela devrait se produire normalement après le premier déverrouillage.</string>
 
-    <!-- Record rules bottom sheet -->
+    <!-- Record rules activity -->
     <string name="pref_header_rules">Règles</string>
-    <string name="pref_add_rule_name">Ajouter une règle</string>
-    <string name="pref_add_rule_desc">Ajouter une règle d\auto-enregistrement pour un contact.</string>
+    <string name="pref_add_contact_rule_desc">Ajouter une règle d\auto-enregistrement pour un contact.</string>
     <string name="record_rules_rule_added">Règle ajoutée. Maintenir appuyé pour la supprimer.</string>
     <string name="record_rules_rule_exists">Règle déjà existante.</string>
     <string name="record_rules_info">Quand une règle est active, l\'appel est automatiquement enregistré et peut être supprimé manuellement via la notification. Quand une règle est inactive, l\'enregistrement sera supprimé automatiquement à la fin de l\'appel et peut être restauré manuellement via la notification.</string>
@@ -55,7 +54,7 @@
     <string name="record_rule_type_unknown_calls_name">Appels inconnus</string>
     <string name="record_rule_type_unknown_calls_desc">Appels ne correspondant à aucun contact.</string>
     <string name="record_rule_type_contact_name">Contact: %s</string>
-    <string name="record_rule_type_contact_desc">Maintenir appuyé pour supprimer la règle.</string>
+    <string name="record_rule_removable_desc">Maintenir appuyé pour supprimer la règle.</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Changer le dossier</string>
