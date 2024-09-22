@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Add support for specifying a minimum duration for keeping a recording ([Issue #411], [Issue #604], [PR #605 @chenxiaolong])
+
 ### Version 1.71
 
 * Fix notification not showing after recording to the default output directory ([PR #603 @chenxiaolong])
@@ -658,6 +660,7 @@ Non-user-facing changes:
 [Issue #380]: https://github.com/chenxiaolong/BCR/issues/380
 [Issue #388]: https://github.com/chenxiaolong/BCR/issues/388
 [Issue #394]: https://github.com/chenxiaolong/BCR/issues/394
+[Issue #411]: https://github.com/chenxiaolong/BCR/issues/411
 [Issue #422]: https://github.com/chenxiaolong/BCR/issues/422
 [Issue #429]: https://github.com/chenxiaolong/BCR/issues/429
 [Issue #433]: https://github.com/chenxiaolong/BCR/issues/433
@@ -676,6 +679,7 @@ Non-user-facing changes:
 [Issue #582]: https://github.com/chenxiaolong/BCR/issues/582
 [Issue #591]: https://github.com/chenxiaolong/BCR/issues/591
 [Issue #598]: https://github.com/chenxiaolong/BCR/issues/598
+[Issue #604]: https://github.com/chenxiaolong/BCR/issues/604
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -938,3 +942,4 @@ Non-user-facing changes:
 [PR #597 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/597
 [PR #600 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/600
 [PR #603 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/603
+[PR #605 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/605
