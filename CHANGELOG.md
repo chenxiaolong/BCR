@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Add support for specifying a minimum duration for keeping a recording ([Issue #411], [Issue #604], [PR #605 @chenxiaolong])
+* Add support for contact groups in auto-record rules ([Issue #536], [PR #606 @chenxiaolong])
 
 ### Version 1.71
 
@@ -668,6 +669,7 @@ Non-user-facing changes:
 [Issue #491]: https://github.com/chenxiaolong/BCR/issues/491
 [Issue #507]: https://github.com/chenxiaolong/BCR/issues/507
 [Issue #513]: https://github.com/chenxiaolong/BCR/issues/513
+[Issue #536]: https://github.com/chenxiaolong/BCR/issues/536
 [Issue #539]: https://github.com/chenxiaolong/BCR/issues/539
 [Issue #546]: https://github.com/chenxiaolong/BCR/issues/546
 [Issue #554]: https://github.com/chenxiaolong/BCR/issues/554
@@ -943,3 +945,4 @@ Non-user-facing changes:
 [PR #600 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/600
 [PR #603 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/603
 [PR #605 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/605
+[PR #606 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/606
