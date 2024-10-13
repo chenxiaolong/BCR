@@ -11,6 +11,7 @@
 
 * Add support for specifying a minimum duration for keeping a recording ([Issue #411], [Issue #604], [PR #605 @chenxiaolong])
 * Add support for contact groups in auto-record rules ([Issue #536], [PR #606 @chenxiaolong])
+* Fix Cursor resource leak ([PR #610 @chenxiaolong])
 
 ### Version 1.71
 
@@ -946,3 +947,4 @@ Non-user-facing changes:
 [PR #603 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/603
 [PR #605 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/605
 [PR #606 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/606
+[PR #610 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/610
