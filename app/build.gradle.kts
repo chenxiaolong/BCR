@@ -355,7 +355,9 @@ android.applicationVariants.all {
 
         from(moduleProp.map { it.outputs })
         from(addonD.map { it.outputs }) {
-            fileMode = 0b111_101_101 // 0o755; kotlin doesn't support octal literals
+            filePermissions {
+                unix("755")
+            }
             into("system/addon.d")
         }
         from(permissionsXml.map { it.outputs }) {
