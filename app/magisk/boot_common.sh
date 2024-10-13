@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2023 Andrew Gunnerson
+# SPDX-License-Identifier: GPL-3.0-only
+#
 # source "${0%/*}/boot_common.sh" <log file>
 
 exec >"${1}" 2>&1

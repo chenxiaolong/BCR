@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: 2023-2024 Andrew Gunnerson
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 @file:Suppress("SameParameterValue")
 
 package com.chiller3.bcr.standalone

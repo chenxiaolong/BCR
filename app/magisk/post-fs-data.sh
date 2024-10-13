@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2023-2024 Andrew Gunnerson
+# SPDX-License-Identifier: GPL-3.0-only
+
 # On some devices, the system time is set too late in the boot process. This,
 # for some reason, causes the package manager service to not update the cache
 # entry for BCR despite the mtime of the apk being newer than the mtime of the

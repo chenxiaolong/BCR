@@ -1,3 +1,7 @@
+<!--
+    SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+    SPDX-License-Identifier: GPL-3.0-only
+-->
 <resources>
     <style name="Theme.BCR" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="switchPreferenceCompatStyle">@style/SwitchPreferenceCompat.Material3</item>

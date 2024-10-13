@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    SPDX-FileCopyrightText: 2023 Andrew Gunnerson
+    SPDX-License-Identifier: GPL-3.0-only
+-->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/reset"
         android:title="@string/bottom_sheet_reset" />

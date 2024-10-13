@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    SPDX-FileCopyrightText: 2023 Andrew Gunnerson
+    SPDX-License-Identifier: GPL-3.0-only
+-->
 <resources>
     <!-- None of these colors are used as-is. They're harmonized with the Material 3 theme. -->
     <color name="template_highlighting_variable_ref_name">#ff008000</color>

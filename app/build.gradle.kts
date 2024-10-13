@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2023 Patryk Miś
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 import org.eclipse.jgit.api.ArchiveCommand
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.archive.TarFormat

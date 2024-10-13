@@ -1,3 +1,8 @@
+/*
+ * SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
 package com.chiller3.bcr
 
 import android.content.Context

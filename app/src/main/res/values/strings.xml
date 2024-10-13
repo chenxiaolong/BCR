@@ -1,3 +1,7 @@
+<!--
+    SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+    SPDX-License-Identifier: GPL-3.0-only
+-->
 <resources>
     <string name="app_name_full">Basic Call Recorder</string>
 

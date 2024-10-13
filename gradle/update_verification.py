@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# SPDX-FileCopyrightText: 2023-2024 Andrew Gunnerson
+# SPDX-License-Identifier: GPL-3.0-only
+
 import hashlib
 import io
 import os
