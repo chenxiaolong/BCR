@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.72
 
 * Add support for specifying a minimum duration for keeping a recording ([Issue #411], [Issue #604], [PR #605 @chenxiaolong])
 * Add support for contact groups in auto-record rules ([Issue #536], [PR #606 @chenxiaolong])
