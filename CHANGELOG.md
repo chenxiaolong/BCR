@@ -13,6 +13,7 @@
 * Add support for contact groups in auto-record rules ([Issue #536], [PR #606 @chenxiaolong])
 * Fix Cursor resource leak ([PR #610 @chenxiaolong])
 * Minor notification code cleanup ([PR #611 @chenxiaolong])
+* Update dependencies ([PR #612 @chenxiaolong])
 
 ### Version 1.71
 
@@ -950,3 +951,4 @@ Non-user-facing changes:
 [PR #606 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/606
 [PR #610 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/610
 [PR #611 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/611
+[PR #612 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/612
