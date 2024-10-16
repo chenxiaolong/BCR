@@ -135,6 +135,7 @@ android {
             "ja",
             "pl",
             "pt-rPT",
+            "ro",
             "ru",
             "sk",
             "tr",
