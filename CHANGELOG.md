@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update French translations ([PR #615 @NSO73])
+
 ### Version 1.72
 
 * Add support for specifying a minimum duration for keeping a recording ([Issue #411], [Issue #604], [PR #605 @chenxiaolong])
@@ -954,3 +956,4 @@ Non-user-facing changes:
 [PR #610 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/610
 [PR #611 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/611
 [PR #612 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/612
+[PR #615 @NSO73]: https://github.com/chenxiaolong/BCR/pull/615
