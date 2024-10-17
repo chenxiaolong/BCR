@@ -152,10 +152,10 @@
     <string name="notification_recording_on_hold">Enregistrement en attente</string>
     <string name="notification_recording_failed">Échec de l\'enregistrement</string>
     <string name="notification_recording_succeeded">Enregistrement validé</string>
-    <string name="notification_message_delete_at_end">L\'enregistrement sera supprimé à la fin de l\'appel. Toucher Restaurer pour garder le conserver.</string>
+    <string name="notification_message_delete_at_end">L\'enregistrement sera supprimé à la fin de l\'appel. Toucher Restaurer pour le conserver.</string>
     <plurals name="notification_message_delete_at_end_too_short">
-        <item quantity="one">L\'enregistrement sera supprimé à la fin de l\'appel si sa durée est plus courte que %d seconde. Toucher Restaurer pour garder le conserver.</item>
-        <item quantity="other">L\'enregistrement sera supprimé à la fin de l\'appel si sa durée est plus courte que %d secondes. Toucher Restaurer pour garder le conserver.</item>
+        <item quantity="one">L\'enregistrement sera supprimé à la fin de l\'appel si sa durée est plus courte que %d seconde. Toucher Restaurer pour le conserver.</item>
+        <item quantity="other">L\'enregistrement sera supprimé à la fin de l\'appel si sa durée est plus courte que %d secondes. Toucher Restaurer pour le conserver.</item>
     </plurals>
     <string name="notification_internal_android_error">L\'enregistrement a échoué du à un composant interne Android (%s). Ce mobile ou firmware ne semble pas compatible pour l\'enregistrement des appels.</string>
     <string name="notification_pure_silence_error">L\'enregistrement a été rejeté car il est complètement silencieux. L\'appareil ne semble pas supporter l\'enregistrement avec l\'application \'%s\'.</string>
