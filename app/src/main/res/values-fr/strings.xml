@@ -19,6 +19,13 @@
     <string name="pref_output_format_name">Format des enregistrements</string>
     <string name="pref_output_format_desc">Choisir un encodage pour stocker les enregistrements.</string>
 
+    <string name="pref_min_duration_name">Durée minimum d\'enregistrement</string>
+    <plurals name="pref_min_duration_desc">
+        <item quantity="one">Garder les enregistrements durant au moins %d seconde.</item>
+        <item quantity="other">Garder les enregistrements durant au moins %d secondes.</item>
+    </plurals>
+    <string name="pref_min_duration_desc_zero">Garder les enregistrements de toutes durées.</string>
+
     <string name="pref_inhibit_batt_opt_name">Désactiver l\'optimisation de la batterie</string>
     <string name="pref_inhibit_batt_opt_desc">Réduit les chances que l\'application soit arrêtée par le système.</string>
 
@@ -41,9 +48,15 @@
     <string name="pref_migrate_direct_boot_name">Déplacer les enregistrements du démarrage direct</string>
     <string name="pref_migrate_direct_boot_desc">Déplacer les enregistrements réalisés avant le premier déverrouillage. Cela devrait se produire normalement après le premier déverrouillage.</string>
 
+    <!-- Pick contact group activity -->
+    <string name="pick_contact_group_title">Choisir un groupe de contact</string>
+
     <!-- Record rules activity -->
     <string name="pref_header_rules">Règles</string>
+    <string name="pref_add_contact_rule_name">Ajouter une règle pour un contact</string>
     <string name="pref_add_contact_rule_desc">Ajouter une règle d\auto-enregistrement pour un contact.</string>
+    <string name="pref_add_contact_group_rule_name">Ajouter une règle pour un groupe de contact</string>
+    <string name="pref_add_contact_group_rule_desc">Ajouter une règle d\auto-enregistrement pour un groupe de contact.</string>
     <string name="record_rules_rule_added">Règle ajoutée. Maintenir appuyé pour la supprimer.</string>
     <string name="record_rules_rule_exists">Règle déjà existante.</string>
     <string name="record_rules_info">Quand une règle est active, l\'appel est automatiquement enregistré et peut être supprimé manuellement via la notification. Quand une règle est inactive, l\'enregistrement sera supprimé automatiquement à la fin de l\'appel et peut être restauré manuellement via la notification.</string>
@@ -53,7 +66,8 @@
     <string name="record_rule_type_all_other_calls_desc">Appels définis par aucune règle.</string>
     <string name="record_rule_type_unknown_calls_name">Appels inconnus</string>
     <string name="record_rule_type_unknown_calls_desc">Appels ne correspondant à aucun contact.</string>
-    <string name="record_rule_type_contact_name">Contact: %s</string>
+    <string name="record_rule_type_contact_name">Contact : %s</string>
+    <string name="record_rule_type_contact_group_name">Groupe de contact : %s</string>
     <string name="record_rule_removable_desc">Maintenir appuyé pour supprimer la règle.</string>
 
     <!-- Output directory bottom sheet -->
@@ -112,6 +126,14 @@
     <!-- Format sample rate -->
     <string name="format_sample_rate">%s Hz</string>
 
+    <!-- Min duration dialog -->
+    <string name="min_duration_dialog_title">@string/pref_min_duration_name</string>
+    <string name="min_duration_dialog_message">Renseigner une durée minimale pour conserver un enregistrement, excluant les pauses et les mises en attente. Ce paramètre peut être modifié pendant un appel via la notification.</string>
+    <plurals name="min_duration_dialog_seconds">
+        <item quantity="one">%d seconde</item>
+        <item quantity="other">%d secondes</item>
+    </plurals>
+
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Service d\'arrière plan</string>
     <string name="notification_channel_persistent_desc">Notification persistante pour l\'enregistrement des appels</string>
@@ -130,7 +152,11 @@
     <string name="notification_recording_on_hold">Enregistrement en attente</string>
     <string name="notification_recording_failed">Échec de l\'enregistrement</string>
     <string name="notification_recording_succeeded">Enregistrement validé</string>
-    <string name="notification_message_delete_at_end">L\'enregistrement sera supprimé à la fin de l\'appel. Toucher Restaurer pour garder le garder.</string>
+    <string name="notification_message_delete_at_end">L\'enregistrement sera supprimé à la fin de l\'appel. Toucher Restaurer pour le conserver.</string>
+    <plurals name="notification_message_delete_at_end_too_short">
+        <item quantity="one">L\'enregistrement sera supprimé à la fin de l\'appel si sa durée est plus courte que %d seconde. Toucher Restaurer pour le conserver.</item>
+        <item quantity="other">L\'enregistrement sera supprimé à la fin de l\'appel si sa durée est plus courte que %d secondes. Toucher Restaurer pour le conserver.</item>
+    </plurals>
     <string name="notification_internal_android_error">L\'enregistrement a échoué du à un composant interne Android (%s). Ce mobile ou firmware ne semble pas compatible pour l\'enregistrement des appels.</string>
     <string name="notification_pure_silence_error">L\'enregistrement a été rejeté car il est complètement silencieux. L\'appareil ne semble pas supporter l\'enregistrement avec l\'application \'%s\'.</string>
     <string name="notification_action_open">Ouvrir</string>
