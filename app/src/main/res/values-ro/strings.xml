@@ -20,6 +20,11 @@
     <string name="pref_output_format_desc">Selectați un format de codare pentru înregistrări.</string>
 
     <string name="pref_min_duration_name">Durata minimă de înregistrare</string>
+    <plurals name="pref_min_duration_desc">
+        <item quantity="one">Păstrați înregistrările de cel puțin %d secundă.</item>
+		<item quantity="few">Păstrați înregistrările de cel puțin %d secunde.</item>
+        <item quantity="other">Păstrați înregistrările de cel puțin %d secunde.</item>
+    </plurals>
     <string name="pref_min_duration_desc_zero">Păstrați înregistrări de orice durată.</string>
 
     <string name="pref_inhibit_batt_opt_name">Dezactivați optimizarea bateriei</string>
@@ -73,6 +78,12 @@
     <string name="output_dir_bottom_sheet_file_retention">Perioadă păstrare fișiere</string>
     <string name="output_dir_bottom_sheet_edit_retention">Editați perioada</string>
     <string name="retention_keep_all">Păstrează totul</string>
+    <plurals name="retention_days">
+        <item quantity="one">Păstrează %d zi</item>
+		<item quantity="few">Păstrează %d zile</item>
+		<item quantity="many">Păstrează %d zile</item>
+        <item quantity="other">Păstrează %d zile</item>
+    </plurals>
     <string name="retention_unusable">Păstrare fișierelor este dezactivată deoarece șablonul actual pentru numele fișierului este incompatibil cu caracteristica.</string>
 
     <!-- Output format bottom sheet -->
@@ -121,6 +132,11 @@
     <!-- Min duration dialog -->
     <string name="min_duration_dialog_title">@string/pref_min_duration_name</string>
     <string name="min_duration_dialog_message">Introduceți durata minimă pentru păstrarea unei înregistrări, excluzând pauzele și apelurile în așteptare. Acest lucru poate fi întotdeauna suprascris în timpul unui apel din notificare.</string>
+    <plurals name="min_duration_dialog_seconds">
+        <item quantity="one">%d secundă</item>
+		<item quantity="few">%d secunde</item>
+        <item quantity="other">%d secunde</item>
+    </plurals>
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Servicii de fundal</string>
@@ -141,6 +157,11 @@
     <string name="notification_recording_failed">Apelul nu a putut fi înregistrat</string>
     <string name="notification_recording_succeeded">Apel înregistrat cu succes</string>
     <string name="notification_message_delete_at_end">Înregistrarea va fi ștearsă la sfârșitul apelului. Atingeți Păstrare pentru a păstra înregistrarea.</string>
+    <plurals name="notification_message_delete_at_end_too_short">
+        <item quantity="one">Înregistrarea va fi ștearsă la sfârșitul apelului dacă este mai scurtă de %d secundă. Atingeți Păstrare pentru a păstra înregistrarea.</item>
+		<item quantity="few">Înregistrarea va fi ștearsă la sfârșitul apelului dacă este mai scurtă de %d secunde. Atingeți Păstrare pentru a păstra înregistrarea.</item>
+        <item quantity="other">Înregistrarea va fi ștearsă la sfârșitul apelului dacă este mai scurtă de %d secunde. Atingeți Păstrare pentru a păstra înregistrarea.</item>
+    </plurals>
     <string name="notification_internal_android_error">Înregistrarea a eșuat într-o componentă internă Android (%s). Este posibil ca acest dispozitiv sau firmware să nu accepte înregistrarea apelurilor.</string>
     <string name="notification_pure_silence_error">Înregistrarea a fost eliminată deoarece sunetul era complet silențios. Este posibil ca acest dispozitiv să nu accepte înregistrarea apelurilor asociate cu aplicația \'%s\'.</string>
     <string name="notification_action_open">Deschide</string>
