@@ -81,8 +81,7 @@
     <plurals name="retention_days">
         <item quantity="one">Păstrează %d zi</item>
 		<item quantity="few">Păstrează %d zile</item>
-		<item quantity="many">Păstrează %d zile</item>
-        <item quantity="other">Păstrează %d zile</item>
+		<item quantity="other">Păstrează %d zile</item>
     </plurals>
     <string name="retention_unusable">Păstrare fișierelor este dezactivată deoarece șablonul actual pentru numele fișierului este incompatibil cu caracteristica.</string>
 
