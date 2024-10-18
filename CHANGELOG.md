@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update French translations ([PR #615 @NSO73])
+* Add Romanian translations ([PR #613 @gilav23])
 
 ### Version 1.72
 
@@ -956,4 +957,5 @@ Non-user-facing changes:
 [PR #610 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/610
 [PR #611 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/611
 [PR #612 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/612
+[PR #613 @gilav23]: https://github.com/chenxiaolong/BCR/pull/613
 [PR #615 @NSO73]: https://github.com/chenxiaolong/BCR/pull/615
