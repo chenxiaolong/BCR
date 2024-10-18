@@ -1,0 +1,178 @@
+<resources>
+	<string name="app_name_full">Basic Call Recorder</string>
+
+    <!-- Preference headers -->
+    <string name="pref_header_general">General</string>
+    <string name="pref_header_about">Despre</string>
+    <string name="pref_header_debug">Depanare</string>
+
+    <!-- General preferences -->
+    <string name="pref_call_recording_name">Înregistrare apel</string>
+    <string name="pref_call_recording_desc">Înregistrați apelurile telefonice primite și ieșite. Sunt necesare permisiuni pentru microfon și notificare pentru înregistrarea în fundal.</string>
+
+    <string name="pref_record_rules_name">Reguli de înregistrare automată</string>
+    <string name="pref_record_rules_desc">Configurați ce apeluri trebuie înregistrate automat.</string>
+
+    <string name="pref_output_dir_name">Director de ieșire</string>
+    <string name="pref_output_dir_desc">Alegeți un director pentru a stoca înregistrările. Apăsați lung pentru a deschide în managerul de fișiere.</string>
+
+    <string name="pref_output_format_name">Format de ieșire</string>
+    <string name="pref_output_format_desc">Selectați un format de codare pentru înregistrări.</string>
+
+    <string name="pref_min_duration_name">Durata minimă de înregistrare</string>
+    <plurals name="pref_min_duration_desc">
+        <item quantity="one">Păstrați înregistrările de cel puțin %d secundă.</item>
+		<item quantity="few">Păstrați înregistrările de cel puțin %d secunde.</item>
+        <item quantity="other">Păstrați înregistrările de cel puțin %d secunde.</item>
+    </plurals>
+    <string name="pref_min_duration_desc_zero">Păstrați înregistrări de orice durată.</string>
+
+    <string name="pref_inhibit_batt_opt_name">Dezactivați optimizarea bateriei</string>
+    <string name="pref_inhibit_batt_opt_desc">Redu șansele ca aplicația să fie oprită de sistem.</string>
+
+    <string name="pref_write_metadata_name">Scrieți fișierul cu metadate</string>
+    <string name="pref_write_metadata_desc">Creați un fișier JSON care conține detalii despre apel pe lângă fișierul audio.</string>
+
+    <string name="pref_record_telecom_apps_name">Înregistrați aplicațiile integrate în telecomunicații</string>
+    <string name="pref_record_telecom_apps_desc">Înregistrați apelurile din aplicații terțe. Înregistrările acestor apeluri probabil nu vor conține sunete.</string>
+
+    <string name="pref_record_dialing_state_name">Înregistrați apelurile înainte de conectare</string>
+    <string name="pref_record_dialing_state_desc">Pentru apelurile efectuate, înregistați imediat ce începe apelarea, înainte ca apelantul să răspundă.</string>
+
+    <!-- About "preference" -->
+    <string name="pref_version_name">Versiune</string>
+
+    <!-- Debug preferences -->
+    <string name="pref_force_direct_boot_name">Forțați modul de direct boot</string>
+    <string name="pref_force_direct_boot_desc">E necesar ca dispozitivul să fie în starea de dinaintea primei deblocări pentru testare.</string>
+
+    <string name="pref_migrate_direct_boot_name">Migrați înregistrările în direct boot</string>
+    <string name="pref_migrate_direct_boot_desc">Migrați înregistrările făcute înainte de prima deblocare. Acest lucru se întâmplă în mod normal după prima deblocare.</string>
+
+    <!-- Pick contact group activity -->
+    <string name="pick_contact_group_title">Alegeți grupul de contacte</string>
+
+    <!-- Record rules activity -->
+    <string name="pref_header_rules">Reguli</string>
+    <string name="pref_add_contact_rule_name">Adăugați o regulă pentru un contact.</string>
+    <string name="pref_add_contact_rule_desc">Adăugați o regulă de înregistrare automată pentru un contact.</string>
+    <string name="pref_add_contact_group_rule_name">Adăugați o regulă pentru un grup de contacte.</string>
+    <string name="pref_add_contact_group_rule_desc">Adăugați o regulă de înregistrare automată pentru un grup de contacte.</string>
+    <string name="record_rules_rule_added">S-a adăugat o nouă regulă. Apăsați lung pe regulă pentru a o șterge.</string>
+    <string name="record_rules_rule_exists">Regula există deja.</string>
+    <string name="record_rules_info">Când o regulă este activată, apelul este înregistrat automat în mod implicit și poate fi șters manual din notificare. Când o regulă este dezactivată, înregistrarea va fi ștearsă la sfârșitul unui apel, cu excepția cazului în care este păstrată folosind butonul Păstrare din notificare.</string>
+    <string name="record_rule_type_all_calls_name">Toate apelurile</string>
+    <string name="record_rule_type_all_calls_desc">Este necesară permisiunea Agendei pentru reguli mai detaliate.</string>
+    <string name="record_rule_type_all_other_calls_name">Toate celelalte apeluri</string>
+    <string name="record_rule_type_all_other_calls_desc">Apeluri care nu corespund cu nicio altă regulă.</string>
+    <string name="record_rule_type_unknown_calls_name">Apeluri necunoscute</string>
+    <string name="record_rule_type_unknown_calls_desc">Apeluri care nu sunt asociate cu niciun contact.</string>
+    <string name="record_rule_type_contact_name">Contact: %s</string>
+    <string name="record_rule_type_contact_group_name">Grup de contact: %s</string>
+    <string name="record_rule_removable_desc">Apăsați lung pentru a elimina regula.</string>
+
+    <!-- Output directory bottom sheet -->
+    <string name="output_dir_bottom_sheet_change_dir">Schimbați directorul</string>
+    <string name="output_dir_bottom_sheet_filename_template">Șablon nume fișier</string>
+    <string name="output_dir_bottom_sheet_edit_template">Editați șablonul</string>
+    <string name="output_dir_bottom_sheet_file_retention">Perioadă păstrare fișiere</string>
+    <string name="output_dir_bottom_sheet_edit_retention">Editați perioada</string>
+    <string name="retention_keep_all">Păstrează totul</string>
+    <plurals name="retention_days">
+        <item quantity="one">Păstrează %d zi</item>
+		<item quantity="few">Păstrează %d zile</item>
+		<item quantity="other">Păstrează %d zile</item>
+    </plurals>
+    <string name="retention_unusable">Păstrare fișierelor este dezactivată deoarece șablonul actual pentru numele fișierului este incompatibil cu caracteristica.</string>
+
+    <!-- Output format bottom sheet -->
+    <string name="output_format_bottom_sheet_output_format">Format de ieșire</string>
+    <string name="output_format_bottom_sheet_compression_level">Nivel de compresie</string>
+    <string name="output_format_bottom_sheet_bitrate">Rata de biți</string>
+    <string name="output_format_bottom_sheet_sample_rate">Rata de eșantion</string>
+    <string name="output_format_bottom_sheet_custom_param">Personalizat</string>
+
+    <string name="bottom_sheet_reset">Resetați la valorile implicite</string>
+
+    <!-- Filename template dialog -->
+    <string name="filename_template_dialog_title">Șablon nume fișier</string>
+    <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
+    <string name="filename_template_dialog_message">Introduceți un șablon personalizat pentru numele fișierului de ieșire. Variabilele sunt specificate cu acolade (ex. <annotation type="template">{var}</annotation>). Alternativele sunt specificate cu paranteze drepte (ex. <annotation type="template">[{contact_name}|Necunoscut]</annotation>).\n\nVariabile acceptate: <annotation type="supported_vars">PLACEHOLDER</annotation>. Vezi <annotation type="template_docs">documentația</annotation> pentru o descriere completă a sintaxei.</string>
+    <string name="filename_template_dialog_warning_subdirectories">Datorită performanței slabe ale Android Storage Access Framework, folosiți subdirectoarele (caracter <annotation type="template">/</annotation>) poate provoca întârzieri semnificative la salvarea înregistrării pe unele dispozitive. Întârzierea are loc la sfârșitul apelului și nu ar trebui să aibă ca rezultat pierderea sunetului apelului.</string>
+    <string name="filename_template_dialog_error_empty">Șablonul nu poate fi gol</string>
+    <string name="filename_template_dialog_error_unknown_variable">Variabilă șablon necunoscută: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">Variabila nu poate avea un argument: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_argument">Argument variabilă nevalid: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_syntax">Sintaxa șablonului este nevalidă</string>
+    <string name="filename_template_dialog_action_reset_to_default">Resetați la valoarea implicită</string>
+
+    <!-- File retention dialog -->
+    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_message">Introduceți numărul de zile pentru a păstra înregistrările.</string>
+    <string name="file_retention_error_too_large">Numărul este prea mare</string>
+
+    <!-- Format parameter dialog -->
+    <string name="format_param_dialog_title">Parametru personalizat</string>
+    <string name="format_param_dialog_message">Introduceți o valoare în intervalul [%1$s, %2$s].</string>
+
+    <!-- Format sample rate dialog -->
+    <string name="format_sample_rate_dialog_title">Rată de eșantion personalizată</string>
+    <string name="format_sample_rate_dialog_message_desc">Introduceți o frecvență de eșantion în cadrul unuia dintre aceste intervale:</string>
+    <string name="format_sample_rate_dialog_message_range">[%1$s, %2$s]</string>
+
+    <!-- Format parameter -->
+    <string name="format_param_bitrate_bps">%s bps</string>
+    <string name="format_param_bitrate_kbps">%s kbps</string>
+    <string name="format_param_compression_level">Nivel %s</string>
+
+    <!-- Format sample rate -->
+    <string name="format_sample_rate">%s Hz</string>
+
+    <!-- Min duration dialog -->
+    <string name="min_duration_dialog_title">@string/pref_min_duration_name</string>
+    <string name="min_duration_dialog_message">Introduceți durata minimă pentru păstrarea unei înregistrări, excluzând pauzele și apelurile în așteptare. Acest lucru poate fi întotdeauna suprascris în timpul unui apel din notificare.</string>
+    <plurals name="min_duration_dialog_seconds">
+        <item quantity="one">%d secundă</item>
+		<item quantity="few">%d secunde</item>
+        <item quantity="other">%d secunde</item>
+    </plurals>
+
+    <!-- Notifications -->
+    <string name="notification_channel_persistent_name">Servicii de fundal</string>
+    <string name="notification_channel_persistent_desc">Notificare persistentă pentru înregistrarea apelurilor în fundal</string>
+    <string name="notification_channel_failure_name">Alerte de eșec</string>
+    <string name="notification_channel_failure_desc">Alerte pentru erori în timpul înregistrării apelurilor</string>
+    <string name="notification_channel_success_name">Alerte de succes</string>
+    <string name="notification_channel_success_desc">Alerte pentru înregistrări cu succes a apelurilor</string>
+    <string name="notification_channel_silence_name">Avertismente de liniște absolută</string>
+    <string name="notification_channel_silence_desc">Avertizați dacă înregistrările apelurilor au conținut liniște absolută</string>
+    <string name="notification_direct_boot_migration_failed">Migrarea înregistrărilor nu a reușit</string>
+    <string name="notification_direct_boot_migration_error">Unele înregistrări salvate înainte ca dispozitivul să fie deblocat inițial nu au putut fi mutate în directorul de ieșire.</string>
+    <string name="notification_recording_initializing">Inițializarea înregistrării apelului</string>
+    <string name="notification_recording_in_progress">Înregistrare apel în curs</string>
+    <string name="notification_recording_finalizing">Finalizarea înregistrării apelului</string>
+    <string name="notification_recording_paused">Pauză în înregistrarea apelului</string>
+    <string name="notification_recording_on_hold">Apel în așteptare</string>
+    <string name="notification_recording_failed">Apelul nu a putut fi înregistrat</string>
+    <string name="notification_recording_succeeded">Apel înregistrat cu succes</string>
+    <string name="notification_message_delete_at_end">Înregistrarea va fi ștearsă la sfârșitul apelului. Atingeți Păstrare pentru a păstra înregistrarea.</string>
+    <plurals name="notification_message_delete_at_end_too_short">
+        <item quantity="one">Înregistrarea va fi ștearsă la sfârșitul apelului dacă este mai scurtă de %d secundă. Atingeți Păstrare pentru a păstra înregistrarea.</item>
+		<item quantity="few">Înregistrarea va fi ștearsă la sfârșitul apelului dacă este mai scurtă de %d secunde. Atingeți Păstrare pentru a păstra înregistrarea.</item>
+        <item quantity="other">Înregistrarea va fi ștearsă la sfârșitul apelului dacă este mai scurtă de %d secunde. Atingeți Păstrare pentru a păstra înregistrarea.</item>
+    </plurals>
+    <string name="notification_internal_android_error">Înregistrarea a eșuat într-o componentă internă Android (%s). Este posibil ca acest dispozitiv sau firmware să nu accepte înregistrarea apelurilor.</string>
+    <string name="notification_pure_silence_error">Înregistrarea a fost eliminată deoarece sunetul era complet silențios. Este posibil ca acest dispozitiv să nu accepte înregistrarea apelurilor asociate cu aplicația \'%s\'.</string>
+    <string name="notification_action_open">Deschide</string>
+    <string name="notification_action_share">Distribuie</string>
+    <string name="notification_action_delete">Șterge</string>
+    <string name="notification_action_restore">Păstrare</string>
+    <string name="notification_action_pause">Pauză</string>
+    <string name="notification_action_resume">Reia</string>
+
+    <!-- Quick settings tile -->
+    <string name="quick_settings_label">Înregistrarea apelurilor</string>
+
+    <!-- Snackbar alerts -->
+    <string name="documentsui_not_found">Managerul de fișiere încorporat pentru Android (DocumentsUI) nu este disponibil.</string>
+</resources>
