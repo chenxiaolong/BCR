@@ -52,6 +52,9 @@
     <string name="pref_migrate_direct_boot_name">Migrate direct boot recordings</string>
     <string name="pref_migrate_direct_boot_desc">Migrate recordings made before the first unlock. This normally happens automatically after the first unlock.</string>
 
+    <string name="pref_save_logs_name">Save logs</string>
+    <string name="pref_save_logs_desc">Save logcat logs to a file.</string>
+
     <!-- Pick contact group activity -->
     <string name="pick_contact_group_title">Pick contact group</string>
 
@@ -137,6 +140,10 @@
         <item quantity="one">%d second</item>
         <item quantity="other">%d seconds</item>
     </plurals>
+
+    <!-- Snackbar alerts -->
+    <string name="alert_logcat_success">Successfully saved logs to %1$s</string>
+    <string name="alert_logcat_failure">Failed to save logs to %1$s: %2$s</string>
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Background services</string>

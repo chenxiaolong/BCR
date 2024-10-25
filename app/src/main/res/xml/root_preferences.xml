@@ -94,5 +94,12 @@
             app:title="@string/pref_migrate_direct_boot_name"
             app:summary="@string/pref_migrate_direct_boot_desc"
             app:iconSpaceReserved="false" />
+
+        <Preference
+            app:key="save_logs"
+            app:persistent="false"
+            app:title="@string/pref_save_logs_name"
+            app:summary="@string/pref_save_logs_desc"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

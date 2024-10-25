@@ -42,6 +42,7 @@ class Preferences(initialContext: Context) {
         const val PREF_VERSION = "version"
         private const val PREF_FORCE_DIRECT_BOOT = "force_direct_boot"
         const val PREF_MIGRATE_DIRECT_BOOT = "migrate_direct_boot"
+        const val PREF_SAVE_LOGS = "save_logs"
 
         const val PREF_ADD_CONTACT_RULE = "add_contact_rule"
         const val PREF_ADD_CONTACT_GROUP_RULE = "add_contact_group_rule"

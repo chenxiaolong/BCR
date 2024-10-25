@@ -11,11 +11,16 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreferenceCompat
 import com.chiller3.bcr.BuildConfig
 import com.chiller3.bcr.DirectBootMigrationService
+import com.chiller3.bcr.Logcat
 import com.chiller3.bcr.Permissions
 import com.chiller3.bcr.PreferenceBaseFragment
 import com.chiller3.bcr.Preferences
@@ -30,10 +35,13 @@ import com.chiller3.bcr.rule.RecordRulesActivity
 import com.chiller3.bcr.view.LongClickablePreference
 import com.chiller3.bcr.view.OnPreferenceLongClickListener
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
 class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChangeListener,
     Preference.OnPreferenceClickListener, OnPreferenceLongClickListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
+    private val viewModel: SettingsViewModel by viewModels()
+
     private lateinit var prefs: Preferences
     private lateinit var categoryDebug: PreferenceCategory
     private lateinit var prefCallRecording: SwitchPreferenceCompat
@@ -44,6 +52,7 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
     private lateinit var prefInhibitBatteryOpt: SwitchPreferenceCompat
     private lateinit var prefVersion: LongClickablePreference
     private lateinit var prefMigrateDirectBoot: Preference
+    private lateinit var prefSaveLogs: Preference
 
     private val requestPermissionRequired =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { granted ->
@@ -57,6 +66,12 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
     private val requestInhibitBatteryOpt =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             refreshInhibitBatteryOptState()
+        }
+    private val requestSafSaveLogs =
+        registerForActivityResult(ActivityResultContracts.CreateDocument(Logcat.MIMETYPE)) { uri ->
+            uri?.let {
+                viewModel.saveLogs(it)
+            }
         }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -105,7 +120,20 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
         prefMigrateDirectBoot = findPreference(Preferences.PREF_MIGRATE_DIRECT_BOOT)!!
         prefMigrateDirectBoot.onPreferenceClickListener = this
 
+        prefSaveLogs = findPreference(Preferences.PREF_SAVE_LOGS)!!
+        prefSaveLogs.onPreferenceClickListener = this
+
         refreshDebugPrefs()
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.alerts.collect {
+                    it.firstOrNull()?.let { alert ->
+                        onAlert(alert)
+                    }
+                }
+            }
+        }
     }
 
     override fun onStart() {
@@ -231,6 +259,10 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
                 context.startService(Intent(context, DirectBootMigrationService::class.java))
                 return true
             }
+            prefSaveLogs -> {
+                requestSafSaveLogs.launch(Logcat.FILENAME_DEFAULT)
+                return true
+            }
         }
 
         return false
@@ -286,5 +318,22 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
                 refreshMinDuration()
             }
         }
+    }
+
+    private fun onAlert(alert: SettingsAlert) {
+        val msg = when (alert) {
+            is SettingsAlert.LogcatSucceeded ->
+                getString(R.string.alert_logcat_success, alert.uri.formattedString)
+            is SettingsAlert.LogcatFailed ->
+                getString(R.string.alert_logcat_failure, alert.uri.formattedString, alert.error)
+        }
+
+        Snackbar.make(requireView(), msg, Snackbar.LENGTH_LONG)
+            .addCallback(object : Snackbar.Callback() {
+                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                    viewModel.acknowledgeFirstAlert()
+                }
+            })
+            .show()
     }
 }
