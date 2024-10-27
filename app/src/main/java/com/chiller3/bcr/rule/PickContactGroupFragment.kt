@@ -18,6 +18,7 @@ import androidx.preference.size
 import com.chiller3.bcr.ContactGroupInfo
 import com.chiller3.bcr.PreferenceBaseFragment
 import com.chiller3.bcr.R
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 class PickContactGroupFragment : PreferenceBaseFragment(), Preference.OnPreferenceClickListener {
@@ -25,6 +26,16 @@ class PickContactGroupFragment : PreferenceBaseFragment(), Preference.OnPreferen
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.record_rules_preferences, rootKey)
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.alerts.collect {
+                    it.firstOrNull()?.let { alert ->
+                        onAlert(alert)
+                    }
+                }
+            }
+        }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -72,6 +83,21 @@ class PickContactGroupFragment : PreferenceBaseFragment(), Preference.OnPreferen
         }
 
         return false
+    }
+
+    private fun onAlert(alert: PickContactGroupAlert) {
+        val msg = when (alert) {
+            is PickContactGroupAlert.QueryFailed ->
+                getString(R.string.alert_contact_group_query_failure, alert.error)
+        }
+
+        Snackbar.make(requireView(), msg, Snackbar.LENGTH_LONG)
+            .addCallback(object : Snackbar.Callback() {
+                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                    viewModel.acknowledgeFirstAlert()
+                }
+            })
+            .show()
     }
 
     companion object {

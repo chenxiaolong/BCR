@@ -144,6 +144,7 @@
     <!-- Snackbar alerts -->
     <string name="alert_logcat_success">Successfully saved logs to %1$s</string>
     <string name="alert_logcat_failure">Failed to save logs to %1$s: %2$s</string>
+    <string name="alert_contact_group_query_failure">Failed to query contact groups: %1$s</string>
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Background services</string>

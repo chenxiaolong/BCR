@@ -20,7 +20,7 @@ import com.chiller3.bcr.getContactGroupById
 import com.chiller3.bcr.withContactsByUri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -104,10 +104,10 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
     private val prefs = Preferences(getApplication())
 
     private val _messages = MutableStateFlow<List<Message>>(emptyList())
-    val messages: StateFlow<List<Message>> = _messages
+    val messages = _messages.asStateFlow()
 
     private val _rules = MutableStateFlow<List<DisplayedRecordRule>>(emptyList())
-    val rules: StateFlow<List<DisplayedRecordRule>> = _rules
+    val rules = _rules.asStateFlow()
 
     private val rulesMutex = Mutex()
 
