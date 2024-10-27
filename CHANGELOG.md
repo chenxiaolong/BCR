@@ -13,6 +13,7 @@
 * Add Romanian translations ([PR #613 @gilav23])
 * Add debug option to save log file ([PR #622 @chenxiaolong])
 * Fix another Cursor resource leak ([PR #623 @chenxiaolong])
+* Show error message if contact group picker fails to query the list of groups ([Issue #620], [PR #624 @chenxiaolong])
 
 ### Version 1.72
 
@@ -692,6 +693,7 @@ Non-user-facing changes:
 [Issue #591]: https://github.com/chenxiaolong/BCR/issues/591
 [Issue #598]: https://github.com/chenxiaolong/BCR/issues/598
 [Issue #604]: https://github.com/chenxiaolong/BCR/issues/604
+[Issue #620]: https://github.com/chenxiaolong/BCR/issues/620
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -963,3 +965,4 @@ Non-user-facing changes:
 [PR #615 @NSO73]: https://github.com/chenxiaolong/BCR/pull/615
 [PR #622 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/622
 [PR #623 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/623
+[PR #624 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/624
