@@ -40,6 +40,7 @@ class PickContactGroupViewModel(application: Application) : AndroidViewModel(app
                                     o1,
                                     o2,
                                     { it.title },
+                                    { it.accountName },
                                     { it.rowId },
                                     { it.sourceId },
                                 )

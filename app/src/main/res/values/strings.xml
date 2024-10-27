@@ -57,6 +57,7 @@
 
     <!-- Pick contact group activity -->
     <string name="pick_contact_group_title">Pick contact group</string>
+    <string name="pick_contact_group_local_group">Local group</string>
 
     <!-- Record rules activity -->
     <string name="pref_header_rules">Rules</string>
@@ -75,6 +76,7 @@
     <string name="record_rule_type_unknown_calls_desc">Calls that don\'t match any contact.</string>
     <string name="record_rule_type_contact_name">Contact: %s</string>
     <string name="record_rule_type_contact_group_name">Contact group: %s</string>
+    <string name="record_rule_type_contact_group_name_with_account">Contact group: %1$s (%2$s)</string>
     <string name="record_rule_removable_desc">Long press to remove rule.</string>
 
     <!-- Output directory bottom sheet -->

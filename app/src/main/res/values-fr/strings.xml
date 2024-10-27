@@ -68,6 +68,7 @@
     <string name="record_rule_type_unknown_calls_desc">Appels ne correspondant à aucun contact.</string>
     <string name="record_rule_type_contact_name">Contact : %s</string>
     <string name="record_rule_type_contact_group_name">Groupe de contact : %s</string>
+    <string name="record_rule_type_contact_group_name_with_account">Groupe de contact : %1$s (%2$s)</string>
     <string name="record_rule_removable_desc">Maintenir appuyé pour supprimer la règle.</string>
 
     <!-- Output directory bottom sheet -->

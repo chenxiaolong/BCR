@@ -58,6 +58,7 @@ sealed class DisplayedRecordRule : Comparable<DisplayedRecordRule> {
                     this,
                     other,
                     { it.title },
+                    { it.accountName },
                     { it.rowId },
                     { it.sourceId },
                     { it.record },
@@ -77,18 +78,19 @@ sealed class DisplayedRecordRule : Comparable<DisplayedRecordRule> {
     }
 
     data class Contact(
-        val displayName: String?,
         val lookupKey: String,
         override var record: Boolean,
+        val displayName: String?,
     ) : DisplayedRecordRule() {
         override val sortCategory: Int = 1
     }
 
     data class ContactGroup(
-        val title: String?,
         val rowId: Long,
         val sourceId: String?,
         override var record: Boolean,
+        val title: String?,
+        val accountName: String?,
     ) : DisplayedRecordRule() {
         override val sortCategory: Int = 2
     }
@@ -129,16 +131,21 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
                             is RecordRule.AllCalls -> DisplayedRecordRule.AllCalls(rule.record)
                             is RecordRule.UnknownCalls -> DisplayedRecordRule.UnknownCalls(rule.record)
                             is RecordRule.Contact -> DisplayedRecordRule.Contact(
-                                getContactDisplayName(rule.lookupKey),
                                 rule.lookupKey,
                                 rule.record,
+                                getContactDisplayName(rule.lookupKey),
                             )
-                            is RecordRule.ContactGroup -> DisplayedRecordRule.ContactGroup(
-                                getContactGroupTitle(rule.rowId, rule.sourceId),
-                                rule.rowId,
-                                rule.sourceId,
-                                rule.record,
-                            )
+                            is RecordRule.ContactGroup -> {
+                                val group = getContactGroup(rule.rowId, rule.sourceId)
+
+                                DisplayedRecordRule.ContactGroup(
+                                    rule.rowId,
+                                    rule.sourceId,
+                                    rule.record,
+                                    group?.title,
+                                    group?.accountName,
+                                )
+                            }
                         }
                     }
 
@@ -193,7 +200,7 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    private fun getContactGroupTitle(rowId: Long, sourceId: String?): String? {
+    private fun getContactGroup(rowId: Long, sourceId: String?): ContactGroupInfo? {
         if (getApplication<Application>().checkSelfPermission(Manifest.permission.READ_CONTACTS)
             != PackageManager.PERMISSION_GRANTED) {
             return null
@@ -206,7 +213,7 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
         }
 
         return try {
-            getContactGroupById(getApplication(), groupLookup)?.title
+            getContactGroupById(getApplication(), groupLookup)
         } catch (e: Exception) {
             Log.w(TAG, "Failed to look up contact group", e)
             null
@@ -243,9 +250,9 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
                         val newRules = ArrayList(oldRules)
                         newRules.add(
                             DisplayedRecordRule.Contact(
-                                contact.displayName,
                                 contact.lookupKey,
                                 true,
+                                contact.displayName,
                             )
                         )
 
@@ -278,10 +285,11 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
                         val newRules = ArrayList(oldRules)
                         newRules.add(
                             DisplayedRecordRule.ContactGroup(
-                                group.title,
                                 group.rowId,
                                 group.sourceId,
                                 true,
+                                group.title,
+                                group.accountName,
                             )
                         )
 

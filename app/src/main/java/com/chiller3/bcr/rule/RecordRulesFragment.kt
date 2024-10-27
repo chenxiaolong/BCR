@@ -162,10 +162,19 @@ class RecordRulesFragment : PreferenceBaseFragment(), Preference.OnPreferenceCli
                         onPreferenceLongClickListener = this@RecordRulesFragment
                     }
                     is DisplayedRecordRule.ContactGroup -> {
-                        title = getString(
-                            R.string.record_rule_type_contact_group_name,
-                            rule.title ?: rule.sourceId ?: rule.rowId.toString(),
-                        )
+                        title = if (rule.title != null) {
+                            getString(
+                                R.string.record_rule_type_contact_group_name_with_account,
+                                rule.title,
+                                rule.accountName
+                                    ?: getString(R.string.pick_contact_group_local_group),
+                            )
+                        } else {
+                            getString(
+                                R.string.record_rule_type_contact_group_name,
+                                rule.sourceId ?: rule.rowId.toString(),
+                            )
+                        }
                         summary = getString(R.string.record_rule_removable_desc)
                         isEnabled = contactsGranted
                         onPreferenceLongClickListener = this@RecordRulesFragment

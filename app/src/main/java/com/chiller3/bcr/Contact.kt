@@ -32,6 +32,7 @@ private val CONTACT_GROUP_PROJECTION = arrayOf(
     ContactsContract.Groups._ID,
     ContactsContract.Groups.SOURCE_ID,
     ContactsContract.Groups.TITLE,
+    ContactsContract.Groups.ACCOUNT_NAME,
 )
 
 data class ContactInfo(
@@ -50,6 +51,7 @@ data class ContactGroupInfo(
     val rowId: Long,
     val sourceId: String?,
     val title: String,
+    val accountName: String?,
 ) : Parcelable
 
 @RequiresPermission(Manifest.permission.READ_CONTACTS)
@@ -174,12 +176,14 @@ fun <R> withContactGroups(
         val indexRowId = cursor.getColumnIndexOrThrow(ContactsContract.Groups._ID)
         val indexSourceId = cursor.getColumnIndexOrThrow(ContactsContract.Groups.SOURCE_ID)
         val indexTitle = cursor.getColumnIndexOrThrow(ContactsContract.Groups.TITLE)
+        val indexAccountName = cursor.getColumnIndexOrThrow(ContactsContract.Groups.ACCOUNT_NAME)
 
         block(cursor.asSequence().map {
             ContactGroupInfo(
                 cursor.getLong(indexRowId),
                 cursor.getStringOrNull(indexSourceId),
                 cursor.getString(indexTitle),
+                cursor.getStringOrNull(indexAccountName),
             )
         })
     }

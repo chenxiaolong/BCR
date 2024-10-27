@@ -59,6 +59,7 @@ class PickContactGroupFragment : PreferenceBaseFragment(), Preference.OnPreferen
                 key = PREF_GROUP_PREFIX + i
                 isPersistent = false
                 title = group.title
+                summary = group.accountName ?: getString(R.string.pick_contact_group_local_group)
                 isIconSpaceReserved = false
                 onPreferenceClickListener = this@PickContactGroupFragment
             }
