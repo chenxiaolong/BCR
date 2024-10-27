@@ -87,7 +87,7 @@ sealed class DisplayedRecordRule : Comparable<DisplayedRecordRule> {
     data class ContactGroup(
         val title: String?,
         val rowId: Long,
-        val sourceId: String,
+        val sourceId: String?,
         override var record: Boolean,
     ) : DisplayedRecordRule() {
         override val sortCategory: Int = 2
@@ -134,7 +134,7 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
                                 rule.record,
                             )
                             is RecordRule.ContactGroup -> DisplayedRecordRule.ContactGroup(
-                                getContactGroupTitle(rule.sourceId),
+                                getContactGroupTitle(rule.rowId, rule.sourceId),
                                 rule.rowId,
                                 rule.sourceId,
                                 rule.record,
@@ -193,14 +193,20 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    private fun getContactGroupTitle(sourceId: String): String? {
+    private fun getContactGroupTitle(rowId: Long, sourceId: String?): String? {
         if (getApplication<Application>().checkSelfPermission(Manifest.permission.READ_CONTACTS)
             != PackageManager.PERMISSION_GRANTED) {
             return null
         }
 
+        val groupLookup = if (sourceId != null) {
+            GroupLookup.SourceId(sourceId)
+        } else {
+            GroupLookup.RowId(rowId)
+        }
+
         return try {
-            getContactGroupById(getApplication(), GroupLookup.SourceId(sourceId))?.title
+            getContactGroupById(getApplication(), groupLookup)?.title
         } catch (e: Exception) {
             Log.w(TAG, "Failed to look up contact group", e)
             null

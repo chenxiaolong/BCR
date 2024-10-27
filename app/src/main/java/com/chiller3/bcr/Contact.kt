@@ -48,7 +48,7 @@ sealed interface GroupLookup {
 @Parcelize
 data class ContactGroupInfo(
     val rowId: Long,
-    val sourceId: String,
+    val sourceId: String?,
     val title: String,
 ) : Parcelable
 
@@ -178,7 +178,7 @@ fun <R> withContactGroups(
         block(cursor.asSequence().map {
             ContactGroupInfo(
                 cursor.getLong(indexRowId),
-                cursor.getString(indexSourceId),
+                cursor.getStringOrNull(indexSourceId),
                 cursor.getString(indexTitle),
             )
         })

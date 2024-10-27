@@ -164,7 +164,7 @@ class RecordRulesFragment : PreferenceBaseFragment(), Preference.OnPreferenceCli
                     is DisplayedRecordRule.ContactGroup -> {
                         title = getString(
                             R.string.record_rule_type_contact_group_name,
-                            rule.title ?: rule.sourceId,
+                            rule.title ?: rule.sourceId ?: rule.rowId.toString(),
                         )
                         summary = getString(R.string.record_rule_removable_desc)
                         isEnabled = contactsGranted

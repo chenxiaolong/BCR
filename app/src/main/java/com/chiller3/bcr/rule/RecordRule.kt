@@ -91,7 +91,7 @@ sealed class RecordRule {
 
     data class ContactGroup(
         val rowId: Long,
-        val sourceId: String,
+        val sourceId: String?,
         override val record: Boolean,
     ) : RecordRule() {
         override fun matches(
@@ -123,7 +123,6 @@ sealed class RecordRule {
 
                 val prefSourceId = prefix + PREF_SUFFIX_CONTACT_GROUP_SOURCE_ID
                 val sourceId = prefs.getString(prefSourceId, null)
-                    ?: throw IllegalStateException("Missing $prefSourceId")
 
                 val record = prefs.getBoolean(prefix + PREF_SUFFIX_RECORD, false)
 
