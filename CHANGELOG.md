@@ -12,6 +12,7 @@
 * Update French translations ([PR #615 @NSO73])
 * Add Romanian translations ([PR #613 @gilav23])
 * Add debug option to save log file ([PR #622 @chenxiaolong])
+* Fix another Cursor resource leak ([PR #623 @chenxiaolong])
 
 ### Version 1.72
 
@@ -961,3 +962,4 @@ Non-user-facing changes:
 [PR #613 @gilav23]: https://github.com/chenxiaolong/BCR/pull/613
 [PR #615 @NSO73]: https://github.com/chenxiaolong/BCR/pull/615
 [PR #622 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/622
+[PR #623 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/623
