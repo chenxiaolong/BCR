@@ -15,9 +15,9 @@ import androidx.lifecycle.viewModelScope
 import com.chiller3.bcr.ContactGroupInfo
 import com.chiller3.bcr.GroupLookup
 import com.chiller3.bcr.Preferences
-import com.chiller3.bcr.findContactsByUri
 import com.chiller3.bcr.getContactByLookupKey
 import com.chiller3.bcr.getContactGroupById
+import com.chiller3.bcr.withContactsByUri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -211,7 +211,7 @@ class RecordRulesViewModel(application: Application) : AndroidViewModel(applicat
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val contact = try {
-                    findContactsByUri(getApplication(), uri).asSequence().firstOrNull()
+                    withContactsByUri(getApplication(), uri) { it.firstOrNull() }
                 } catch (e: Exception) {
                     Log.w(TAG, "Failed to query contact at $uri", e)
                     return@withContext

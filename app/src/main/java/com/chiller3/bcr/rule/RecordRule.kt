@@ -11,9 +11,9 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.util.Log
 import com.chiller3.bcr.GroupLookup
-import com.chiller3.bcr.findContactsByPhoneNumber
-import com.chiller3.bcr.getContactGroupMemberships
 import com.chiller3.bcr.output.PhoneNumber
+import com.chiller3.bcr.withContactGroupMemberships
+import com.chiller3.bcr.withContactsByPhoneNumber
 
 sealed class RecordRule {
     abstract val record: Boolean
@@ -177,10 +177,9 @@ sealed class RecordRule {
             if (contactsAllowed) {
                 contactLookupKeys = hashSetOf<String>().apply {
                     for (number in numbers) {
-                        findContactsByPhoneNumber(context, number)
-                            .asSequence()
-                            .map { it.lookupKey }
-                            .toCollection(this)
+                        withContactsByPhoneNumber(context, number) { contacts ->
+                            contacts.map { it.lookupKey }.toCollection(this)
+                        }
                     }
                 }
 
@@ -188,9 +187,9 @@ sealed class RecordRule {
                 if (rules.any { it is ContactGroup }) {
                     contactGroupIds = hashSetOf<GroupLookup>().apply {
                         for (lookupKey in contactLookupKeys) {
-                            getContactGroupMemberships(context, lookupKey)
-                                .asSequence()
-                                .toCollection(this)
+                            withContactGroupMemberships(context, lookupKey) {
+                                it.toCollection(this)
+                            }
                         }
                     }
                 }

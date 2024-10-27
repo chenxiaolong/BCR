@@ -10,7 +10,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.chiller3.bcr.ContactGroupInfo
-import com.chiller3.bcr.findContactGroups
+import com.chiller3.bcr.withContactGroups
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,18 +30,19 @@ class PickContactGroupViewModel(application: Application) : AndroidViewModel(app
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val groups = try {
-                    findContactGroups(getApplication())
-                        .asSequence()
-                        .sortedWith { o1, o2 ->
-                            compareValuesBy(
-                                o1,
-                                o2,
-                                { it.title },
-                                { it.rowId },
-                                { it.sourceId },
-                            )
-                        }
-                        .toList()
+                    withContactGroups(getApplication()) { contactGroups ->
+                        contactGroups
+                            .sortedWith { o1, o2 ->
+                                compareValuesBy(
+                                    o1,
+                                    o2,
+                                    { it.title },
+                                    { it.rowId },
+                                    { it.sourceId },
+                                )
+                            }
+                            .toList()
+                    }
                 } catch (e: Exception) {
                     Log.w(TAG, "Failed to list all contact groups", e)
                     return@withContext

@@ -13,8 +13,10 @@ import android.provider.ContactsContract
 import androidx.annotation.RequiresPermission
 import androidx.core.database.getLongOrNull
 import androidx.core.database.getStringOrNull
+import com.chiller3.bcr.extension.asSequence
 import com.chiller3.bcr.output.PhoneNumber
 import kotlinx.parcelize.Parcelize
+import java.io.IOException
 
 private val PROJECTION = arrayOf(
     ContactsContract.PhoneLookup.LOOKUP_KEY,
@@ -51,7 +53,11 @@ data class ContactGroupInfo(
 ) : Parcelable
 
 @RequiresPermission(Manifest.permission.READ_CONTACTS)
-fun findContactsByPhoneNumber(context: Context, number: PhoneNumber): Iterator<ContactInfo> {
+fun <R> withContactsByPhoneNumber(
+    context: Context,
+    number: PhoneNumber,
+    block: (Sequence<ContactInfo>) -> R,
+): R {
     val rawNumber = number.toString()
 
     // Same heuristic as InCallUI's PhoneNumberHelper.isUriNumber()
@@ -64,7 +70,7 @@ fun findContactsByPhoneNumber(context: Context, number: PhoneNumber): Iterator<C
             numberIsSip.toString())
         .build()
 
-    return findContactsByUri(context, uri)
+    return withContactsByUri(context, uri, block)
 }
 
 @RequiresPermission(Manifest.permission.READ_CONTACTS)
@@ -73,26 +79,29 @@ fun getContactByLookupKey(context: Context, lookupKey: String): ContactInfo? {
         .appendPath(lookupKey)
         .build()
 
-    return findContactsByUri(context, uri).asSequence().firstOrNull()
+    return withContactsByUri(context, uri) { it.firstOrNull() }
 }
 
-fun findContactsByUri(context: Context, uri: Uri) = iterator {
-    context.contentResolver.query(uri, PROJECTION, null, null, null)?.use { cursor ->
+fun <R> withContactsByUri(context: Context, uri: Uri, block: (Sequence<ContactInfo>) -> R): R {
+    val cursor = context.contentResolver.query(uri, PROJECTION, null, null, null)
+        ?: throw IOException("Query returned null cursor: $uri")
+
+    return cursor.use {
         val indexLookupKey = cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup.LOOKUP_KEY)
         val indexName = cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup.DISPLAY_NAME)
 
-        if (cursor.moveToFirst()) {
-            yield(ContactInfo(cursor.getString(indexLookupKey), cursor.getString(indexName)))
-
-            while (cursor.moveToNext()) {
-                yield(ContactInfo(cursor.getString(indexLookupKey), cursor.getString(indexName)))
-            }
-        }
+        block(cursor.asSequence().map {
+            ContactInfo(cursor.getString(indexLookupKey), cursor.getString(indexName))
+        })
     }
 }
 
 @RequiresPermission(Manifest.permission.READ_CONTACTS)
-fun getContactGroupMemberships(context: Context, lookupKey: String) = iterator {
+fun <R> withContactGroupMemberships(
+    context: Context,
+    lookupKey: String,
+    block: (Sequence<GroupLookup>) -> R,
+): R {
     val selection = buildString {
         append(ContactsContract.CommonDataKinds.GroupMembership.LOOKUP_KEY)
         append(" = ? AND ")
@@ -104,35 +113,24 @@ fun getContactGroupMemberships(context: Context, lookupKey: String) = iterator {
         ContactsContract.CommonDataKinds.GroupMembership.CONTENT_ITEM_TYPE,
     )
 
-    context.contentResolver.query(
+    val cursor = context.contentResolver.query(
         ContactsContract.Data.CONTENT_URI,
         PROJECTION_GROUP_MEMBERSHIP,
         selection,
         selectionArgs,
         null,
-    )?.let { cursor ->
+    ) ?: throw IOException("Query returned null cursor")
+
+    return cursor.use {
         val indexRowId = cursor.getColumnIndexOrThrow(
             ContactsContract.CommonDataKinds.GroupMembership.GROUP_ROW_ID)
         val indexSourceId = cursor.getColumnIndexOrThrow(
             ContactsContract.CommonDataKinds.GroupMembership.GROUP_SOURCE_ID)
 
-        if (cursor.moveToFirst()) {
-            cursor.getLongOrNull(indexRowId)?.let {
-                yield(GroupLookup.RowId(it))
-            }
-            cursor.getStringOrNull(indexSourceId)?.let {
-                yield(GroupLookup.SourceId(it))
-            }
-
-            while (cursor.moveToNext()) {
-                cursor.getLongOrNull(indexRowId)?.let {
-                    yield(GroupLookup.RowId(it))
-                }
-                cursor.getStringOrNull(indexSourceId)?.let {
-                    yield(GroupLookup.SourceId(it))
-                }
-            }
-        }
+        block(cursor.asSequence().mapNotNull {
+            cursor.getLongOrNull(indexRowId)?.let { GroupLookup.RowId(it) }
+                ?: cursor.getStringOrNull(indexSourceId)?.let { GroupLookup.SourceId(it) }
+        })
     }
 }
 
@@ -155,39 +153,34 @@ fun getContactGroupById(context: Context, id: GroupLookup): ContactGroupInfo? {
         }
     }
 
-    return findContactGroups(context, selection, selectionArgs).asSequence().firstOrNull()
+    return withContactGroups(context, selection, selectionArgs) { it.firstOrNull() }
 }
 
-fun findContactGroups(
+fun <R> withContactGroups(
     context: Context,
     selection: String? = null,
     selectionArgs: Array<String>? = null,
-) = iterator {
-    context.contentResolver.query(
+    block: (Sequence<ContactGroupInfo>) -> R,
+): R {
+    val cursor = context.contentResolver.query(
         ContactsContract.Groups.CONTENT_URI,
         CONTACT_GROUP_PROJECTION,
         selection,
         selectionArgs,
         null,
-    )?.use { cursor ->
+    ) ?: throw IOException("Query returned null cursor")
+
+    return cursor.use {
         val indexRowId = cursor.getColumnIndexOrThrow(ContactsContract.Groups._ID)
         val indexSourceId = cursor.getColumnIndexOrThrow(ContactsContract.Groups.SOURCE_ID)
         val indexTitle = cursor.getColumnIndexOrThrow(ContactsContract.Groups.TITLE)
 
-        if (cursor.moveToFirst()) {
-            yield(ContactGroupInfo(
+        block(cursor.asSequence().map {
+            ContactGroupInfo(
                 cursor.getLong(indexRowId),
                 cursor.getString(indexSourceId),
                 cursor.getString(indexTitle),
-            ))
-
-            while (cursor.moveToNext()) {
-                yield(ContactGroupInfo(
-                    cursor.getLong(indexRowId),
-                    cursor.getString(indexSourceId),
-                    cursor.getString(indexTitle),
-                ))
-            }
-        }
+            )
+        })
     }
 }

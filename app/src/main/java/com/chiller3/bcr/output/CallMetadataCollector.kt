@@ -16,7 +16,7 @@ import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.core.database.getStringOrNull
 import com.chiller3.bcr.extension.phoneNumber
-import com.chiller3.bcr.findContactsByPhoneNumber
+import com.chiller3.bcr.withContactsByPhoneNumber
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -60,13 +60,14 @@ class CallMetadataCollector(
 
         Log.d(TAG, "Performing manual contact lookup")
 
-        for (contact in findContactsByPhoneNumber(context, number)) {
-            Log.d(TAG, "Found contact display name via manual lookup")
-            return contact.displayName
+        val contact = withContactsByPhoneNumber(context, number) { it.firstOrNull() }
+        if (contact == null) {
+            Log.d(TAG, "Contact not found via manual lookup")
+            return null
         }
 
-        Log.d(TAG, "Contact not found via manual lookup")
-        return null
+        Log.d(TAG, "Found contact display name via manual lookup")
+        return contact.displayName
     }
 
     private fun getContactDisplayName(details: Call.Details, allowManualLookup: Boolean): String? {
