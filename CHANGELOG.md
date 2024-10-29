@@ -7,6 +7,8 @@
     to update the actual links at the bottom of the file.
 -->
 
+### Unreleased
+
 ### Version 1.73
 
 * Update French translations ([PR #615 @NSO73])
