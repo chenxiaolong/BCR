@@ -15,6 +15,8 @@
 * Fix another Cursor resource leak ([PR #623 @chenxiaolong])
 * Show error message if contact group picker fails to query the list of groups ([Issue #620], [PR #624 @chenxiaolong])
 * Enable predictive back gestures ([PR #625 @chenxiaolong])
+* Don't fail to populate contact group list when the SOURCE_ID is null ([Issue #620], [PR #626 @chenxiaolong])
+* Add account name to contact group list ([Issue #620], [PR #626 @chenxiaolong])
 
 ### Version 1.72
 
@@ -968,3 +970,4 @@ Non-user-facing changes:
 [PR #623 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/623
 [PR #624 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/624
 [PR #625 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/625
+[PR #626 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/626
