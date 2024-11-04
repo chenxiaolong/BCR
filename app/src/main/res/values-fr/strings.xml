@@ -1,3 +1,7 @@
+<!--
+    SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson, NSO
+    SPDX-License-Identifier: GPL-3.0-only
+-->
 <resources>
     <string name="app_name_full">Basic Call Recorder</string>
 
@@ -48,8 +52,12 @@
     <string name="pref_migrate_direct_boot_name">Déplacer les enregistrements du démarrage direct</string>
     <string name="pref_migrate_direct_boot_desc">Déplacer les enregistrements réalisés avant le premier déverrouillage. Cela devrait se produire normalement après le premier déverrouillage.</string>
 
+    <string name="pref_save_logs_name">Enregistrer les logs</string>
+    <string name="pref_save_logs_desc">Enregistrer les journeaux logs dans un fichier.</string>
+
     <!-- Pick contact group activity -->
     <string name="pick_contact_group_title">Choisir un groupe de contact</string>
+    <string name="pick_contact_group_local_group">Groupe locale</string>
 
     <!-- Record rules activity -->
     <string name="pref_header_rules">Règles</string>
@@ -59,7 +67,7 @@
     <string name="pref_add_contact_group_rule_desc">Ajouter une règle d\auto-enregistrement pour un groupe de contact.</string>
     <string name="record_rules_rule_added">Règle ajoutée. Maintenir appuyé pour la supprimer.</string>
     <string name="record_rules_rule_exists">Règle déjà existante.</string>
-    <string name="record_rules_info">Quand une règle est active, l\'appel est automatiquement enregistré et peut être supprimé manuellement via la notification. Quand une règle est inactive, l\'enregistrement sera supprimé automatiquement à la fin de l\'appel et peut être restauré manuellement via la notification.</string>
+    <string name="record_rules_info">Quand une règle est active, l\'appel est automatiquement enregistré et peut être supprimé manuellement via la notification. Quand une règle est inactive, l\'enregistrement sera supprimé automatiquement à la fin de l\'appel mais peut être restauré manuellement via la notification.</string>
     <string name="record_rule_type_all_calls_name">Tous les appels</string>
     <string name="record_rule_type_all_calls_desc">La permission contacts est requise pour les règles spécifiques.</string>
     <string name="record_rule_type_all_other_calls_name">Autres appels</string>
@@ -135,6 +143,11 @@
         <item quantity="other">%d secondes</item>
     </plurals>
 
+    <!-- Snackbar alerts -->
+    <string name="alert_logcat_success">Enregistrement des logs réussi vers %1$s</string>
+    <string name="alert_logcat_failure">Échec de l\'enregistrement des logs vers %1$s: %2$s</string>
+    <string name="alert_contact_group_query_failure">Échec de la requête des groupes de contacts : %1$s</string>
+
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Service d\'arrière plan</string>
     <string name="notification_channel_persistent_desc">Notification persistante pour l\'enregistrement des appels</string>
@@ -152,7 +165,7 @@
     <string name="notification_recording_paused">Enregistrement en pause</string>
     <string name="notification_recording_on_hold">Enregistrement en attente</string>
     <string name="notification_recording_failed">Échec de l\'enregistrement</string>
-    <string name="notification_recording_succeeded">Enregistrement validé</string>
+    <string name="notification_recording_succeeded">Enregistrement réussi</string>
     <string name="notification_message_delete_at_end">L\'enregistrement sera supprimé à la fin de l\'appel. Toucher Restaurer pour le conserver.</string>
     <plurals name="notification_message_delete_at_end_too_short">
         <item quantity="one">L\'enregistrement sera supprimé à la fin de l\'appel si sa durée est plus courte que %d seconde. Toucher Restaurer pour le conserver.</item>
