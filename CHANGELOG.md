@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update French translations ([PR #627 @NSO73])
+
 ### Version 1.73
 
 * Update French translations ([PR #615 @NSO73])
@@ -973,3 +975,4 @@ Non-user-facing changes:
 [PR #624 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/624
 [PR #625 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/625
 [PR #626 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/626
+[PR #627 @NSO73]: https://github.com/chenxiaolong/BCR/pull/627
