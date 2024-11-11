@@ -10,6 +10,7 @@ package com.chiller3.bcr.format
 import android.content.Context
 import android.media.MediaCodecList
 import android.media.MediaFormat
+import android.util.Log
 import com.chiller3.bcr.R
 
 sealed class SampleRateInfo(
@@ -36,6 +37,8 @@ sealed class SampleRateInfo(
         context.getString(R.string.format_sample_rate, rate.toString())
 
     companion object {
+        private val TAG = SampleRateInfo::class.java.simpleName
+
         fun fromCodec(format: MediaFormat, tryDefault: UInt): SampleRateInfo {
             val codecList = MediaCodecList(MediaCodecList.REGULAR_CODECS)
 
@@ -57,7 +60,12 @@ sealed class SampleRateInfo(
                 val audioCapabilities = capabilities.audioCapabilities
                     ?: throw IllegalArgumentException("${info.name} encoder has no audio capabilities")
 
-                val rates = audioCapabilities.supportedSampleRates
+                val rates = try {
+                    audioCapabilities.supportedSampleRates
+                } catch (e: NullPointerException) {
+                    Log.w(TAG, "OS is missing 2e961480fe0f4e87f2b7f621b276035864124f69 fix", e)
+                    null
+                }
                 if (rates != null && rates.isNotEmpty()) {
                     val ratesUnsigned = rates.toUIntArray()
                     val default = DiscreteSampleRateInfo.toNearest(ratesUnsigned, tryDefault)!!
