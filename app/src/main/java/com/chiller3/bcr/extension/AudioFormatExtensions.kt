@@ -18,8 +18,10 @@ val AudioFormat.frameSizeInBytesCompat: Int
         2 * channelCount
     }
 
-// Static extension functions are currently not supported in Kotlin. Also, we set usesNonSdkApi to
-// allow access to these hidden fields.
+// Static extension functions are currently not supported in Kotlin. Also, we both install a
+// sysconfig file and set usesNonSdkApi to allow access to these hidden fields. The usesNonSdkApi
+// flag is more reliable, but the sysconfig file is needed on older versions of Android that are
+// missing AOSP commit ca6f81d39525174e926c2fcc824fe9531ffb3563.
 
 @SuppressLint("SoonBlockedPrivateApi")
 val SAMPLE_RATE_HZ_MIN_COMPAT: Int =
