@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update French translations ([PR #627 @NSO73])
+* Work around crash in Android itself when querying sample rates on older Android versions ([Issue #628], [PR #629 @chenxiaolong])
 
 ### Version 1.73
 
@@ -701,6 +702,7 @@ Non-user-facing changes:
 [Issue #598]: https://github.com/chenxiaolong/BCR/issues/598
 [Issue #604]: https://github.com/chenxiaolong/BCR/issues/604
 [Issue #620]: https://github.com/chenxiaolong/BCR/issues/620
+[Issue #628]: https://github.com/chenxiaolong/BCR/issues/628
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -976,3 +978,4 @@ Non-user-facing changes:
 [PR #625 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/625
 [PR #626 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/626
 [PR #627 @NSO73]: https://github.com/chenxiaolong/BCR/pull/627
+[PR #629 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/629
