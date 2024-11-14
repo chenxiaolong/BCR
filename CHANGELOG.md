@@ -11,6 +11,7 @@
 
 * Update French translations ([PR #627 @NSO73])
 * Work around crash in Android itself when querying sample rates on older Android versions ([Issue #628], [PR #629 @chenxiaolong])
+* Work around crash when accessing private Android APIs in Android 9 ([Issue #628], [PR #630 @chenxiaolong])
 
 ### Version 1.73
 
@@ -979,3 +980,4 @@ Non-user-facing changes:
 [PR #626 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/626
 [PR #627 @NSO73]: https://github.com/chenxiaolong/BCR/pull/627
 [PR #629 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/629
+[PR #630 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/630
