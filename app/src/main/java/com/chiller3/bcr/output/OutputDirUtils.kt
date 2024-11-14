@@ -20,6 +20,7 @@ import com.chiller3.bcr.extension.createNestedFile
 import com.chiller3.bcr.extension.deleteIfEmptyDirRecursively
 import com.chiller3.bcr.extension.findNestedFile
 import com.chiller3.bcr.extension.findOrCreateDirectories
+import com.chiller3.bcr.extension.getExtensionFromMimeTypeCompat
 import com.chiller3.bcr.extension.moveToDirectory
 import com.chiller3.bcr.extension.renameToPreserveExt
 import com.chiller3.bcr.extension.toDocumentFile
@@ -143,8 +144,9 @@ class OutputDirUtils(private val context: Context, private val redactor: Redacto
         try {
             val targetFile = sourceFile.moveToDirectory(targetParent)
             if (targetFile != null) {
-                val hasExt =
-                    !MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType).isNullOrEmpty()
+                val hasExt = !MimeTypeMap.getSingleton()
+                    .getExtensionFromMimeTypeCompat(mimeType)
+                    .isNullOrEmpty()
 
                 // We behave like SAF where the target path does not contain the file extension, but
                 // querying the current filename does contain the file extension. Only chop off the

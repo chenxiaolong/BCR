@@ -11,6 +11,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.DocumentsContract
 import android.util.Log
+import android.webkit.MimeTypeMap
 import androidx.core.net.toFile
 import androidx.documentfile.provider.DocumentFile
 import java.io.File
@@ -31,6 +32,10 @@ private val DocumentFile.context: Context?
 
 private val DocumentFile.isTree: Boolean
     get() = uri.scheme == ContentResolver.SCHEME_CONTENT && DocumentsContract.isTreeUri(uri)
+
+private val DocumentFile.isLocal: Boolean
+    get() = uri.scheme == ContentResolver.SCHEME_FILE ||
+            (uri.scheme == ContentResolver.SCHEME_CONTENT && uri.authority == DOCUMENTSUI_AUTHORITY)
 
 private fun <R> DocumentFile.withChildrenWithColumns(
     columns: Array<String>,
@@ -180,6 +185,33 @@ fun DocumentFile.findOrCreateDirectories(path: List<String>): DocumentFile? {
 }
 
 /**
+ * Like [DocumentFile.createFile], but explicitly appends file extensions for certain MIME types
+ * that are not supported in older versions of Android. This special handling is only applied for
+ * local files.
+ */
+fun DocumentFile.createFileCompat(mimeType: String, displayName: String): DocumentFile? {
+    val finalDisplayName = if (isLocal) {
+        buildString {
+            append(displayName)
+
+            val mimeTypeMap = MimeTypeMap.getSingleton()
+
+            if (!mimeTypeMap.hasMimeType(mimeType)) {
+                val ext = mimeTypeMap.getExtensionFromMimeTypeCompat(mimeType)
+                if (ext != null) {
+                    append('.')
+                    append(ext)
+                }
+            }
+        }
+    } else {
+        displayName
+    }
+
+    return createFile(mimeType, finalDisplayName)
+}
+
+/**
  * Like [DocumentFile.createFile], but accepts a nested path and automatically creates intermediate
  * subdirectories.
  *
@@ -191,7 +223,7 @@ fun DocumentFile.createNestedFile(mimeType: String, path: List<String>): Documen
     require(path.isNotEmpty()) { "Path cannot be empty" }
 
     return findOrCreateDirectories(path.dropLast(1))
-        ?.createFile(mimeType, path.last())
+        ?.createFileCompat(mimeType, path.last())
 }
 
 /** Like [DocumentFile.renameTo], but preserves the file extension. */

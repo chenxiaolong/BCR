@@ -20,7 +20,7 @@ val Uri.formattedString: String
         ContentResolver.SCHEME_FILE -> path!!
         ContentResolver.SCHEME_CONTENT -> {
             val prefix = when (authority) {
-                "com.android.externalstorage.documents" -> ""
+                DOCUMENTSUI_AUTHORITY -> ""
                 // Include the authority to reduce ambiguity when this isn't a SAF URI provided by
                 // Android's local filesystem document provider
                 else -> "[$authority] "

@@ -13,6 +13,8 @@ import android.os.Looper
 import android.util.Log
 import android.webkit.MimeTypeMap
 import androidx.documentfile.provider.DocumentFile
+import com.chiller3.bcr.extension.getExtensionFromMimeTypeCompat
+import com.chiller3.bcr.extension.hasExtensionCompat
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.output.OutputDirUtils
 import com.chiller3.bcr.output.OutputFile
@@ -24,7 +26,7 @@ class DirectBootMigrationService : Service() {
         private val TAG = DirectBootMigrationService::class.java.simpleName
 
         private fun isKnownExtension(extension: String): Boolean {
-            return extension == "log" || MimeTypeMap.getSingleton().hasExtension(extension)
+            return extension == "log" || MimeTypeMap.getSingleton().hasExtensionCompat(extension)
         }
 
         private fun splitKnownExtension(name: String): Pair<String, String> {
@@ -58,7 +60,7 @@ class DirectBootMigrationService : Service() {
             }
 
             return knownMimeTypes.find {
-                MimeTypeMap.getSingleton().getExtensionFromMimeType(it.type) == extension
+                MimeTypeMap.getSingleton().getExtensionFromMimeTypeCompat(it.type) == extension
             }
         }
     }
