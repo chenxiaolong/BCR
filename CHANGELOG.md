@@ -13,6 +13,7 @@
 * Work around crash in Android itself when querying sample rates on older Android versions ([Issue #628], [PR #629 @chenxiaolong])
 * Work around crash when accessing private Android APIs in Android 9 ([Issue #628], [PR #630 @chenxiaolong])
 * Update all dependencies ([PR #631 @chenxiaolong])
+* Work around Android 9 and 10 not knowing the file extension for the `audio/mp4` MIME type ([PR #632 @chenxiaolong])
 
 ### Version 1.73
 
@@ -983,3 +984,4 @@ Non-user-facing changes:
 [PR #629 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/629
 [PR #630 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/630
 [PR #631 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/631
+[PR #632 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/632
