@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Rebase icon off the latest material call and mic icons ([PR #635 @chenxiaolong])
+
 ### Version 1.74
 
 * Update French translations ([PR #627 @NSO73])
@@ -987,3 +989,4 @@ Non-user-facing changes:
 [PR #630 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/630
 [PR #631 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/631
 [PR #632 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/632
+[PR #635 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/635
