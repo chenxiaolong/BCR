@@ -167,7 +167,7 @@
         <item quantity="other">La registrazione verrà eliminata alla fine della chiamata se è più breve di %d secondi. Tocca Ripristina per conservare la registrazione.</item>
     </plurals>
     <string name="notification_internal_android_error">La registrazione è fallita a causa di un componente interno di Android  (%s). Questo dispositivo o firmware potrebbe essere non supportare la registrazione delle chiamate.</string>
-    <string name="notification_pure_silence_error">La registrazione è stata scartata perché l'audio era completamente silenzioso. Questo dispositivo potrebbe non supportare la registrazione delle chiamate associate all'app \'%s\'.</string>
+    <string name="notification_pure_silence_error">La registrazione è stata scartata perché l\'audio era completamente silenzioso. Questo dispositivo potrebbe non supportare la registrazione delle chiamate associate all\'app \'%s\'.</string>
     <string name="notification_action_open">Apri</string>
     <string name="notification_action_share">Condividi</string>
     <string name="notification_action_delete">Cancella</string>
