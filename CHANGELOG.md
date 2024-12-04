@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Rebase icon off the latest material call and mic icons ([PR #635 @chenxiaolong])
+* Update Italian translations ([PR #637 @Strange-IPmart])
 
 ### Version 1.74
 
@@ -990,3 +991,4 @@ Non-user-facing changes:
 [PR #631 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/631
 [PR #632 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/632
 [PR #635 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/635
+[PR #637 @Strange-IPmart]: https://github.com/chenxiaolong/BCR/pull/637
