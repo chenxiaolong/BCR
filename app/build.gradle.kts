@@ -14,6 +14,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 java {
@@ -222,8 +223,10 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.preference)
     implementation(libs.androidx.preference.ktx)
-    implementation(libs.material)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.kudzu)
+    implementation(libs.material)
     testImplementation(libs.junit)
 }
 

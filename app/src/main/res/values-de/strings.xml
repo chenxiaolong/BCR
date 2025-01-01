@@ -25,12 +25,7 @@
     <string name="pref_version_name">Version</string>
 
     <!-- Record rules activity -->
-    <string name="pref_add_contact_rule_desc">Füge eine automatische Aufnahmeregel für einen Kontakt hinzu.</string>
-    <string name="record_rules_rule_added">Neue Regel hinzugefügt. Lange gedrückt halten, um sie zu löschen.</string>
-    <string name="record_rules_rule_exists">Regel existiert bereits.</string>
-    <string name="record_rule_type_all_other_calls_name">Alle anderen Anrufe</string>
-    <string name="record_rule_type_unknown_calls_name">Unbekannte Anrufe</string>
-    <string name="record_rule_type_contact_name">Kontakt: %s</string>
+    <string name="record_rule_number_contact_summary">Kontakt: %s</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Ändere Ordner</string>

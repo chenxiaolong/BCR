@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    SPDX-FileCopyrightText: 2024 Andrew Gunnerson
+    SPDX-License-Identifier: GPL-3.0-only
+-->
+<resources>
+    <!-- Accessibility actions for the record rules list because dragging and swiping are not supported. -->
+    <item type="id" name="record_rule_drag_move_up" />
+    <item type="id" name="record_rule_drag_move_down" />
+    <item type="id" name="record_rule_swipe_remove" />
+</resources>

@@ -54,23 +54,9 @@
 
     <!-- Record rules activity -->
     <string name="pref_header_rules">Reguli</string>
-    <string name="pref_add_contact_rule_name">Adăugați o regulă pentru un contact.</string>
-    <string name="pref_add_contact_rule_desc">Adăugați o regulă de înregistrare automată pentru un contact.</string>
-    <string name="pref_add_contact_group_rule_name">Adăugați o regulă pentru un grup de contacte.</string>
-    <string name="pref_add_contact_group_rule_desc">Adăugați o regulă de înregistrare automată pentru un grup de contacte.</string>
-    <string name="record_rules_rule_added">S-a adăugat o nouă regulă. Apăsați lung pe regulă pentru a o șterge.</string>
-    <string name="record_rules_rule_exists">Regula există deja.</string>
-    <string name="record_rules_info">Când o regulă este activată, apelul este înregistrat automat în mod implicit și poate fi șters manual din notificare. Când o regulă este dezactivată, înregistrarea va fi ștearsă la sfârșitul unui apel, cu excepția cazului în care este păstrată folosind butonul Păstrare din notificare.</string>
-    <string name="record_rule_type_all_calls_name">Toate apelurile</string>
-    <string name="record_rule_type_all_calls_desc">Este necesară permisiunea Agendei pentru reguli mai detaliate.</string>
-    <string name="record_rule_type_all_other_calls_name">Toate celelalte apeluri</string>
-    <string name="record_rule_type_all_other_calls_desc">Apeluri care nu corespund cu nicio altă regulă.</string>
-    <string name="record_rule_type_unknown_calls_name">Apeluri necunoscute</string>
-    <string name="record_rule_type_unknown_calls_desc">Apeluri care nu sunt asociate cu niciun contact.</string>
-    <string name="record_rule_type_contact_name">Contact: %s</string>
-    <string name="record_rule_type_contact_group_name">Grup de contact: %s</string>
-    <string name="record_rule_type_contact_group_name_with_account">Grup de contact: %1$s (%2$s)</string>
-    <string name="record_rule_removable_desc">Apăsați lung pentru a elimina regula.</string>
+    <string name="record_rule_number_contact_summary">Contact: %s</string>
+    <string name="record_rule_number_contact_group_unknown_summary">Grup de contact: %s</string>
+    <string name="record_rule_number_contact_group_with_account_summary">Grup de contact: %1$s (%2$s)</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Schimbați directorul</string>

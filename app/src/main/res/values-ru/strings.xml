@@ -35,18 +35,7 @@
 
     <!-- Record rules activity -->
     <string name="pref_header_rules">Правила</string>
-    <string name="pref_add_contact_rule_desc">Добавить правило автоматической записи для контакта.</string>
-    <string name="record_rules_rule_added">Добавлено новое правило. Нажмите и удерживайте правило, чтобы удалить его.</string>
-    <string name="record_rules_rule_exists">Правило уже существует.</string>
-    <string name="record_rules_info">Если правило включено, то по умолчанию запись разговора ведется автоматически и может быть удалена вручную из уведомления. Если правило выключено, запись будет удалена по окончании разговора, если она не была сохранена с помощью кнопки "Восстановить" в уведомлении.</string>
-    <string name="record_rule_type_all_calls_name">Все звонки</string>
-    <string name="record_rule_type_all_calls_desc">Требуется разрешение на чтение контактов для более тонкой настройки правил.</string>
-    <string name="record_rule_type_all_other_calls_name">Все остальные звонки</string>
-    <string name="record_rule_type_all_other_calls_desc">Звонки, не соответствующие никакому другому правилу.</string>
-    <string name="record_rule_type_unknown_calls_name">Звонки от неизвестных</string>
-    <string name="record_rule_type_unknown_calls_desc">Звонки, которые не соответствуют ни одному контакту.</string>
-    <string name="record_rule_type_contact_name">Контакт: %s</string>
-    <string name="record_rule_removable_desc">Нажмите и удерживайте для удаления правила.</string>
+    <string name="record_rule_number_contact_summary">Контакт: %s</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Изменить папку</string>

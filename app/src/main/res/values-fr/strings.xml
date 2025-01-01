@@ -61,23 +61,9 @@
 
     <!-- Record rules activity -->
     <string name="pref_header_rules">Règles</string>
-    <string name="pref_add_contact_rule_name">Ajouter une règle pour un contact</string>
-    <string name="pref_add_contact_rule_desc">Ajouter une règle d\auto-enregistrement pour un contact.</string>
-    <string name="pref_add_contact_group_rule_name">Ajouter une règle pour un groupe de contact</string>
-    <string name="pref_add_contact_group_rule_desc">Ajouter une règle d\auto-enregistrement pour un groupe de contact.</string>
-    <string name="record_rules_rule_added">Règle ajoutée. Maintenir appuyé pour la supprimer.</string>
-    <string name="record_rules_rule_exists">Règle déjà existante.</string>
-    <string name="record_rules_info">Quand une règle est active, l\'appel est automatiquement enregistré et peut être supprimé manuellement via la notification. Quand une règle est inactive, l\'enregistrement sera supprimé automatiquement à la fin de l\'appel mais peut être restauré manuellement via la notification.</string>
-    <string name="record_rule_type_all_calls_name">Tous les appels</string>
-    <string name="record_rule_type_all_calls_desc">La permission contacts est requise pour les règles spécifiques.</string>
-    <string name="record_rule_type_all_other_calls_name">Autres appels</string>
-    <string name="record_rule_type_all_other_calls_desc">Appels définis par aucune règle.</string>
-    <string name="record_rule_type_unknown_calls_name">Appels inconnus</string>
-    <string name="record_rule_type_unknown_calls_desc">Appels ne correspondant à aucun contact.</string>
-    <string name="record_rule_type_contact_name">Contact : %s</string>
-    <string name="record_rule_type_contact_group_name">Groupe de contact : %s</string>
-    <string name="record_rule_type_contact_group_name_with_account">Groupe de contact : %1$s (%2$s)</string>
-    <string name="record_rule_removable_desc">Maintenir appuyé pour supprimer la règle.</string>
+    <string name="record_rule_number_contact_summary">Contact : %s</string>
+    <string name="record_rule_number_contact_group_unknown_summary">Groupe de contact : %s</string>
+    <string name="record_rule_number_contact_group_with_account_summary">Groupe de contact : %1$s (%2$s)</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Changer le dossier</string>

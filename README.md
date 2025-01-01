@@ -19,7 +19,7 @@ BCR is a simple Android call recording app for rooted devices or devices running
   * WAV/PCM - Lossless, largest files, least CPU usage
 * Supports Android's Storage Access Framework (can record to SD cards, USB devices, etc.)
 * Direct boot aware (records calls prior to first unlock after a reboot)
-* Per-contact auto-record rules
+* Auto-record rules
 * Quick settings toggle
 * Material You dynamic theming
 * No persistent notification unless a recording is in progress
@@ -87,7 +87,7 @@ If you live in a jurisdiction where two-party consent is required, you are respo
 
 BCR is direct boot aware, meaning that it's capable of running and recording calls before the device is initially unlocked following a reboot. In this state, most of BCR's functionality will still work, aside from features that require the contact list or call log. In practice, this means:
 
-* If auto-record rules are set up, they are mostly ignored. All contacts are treated as unknown numbers.
+* If auto-record rules are set up, the contact and contact group conditions will not match.
 * It's not possible to manually preserve the recording if an auto-record rule is set to discard it because BCR's notification is not accessible before the initial unlock.
 * The output filename, if using the default template, will only contain the caller ID, not the contact name or call log name.
 
@@ -112,7 +112,7 @@ Note that the output directory is not available before the device is unlocked fo
   * If allowed, the name as shown in the call log can be added to the output filename.
   * This is also required to show the correct phone number when using call redirection apps.
 * `READ_CONTACTS` (**optional**)
-  * If allowed, the contact name can be added to the output filename. It also allows auto-record rules to be set per contact.
+  * If allowed, the contact name can be added to the output filename. It also allows auto-record rules to match contacts and contact groups.
 * `RECEIVE_BOOT_COMPLETED`, `FOREGROUND_SERVICE_SPECIAL_USE` (**automatically granted at install time**)
   * Needed to automatically move recordings made before the initial device unlock to the output directory.
 * `READ_PHONE_STATE` (**optional**)

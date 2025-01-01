@@ -193,12 +193,26 @@ class RecorderThread(
         Log.i(tag, "Evaluating record rules for ${numbers.size} phone number(s)")
 
         val rules = prefs.recordRules ?: Preferences.DEFAULT_RECORD_RULES
-        val keep = try {
-            RecordRule.evaluate(context, rules, numbers)
+        val metadata = callMetadataCollector.callMetadata
+
+        val action = try {
+            RecordRule.evaluate(context, rules, numbers, metadata.direction, metadata.simSlot)
         } catch (e: Exception) {
             Log.w(tag, "Failed to evaluate record rules", e)
             // Err on the side of caution
-            true
+            RecordRule.Action.SAVE
+        }
+
+        Log.i(tag, "Record rule action: $action")
+
+        val keep = when (action) {
+            RecordRule.Action.SAVE -> true
+            RecordRule.Action.DISCARD -> false
+            RecordRule.Action.IGNORE -> {
+                Log.i(tag, "Cancelling due to record rules")
+                cancel()
+                return
+            }
         }
 
         keepRecordingCompareAndSet(
@@ -227,13 +241,13 @@ class RecorderThread(
         try {
             Log.i(tag, "Recording thread started")
 
+            evaluateRules()
+
             if (isCancelled) {
                 Log.i(tag, "Recording cancelled before it began")
             } else {
                 state = State.RECORDING
                 listener.onRecordingStateChanged(this)
-
-                evaluateRules()
 
                 val initialPath = outputPath
                 outputDocFile = dirUtils.createFileInDefaultDir(
@@ -269,7 +283,7 @@ class RecorderThread(
                         }
                     } else {
                         Log.i(tag, "Deleting recording: $finalPath")
-                        outputDocFile!!.delete()
+                        outputDocFile.delete()
                         outputDocFile = null
 
                         status = Status.Discarded(DiscardReason.Intentional)

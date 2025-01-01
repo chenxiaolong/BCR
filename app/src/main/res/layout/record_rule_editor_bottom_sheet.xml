@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    SPDX-FileCopyrightText: 2024 Andrew Gunnerson
+    SPDX-License-Identifier: GPL-3.0-only
+-->
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/bottom_sheet_overall_padding">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceHeadline5" />
+
+        <LinearLayout
+            android:id="@+id/call_number_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/bottom_sheet_section_separation"
+                android:text="@string/record_rule_number_title"
+                android:textAppearance="?attr/textAppearanceHeadline6" />
+
+            <com.chiller3.bcr.view.ChipGroupCentered
+                android:id="@+id/call_number_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/bottom_sheet_title_margin_bottom"
+                app:selectionRequired="true"
+                app:singleSelection="true" />
+
+            <TextView
+                android:id="@+id/call_number_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/bottom_sheet_title_margin_bottom"
+                android:textAlignment="center" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/call_number_change"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/bottom_sheet_title_margin_bottom"
+                style="?attr/materialButtonOutlinedStyle" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/call_type_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/bottom_sheet_section_separation"
+                android:text="@string/record_rule_type_title"
+                android:textAppearance="?attr/textAppearanceHeadline6" />
+
+            <com.chiller3.bcr.view.ChipGroupCentered
+                android:id="@+id/call_type_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/bottom_sheet_title_margin_bottom"
+                app:selectionRequired="true"
+                app:singleSelection="true" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/sim_slot_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/bottom_sheet_section_separation"
+                android:text="@string/record_rule_sim_title"
+                android:textAppearance="?attr/textAppearanceHeadline6" />
+
+            <com.chiller3.bcr.view.ChipGroupCentered
+                android:id="@+id/sim_slot_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/bottom_sheet_title_margin_bottom"
+                app:selectionRequired="true"
+                app:singleSelection="true" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/bottom_sheet_section_separation"
+            android:text="@string/record_rule_action_title"
+            android:textAppearance="?attr/textAppearanceHeadline6" />
+
+        <com.chiller3.bcr.view.ChipGroupCentered
+            android:id="@+id/action_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/bottom_sheet_title_margin_bottom"
+            app:selectionRequired="true"
+            app:singleSelection="true" />
+
+        <TextView
+            android:id="@+id/action_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/bottom_sheet_title_margin_bottom"
+            android:textAlignment="center" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

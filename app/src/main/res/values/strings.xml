@@ -59,25 +59,95 @@
     <string name="pick_contact_group_title">Pick contact group</string>
     <string name="pick_contact_group_local_group">Local group</string>
 
-    <!-- Record rules activity -->
+    <!-- Title of the preference category holding the "Add new rule" option and the list of record rules. -->
     <string name="pref_header_rules">Rules</string>
-    <string name="pref_add_contact_rule_name">Add contact rule</string>
-    <string name="pref_add_contact_rule_desc">Add an auto-record rule for a contact.</string>
-    <string name="pref_add_contact_group_rule_name">Add contact group rule</string>
-    <string name="pref_add_contact_group_rule_desc">Add an auto-record rule for a contact group.</string>
-    <string name="record_rules_rule_added">Added new rule. Long press the rule to delete it.</string>
-    <string name="record_rules_rule_exists">Rule already exists.</string>
-    <string name="record_rules_info">When a rule is turned on, the call is automatically recorded by default and can be manually deleted from the notification. When a rule is turned off, the recording will be deleted at the end of a call unless it is preserved using the Restore button in the notification.</string>
-    <string name="record_rule_type_all_calls_name">All calls</string>
-    <string name="record_rule_type_all_calls_desc">Contacts permission is required for more granular rules.</string>
-    <string name="record_rule_type_all_other_calls_name">All other calls</string>
-    <string name="record_rule_type_all_other_calls_desc">Calls that don\'t match any other rule.</string>
-    <string name="record_rule_type_unknown_calls_name">Unknown calls</string>
-    <string name="record_rule_type_unknown_calls_desc">Calls that don\'t match any contact.</string>
-    <string name="record_rule_type_contact_name">Contact: %s</string>
-    <string name="record_rule_type_contact_group_name">Contact group: %s</string>
-    <string name="record_rule_type_contact_group_name_with_account">Contact group: %1$s (%2$s)</string>
-    <string name="record_rule_removable_desc">Long press to remove rule.</string>
+    <!-- Message shown above the record rules list that indicates what rules do and how to interact with the list UI. -->
+    <string name="record_rules_info">Rules determine which action to take for a matching phone call. They are processed from top to bottom until a match is found. Tap and hold to reorder rules or swipe to delete them.</string>
+    <!-- Title of preference option for adding a new record rule. -->
+    <string name="pref_add_new_rule_name">Add new rule</string>
+    <!-- Description of preference option for adding a new record rule. -->
+    <string name="pref_add_new_rule_desc">Add a new rule to determine the action to take for a matching call.</string>
+    <!-- Numeric title for every custom rule (excluding the default rule). The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rules_list_custom_name">Rule %d</string>
+    <!-- Title for the default/fallback rule at the bottom of the list. -->
+    <string name="record_rules_list_default_name">Default rule</string>
+    <!-- Accessibility option to move a rule up by one spot in the list. -->
+    <string name="record_rules_list_action_move_up">Move rule up</string>
+    <!-- Accessibility option to move a rule down by one spot in the list. -->
+    <string name="record_rules_list_action_move_down">Move rule down</string>
+    <!-- Accessibility option to remove a rule. -->
+    <string name="record_rules_list_action_remove">Remove rule</string>
+
+    <!-- Button in the record rule editor to select a different contact. -->
+    <string name="record_rule_editor_change_contact">Change contact</string>
+    <!-- Button in the record rule editor to select a different contact group. -->
+    <string name="record_rule_editor_change_contact_group">Change contact group</string>
+
+    <!-- Title of the record rule editor section for configuring the call number to match. -->
+    <string name="record_rule_number_title">Call number</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_number_any_chip">Any</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_number_unknown_chip">Unknown</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact rules as a category, not a specific contact. -->
+    <string name="record_rule_number_contact_chip">Contact</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact group rules as a category, not a specific contact group. -->
+    <string name="record_rule_number_contact_group_chip">Contact group</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Match: " prefix for visual consistency. -->
+    <string name="record_rule_number_unknown_summary">Match: Unknown numbers</string>
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. When the contacts permission is denied, this will display an internal contact ID instead of the contact name. -->
+    <string name="record_rule_number_contact_summary">Contact: %s</string>
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. This variant is only used when the contacts permission is denied and only the group ID is available (not the group name or account). -->
+    <string name="record_rule_number_contact_group_unknown_summary">Contact group: %s</string>
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. -->
+    <string name="record_rule_number_contact_group_with_account_summary">Contact group: %1$s (%2$s)</string>
+
+    <!-- Title of the record rule editor section for configuring the type of call to match. -->
+    <string name="record_rule_type_title">Call type</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_any_chip">Any</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_incoming_chip">Incoming</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_outgoing_chip">Outgoing</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_conference_chip">Conference</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_incoming_summary">Type: Incoming call</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_outgoing_summary">Type: Outgoing call</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_conference_summary">Type: Conference call</string>
+
+    <!-- Title of the record rule editor section for configuring which SIM slot to match. -->
+    <string name="record_rule_sim_title">SIM slot</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_sim_any_chip">Any</string>
+    <!-- Text for the UI chip to select a specific SIM slot in the rule editor. The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rule_sim_specific_chip">SIM %d</string>
+    <!-- Summary shown in the record rules list descriptions. This should have a prefix, like other summary lines, for visual consistency. The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rule_sim_specific_summary">SIM slot: %d</string>
+
+    <!-- Title of the record rule editor section to configure the action to take when all conditions match. -->
+    <string name="record_rule_action_title">Action</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_action_save_chip">Save</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_action_discard_chip">Discard</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_action_ignore_chip">Ignore</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_save_desc">Save the recording. The recording can be marked for deletion at the end of the call via the notification shown during a call.</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_discard_desc">Discard the recording at the end of the call. The recording can be preserved via the notification shown during a call.</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_ignore_desc">Completely ignore the call. The call will not be recorded and it is not possible to start the recording during the call.</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_save_summary">Action: Save recording</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_discard_summary">Action: Discard recording</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_ignore_summary">Action: Ignore call</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Change directory</string>

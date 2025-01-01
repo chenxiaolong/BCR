@@ -32,18 +32,7 @@
 
     <!-- Record rules activity -->
     <string name="pref_header_rules">Quy tắc</string>
-    <string name="pref_add_contact_rule_desc">Thêm quy tắc tự động ghi âm cho một liên hệ.</string>
-    <string name="record_rules_rule_added">Đã thêm quy tắc mới. Nhấn giữ quy tắc để xóa.</string>
-    <string name="record_rules_rule_exists">Quy tắc đã tồn tại.</string>
-    <string name="record_rules_info">Khi một quy tắc được bật, cuộc gọi sẽ được tự động ghi âm theo mặc định và có thể xóa thủ công từ thông báo. Khi một quy tắc bị tắt, bản ghi âm sẽ bị xóa khi cuộc gọi kết thúc trừ khi nó được giữ lại bằng cách sử dụng nút Khôi phục trong thông báo.</string>
-    <string name="record_rule_type_all_calls_name">Tất cả cuộc gọi</string>
-    <string name="record_rule_type_all_calls_desc">Cần cấp quyền truy cập liên hệ để có quy tắc chi tiết hơn.</string>
-    <string name="record_rule_type_all_other_calls_name">Tất cả các cuộc gọi khác</string>
-    <string name="record_rule_type_all_other_calls_desc">Các cuộc gọi không khớp với bất kỳ quy tắc nào khác.</string>
-    <string name="record_rule_type_unknown_calls_name">Cuộc gọi không xác định</string>
-    <string name="record_rule_type_unknown_calls_desc">Các cuộc gọi không khớp với bất kỳ liên hệ nào.</string>
-    <string name="record_rule_type_contact_name">Liên hệ: %s</string>
-    <string name="record_rule_removable_desc">Nhấn giữ để xóa quy tắc.</string>
+    <string name="record_rule_number_contact_summary">Liên hệ: %s</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Thay đổi thư mục</string>

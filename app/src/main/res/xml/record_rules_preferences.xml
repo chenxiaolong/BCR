@@ -16,17 +16,10 @@
         app:iconSpaceReserved="false">
 
         <Preference
-            app:key="add_contact_rule"
+            app:key="add_new_rule"
             app:persistent="false"
-            app:title="@string/pref_add_contact_rule_name"
-            app:summary="@string/pref_add_contact_rule_desc"
-            app:iconSpaceReserved="false" />
-
-        <Preference
-            app:key="add_contact_group_rule"
-            app:persistent="false"
-            app:title="@string/pref_add_contact_group_rule_name"
-            app:summary="@string/pref_add_contact_group_rule_desc"
+            app:title="@string/pref_add_new_rule_name"
+            app:summary="@string/pref_add_new_rule_desc"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

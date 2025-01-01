@@ -5,92 +5,69 @@
 
 package com.chiller3.bcr.rule
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.activity.result.contract.ActivityResultContracts
+import android.view.ViewGroup
+import androidx.core.os.BundleCompat
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
-import androidx.preference.get
-import androidx.preference.size
+import androidx.preference.PreferenceScreen
+import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.chiller3.bcr.PreferenceBaseFragment
 import com.chiller3.bcr.Preferences
 import com.chiller3.bcr.R
-import com.chiller3.bcr.view.LongClickableSwitchPreference
-import com.chiller3.bcr.view.OnPreferenceLongClickListener
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
-import kotlin.properties.Delegates
 
 class RecordRulesFragment : PreferenceBaseFragment(), Preference.OnPreferenceClickListener,
-    Preference.OnPreferenceChangeListener, OnPreferenceLongClickListener {
+    RecordRulesAdapter.Listener {
     private val viewModel: RecordRulesViewModel by viewModels()
 
-    private lateinit var categoryRules: PreferenceCategory
-    private lateinit var prefAddContactRule: Preference
-    private lateinit var prefAddContactGroupRule: Preference
+    private lateinit var prefAddNewRule: Preference
 
-    private var ruleOffset by Delegates.notNull<Int>()
-
-    // We don't bother using persisted URI permissions because we need the full READ_CONTACTS
-    // permission for this feature to work at all (eg. to perform lookups by number).
-    private val requestContact =
-        registerForActivityResult(ActivityResultContracts.PickContact()) { uri ->
-            uri?.let { viewModel.addContactRule(it) }
-        }
-    private val requestContactGroup =
-        registerForActivityResult(PickContactGroup()) { group ->
-            group?.let { viewModel.addContactGroupRule(it) }
-        }
+    private val globalAdapter = ConcatAdapter()
+    private lateinit var rulesAdapter: RecordRulesAdapter
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.record_rules_preferences, rootKey)
 
-        categoryRules = findPreference(Preferences.CATEGORY_RULES)!!
+        val context = requireContext()
 
-        ruleOffset = categoryRules.preferenceCount
+        prefAddNewRule = findPreference(Preferences.PREF_ADD_NEW_RULE)!!
+        prefAddNewRule.onPreferenceClickListener = this
 
-        prefAddContactRule = findPreference(Preferences.PREF_ADD_CONTACT_RULE)!!
-        prefAddContactRule.onPreferenceClickListener = this
-
-        prefAddContactGroupRule = findPreference(Preferences.PREF_ADD_CONTACT_GROUP_RULE)!!
-        prefAddContactGroupRule.onPreferenceClickListener = this
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.messages.collect {
-                    it.firstOrNull()?.let { message ->
-                        when (message) {
-                            Message.RuleAdded -> {
-                                showSnackBar(getString(R.string.record_rules_rule_added)) {
-                                    viewModel.acknowledgeFirstMessage()
-                                }
-                            }
-                            Message.RuleExists -> {
-                                showSnackBar(getString(R.string.record_rules_rule_exists)) {
-                                    viewModel.acknowledgeFirstMessage()
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        rulesAdapter = RecordRulesAdapter(context, this)
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.rules.collect {
-                    updateRules(it)
+                    rulesAdapter.setDisplayableRules(it)
                 }
+            }
+        }
+
+        setFragmentResultListener(RecordRuleEditorBottomSheet.TAG) { _, result ->
+            val position = result.getInt(RecordRuleEditorBottomSheet.RESULT_POSITION)
+            val recordRule = BundleCompat.getParcelable<RecordRule>(
+                result,
+                RecordRuleEditorBottomSheet.RESULT_RECORD_RULE,
+                RecordRule::class.java,
+            )!!
+
+            if (position >= 0) {
+                viewModel.replaceRule(position, recordRule)
+            } else {
+                viewModel.addRule(recordRule)
             }
         }
     }
@@ -115,99 +92,36 @@ class RecordRulesFragment : PreferenceBaseFragment(), Preference.OnPreferenceCli
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    private fun updateRules(newRules: List<DisplayedRecordRule>) {
-        // The list is going to be short enough that it doesn't make sense to use DiffUtil and
-        // deal with PreferenceGroup's awkward indexing/ordering mechanism. Just replace all the
-        // preferences every time.
+    override fun onCreateRecyclerView(
+        inflater: LayoutInflater,
+        parent: ViewGroup,
+        savedInstanceState: Bundle?
+    ): RecyclerView = super.onCreateRecyclerView(inflater, parent, savedInstanceState).apply {
+        ItemTouchHelper(RecordRulesTouchHelperCallback(rulesAdapter)).attachToRecyclerView(this)
+    }
 
-        val context = requireContext()
-        val contactsGranted = context.checkSelfPermission(Manifest.permission.READ_CONTACTS) ==
-                PackageManager.PERMISSION_GRANTED
+    override fun onCreateLayoutManager(): RecyclerView.LayoutManager {
+        return RecordRulesLayoutManager(requireContext(), globalAdapter)
+    }
 
-        prefAddContactRule.isEnabled = contactsGranted
-        prefAddContactGroupRule.isEnabled = contactsGranted
-
-        for (i in (ruleOffset until categoryRules.size).reversed()) {
-            val p = categoryRules[i]
-            categoryRules.removePreference(p)
-        }
-
-        for ((i, rule) in newRules.withIndex()) {
-            val p = LongClickableSwitchPreference(context).apply {
-                key = PREF_RULE_PREFIX + i
-                isPersistent = false
-                when (rule) {
-                    is DisplayedRecordRule.AllCalls -> {
-                        if (contactsGranted) {
-                            title = getString(R.string.record_rule_type_all_other_calls_name)
-                            summary = getString(R.string.record_rule_type_all_other_calls_desc)
-                        } else {
-                            title = getString(R.string.record_rule_type_all_calls_name)
-                            summary = getString(R.string.record_rule_type_all_calls_desc)
-                        }
-                        isEnabled = true
-                    }
-                    is DisplayedRecordRule.UnknownCalls -> {
-                        title = getString(R.string.record_rule_type_unknown_calls_name)
-                        summary = getString(R.string.record_rule_type_unknown_calls_desc)
-                        isEnabled = contactsGranted
-                    }
-                    is DisplayedRecordRule.Contact -> {
-                        title = getString(
-                            R.string.record_rule_type_contact_name,
-                            rule.displayName ?: rule.lookupKey,
-                        )
-                        summary = getString(R.string.record_rule_removable_desc)
-                        isEnabled = contactsGranted
-                        onPreferenceLongClickListener = this@RecordRulesFragment
-                    }
-                    is DisplayedRecordRule.ContactGroup -> {
-                        title = if (rule.title != null) {
-                            getString(
-                                R.string.record_rule_type_contact_group_name_with_account,
-                                rule.title,
-                                rule.accountName
-                                    ?: getString(R.string.pick_contact_group_local_group),
-                            )
-                        } else {
-                            getString(
-                                R.string.record_rule_type_contact_group_name,
-                                rule.sourceId ?: rule.rowId.toString(),
-                            )
-                        }
-                        summary = getString(R.string.record_rule_removable_desc)
-                        isEnabled = contactsGranted
-                        onPreferenceLongClickListener = this@RecordRulesFragment
-                    }
-                }
-                isIconSpaceReserved = false
-                isChecked = rule.record
-                onPreferenceChangeListener = this@RecordRulesFragment
-            }
-            categoryRules.addPreference(p)
-        }
+    override fun onCreateAdapter(preferenceScreen: PreferenceScreen): RecyclerView.Adapter<*> {
+        globalAdapter.addAdapter(super.onCreateAdapter(preferenceScreen))
+        globalAdapter.addAdapter(rulesAdapter)
+        return globalAdapter
     }
 
     override fun onPreferenceClick(preference: Preference): Boolean {
         when (preference) {
-            prefAddContactRule -> {
-                requestContact.launch(null)
-                return true
-            }
-            prefAddContactGroupRule -> {
-                requestContactGroup.launch(null)
-                return true
-            }
-        }
+            prefAddNewRule -> {
+                val newRule = RecordRule(
+                    callNumber = RecordRule.CallNumber.Any,
+                    callType = RecordRule.CallType.ANY,
+                    simSlot = RecordRule.SimSlot.Any,
+                    action = RecordRule.Action.SAVE,
+                )
 
-        return false
-    }
-
-    override fun onPreferenceChange(preference: Preference, newValue: Any?): Boolean {
-        when {
-            preference.key.startsWith(PREF_RULE_PREFIX) -> {
-                val index = preference.key.substring(PREF_RULE_PREFIX.length).toInt()
-                viewModel.setRuleRecord(index, newValue as Boolean)
+                RecordRuleEditorBottomSheet.newInstance(-1, newRule, false)
+                    .show(parentFragmentManager.beginTransaction(), RecordRuleEditorBottomSheet.TAG)
                 return true
             }
         }
@@ -215,29 +129,12 @@ class RecordRulesFragment : PreferenceBaseFragment(), Preference.OnPreferenceCli
         return false
     }
 
-    override fun onPreferenceLongClick(preference: Preference): Boolean {
-        when {
-            preference.key.startsWith(PREF_RULE_PREFIX) -> {
-                val index = preference.key.substring(PREF_RULE_PREFIX.length).toInt()
-                viewModel.deleteRule(index)
-                return true
-            }
-        }
-
-        return false
+    override fun onRulesChanged(rules: List<RecordRule>) {
+        viewModel.replaceRules(rules)
     }
 
-    private fun showSnackBar(text: CharSequence, onDismiss: () -> Unit) {
-        Snackbar.make(requireView(), text, Snackbar.LENGTH_LONG)
-            .addCallback(object : Snackbar.Callback() {
-                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                    onDismiss()
-                }
-            })
-            .show()
-    }
-
-    companion object {
-        private const val PREF_RULE_PREFIX = "rule_"
+    override fun onRuleSelected(position: Int, rule: RecordRule, isDefault: Boolean) {
+        RecordRuleEditorBottomSheet.newInstance(position, rule, isDefault)
+            .show(parentFragmentManager.beginTransaction(), RecordRuleEditorBottomSheet.TAG)
     }
 }

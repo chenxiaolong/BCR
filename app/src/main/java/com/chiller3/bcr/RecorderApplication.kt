@@ -49,6 +49,7 @@ class RecorderApplication : Application() {
         // Migrate legacy preferences.
         val prefs = Preferences(this)
         prefs.migrateSampleRate()
+        prefs.migrateLegacyRules()
     }
 
     companion object {

@@ -102,7 +102,7 @@ class ChipGroupCentered : ChipGroup {
      */
     @SuppressLint("RestrictedApi")
     private fun layoutRow(childIndices: IntRange, offsetLeft: Int, offsetTop: Int, rowIndex: Int) {
-        val range = if (layoutDirection == View.LAYOUT_DIRECTION_RTL) {
+        val range = if (layoutDirection == LAYOUT_DIRECTION_RTL) {
             childIndices.reversed()
         } else {
             childIndices

@@ -18,16 +18,18 @@ import com.chiller3.bcr.extension.DOCUMENTSUI_AUTHORITY
 import com.chiller3.bcr.extension.safTreeToDocument
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.output.Retention
+import com.chiller3.bcr.rule.LegacyRecordRule
 import com.chiller3.bcr.rule.RecordRule
 import com.chiller3.bcr.template.Template
+import kotlinx.serialization.encodeToString
 import java.io.File
+import kotlinx.serialization.json.Json
 
 class Preferences(initialContext: Context) {
     companion object {
         private val TAG = Preferences::class.java.simpleName
 
         const val CATEGORY_DEBUG = "debug"
-        const val CATEGORY_RULES = "rules"
 
         const val PREF_CALL_RECORDING = "call_recording"
         const val PREF_RECORD_RULES = "record_rules"
@@ -44,12 +46,11 @@ class Preferences(initialContext: Context) {
         const val PREF_MIGRATE_DIRECT_BOOT = "migrate_direct_boot"
         const val PREF_SAVE_LOGS = "save_logs"
 
-        const val PREF_ADD_CONTACT_RULE = "add_contact_rule"
-        const val PREF_ADD_CONTACT_GROUP_RULE = "add_contact_group_rule"
+        const val PREF_ADD_NEW_RULE = "add_new_rule"
 
         // Not associated with a UI preference
         private const val PREF_DEBUG_MODE = "debug_mode"
-        private const val PREF_RECORD_RULE_PREFIX = "record_rule_"
+        private const val PREF_LEGACY_RECORD_RULE_PREFIX = "record_rule_"
         private const val PREF_FORMAT_NAME = "codec_name"
         private const val PREF_FORMAT_PARAM_PREFIX = "codec_param_"
         private const val PREF_FORMAT_SAMPLE_RATE_PREFIX = "codec_sample_rate_"
@@ -67,9 +68,15 @@ class Preferences(initialContext: Context) {
                     "[_[{contact_name}|{caller_name}|{call_log_name}]|]"
         )
         val DEFAULT_RECORD_RULES = listOf(
-            RecordRule.UnknownCalls(true),
-            RecordRule.AllCalls(true),
+            RecordRule(
+                callNumber = RecordRule.CallNumber.Any,
+                callType = RecordRule.CallType.ANY,
+                simSlot = RecordRule.SimSlot.Any,
+                action = RecordRule.Action.SAVE,
+            ),
         )
+
+        private val JSON_FORMAT = Json { ignoreUnknownKeys = true }
 
         fun isFormatKey(key: String): Boolean =
             key == PREF_FORMAT_NAME
@@ -307,27 +314,36 @@ class Preferences(initialContext: Context) {
         get() = prefs.getBoolean(PREF_CALL_RECORDING, false)
         set(enabled) = prefs.edit { putBoolean(PREF_CALL_RECORDING, enabled) }
 
-    /** List of rules to determine whether to automatically record. */
-    var recordRules: List<RecordRule>?
+    /** No longer used, except for migration to modern rules. */
+    private var legacyRecordRules: List<LegacyRecordRule>?
         get() {
-            val rules = mutableListOf<RecordRule>()
+            val rules = mutableListOf<LegacyRecordRule>()
             while (true) {
-                val prefix = "${PREF_RECORD_RULE_PREFIX}${rules.size}_"
-                val rule = RecordRule.fromRawPreferences(prefs, prefix) ?: break
+                val prefix = "${PREF_LEGACY_RECORD_RULE_PREFIX}${rules.size}_"
+                val rule = LegacyRecordRule.fromRawPreferences(prefs, prefix) ?: break
                 rules.add(rule)
             }
             return rules.ifEmpty { null }
         }
         set(rules) = prefs.edit {
-            val keys = prefs.all.keys.filter { it.startsWith(PREF_RECORD_RULE_PREFIX) }
+            val keys = prefs.all.keys.filter { it.startsWith(PREF_LEGACY_RECORD_RULE_PREFIX) }
             for (key in keys) {
                 remove(key)
             }
 
             if (rules != null) {
-                for ((i, rule) in rules.withIndex()) {
-                    rule.toRawPreferences(this, "${PREF_RECORD_RULE_PREFIX}${i}_")
-                }
+                throw IllegalArgumentException("Setting legacy rules is not supported")
+            }
+        }
+
+    /** List of rules to determine which action to take for a specific call. */
+    var recordRules: List<RecordRule>?
+        get() = prefs.getString(PREF_RECORD_RULES, null)?.let { JSON_FORMAT.decodeFromString(it) }
+        set(rules) = prefs.edit {
+            if (rules == null) {
+                remove(PREF_RECORD_RULES)
+            } else {
+                putString(PREF_RECORD_RULES, JSON_FORMAT.encodeToString(rules))
             }
         }
 
@@ -441,6 +457,19 @@ class Preferences(initialContext: Context) {
             val (format, _, _) = Format.fromPreferences(this)
             setFormatSampleRate(format, sampleRate)
             setOptionalUint(PREF_SAMPLE_RATE, UInt.MAX_VALUE, null)
+        }
+    }
+
+    /**
+     * Migrate legacy rules to modern rules.
+     *
+     * This migration will be removed in version 1.80.
+     */
+    fun migrateLegacyRules() {
+        val legacyRules = legacyRecordRules
+        if (legacyRules != null) {
+            recordRules = LegacyRecordRule.convertToModernRules(legacyRules)
+            legacyRecordRules = null
         }
     }
 }
