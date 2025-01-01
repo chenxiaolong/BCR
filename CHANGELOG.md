@@ -19,6 +19,7 @@
 * Fix regression from version 1.73 that caused BCR to crash when recording calls in direct boot mode ([Issue #643], [PR #645 @chenxiaolong])
 * Remove migration of the old global sample-rate option ([PR #646 @chenxiaolong])
   * Folks upgrading from pre-1.62 versions should first upgrade to 1.74 first and then upgrade to this version.
+* Switch to kotlinx-serialization library for writing metadata JSON file ([PR #647 @chenxiaolong])
 
 ### Version 1.74
 
@@ -1007,3 +1008,4 @@ Non-user-facing changes:
 [PR #644 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/644
 [PR #645 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/645
 [PR #646 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/646
+[PR #647 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/647
