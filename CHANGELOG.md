@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.75
 
 * New record rules system ([Issue #406], [Issue #509], [Issue #607], [PR #644 @chenxiaolong])
     * Supports matching call type (incoming, outgoing, conference) and SIM slot
