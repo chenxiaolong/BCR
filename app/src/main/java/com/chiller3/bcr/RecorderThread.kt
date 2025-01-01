@@ -23,21 +23,24 @@ import com.chiller3.bcr.extension.phoneNumber
 import com.chiller3.bcr.extension.toDocumentFile
 import com.chiller3.bcr.format.Encoder
 import com.chiller3.bcr.format.Format
-import com.chiller3.bcr.format.NoParamInfo
-import com.chiller3.bcr.format.RangedParamInfo
-import com.chiller3.bcr.format.RangedParamType
 import com.chiller3.bcr.output.CallMetadata
 import com.chiller3.bcr.output.CallMetadataCollector
+import com.chiller3.bcr.output.CallMetadataJson
 import com.chiller3.bcr.output.DaysRetention
+import com.chiller3.bcr.output.FormatJson
 import com.chiller3.bcr.output.NoRetention
 import com.chiller3.bcr.output.OutputDirUtils
 import com.chiller3.bcr.output.OutputFile
 import com.chiller3.bcr.output.OutputFilenameGenerator
+import com.chiller3.bcr.output.OutputJson
 import com.chiller3.bcr.output.OutputPath
+import com.chiller3.bcr.output.ParameterType
 import com.chiller3.bcr.output.PhoneNumber
+import com.chiller3.bcr.output.RecordingJson
 import com.chiller3.bcr.output.Retention
 import com.chiller3.bcr.rule.RecordRule
-import org.json.JSONObject
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.lang.Process
 import java.nio.ByteBuffer
 import java.time.Duration
@@ -423,43 +426,37 @@ class RecorderThread(
         Log.i(tag, "Writing metadata file")
 
         try {
-            val formatJson = JSONObject().apply {
-                put("type", format.name)
-                put("mime_type_container", format.mimeTypeContainer)
-                put("mime_type_audio", format.mimeTypeAudio)
-                put("parameter_type", when (val info = format.paramInfo) {
-                    NoParamInfo -> "none"
-                    is RangedParamInfo -> when (info.type) {
-                        RangedParamType.CompressionLevel -> "compression_level"
-                        RangedParamType.Bitrate -> "bitrate"
-                    }
-                })
-                put("parameter", (formatParam ?: format.paramInfo.default).toInt())
+            val formatJson = FormatJson(
+                type = format.name,
+                mimeTypeContainer = format.mimeTypeContainer,
+                mimeTypeAudio = format.mimeTypeAudio,
+                parameterType = ParameterType.fromParamInfo(format.paramInfo),
+                parameter = formatParam ?: format.paramInfo.default,
+            )
+            val recordingJson = recordingInfo?.let {
+                RecordingJson(
+                    framesTotal = it.framesTotal,
+                    framesEncoded = it.framesEncoded,
+                    sampleRate = it.sampleRate,
+                    channelCount = it.channelCount,
+                    durationSecsTotal = it.durationSecsTotal,
+                    durationSecsEncoded = it.durationSecsEncoded,
+                    bufferFrames = it.bufferFrames,
+                    bufferOverruns = it.bufferOverruns,
+                    wasEverPaused = it.wasEverPaused,
+                    wasEverHolding = it.wasEverHolding,
+                )
             }
-            val recordingJson = if (recordingInfo != null) {
-                JSONObject().apply {
-                    put("frames_total", recordingInfo.framesTotal)
-                    put("frames_encoded", recordingInfo.framesEncoded)
-                    put("sample_rate", recordingInfo.sampleRate)
-                    put("channel_count", recordingInfo.channelCount)
-                    put("duration_secs_total", recordingInfo.durationSecsTotal)
-                    put("duration_secs_encoded", recordingInfo.durationSecsEncoded)
-                    put("buffer_frames", recordingInfo.bufferFrames)
-                    put("buffer_overruns", recordingInfo.bufferOverruns)
-                    put("was_ever_paused", recordingInfo.wasEverPaused)
-                    put("was_ever_holding", recordingInfo.wasEverHolding)
-                }
-            } else {
-                JSONObject.NULL
-            }
-            val outputJson = JSONObject().apply {
-                put("format", formatJson)
-                put("recording", recordingJson)
-            }
-            val metadataJson = callMetadataCollector.callMetadata.toJson(context).apply {
-                put("output", outputJson)
-            }
-            val metadataBytes = metadataJson.toString(4).toByteArray()
+            val outputJson = OutputJson(
+                format = formatJson,
+                recording = recordingJson,
+            )
+            val metadataJson = CallMetadataJson(
+                context,
+                callMetadataCollector.callMetadata,
+                outputJson,
+            )
+            val metadataBytes = JSON_FORMAT.encodeToString(metadataJson).toByteArray()
 
             // Always create in the default directory and then move to ensure that we don't race
             // with the direct boot file migration process.
@@ -741,6 +738,10 @@ class RecorderThread(
 
         const val MIME_LOGCAT = "text/plain"
         const val MIME_METADATA = "application/json"
+
+        private val JSON_FORMAT = Json {
+            prettyPrint = true
+        }
     }
 
     private data class RecordingInfo(
