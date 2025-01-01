@@ -55,7 +55,6 @@ class Preferences(initialContext: Context) {
         private const val PREF_FORMAT_PARAM_PREFIX = "codec_param_"
         private const val PREF_FORMAT_SAMPLE_RATE_PREFIX = "codec_sample_rate_"
         const val PREF_OUTPUT_RETENTION = "output_retention"
-        const val PREF_SAMPLE_RATE = "sample_rate"
         private const val PREF_NEXT_NOTIFICATION_ID = "next_notification_id"
         private const val PREF_ALREADY_MIGRATED = "already_migrated"
 
@@ -445,20 +444,6 @@ class Preferences(initialContext: Context) {
             prefs.edit { putInt(PREF_NEXT_NOTIFICATION_ID, nextId + 1) }
             nextId
         }
-
-    /**
-     * Migrate legacy global sample rate to format-specific sample rate.
-     *
-     * This migration will be removed in version 1.65.
-     */
-    fun migrateSampleRate() {
-        val sampleRate = getOptionalUint(PREF_SAMPLE_RATE, UInt.MAX_VALUE)
-        if (sampleRate != null) {
-            val (format, _, _) = Format.fromPreferences(this)
-            setFormatSampleRate(format, sampleRate)
-            setOptionalUint(PREF_SAMPLE_RATE, UInt.MAX_VALUE, null)
-        }
-    }
 
     /**
      * Migrate legacy rules to modern rules.

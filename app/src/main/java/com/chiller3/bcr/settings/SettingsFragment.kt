@@ -310,7 +310,7 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
                 refreshOutputDir()
             }
             // Update the output format state when it's changed by the bottom sheet.
-            Preferences.isFormatKey(key) || key == Preferences.PREF_SAMPLE_RATE -> {
+            Preferences.isFormatKey(key) -> {
                 refreshOutputFormat()
             }
             // Update when it's changed by the dialog.
