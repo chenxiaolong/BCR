@@ -20,6 +20,7 @@
 * Remove migration of the old global sample-rate option ([PR #646 @chenxiaolong])
   * Folks upgrading from pre-1.62 versions should first upgrade to 1.74 first and then upgrade to this version.
 * Switch to kotlinx-serialization library for writing metadata JSON file ([PR #647 @chenxiaolong])
+* Update dependencies ([PR #648 @chenxiaolong])
 
 ### Version 1.74
 
@@ -1009,3 +1010,4 @@ Non-user-facing changes:
 [PR #645 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/645
 [PR #646 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/646
 [PR #647 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/647
+[PR #648 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/648
