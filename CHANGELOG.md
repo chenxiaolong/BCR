@@ -16,6 +16,7 @@
     * All existing rules are automatically migrated
 * Rebase icon off the latest material call and mic icons ([PR #635 @chenxiaolong])
 * Update Italian translations ([PR #637 @Strange-IPmart])
+* Fix regression from version 1.73 that caused BCR to crash when recording calls in direct boot mode ([Issue #643], [PR #645 @chenxiaolong])
 
 ### Version 1.74
 
@@ -719,6 +720,7 @@ Non-user-facing changes:
 [Issue #607]: https://github.com/chenxiaolong/BCR/issues/607
 [Issue #620]: https://github.com/chenxiaolong/BCR/issues/620
 [Issue #628]: https://github.com/chenxiaolong/BCR/issues/628
+[Issue #643]: https://github.com/chenxiaolong/BCR/issues/643
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -1001,3 +1003,4 @@ Non-user-facing changes:
 [PR #635 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/635
 [PR #637 @Strange-IPmart]: https://github.com/chenxiaolong/BCR/pull/637
 [PR #644 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/644
+[PR #645 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/645
