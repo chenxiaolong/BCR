@@ -9,6 +9,11 @@
 
 ### Unreleased
 
+* New record rules system ([Issue #406], [Issue #509], [Issue #607], [PR #644 @chenxiaolong])
+    * Supports matching call type (incoming, outgoing, conference) and SIM slot
+    * Adds a new option for completely ignoring a call instead of just deferring deletion of the recording until the end of the call
+    * More polished UI for editing and reordering rules
+    * All existing rules are automatically migrated
 * Rebase icon off the latest material call and mic icons ([PR #635 @chenxiaolong])
 * Update Italian translations ([PR #637 @Strange-IPmart])
 
@@ -688,6 +693,7 @@ Non-user-facing changes:
 [Issue #380]: https://github.com/chenxiaolong/BCR/issues/380
 [Issue #388]: https://github.com/chenxiaolong/BCR/issues/388
 [Issue #394]: https://github.com/chenxiaolong/BCR/issues/394
+[Issue #406]: https://github.com/chenxiaolong/BCR/issues/406
 [Issue #411]: https://github.com/chenxiaolong/BCR/issues/411
 [Issue #422]: https://github.com/chenxiaolong/BCR/issues/422
 [Issue #429]: https://github.com/chenxiaolong/BCR/issues/429
@@ -695,6 +701,7 @@ Non-user-facing changes:
 [Issue #455]: https://github.com/chenxiaolong/BCR/issues/455
 [Issue #491]: https://github.com/chenxiaolong/BCR/issues/491
 [Issue #507]: https://github.com/chenxiaolong/BCR/issues/507
+[Issue #509]: https://github.com/chenxiaolong/BCR/issues/509
 [Issue #513]: https://github.com/chenxiaolong/BCR/issues/513
 [Issue #536]: https://github.com/chenxiaolong/BCR/issues/536
 [Issue #539]: https://github.com/chenxiaolong/BCR/issues/539
@@ -709,6 +716,7 @@ Non-user-facing changes:
 [Issue #591]: https://github.com/chenxiaolong/BCR/issues/591
 [Issue #598]: https://github.com/chenxiaolong/BCR/issues/598
 [Issue #604]: https://github.com/chenxiaolong/BCR/issues/604
+[Issue #607]: https://github.com/chenxiaolong/BCR/issues/607
 [Issue #620]: https://github.com/chenxiaolong/BCR/issues/620
 [Issue #628]: https://github.com/chenxiaolong/BCR/issues/628
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
@@ -992,3 +1000,4 @@ Non-user-facing changes:
 [PR #632 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/632
 [PR #635 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/635
 [PR #637 @Strange-IPmart]: https://github.com/chenxiaolong/BCR/pull/637
+[PR #644 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/644
