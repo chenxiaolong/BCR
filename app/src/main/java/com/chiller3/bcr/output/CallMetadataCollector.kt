@@ -60,7 +60,12 @@ class CallMetadataCollector(
 
         Log.d(TAG, "Performing manual contact lookup")
 
-        val contact = withContactsByPhoneNumber(context, number) { it.firstOrNull() }
+        val contact = try {
+            withContactsByPhoneNumber(context, number) { it.firstOrNull() }
+        } catch (e: Exception) {
+            Log.d(TAG, "Failed to look up contact", e)
+            return null
+        }
         if (contact == null) {
             Log.d(TAG, "Contact not found via manual lookup")
             return null

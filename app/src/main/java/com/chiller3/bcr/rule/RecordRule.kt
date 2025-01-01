@@ -5,10 +5,8 @@
 
 package com.chiller3.bcr.rule
 
-import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.os.Parcelable
 import android.util.Log
 import com.chiller3.bcr.GroupLookup
@@ -169,12 +167,10 @@ data class RecordRule(
             direction: CallDirection?,
             simSlot: Int?,
         ): Action {
-            val contactsAllowed = context.checkSelfPermission(Manifest.permission.READ_CONTACTS) ==
-                    PackageManager.PERMISSION_GRANTED
             var contactLookupKeys = emptySet<String>()
             var contactGroupIds = emptySet<GroupLookup>()
 
-            if (contactsAllowed) {
+            try {
                 contactLookupKeys = hashSetOf<String>().apply {
                     for (number in numbers) {
                         withContactsByPhoneNumber(context, number) { contacts ->
@@ -193,8 +189,10 @@ data class RecordRule(
                         }
                     }
                 }
-            } else {
-                Log.i(TAG, "Contacts permission not granted")
+            } catch (e: SecurityException) {
+                Log.w(TAG, "Permission denied when querying contacts and contact groups", e)
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed to query contacts and contact groups", e)
             }
 
             for (rule in rules) {
