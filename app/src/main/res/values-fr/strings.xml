@@ -59,11 +59,95 @@
     <string name="pick_contact_group_title">Choisir un groupe de contact</string>
     <string name="pick_contact_group_local_group">Groupe locale</string>
 
-    <!-- Record rules activity -->
+    <!-- Title of the preference category holding the "Add new rule" option and the list of record rules. -->
     <string name="pref_header_rules">Règles</string>
+    <!-- Message shown above the record rules list that indicates what rules do and how to interact with the list UI. -->
+    <string name="record_rules_info">Les règles détermines les actions à effectuer pour les appels correspondants. Elles sont appliqués de haut en bas jusqu\'à une correspondance trouvée. Maintenir pour les réorganiser ou balayer pour les supprimer.</string>
+    <!-- Title of preference option for adding a new record rule. -->
+    <string name="pref_add_new_rule_name">Ajouter une nouvelle règle</string>
+    <!-- Description of preference option for adding a new record rule. -->
+    <string name="pref_add_new_rule_desc">Ajouter une règle définissant l\'action à effectuer pour l\'appel correspondant.</string>
+    <!-- Numeric title for every custom rule (excluding the default rule). The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rules_list_custom_name">Règle %d</string>
+    <!-- Title for the default/fallback rule at the bottom of the list. -->
+    <string name="record_rules_list_default_name">Règle par défaut</string>
+    <!-- Accessibility option to move a rule up by one spot in the list. -->
+    <string name="record_rules_list_action_move_up">Remonter la règle</string>
+    <!-- Accessibility option to move a rule down by one spot in the list. -->
+    <string name="record_rules_list_action_move_down">Déscendre la règle</string>
+    <!-- Accessibility option to remove a rule. -->
+    <string name="record_rules_list_action_remove">Supprimer la règle</string>
+
+    <!-- Button in the record rule editor to select a different contact. -->
+    <string name="record_rule_editor_change_contact">Changer contact</string>
+    <!-- Button in the record rule editor to select a different contact group. -->
+    <string name="record_rule_editor_change_contact_group">Changer groupe de contact</string>
+
+    <!-- Title of the record rule editor section for configuring the call number to match. -->
+    <string name="record_rule_number_title">Numéro d\'appel</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_number_any_chip">Tous</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_number_unknown_chip">Inconnu</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact rules as a category, not a specific contact. -->
+    <string name="record_rule_number_contact_chip">Contact</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact group rules as a category, not a specific contact group. -->
+    <string name="record_rule_number_contact_group_chip">Groupe de contact</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Match: " prefix for visual consistency. -->
+    <string name="record_rule_number_unknown_summary">Correspondance : Numéros inconnus</string>
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. When the contacts permission is denied, this will display an internal contact ID instead of the contact name. -->
     <string name="record_rule_number_contact_summary">Contact : %s</string>
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. This variant is only used when the contacts permission is denied and only the group ID is available (not the group name or account). -->
     <string name="record_rule_number_contact_group_unknown_summary">Groupe de contact : %s</string>
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. -->
     <string name="record_rule_number_contact_group_with_account_summary">Groupe de contact : %1$s (%2$s)</string>
+
+    <!-- Title of the record rule editor section for configuring the type of call to match. -->
+    <string name="record_rule_type_title">Type d\'appel</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_any_chip">Tous</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_incoming_chip">Entrant</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_outgoing_chip">Sortant</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_conference_chip">Groupé</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_incoming_summary">Type : Appel entrant</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_outgoing_summary">Type : Appel sortant</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_conference_summary">Type : Appel groupé</string>
+
+    <!-- Title of the record rule editor section for configuring which SIM slot to match. -->
+    <string name="record_rule_sim_title">Emplacement SIM</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_sim_any_chip">Tous</string>
+    <!-- Text for the UI chip to select a specific SIM slot in the rule editor. The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rule_sim_specific_chip">SIM %d</string>
+    <!-- Summary shown in the record rules list descriptions. This should have a prefix, like other summary lines, for visual consistency. The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rule_sim_specific_summary">Emplacement SIM : %d</string>
+
+    <!-- Title of the record rule editor section to configure the action to take when all conditions match. -->
+    <string name="record_rule_action_title">Action</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_action_save_chip">Sauvegarder</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_action_discard_chip">Abandonner</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_action_ignore_chip">Ignorer</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_save_desc">Sauvegarder l\'enregistrement. L\'enregistrement peut être sélectionné pour suppression à la fin de l\'appel via la notification durant l\'échange.</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_discard_desc">Abandonner l\'enregistrmement à la fin de l\'appel. L\'enregistrement peut être conservé via la notification durant l\'échange.</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_ignore_desc">Ignorer complètement l\'appel. L\'appel ne sera pas enregistré et il sera impossible de démarrer l\'enregistrement pendant l\'échange.</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_save_summary">Action : Sauvegarder l\'enregistrement</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_discard_summary">Action : Abandonner l\'enregistrement</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_ignore_summary">Action : Ignorer l\'appel</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Changer le dossier</string>
