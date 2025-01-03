@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update French translations ([PR #651 @NSO73])
+
 ### Version 1.75
 
 * New record rules system ([Issue #406], [Issue #509], [Issue #607], [PR #644 @chenxiaolong])
@@ -1013,3 +1015,4 @@ Non-user-facing changes:
 [PR #646 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/646
 [PR #647 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/647
 [PR #648 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/648
+[PR #651 @NSO73]: https://github.com/chenxiaolong/BCR/pull/651
