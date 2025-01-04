@@ -232,9 +232,7 @@ class CallMetadataCollector(
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
             && context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
-                == PackageManager.PERMISSION_GRANTED
-            && context.packageManager.hasSystemFeature(
-                PackageManager.FEATURE_TELEPHONY_SUBSCRIPTION)) {
+                == PackageManager.PERMISSION_GRANTED) {
             val subscriptionManager = context.getSystemService(SubscriptionManager::class.java)
 
             val telephonyManager = context.getSystemService(TelephonyManager::class.java)
