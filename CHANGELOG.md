@@ -10,6 +10,8 @@
 ### Unreleased
 
 * Update French translations ([PR #651 @NSO73])
+* Assume that `android.hardware.telephony.subscription` is supported on Android 11+ ([Issue #649], [PR #652 @chenxiaolong])
+    * OxygenOS on OnePlus devices supports this feature, but does not declare that it does. This workaround allows features that depend on the SIM slot (eg. SIM slot rules) to work.
 
 ### Version 1.75
 
@@ -729,6 +731,7 @@ Non-user-facing changes:
 [Issue #620]: https://github.com/chenxiaolong/BCR/issues/620
 [Issue #628]: https://github.com/chenxiaolong/BCR/issues/628
 [Issue #643]: https://github.com/chenxiaolong/BCR/issues/643
+[Issue #649]: https://github.com/chenxiaolong/BCR/issues/649
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -1016,3 +1019,4 @@ Non-user-facing changes:
 [PR #647 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/647
 [PR #648 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/648
 [PR #651 @NSO73]: https://github.com/chenxiaolong/BCR/pull/651
+[PR #652 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/652
