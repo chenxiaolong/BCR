@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.76
 
 * Update French translations ([PR #651 @NSO73])
 * Assume that `android.hardware.telephony.subscription` is supported on Android 11+ ([Issue #649], [PR #652 @chenxiaolong])
