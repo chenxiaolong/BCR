@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update Italian translations ([PR #653 @nicorac])
+
 ### Version 1.76
 
 * Update French translations ([PR #651 @NSO73])
@@ -1022,3 +1024,4 @@ Non-user-facing changes:
 [PR #648 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/648
 [PR #651 @NSO73]: https://github.com/chenxiaolong/BCR/pull/651
 [PR #652 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/652
+[PR #653 @nicorac]: https://github.com/chenxiaolong/BCR/pull/653
