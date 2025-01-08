@@ -1,31 +1,179 @@
+<!--
+    SPDX-FileContributor: Translated by Tzagim
+-->
 <resources>
     <string name="app_name_full">מקליט שיחות בסיסי</string>
 
     <!-- Preference headers -->
     <string name="pref_header_general">כללי</string>
     <string name="pref_header_about">אודות</string>
+    <string name="pref_header_debug">דיבאג</string>
 
     <!-- General preferences -->
     <string name="pref_call_recording_name">הקלטת שיחה</string>
-    <string name="pref_call_recording_desc">הקלט שיחות יוצאות ונכנסות. חובה לאפשר הרשאות למיקרופון ולהתראות, מומלץ לאפשר גישה לטלפון ולאנשי הקשר על מנת שקבצי ההקלטות יישמרו עם נתוני השיחה</string>
+    <string name="pref_call_recording_desc">הקלטת שיחות טלפון נכנסות ויוצאות. נדרשות הרשאות מיקרופון והתראה להקלטה ברקע.</string>
 
     <string name="pref_record_rules_name">כללי הקלטה אוטומטית</string>
-    <string name="pref_record_rules_desc">הגדר אילו שיחות יוקלטו באופן אוטומטי.</string>
-
-    <string name="pref_output_dir_name">מיקום האחסון</string>
-    <string name="pref_output_dir_desc">בחר תיקיה לאחסון הקלטות</string>
-
-    <string name="pref_output_format_name">פורמט הקובץ</string>
-    <string name="pref_output_format_desc">בחר סוג פורמט לקובץ ההקלטה</string>
-
-    <string name="pref_inhibit_batt_opt_name">השבת את חיסכון בסוללה</string>
-    <string name="pref_inhibit_batt_opt_desc">מפחית את הסיכוי שהאפליקציה תיעצר על ידי המערכת</string>
-
+    <string name="pref_record_rules_desc">הגדרה אילו שיחות יוקלטו באופן אוטומטי.</string>
+    <string name="pref_output_dir_name">מיקום פלט</string>
+    <string name="pref_output_dir_desc">בחירת ספרייה לאחסון הקלטות. יש ללחוץ לחיצה ארוכה כדי לפתוח במנהל הקבצים.</string>
+    <string name="pref_output_format_name">פורמט הפלט</string>
+    <string name="pref_output_format_desc">בחירת פורמט קידוד עבור ההקלטות.</string>
+    <string name="pref_min_duration_name">משך הקלטה מינימלי</string>
+    <plurals name="pref_min_duration_desc">
+        <item quantity="one">שמירת הקלטה באורך של %d שניות לפחות.</item>
+        <item quantity="other">שמירת הקלטות באורך של %d שניות לפחות.</item>
+    </plurals>
+    <string name="pref_min_duration_desc_zero">שמירת הקלטות בכל אורך.</string>
+    <string name="pref_inhibit_batt_opt_name">השבתת מיטוב סוללה</string>
+    <string name="pref_inhibit_batt_opt_desc">מפחית את הסיכוי שהיישום יסגר על ידי המערכת.</string>
     <string name="pref_write_metadata_name">כתיבת קובץ מטה-נתונים</string>
-    <string name="pref_write_metadata_desc">צור קובץ JSON המכיל פרטים על השיחה לצד קובץ השמע.</string>
+    <string name="pref_write_metadata_desc">צור קובץ JSON המכיל פרטים על השיחה ליד קובץ האודיו.</string>
+    <string name="pref_record_telecom_apps_name">הקלטת יישומים משולבי טלקום</string>
+    <string name="pref_record_telecom_apps_desc">הקלטת שיחות מיישומי צד שלישי המשתלבות עם מערכת הטלקום של אנדרואיד. הקלטות של שיחות אלו יכללו ככל הנראה רק שקט.</string>
+    <string name="pref_record_dialing_state_name">הקלטת שיחות לפני חיבור</string>
+    <string name="pref_record_dialing_state_desc">עבור שיחות יוצאות, התחל להקליט מיד עם תחילת החיוג במקום להמתין עד שהשיחה תתחבר.</string>
 
     <!-- About "preference" -->
-    <string name="pref_version_name">מספר גרסה</string>
+    <string name="pref_version_name">גירסה</string>
+
+    <!-- Debug preferences -->
+    <string name="pref_force_direct_boot_name">כפיית מצב אתחול ישיר</string>
+    <string name="pref_force_direct_boot_desc">העמד פנים שההתקן נמצא במצב לפני ביטול הנעילה הראשון לצורך בדיקה.</string>
+    <string name="pref_migrate_direct_boot_name">העברת הקלטות אתחול ישיר</string>
+    <string name="pref_migrate_direct_boot_desc">העברת הקלטות שנעשו לפני ביטול הנעילה הראשון. זה קורה בדרך כלל אוטומטית לאחר ביטול הנעילה הראשון.</string>
+    <string name="pref_save_logs_name">שמירת יומנים</string>
+    <string name="pref_save_logs_desc">שמירת יומני logcat בקובץ.</string>
+
+    <!-- Pick contact group activity -->
+    <string name="pick_contact_group_title">בחירת קבוצת אנשי קשר</string>
+    <string name="pick_contact_group_local_group">קבוצה מקומית</string>
+
+    <!-- Title of the preference category holding the "Add new rule" option and the list of record rules. -->
+    <string name="pref_header_rules">כללים</string>
+    
+    <!-- Message shown above the record rules list that indicates what rules do and how to interact with the list UI. -->
+    <string name="record_rules_info">הכללים קובעים איזו פעולה לבצע עבור שיחת טלפון תואמת. הם מעובדים מלמעלה למטה עד שנמצאת התאמה. יש להקיש ולהחזיק כדי לסדר מחדש את הכללים או להחליק כדי למחוק אותם.</string>
+
+    <!-- Title of preference option for adding a new record rule. -->
+    <string name="pref_add_new_rule_name">הוספת כלל חדש</string>
+
+    <!-- Description of preference option for adding a new record rule. -->
+    <string name="pref_add_new_rule_desc">הוספת כלל חדש כדי לקבוע את הפעולה שיש לבצע עבור שיחה תואמת.</string>
+
+    <!-- Numeric title for every custom rule (excluding the default rule). The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rules_list_custom_name">כלל %d</string>
+
+    <!-- Title for the default/fallback rule at the bottom of the list. -->
+    <string name="record_rules_list_default_name">כלל ברירת מחדל</string>
+
+    <!-- Accessibility option to move a rule up by one spot in the list. -->
+    <string name="record_rules_list_action_move_up">העברת כלל למעלה</string>
+
+    <!-- Accessibility option to move a rule down by one spot in the list. -->
+    <string name="record_rules_list_action_move_down">העבת כלל למטה</string>
+
+    <!-- Accessibility option to remove a rule. -->
+    <string name="record_rules_list_action_remove">הסרת כלל</string>
+
+    <!-- Button in the record rule editor to select a different contact. -->
+    <string name="record_rule_editor_change_contact">שינוי איש קשר</string>
+
+    <!-- Button in the record rule editor to select a different contact group. -->
+    <string name="record_rule_editor_change_contact_group">שינוי קבוצת איש קשר</string>
+
+    <!-- Title of the record rule editor section for configuring the call number to match. -->
+    <string name="record_rule_number_title">מספר טלפון</string>
+
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_number_any_chip">הכל</string>
+
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_number_unknown_chip">לא ידוע</string>
+
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact rules as a category, not a specific contact. -->
+    <string name="record_rule_number_contact_chip">איש קשר</string>
+
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact group rules as a category, not a specific contact group. -->
+    <string name="record_rule_number_contact_group_chip">קבוצת איש קשר</string>
+
+    <!-- Summary shown in the record rules list descriptions. This should include a "Match: " prefix for visual consistency. -->
+    <string name="record_rule_number_unknown_summary">התאמה: מספרים לא ידועים</string>
+
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. When the contacts permission is denied, this will display an internal contact ID instead of the contact name. -->
+    <string name="record_rule_number_contact_summary">איש קשר: %s</string>
+
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. This variant is only used when the contacts permission is denied and only the group ID is available (not the group name or account). -->
+    <string name="record_rule_number_contact_group_unknown_summary">קבוצת איש קשר: %s</string>
+
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. -->
+    <string name="record_rule_number_contact_group_with_account_summary">קבוצת איש קשר: %1$s (%2$s)</string>
+
+    <!-- Title of the record rule editor section for configuring the type of call to match. -->
+    <string name="record_rule_type_title">סוג שיחה</string>
+
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_any_chip">הכל</string>
+
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_incoming_chip">נכנסות</string>
+
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_outgoing_chip">יוצאות</string>
+
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_conference_chip">ועידה</string>
+
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_incoming_summary">סוג: שיחה נכנסת</string>
+
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_outgoing_summary">סוג: שיחה יוצאת</string>
+
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_conference_summary">סוג: שיחת ועידה</string>
+
+    <!-- Title of the record rule editor section for configuring which SIM slot to match. -->
+    <string name="record_rule_sim_title">חריץ SIM</string>
+
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_sim_any_chip">הכל</string>
+
+    <!-- Text for the UI chip to select a specific SIM slot in the rule editor. The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rule_sim_specific_chip">SIM %d</string>
+    
+    <!-- Summary shown in the record rules list descriptions. This should have a prefix, like other summary lines, for visual consistency. The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rule_sim_specific_summary">חריץ SIM: %d</string>
+
+    <!-- Title of the record rule editor section to configure the action to take when all conditions match. -->
+    <string name="record_rule_action_title">פעולה</string>
+
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_action_save_chip">שמירה</string>
+
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_action_discard_chip">השלכה</string>
+
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_action_ignore_chip">התעלמות</string>
+
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_save_desc">שמירת ההקלטה. ניתן לסמן את ההקלטה למחיקה בתום השיחה באמצעות ההתראה המוצגת במהלך שיחה.</string>
+
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_discard_desc">מחיקת ההקלטה בסוף השיחה. ניתן לשמור את ההקלטה באמצעות ההתראה המוצגת במהלך שיחה.</string>
+
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_ignore_desc">התעלמות מוחלטת מהשיחה. השיחה לא תוקלט ולא ניתן להתחיל את ההקלטה במהלך השיחה.</string>
+
+    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_save_summary">פעולה: שמירת הקלטה</string>
+
+    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_discard_summary">פעולה: מחיקת הקלטה</string>
+
+    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_ignore_summary">פעולה: התעלמות מהשיחה</string>
 
     <!-- Record rules activity -->
     <string name="pref_header_rules">כללים</string>
@@ -37,57 +185,83 @@
     <string name="output_dir_bottom_sheet_edit_template">עריכת תבנית</string>
     <string name="output_dir_bottom_sheet_file_retention">שמירת קבצים</string>
     <string name="output_dir_bottom_sheet_edit_retention">עריכת שמירה</string>
-    <string name="retention_keep_all">שמור הכול</string>
+    <string name="retention_keep_all">שמירת הכול</string>
     <plurals name="retention_days">
-        <item quantity="one">לשמור %d יום</item>
-        <item quantity="two">לשמור %d יומיים</item>
+        <item quantity="one">לשמור יום אחד</item>
+        <item quantity="two">לשמור יומיים</item>
         <item quantity="other">לשמור %d ימים</item>
     </plurals>
     <string name="retention_unusable">שמירת קבצים אינה זמינה מכיוון שתבנית שם הקובץ הנוכחית אינה תואמת לתכונה.</string>
 
-
     <!-- Output format bottom sheet -->
-    <string name="output_format_bottom_sheet_output_format">פורמט הקובץ</string>
+    <string name="output_format_bottom_sheet_output_format">פורמט הפלט</string>
     <string name="output_format_bottom_sheet_compression_level">רמת דחיסה</string>
     <string name="output_format_bottom_sheet_bitrate">קצב סיביות</string>
     <string name="output_format_bottom_sheet_sample_rate">קצב דגימה</string>
-    <string name="output_format_bottom_sheet_custom_param">Custom</string>
-
+    <string name="output_format_bottom_sheet_custom_param">מותאם אישית</string>
     <string name="bottom_sheet_reset">איפוס ברירות מחדל</string>
 
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">תבנית שם קובץ</string>
+
     <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
-    <string name="filename_template_dialog_message">Enter a custom template for the output filename. Variables are specified with curly braces (eg. <annotation type="template">{var}</annotation>). Fallbacks are specified with square brackets (eg. <annotation type="template">[{contact_name}|Unknown]</annotation>).
-Supported variables: <annotation type="supported_vars">PLACEHOLDER</annotation>. See <annotation type="template_docs">the documentation</annotation> לתיאור מלא של התחביר.</string>
+    <string name="filename_template_dialog_message">הזן תבנית מותאמת אישית עבור שם קובץ הפלט. משתנים מצוינים בסוגריים מסולסלים (למשל <annotation type="template">{var}</annotation>). נפילות מצוינות בסוגריים מרובעים (למשל <annotation type="template">[{contact_name}|לא ידוע]</annotation>).\n\nמשתנים נתמכים: <annotation type="supported_vars">PLACEHOLDER</annotation>. ניתן לראות <annotation type="template_docs">תיעוד</annotation> לתיאור מלא של התחביר.</string>
     <string name="filename_template_dialog_warning_subdirectories">עקב הביצועים הגרועים של Android Storage Access Framework, באמצעות ספריות משנה (<annotation type="template">/</annotation> character) עלול לגרום לעיכובים משמעותיים בעת שמירת ההקלטה במכשירים מסוימים. ההשהיה מתרחשת בסוף השיחה ולא אמורה לגרום לאובדן אודיו של השיחה.</string>
     <string name="filename_template_dialog_error_empty">התבנית לא יכולה להיות ריקה</string>
     <string name="filename_template_dialog_error_unknown_variable">משתנה תבנית לא ידוע: <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_has_argument">למשתנה לא יכול להיות ארגומנט: <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_invalid_argument">ארגומנט משתנה לא חוקי: <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_invalid_syntax">תחביר התבנית אינו חוקי</string>
-    <string name="filename_template_dialog_action_reset_to_default">אפס לברירת המחדל</string>
+    <string name="filename_template_dialog_action_reset_to_default">איפוס לברירת המחדל</string>
 
     <!-- File retention dialog -->
     <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
-    <string name="file_retention_dialog_message">הזן את מספר הימים לשמירת הקלטות.</string>
+    <string name="file_retention_dialog_message">הזנת את מספר הימים לשמירת הקלטות.</string>
     <string name="file_retention_error_too_large">המספר גדול מדי</string>
 
     <!-- Format parameter dialog -->
     <string name="format_param_dialog_title">פרמטר מותאם אישית</string>
-    <string name="format_param_dialog_message">הזן ערך בטווח [%1$s, %2$s].</string>
+    <string name="format_param_dialog_message">הזנת ערך בטווח [%1$s, %2$s].</string>
+
+    <!-- Format sample rate dialog -->
+    <string name="format_sample_rate_dialog_title">קצב דגימה מותאם אישית</string>
+    <string name="format_sample_rate_dialog_message_desc">הזנת קצב דגימה באחד מהטווחים הבאים:</string>
+    <string name="format_sample_rate_dialog_message_range">[%1$s, %2$s]</string>
 
     <!-- Format parameter -->
-    <string name="format_param_bitrate_kbps">%s kbps</string>
+    <string name="format_param_bitrate_bps">%s ב"ש</string>
+    <string name="format_param_bitrate_kbps">%s קב"ש</string>
     <string name="format_param_compression_level">רמה %s</string>
+
+    <!-- Format sample rate -->
+    <string name="format_sample_rate">%s Hz</string>
+
+    <!-- Min duration dialog -->
+    <string name="min_duration_dialog_title">@string/pref_min_duration_name</string>
+    <string name="min_duration_dialog_message">הזנת משך הזמן המינימלי לשמירת הקלטה, לא כולל הפסקות והשהיית שיחות. תמיד ניתן לעקוף זאת במהלך שיחה מההתראה.</string>
+    <plurals name="min_duration_dialog_seconds">
+        <item quantity="one">שניה אחת</item>
+        <item quantity="two">שתי שניות</item>
+        <item quantity="other">%d שניות</item>
+    </plurals>
+
+    <!-- Snackbar alerts -->
+    <string name="alert_logcat_success">יומנים נשמרו בהצלחה ב %1$s</string>
+    <string name="alert_logcat_failure">שמירת יומנים נכשלה %1$s: %2$s</string>
+    <string name="alert_contact_group_query_failure">השאילתה לקבוצות אנשי קשר נכשלה: %1$s</string>
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">שירותי רקע</string>
     <string name="notification_channel_persistent_desc">התראה מתמשכת עבור הקלטת שיחות ברקע</string>
-    <string name="notification_channel_failure_name">התראות על שגיאה בהקלטת שיחה</string>
+    <string name="notification_channel_failure_name">התראות על כשל</string>
+    <string name="notification_channel_persistent_desc">התראה מתמשכת עבור הקלטת שיחות ברקע</string>
     <string name="notification_channel_failure_desc">התראות על שגיאות במהלך הקלטת שיחה</string>
     <string name="notification_channel_success_name">התראות סיום הקלטה בהצלחה</string>
     <string name="notification_channel_success_desc">התראות הקלטות שיחות שהסתיימו בהצלחה</string>
+    <string name="notification_channel_silence_name">התראות מושפקות לחלוטין</string>
+    <string name="notification_channel_silence_desc">הזהר אם הקלטות שיחות הכילו שקט מוחלט</string>
+    <string name="notification_direct_boot_migration_failed">העברת ההקלטות נכשלה</string>
+    <string name="notification_direct_boot_migration_error">לא ניתן היה להעביר חלק מהקלטות שנשמרו לפני ביטול הנעילה הראשונית של ההתקן לספריית הפלט.</string>
     <string name="notification_recording_initializing">אתחול הקלטת שיחות</string>
     <string name="notification_recording_in_progress">הקלטת שיחה מתבצעת</string>
     <string name="notification_recording_finalizing">סיום הקלטת שיחות</string>
@@ -95,14 +269,20 @@ Supported variables: <annotation type="supported_vars">PLACEHOLDER</annotation>.
     <string name="notification_recording_on_hold">שיחה בהמתנה</string>
     <string name="notification_recording_failed">הקלטת שיחה נכשלה</string>
     <string name="notification_recording_succeeded">השיחה הוקלטה בהצלחה</string>
-    <string name="notification_message_delete_at_end">ההקלטה תימחק בסיום השיחה. הקש על שחזור כדי לשמור את ההקלטה.</string>
+    <string name="notification_message_delete_at_end">ההקלטה תימחק בסיום השיחה. יש להקיש על שחזור כדי לשמור את ההקלטה.</string>
+    <plurals name="notification_message_delete_at_end_too_short">
+        <item quantity="one">ההקלטה תימחק בסיום השיחה אם היא קצרה משניה. יש להקיש על שחזור כדי לשמור את ההקלטה.</item>
+        <item quantity="two">ההקלטה תימחק בסוף השיחה אם היא קצרה משתי שניות. יש להקיש על שחזור כדי לשמור את ההקלטה.</item>
+        <item quantity="other">ההקלטה תימחק בסיום השיחה אם היא קצרה מ-%d שניה. יש להקיש על שחזור כדי לשמור את ההקלטה.</item>
+    </plurals>
     <string name="notification_internal_android_error">ההקלטה נכשלה ברכיב Android פנימי (%s). ייתכן שהמכשיר או הקושחה אינם תומכים בהקלטת שיחות</string>
+    <string name="notification_pure_silence_error">ההקלטה נמחקה מכיוון שהשמע היה שקט לחלוטין. ייתכן שההתקן הזה לא תומך בהקלטת שיחות המשויכות ליישום \'%s\'.</string>
     <string name="notification_action_open">פתיחה</string>
     <string name="notification_action_share">שיתוף</string>
     <string name="notification_action_delete">מחיקה</string>
-    <string name="notification_action_restore">לשחזר</string>
+    <string name="notification_action_restore">שיחזור</string>
     <string name="notification_action_pause">עצירה</string>
-    <string name="notification_action_resume">המשך</string>
+    <string name="notification_action_resume">המשכה</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">הקלטת שיחה</string>
