@@ -175,10 +175,6 @@
     <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
     <string name="record_rule_action_ignore_summary">פעולה: התעלמות מהשיחה</string>
 
-    <!-- Record rules activity -->
-    <string name="pref_header_rules">כללים</string>
-    <string name="record_rule_number_contact_summary">איש קשר: %s</string>
-
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">שינוי תיקיה</string>
     <string name="output_dir_bottom_sheet_filename_template">תבנית שם קובץ</string>
