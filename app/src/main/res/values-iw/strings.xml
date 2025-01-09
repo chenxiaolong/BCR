@@ -110,13 +110,13 @@
     <!-- SIM preferences -->
 
     <!-- Title of the record rule editor section for configuring which SIM slot to match. -->
-    <string name="record_rule_sim_title">חריץ SIM</string>
+    <string name="record_rule_sim_title">חריץ סים</string>
     <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
     <string name="record_rule_sim_any_chip">הכל</string>
     <!-- Text for the UI chip to select a specific SIM slot in the rule editor. The placeholder value (Arabic numerals) is a number starting at 1. -->
-    <string name="record_rule_sim_specific_chip">SIM %d</string>
+    <string name="record_rule_sim_specific_chip">סים %d</string>
     <!-- Summary shown in the record rules list descriptions. This should have a prefix, like other summary lines, for visual consistency. The placeholder value (Arabic numerals) is a number starting at 1. -->
-    <string name="record_rule_sim_specific_summary">חריץ SIM: %d</string>
+    <string name="record_rule_sim_specific_summary">חריץ סים: %d</string>
 
     <!-- Action preferences -->
 
@@ -143,9 +143,9 @@
     <string name="output_dir_bottom_sheet_edit_retention">עריכת שמירה</string>
     <string name="retention_keep_all">שמירת הכול</string>
     <plurals name="retention_days">
-        <item quantity="one">לשמור יום אחד</item>
-        <item quantity="two">לשמור יומיים</item>
-        <item quantity="other">לשמור %d ימים</item>
+        <item quantity="one">שמירה ליום אחד</item>
+        <item quantity="two">שמירה ליומיים</item>
+        <item quantity="other">שמירה ל-%d ימים</item>
     </plurals>
     <string name="retention_unusable">שמירת קבצים אינה זמינה מכיוון שתבנית שם הקובץ הנוכחית אינה תואמת לתכונה.</string>
 
@@ -161,7 +161,7 @@
     <string name="filename_template_dialog_title">תבנית שם קובץ</string>
 
     <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
-    <string name="filename_template_dialog_message">הזן תבנית מותאמת אישית עבור שם קובץ הפלט. משתנים מצוינים בסוגריים מסולסלים (למשל <annotation type="template">{var}</annotation>). נפילות מצוינות בסוגריים מרובעים (למשל <annotation type="template">[{contact_name}|לא ידוע]</annotation>).\n\nמשתנים נתמכים: <annotation type="supported_vars">PLACEHOLDER</annotation>. ניתן לראות <annotation type="template_docs">תיעוד</annotation> לתיאור מלא של התחביר.</string>
+    <string name="filename_template_dialog_message">הזנת תבנית מותאמת אישית עבור שם קובץ הפלט. משתנים מצוינים בסוגריים מסולסלים (למשל <annotation type="template">{var}</annotation>). נפילות מצוינות בסוגריים מרובעים (למשל <annotation type="template">[{contact_name}|לא ידוע]</annotation>).\n\nמשתנים נתמכים: <annotation type="supported_vars">PLACEHOLDER</annotation>. ניתן לראות <annotation type="template_docs">תיעוד</annotation> לתיאור מלא של התחביר.</string>
     <string name="filename_template_dialog_warning_subdirectories">עקב הביצועים הגרועים של Android Storage Access Framework, באמצעות ספריות משנה (<annotation type="template">/</annotation> character) עלול לגרום לעיכובים משמעותיים בעת שמירת ההקלטה במכשירים מסוימים. ההשהיה מתרחשת בסוף השיחה ולא אמורה לגרום לאובדן אודיו של השיחה.</string>
     <string name="filename_template_dialog_error_empty">התבנית לא יכולה להיות ריקה</string>
     <string name="filename_template_dialog_error_unknown_variable">משתנה תבנית לא ידוע: <annotation type="template">PLACEHOLDER</annotation></string>
@@ -172,7 +172,7 @@
 
     <!-- File retention dialog -->
     <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
-    <string name="file_retention_dialog_message">הזנת את מספר הימים לשמירת הקלטות.</string>
+    <string name="file_retention_dialog_message">הזנת מספר הימים לשמירת הקלטות.</string>
     <string name="file_retention_error_too_large">המספר גדול מדי</string>
 
     <!-- Format parameter dialog -->
