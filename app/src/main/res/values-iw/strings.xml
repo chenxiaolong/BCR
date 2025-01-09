@@ -21,7 +21,8 @@
     <string name="pref_output_format_desc">בחירת פורמט קידוד עבור ההקלטות.</string>
     <string name="pref_min_duration_name">משך הקלטה מינימלי</string>
     <plurals name="pref_min_duration_desc">
-        <item quantity="one">שמירת הקלטה באורך של %d שניות לפחות.</item>
+        <item quantity="one">שמירת הקלטה באורך של שניה אחת לפחות.</item>
+        <item quantity="two">שמירת הקלטה באורך של שתי שניות לפחות.</item>
         <item quantity="other">שמירת הקלטות באורך של %d שניות לפחות.</item>
     </plurals>
     <string name="pref_min_duration_desc_zero">שמירת הקלטות בכל אורך.</string>
@@ -45,134 +46,93 @@
     <string name="pref_save_logs_name">שמירת יומנים</string>
     <string name="pref_save_logs_desc">שמירת יומני logcat בקובץ.</string>
 
+    <!-- Rules preferences -->
+
     <!-- Pick contact group activity -->
     <string name="pick_contact_group_title">בחירת קבוצת אנשי קשר</string>
     <string name="pick_contact_group_local_group">קבוצה מקומית</string>
-
     <!-- Title of the preference category holding the "Add new rule" option and the list of record rules. -->
     <string name="pref_header_rules">כללים</string>
-    
-    <!-- Message shown above the record rules list that indicates what rules do and how to interact with the list UI. -->
+        <!-- Message shown above the record rules list that indicates what rules do and how to interact with the list UI. -->
     <string name="record_rules_info">הכללים קובעים איזו פעולה לבצע עבור שיחת טלפון תואמת. הם מעובדים מלמעלה למטה עד שנמצאת התאמה. יש להקיש ולהחזיק כדי לסדר מחדש את הכללים או להחליק כדי למחוק אותם.</string>
-
     <!-- Title of preference option for adding a new record rule. -->
     <string name="pref_add_new_rule_name">הוספת כלל חדש</string>
-
     <!-- Description of preference option for adding a new record rule. -->
     <string name="pref_add_new_rule_desc">הוספת כלל חדש כדי לקבוע את הפעולה שיש לבצע עבור שיחה תואמת.</string>
-
     <!-- Numeric title for every custom rule (excluding the default rule). The placeholder value (Arabic numerals) is a number starting at 1. -->
     <string name="record_rules_list_custom_name">כלל %d</string>
-
     <!-- Title for the default/fallback rule at the bottom of the list. -->
     <string name="record_rules_list_default_name">כלל ברירת מחדל</string>
-
     <!-- Accessibility option to move a rule up by one spot in the list. -->
     <string name="record_rules_list_action_move_up">העברת כלל למעלה</string>
-
-    <!-- Accessibility option to move a rule down by one spot in the list. -->
     <string name="record_rules_list_action_move_down">העבת כלל למטה</string>
-
     <!-- Accessibility option to remove a rule. -->
     <string name="record_rules_list_action_remove">הסרת כלל</string>
-
     <!-- Button in the record rule editor to select a different contact. -->
     <string name="record_rule_editor_change_contact">שינוי איש קשר</string>
-
     <!-- Button in the record rule editor to select a different contact group. -->
     <string name="record_rule_editor_change_contact_group">שינוי קבוצת איש קשר</string>
 
-    <!-- Title of the record rule editor section for configuring the call number to match. -->
-    <string name="record_rule_number_title">מספר טלפון</string>
-
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_number_any_chip">הכל</string>
+    <!-- Number preferences -->
 
     <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
     <string name="record_rule_number_unknown_chip">לא ידוע</string>
-
+    <string name="record_rule_number_any_chip">הכל</string>
+    <!-- Title of the record rule editor section for configuring the call number to match. -->
+    <string name="record_rule_number_title">מספר טלפון</string>
     <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact rules as a category, not a specific contact. -->
     <string name="record_rule_number_contact_chip">איש קשר</string>
-
     <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact group rules as a category, not a specific contact group. -->
     <string name="record_rule_number_contact_group_chip">קבוצת איש קשר</string>
-
     <!-- Summary shown in the record rules list descriptions. This should include a "Match: " prefix for visual consistency. -->
     <string name="record_rule_number_unknown_summary">התאמה: מספרים לא ידועים</string>
-
     <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. When the contacts permission is denied, this will display an internal contact ID instead of the contact name. -->
     <string name="record_rule_number_contact_summary">איש קשר: %s</string>
-
     <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. This variant is only used when the contacts permission is denied and only the group ID is available (not the group name or account). -->
     <string name="record_rule_number_contact_group_unknown_summary">קבוצת איש קשר: %s</string>
-
     <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. -->
     <string name="record_rule_number_contact_group_with_account_summary">קבוצת איש קשר: %1$s (%2$s)</string>
 
+    <!-- Type preferences -->
+
     <!-- Title of the record rule editor section for configuring the type of call to match. -->
     <string name="record_rule_type_title">סוג שיחה</string>
-
     <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
     <string name="record_rule_type_any_chip">הכל</string>
-
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
     <string name="record_rule_type_incoming_chip">נכנסות</string>
-
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
     <string name="record_rule_type_outgoing_chip">יוצאות</string>
-
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
     <string name="record_rule_type_conference_chip">ועידה</string>
-
     <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
     <string name="record_rule_type_incoming_summary">סוג: שיחה נכנסת</string>
-
-    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
     <string name="record_rule_type_outgoing_summary">סוג: שיחה יוצאת</string>
-
-    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
     <string name="record_rule_type_conference_summary">סוג: שיחת ועידה</string>
+
+    <!-- SIM preferences -->
 
     <!-- Title of the record rule editor section for configuring which SIM slot to match. -->
     <string name="record_rule_sim_title">חריץ SIM</string>
-
     <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
     <string name="record_rule_sim_any_chip">הכל</string>
-
     <!-- Text for the UI chip to select a specific SIM slot in the rule editor. The placeholder value (Arabic numerals) is a number starting at 1. -->
     <string name="record_rule_sim_specific_chip">SIM %d</string>
-    
     <!-- Summary shown in the record rules list descriptions. This should have a prefix, like other summary lines, for visual consistency. The placeholder value (Arabic numerals) is a number starting at 1. -->
     <string name="record_rule_sim_specific_summary">חריץ SIM: %d</string>
 
-    <!-- Title of the record rule editor section to configure the action to take when all conditions match. -->
-    <string name="record_rule_action_title">פעולה</string>
+    <!-- Action preferences -->
 
     <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
     <string name="record_rule_action_save_chip">שמירה</string>
-
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
     <string name="record_rule_action_discard_chip">השלכה</string>
-
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
     <string name="record_rule_action_ignore_chip">התעלמות</string>
-
+    <!-- Title of the record rule editor section to configure the action to take when all conditions match. -->
+    <string name="record_rule_action_title">פעולה</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
     <string name="record_rule_action_save_desc">שמירת ההקלטה. ניתן לסמן את ההקלטה למחיקה בתום השיחה באמצעות ההתראה המוצגת במהלך שיחה.</string>
-
-    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
     <string name="record_rule_action_discard_desc">מחיקת ההקלטה בסוף השיחה. ניתן לשמור את ההקלטה באמצעות ההתראה המוצגת במהלך שיחה.</string>
-
-    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
     <string name="record_rule_action_ignore_desc">התעלמות מוחלטת מהשיחה. השיחה לא תוקלט ולא ניתן להתחיל את ההקלטה במהלך השיחה.</string>
-
     <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
     <string name="record_rule_action_save_summary">פעולה: שמירת הקלטה</string>
-
-    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
     <string name="record_rule_action_discard_summary">פעולה: מחיקת הקלטה</string>
-
-    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
     <string name="record_rule_action_ignore_summary">פעולה: התעלמות מהשיחה</string>
 
     <!-- Output directory bottom sheet -->
@@ -250,7 +210,6 @@
     <string name="notification_channel_persistent_name">שירותי רקע</string>
     <string name="notification_channel_persistent_desc">התראה מתמשכת עבור הקלטת שיחות ברקע</string>
     <string name="notification_channel_failure_name">התראות על כשל</string>
-    <string name="notification_channel_persistent_desc">התראה מתמשכת עבור הקלטת שיחות ברקע</string>
     <string name="notification_channel_failure_desc">התראות על שגיאות במהלך הקלטת שיחה</string>
     <string name="notification_channel_success_name">התראות סיום הקלטה בהצלחה</string>
     <string name="notification_channel_success_desc">התראות הקלטות שיחות שהסתיימו בהצלחה</string>
