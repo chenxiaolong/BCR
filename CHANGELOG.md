@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update Italian translations ([PR #653 @nicorac])
+* Update Hebrew translations ([PR #655 @tzagim])
 
 ### Version 1.76
 
@@ -1025,3 +1026,4 @@ Non-user-facing changes:
 [PR #651 @NSO73]: https://github.com/chenxiaolong/BCR/pull/651
 [PR #652 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/652
 [PR #653 @nicorac]: https://github.com/chenxiaolong/BCR/pull/653
+[PR #655 @tzagim]: https://github.com/chenxiaolong/BCR/pull/655
