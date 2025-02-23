@@ -124,28 +124,6 @@ android {
         targetSdk = 35
         versionCode = gitVersionCode
         versionName = gitVersionName
-        resourceConfigurations.addAll(listOf(
-            "ar",
-            "de",
-            "en",
-            "es",
-            "fr",
-            "hi",
-            "it",
-            "iw",
-            "ja",
-            "pl",
-            "pt-rPT",
-            "ro",
-            "ru",
-            "sk",
-            "tr",
-            "ur",
-            "uk",
-            "vi",
-            "zh-rCN",
-            "zh-rTW",
-        ))
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -155,6 +133,9 @@ android {
         buildConfigField("String", "PROVIDER_AUTHORITY",
             "APPLICATION_ID + \".provider\"")
         resValue("string", "provider_authority", "$applicationId.provider")
+    }
+    androidResources {
+        generateLocaleConfig = true
     }
     sourceSets {
         getByName("main") {

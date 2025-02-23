@@ -48,7 +48,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BCR"
-        android:localeConfig="@xml/locales_config"
         tools:ignore="UnusedAttribute">
 
         <service
