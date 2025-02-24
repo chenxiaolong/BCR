@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.77
 
 * Update Italian translations ([PR #653 @nicorac])
 * Update Hebrew translations ([PR #655 @tzagim])
