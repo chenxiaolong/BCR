@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2023-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2023-2025 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -127,6 +127,8 @@ data class RecordingJson(
     val sampleRate: Int,
     @SerialName("channel_count")
     val channelCount: Int,
+    @SerialName("duration_secs_wall")
+    val durationSecsWall: Double,
     @SerialName("duration_secs_total")
     val durationSecsTotal: Double,
     @SerialName("duration_secs_encoded")

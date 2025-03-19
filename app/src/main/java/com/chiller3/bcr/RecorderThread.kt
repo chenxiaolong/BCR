@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2025 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -39,7 +39,6 @@ import com.chiller3.bcr.output.PhoneNumber
 import com.chiller3.bcr.output.RecordingJson
 import com.chiller3.bcr.output.Retention
 import com.chiller3.bcr.rule.RecordRule
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.lang.Process
 import java.nio.ByteBuffer
@@ -162,6 +161,8 @@ class RecorderThread(
     private lateinit var logcatFile: DocumentFile
     private lateinit var logcatProcess: Process
 
+    private var wallBeginNanos = 0L
+
     init {
         Log.i(tag, "Created thread for call: $parentCall")
 
@@ -235,6 +236,8 @@ class RecorderThread(
     }
 
     override fun run() {
+        wallBeginNanos = System.nanoTime()
+
         var status: Status = Status.Cancelled
         var outputDocFile: DocumentFile? = null
         val additionalFiles = ArrayList<OutputFile>()
@@ -439,6 +442,7 @@ class RecorderThread(
                     framesEncoded = it.framesEncoded,
                     sampleRate = it.sampleRate,
                     channelCount = it.channelCount,
+                    durationSecsWall = it.durationSecsWall,
                     durationSecsTotal = it.durationSecsTotal,
                     durationSecsEncoded = it.durationSecsEncoded,
                     bufferFrames = it.bufferFrames,
@@ -717,6 +721,7 @@ class RecorderThread(
         encoder.encode(buffer, true)
 
         val recordingInfo = RecordingInfo(
+            System.nanoTime() - wallBeginNanos,
             numFramesTotal,
             numFramesEncoded,
             audioRecord.sampleRate,
@@ -745,6 +750,7 @@ class RecorderThread(
     }
 
     private data class RecordingInfo(
+        val wallDurationNanos: Long,
         val framesTotal: Long,
         val framesEncoded: Long,
         val sampleRate: Int,
@@ -754,11 +760,13 @@ class RecorderThread(
         val wasEverPaused: Boolean,
         val wasEverHolding: Boolean,
     ) {
+        val durationSecsWall = wallDurationNanos.toDouble() / 1_000_000_000.0
         val durationSecsTotal = framesTotal.toDouble() / sampleRate / channelCount
         val durationSecsEncoded = framesEncoded.toDouble() / sampleRate / channelCount
 
         override fun toString() = buildString {
-            append("Total: $framesTotal frames (${"%.1f".format(durationSecsTotal)}s)")
+            append("Wall: ${"%.1f".format(durationSecsWall)}s")
+            append(", Total: $framesTotal frames (${"%.1f".format(durationSecsTotal)}s)")
             append(", Encoded: $framesEncoded frames (${"%.1f".format(durationSecsEncoded)}s)")
             append(", Sample rate: $sampleRate")
             append(", Channel count: $channelCount")

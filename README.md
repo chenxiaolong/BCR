@@ -268,6 +268,11 @@ The JSON structure is shown in the following example. Note that only `timestamp_
             // because no device supports stereo call audio.
             "channel_count": 1,
 
+            // The total wall time from when the recording process began to when
+            // it ended. If duration_secs_total is significantly lower than this
+            // value, then Android sent less audio to BCR than expected.
+            "duration_secs_wall": 3.0,
+
             // The total time in seconds that BCR read from the audio device.
             // (Equal to: frames_total / sample_rate / channel_count)
             "duration_secs_total": 2.0,

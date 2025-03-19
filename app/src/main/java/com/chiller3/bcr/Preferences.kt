@@ -21,9 +21,8 @@ import com.chiller3.bcr.output.Retention
 import com.chiller3.bcr.rule.LegacyRecordRule
 import com.chiller3.bcr.rule.RecordRule
 import com.chiller3.bcr.template.Template
-import kotlinx.serialization.encodeToString
-import java.io.File
 import kotlinx.serialization.json.Json
+import java.io.File
 
 class Preferences(initialContext: Context) {
     companion object {
