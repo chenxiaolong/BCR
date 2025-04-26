@@ -1,0 +1,248 @@
+<!--
+    SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+    SPDX-License-Identifier: GPL-3.0-only
+-->
+<resources>
+    <string name="app_name_full">ضبط خودکار تماس‌ها</string>
+
+    <!-- Preference headers -->
+    <string name="pref_header_general">عمومی</string>
+    <string name="pref_header_about">درباره</string>
+    <string name="pref_header_debug">دیباگ</string>
+
+    <!-- General preferences -->
+    <string name="pref_call_recording_name">ضبط تماس</string>
+    <string name="pref_call_recording_desc">ضبط تماس‌های ورودی و خروجی. برای ضبط در پس‌زمینه، دسترسی به میکروفون و اعلان‌ها لازم است.</string>
+
+    <string name="pref_record_rules_name">شروط ضبط خودکار</string>
+    <string name="pref_record_rules_desc">تعیین کنید که کدام تماس‌ها باید به طور خودکار ضبط شوند.</string>
+
+    <string name="pref_output_dir_name">فولدر خروجی</string>
+    <string name="pref_output_dir_desc">یک فولدر برای ذخیره ضبط‌ها انتخاب کنید. برای باز کردن در مدیریت فایل، این مورد لمس و نگه دارید.</string>
+
+    <string name="pref_output_format_name">فرمت خروجی</string>
+    <string name="pref_output_format_desc">یک فرمت رمزگذاری برای ضبط‌ها انتخاب کنید.</string>
+
+    <string name="pref_min_duration_name">حداقل زمان ضبط</string>
+    <plurals name="pref_min_duration_desc">
+        <item quantity="one">ضبط‌های حداقل %d ثانیه را ذخیره کن.</item>
+        <item quantity="other">ضبط‌های حداقل %d ثانیه را ذخیره کن.</item>
+    </plurals>
+    <string name="pref_min_duration_desc_zero">ضبط‌ها با هر طول را ذخیره کن.</string>
+
+    <string name="pref_inhibit_batt_opt_name">غیرفعال کردن بهینه‌سازی باتری</string>
+    <string name="pref_inhibit_batt_opt_desc">احتمال متوقف شدن برنامه توسط سیستم را کاهش می‌دهد.</string>
+
+    <string name="pref_write_metadata_name">نوشتن فایل متادیتا</string>
+    <string name="pref_write_metadata_desc">یک فایل JSON حاوی جزئیات تماس در کنار فایل صوتی ایجاد کن.</string>
+
+    <string name="pref_record_telecom_apps_name">ضبط تماس اپلیکیشن های دیگر </string>
+    <string name="pref_record_telecom_apps_desc">ضبط تماس‌ها از اپلیکیشت هایی که با سیستم مخابراتی اندروید یکپارچه می‌شوند. ضبط این تماس‌ها احتمالاً فقط سکوت خواهد بود.</string>
+
+    <string name="pref_record_dialing_state_name">ضبط تماس‌ها قبل از اتصال</string>
+    <string name="pref_record_dialing_state_desc">برای تماس‌های خروجی، ضبط را به محض شروع شماره‌گیری آغاز کن نه پس از برقراری تماس.</string>
+
+    <!-- About "preference" -->
+    <string name="pref_version_name">نسخه</string>
+
+    <!-- Debug preferences -->
+    <string name="pref_force_direct_boot_name">اجبار حالت راه‌اندازی پس از روشن شدن</string>
+    <string name="pref_force_direct_boot_desc"> برای تست کردن دستگاه را در حالت بازکردن قفل اولین بار بعد از روشن شدن قرار دهید..</string>
+
+    <string name="pref_migrate_direct_boot_name">انتقال از ضبط‌های راه‌اندازی پس از روشن شدن</string>
+    <string name="pref_migrate_direct_boot_desc">انتقال ضبط‌هایی که قبل از اولین بازکردن قفل پس از روشن شدن انجام شده‌اند. این معمولاً پس از اولین بازکردن قفل به طور خودکار انجام می‌شود.</string>
+
+    <string name="pref_save_logs_name">ذخیره لاگ</string>
+    <string name="pref_save_logs_desc">ذخیره لاگ ها logcat در یک فایل.</string>
+
+    <!-- Additional translations for key functionality -->
+    <string name="pick_contact_group_title">انتخاب گروه مخاطب</string>
+    <string name="pick_contact_group_local_group">گروه داخلی</string>
+
+    <string name="pref_header_rules">شروط</string>
+    <string name="record_rules_info">این شروط تعیین می‌کنند که برای یک تماس تعریف شده چه اقدامی انجام شود. شروط از بالا به پایین پردازش می‌شوند تا زمانی که یک مورد پیدا شود. برای مرتب‌سازی لمس و نگه دارید یا برای حذف،از کنار بکشید.</string>
+    <string name="pref_add_new_rule_name">افزودن شرط جدید</string>
+    <string name="pref_add_new_rule_desc">افزودن یک شرط جدید برای اقدامات یک تماس مشخص شده.</string>
+    <string name="record_rules_list_custom_name">شرط %d</string>
+    <string name="record_rules_list_default_name">شروط پیش‌فرض</string>
+    <string name="record_rules_list_action_move_up">انتقال شرط به بالا</string>
+    <string name="record_rules_list_action_move_down">انتقال شرط به پایین</string>
+    <string name="record_rules_list_action_remove">حذف شرط</string>
+
+    <!-- Button in the record rule editor to select a different contact. -->
+    <string name="record_rule_editor_change_contact">تغییر مخاطب</string>
+    <!-- Button in the record rule editor to select a different contact group. -->
+    <string name="record_rule_editor_change_contact_group">تغییر گروه مخاطب</string>
+
+    <!-- Title of the record rule editor section for configuring the call number to match. -->
+    <string name="record_rule_number_title">شماره تماس</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_number_any_chip">همه</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_number_unknown_chip">ناشناس</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact rules as a category, not a specific contact. -->
+    <string name="record_rule_number_contact_chip">مخاطب</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact group rules as a category, not a specific contact group. -->
+    <string name="record_rule_number_contact_group_chip">گروه مخاطب</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Match: " prefix for visual consistency. -->
+    <string name="record_rule_number_unknown_summary">تطابق: شماره‌های ناشناس</string>
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. When the contacts permission is denied, this will display an internal contact ID instead of the contact name. -->
+    <string name="record_rule_number_contact_summary">مخاطب: %s</string>
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. This variant is only used when the contacts permission is denied and only the group ID is available (not the group name or account). -->
+    <string name="record_rule_number_contact_group_unknown_summary">گروه مخاطب: %s</string>
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. -->
+    <string name="record_rule_number_contact_group_with_account_summary">گروه مخاطب: %1$s (%2$s)</string>
+
+    <!-- Title of the record rule editor section for configuring the type of call to match. -->
+    <string name="record_rule_type_title">نوع تماس</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_any_chip">همه</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_incoming_chip">ورودی</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_outgoing_chip">خروجی</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_conference_chip">کنفرانس</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_incoming_summary">نوع: تماس ورودی</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_outgoing_summary">نوع: تماس خروجی</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_conference_summary">نوع: تماس کنفرانسی</string>
+
+    <!-- Title of the record rule editor section for configuring which SIM slot to match. -->
+    <string name="record_rule_sim_title">سیمکارت</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_sim_any_chip">همه</string>
+    <!-- Text for the UI chip to select a specific SIM slot in the rule editor. The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rule_sim_specific_chip">سیمکارت %d</string>
+    <!-- Summary shown in the record rules list descriptions. This should have a prefix, like other summary lines, for visual consistency. The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rule_sim_specific_summary">سیمکارت: %d</string>
+
+    <!-- Title of the record rule editor section to configure the action to take when all conditions match. -->
+    <string name="record_rule_action_title">اقدام</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_action_save_chip">ذخیره</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_action_discard_chip">حذف</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_action_ignore_chip">نادیده گرفتن</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_save_desc">ذخیره‌سازی ضبط. ضبط را می‌توان در پایان تماس از طریق اعلان نمایش داده شده در حین تماس برای حذف آن اقدام کرد.</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_discard_desc">حذف ضبط در پایان تماس. ضبط را می‌توان از طریق اعلان نمایش داده شده در حین تماس نگه داشت.</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_ignore_desc">کاملاً تماس را نادیده بگیر. تماس ضبط نخواهد شد و امکان شروع ضبط در حین تماس وجود ندارد.</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_save_summary">اقدام: ذخیره‌سازی ضبط</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_discard_summary">اقدام: حذف ضبط</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_ignore_summary">اقدام: نادیده گرفتن تماس</string>
+
+    <!-- Common UI elements -->
+    <string name="bottom_sheet_reset">بازنشانی به پیش‌فرض</string>
+    <string name="output_dir_bottom_sheet_change_dir">تغییر فولدر</string>
+    <string name="output_dir_bottom_sheet_filename_template">الگوی نام فایل</string>
+    <string name="output_dir_bottom_sheet_edit_template">ویرایش الگو</string>
+    <string name="output_dir_bottom_sheet_file_retention">نگه داشتن فایل</string>
+    <string name="output_dir_bottom_sheet_edit_retention">ویرایش نگه داشتن</string>
+    <string name="retention_keep_all">نگه داشتن همه</string>
+    <plurals name="retention_days">
+        <item quantity="one">نگه داشتن %d روز</item>
+        <item quantity="other">نگه داشتن %d روز</item>
+    </plurals>
+    <string name="retention_unusable">ذخیره‌سازی فایل غیرفعال است زیرا قالب نام فایل فعلی با این ویژگی ناسازگار است.</string>
+
+    <!-- Output format bottom sheet -->
+    <string name="output_format_bottom_sheet_output_format">فرمت خروجی</string>
+    <string name="output_format_bottom_sheet_compression_level">سطح فشرده‌سازی</string>
+    <string name="output_format_bottom_sheet_bitrate">نرخ بیت</string>
+    <string name="output_format_bottom_sheet_sample_rate">نرخ نمونه‌برداری</string>
+    <string name="output_format_bottom_sheet_custom_param">سفارشی</string>
+
+    <!-- Filename template dialog -->
+    <string name="filename_template_dialog_title">الگوی نام فایل</string>
+    <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
+    <string name="filename_template_dialog_message">یک قالب سفارشی برای نام فایل خروجی وارد کنید. متغیرها با براکت‌های آکولاد مشخص می‌شوند (مثلاً <annotation type="template">{var}</annotation>). جایگزین‌ها با براکت‌های مربعی مشخص می‌شوند (مثلاً <annotation type="template">[{contact_name}|ناشناس]</annotation>).\n\nمتغیرهای پشتیبانی شده: <annotation type="supported_vars">متغیر</annotation>. برای توضیح کامل در مورد نحو، <annotation type="template_docs">مستندات</annotation> را ببینید.</string>
+    <string name="filename_template_dialog_warning_subdirectories">به دلیل عملکرد ضعیف چارچوب دسترسی به حافظه اندروید، استفاده از زیرفولدرها (کاراکتر <annotation type="template">/</annotation>) ممکن است هنگام ذخیره ضبط در برخی دستگاه‌ها تأخیر قابل توجهی ایجاد کند. این تأخیر در پایان تماس رخ می‌دهد و نباید منجر به از دست رفتن صدای تماس شود.</string>
+    <string name="filename_template_dialog_error_empty">قالب نمی‌تواند خالی باشد</string>
+    <string name="filename_template_dialog_error_unknown_variable">متغیر قالب ناشناخته: <annotation type="template">متغیر</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">متغیر نمی‌تواند آرگومان داشته باشد: <annotation type="template">متغیر</annotation></string>
+    <string name="filename_template_dialog_error_invalid_argument">آرگومان متغیر نامعتبر: <annotation type="template">متغیر</annotation></string>
+    <string name="filename_template_dialog_error_invalid_syntax">نحو قالب نامعتبر است</string>
+    <string name="filename_template_dialog_action_reset_to_default">بازنشانی به پیش‌فرض</string>
+
+    <!-- File retention dialog -->
+    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_message">تعداد روزهای نگهداری ضبط‌ها را وارد کنید.</string>
+    <string name="file_retention_error_too_large">عدد بسیار بزرگ است</string>
+
+    <!-- Format parameter dialog -->
+    <string name="format_param_dialog_title">پارامتر سفارشی</string>
+    <string name="format_param_dialog_message">یک مقدار در محدوده [%1$s، %2$s] وارد کنید.</string>
+
+    <!-- Format sample rate dialog -->
+    <string name="format_sample_rate_dialog_title">نرخ نمونه‌برداری سفارشی</string>
+    <string name="format_sample_rate_dialog_message_desc">یک نرخ نمونه‌برداری در یکی از این محدوده‌ها وارد کنید:</string>
+    <string name="format_sample_rate_dialog_message_range">[%1$s، %2$s]</string>
+
+    <!-- Format parameter -->
+    <string name="format_param_bitrate_bps">%s بیت بر ثانیه</string>
+    <string name="format_param_bitrate_kbps">%s کیلوبیت بر ثانیه</string>
+    <string name="format_param_compression_level">سطح %s</string>
+
+    <!-- Format sample rate -->
+    <string name="format_sample_rate">%s هرتز</string>
+
+    <!-- Min duration dialog -->
+    <string name="min_duration_dialog_title">@string/pref_min_duration_name</string>
+    <string name="min_duration_dialog_message">حداقل مدت زمان برای حفظ یک ضبط را وارد کنید، به استثنای مکث‌ها و نگه داشتن تماس. این همیشه می‌تواند در طول تماس از طریق اعلان نمایش داده شده لغو شود.</string>
+    <plurals name="min_duration_dialog_seconds">
+        <item quantity="one">%d ثانیه</item>
+        <item quantity="other">%d ثانیه</item>
+    </plurals>
+
+    <!-- Snackbar alerts -->
+    <string name="alert_logcat_success">لاگ‌ها با موفقیت در %1$s ذخیره شدند</string>
+    <string name="alert_logcat_failure">خطا در ذخیره لاگ‌ها در %1$s: %2$s</string>
+    <string name="alert_contact_group_query_failure">خطا در پرس و جو گروه‌های مخاطبین: %1$s</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_persistent_name">سرویس‌های پس‌زمینه</string>
+    <string name="notification_channel_persistent_desc">اعلان ماندگار برای ضبط تماس در پس‌زمینه</string>
+    <string name="notification_channel_failure_name">هشدارهای خطا</string>
+    <string name="notification_channel_failure_desc">هشدار برای خطاهای هنگام ضبط تماس</string>
+    <string name="notification_channel_success_name">هشدارهای موفقیت</string>
+    <string name="notification_channel_success_desc">هشدار برای ضبط‌های تماس موفق</string>
+    <string name="notification_channel_silence_name">هشدارهای سکوت کامل</string>
+    <string name="notification_channel_silence_desc">هشدار اگر ضبط‌های تماس فقط سکوت باشند</string>
+    <string name="notification_direct_boot_migration_failed">انتقال ضبط‌ها ناموفق بود</string>
+    <string name="notification_direct_boot_migration_error">برخی از ضبط‌های ذخیره شده قبل از باز شدن اولیه قفل دستگاه نتوانستند به پوشه خروجی منتقل شوند.</string>
+    <string name="notification_recording_initializing">در حال آماده‌سازی ضبط تماس</string>
+    <string name="notification_recording_in_progress">ضبط تماس در حال انجام</string>
+    <string name="notification_recording_finalizing">در حال نهایی‌سازی ضبط تماس</string>
+    <string name="notification_recording_paused">ضبط تماس متوقف شده</string>
+    <string name="notification_recording_on_hold">تماس در حالت انتظار</string>
+    <string name="notification_recording_failed">ضبط تماس ناموفق بود</string>
+    <string name="notification_recording_succeeded">ضبط تماس با موفقیت انجام شد</string>
+    <string name="notification_message_delete_at_end">ضبط در پایان تماس حذف خواهد شد. برای حفظ ضبط، بازگرداندن را لمس کنید.</string>
+    <plurals name="notification_message_delete_at_end_too_short">
+        <item quantity="one">اگر ضبط کوتاه‌تر از %d ثانیه باشد، در پایان تماس حذف خواهد شد. برای حفظ ضبط، بازگرداندن را لمس کنید.</item>
+        <item quantity="other">اگر ضبط کوتاه‌تر از %d ثانیه باشد، در پایان تماس حذف خواهد شد. برای حفظ ضبط، بازگرداندن را لمس کنید.</item>
+    </plurals>
+    <string name="notification_internal_android_error">ضبط در یک جزء داخلی اندروید با خطا مواجه شد (%s). این دستگاه یا نرم‌افزار ممکن است از ضبط تماس پشتیبانی نکند.</string>
+    <string name="notification_pure_silence_error">ضبط حذف شد زیرا صدا کاملاً خالی بود. این دستگاه ممکن است از ضبط تماس‌های مرتبط با برنامه \'%s\' پشتیبانی نکند.</string>
+    <string name="notification_action_open">باز کردن</string>
+    <string name="notification_action_share">اشتراک‌گذاری</string>
+    <string name="notification_action_delete">حذف</string>
+    <string name="notification_action_restore">بازگرداندن</string>
+    <string name="notification_action_pause">توقف</string>
+    <string name="notification_action_resume">ادامه</string>
+
+    <!-- Quick settings tile -->
+    <string name="quick_settings_label">ضبط تماس</string>
+
+    <!-- Snackbar alerts -->
+    <string name="documentsui_not_found">مدیریت فایل داخلی اندروید (DocumentsUI) در دسترس نیست.</string>
+</resources> 
