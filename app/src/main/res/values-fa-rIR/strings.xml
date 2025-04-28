@@ -1,7 +1,3 @@
-<!--
-    SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
-    SPDX-License-Identifier: GPL-3.0-only
--->
 <resources>
     <string name="app_name_full">ضبط خودکار تماس‌ها</string>
 
@@ -245,4 +241,4 @@
 
     <!-- Snackbar alerts -->
     <string name="documentsui_not_found">مدیریت فایل داخلی اندروید (DocumentsUI) در دسترس نیست.</string>
-</resources> 
+</resources>

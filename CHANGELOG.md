@@ -11,6 +11,7 @@
 
 * Add new `duration_secs_wall` field to the metadata JSON output file ([PR #674 @chenxiaolong])
   * This measures the wall time from when the recording process started to when it ended. This value can be compared with `duration_secs_total` to determine if Android is sending too little audio to BCR.
+* Add Persian translations ([PR #681 @namini40])
 
 ### Version 1.77
 
@@ -1035,3 +1036,4 @@ Non-user-facing changes:
 [PR #655 @tzagim]: https://github.com/chenxiaolong/BCR/pull/655
 [PR #665 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/665
 [PR #674 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/674
+[PR #681 @namini40]: https://github.com/chenxiaolong/BCR/pull/681
