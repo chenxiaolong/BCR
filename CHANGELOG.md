@@ -7,6 +7,8 @@
     to update the actual links at the bottom of the file.
 -->
 
+### Unreleased
+
 ### Version 1.78
 
 * Add new `duration_secs_wall` field to the metadata JSON output file ([PR #674 @chenxiaolong])
