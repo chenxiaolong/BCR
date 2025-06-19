@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Target Java 21 ([PR #685 @chenxiaolong])
+
 ### Version 1.78
 
 * Add new `duration_secs_wall` field to the metadata JSON output file ([PR #674 @chenxiaolong])
@@ -1041,3 +1043,4 @@ Non-user-facing changes:
 [PR #674 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/674
 [PR #681 @namini40]: https://github.com/chenxiaolong/BCR/pull/681
 [PR #684 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/684
+[PR #685 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/685
