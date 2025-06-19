@@ -9,7 +9,6 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Typeface
-import android.net.Uri
 import android.os.Bundle
 import android.text.Annotation
 import android.text.InputType
@@ -22,6 +21,7 @@ import android.text.style.TypefaceSpan
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
+import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -105,7 +105,7 @@ class FilenameTemplateDialogFragment : DialogFragment() {
                         binding.textLayout.error = buildErrorMessageWithTemplate(
                             errorResId, error.varRef.toTemplate())
                     }
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     template = null
                     binding.textLayout.error =
                         getString(R.string.filename_template_dialog_error_invalid_syntax)
@@ -189,8 +189,8 @@ class FilenameTemplateDialogFragment : DialogFragment() {
                 message.setSpan(
                     object : ClickableSpan() {
                         override fun onClick(widget: View) {
-                            val uri = Uri.parse(BuildConfig.PROJECT_URL_AT_COMMIT +
-                                    "#filename-template")
+                            val uri = (BuildConfig.PROJECT_URL_AT_COMMIT +
+                                    "#filename-template").toUri()
                             startActivity(Intent(Intent.ACTION_VIEW, uri))
                         }
                     },

@@ -9,6 +9,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.view.isGone
 import com.google.android.material.chip.ChipGroup
 import java.lang.Integer.max
 import java.lang.Integer.min
@@ -70,7 +71,7 @@ class ChipGroupCentered : ChipGroup {
 
         while (true) {
             val child = getChildAt(indexEnd)
-            if (child.visibility == GONE) {
+            if (child.isGone) {
                 continue
             }
 
@@ -111,7 +112,7 @@ class ChipGroupCentered : ChipGroup {
 
         for (i in range) {
             val child = getChildAt(i)
-            if (child.visibility == GONE) {
+            if (child.isGone) {
                 child.setTag(com.google.android.material.R.id.row_index_key, -1)
                 continue
             } else {

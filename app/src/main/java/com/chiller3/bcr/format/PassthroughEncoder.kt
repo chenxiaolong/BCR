@@ -7,7 +7,6 @@ package com.chiller3.bcr.format
 
 import android.media.MediaCodec
 import android.media.MediaFormat
-import java.lang.IllegalStateException
 import java.nio.ByteBuffer
 
 /**

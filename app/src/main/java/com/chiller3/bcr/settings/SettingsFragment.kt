@@ -8,9 +8,9 @@ package com.chiller3.bcr.settings
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.SharedPreferences
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -250,7 +250,7 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
                 return true
             }
             prefVersion -> {
-                val uri = Uri.parse(BuildConfig.PROJECT_URL_AT_COMMIT)
+                val uri = BuildConfig.PROJECT_URL_AT_COMMIT.toUri()
                 startActivity(Intent(Intent.ACTION_VIEW, uri))
                 return true
             }
@@ -273,7 +273,7 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
             prefOutputDir -> {
                 try {
                     startActivity(prefs.outputDirOrDefaultIntent)
-                } catch (e: ActivityNotFoundException) {
+                } catch (_: ActivityNotFoundException) {
                     Snackbar.make(
                         requireView(),
                         R.string.documentsui_not_found,

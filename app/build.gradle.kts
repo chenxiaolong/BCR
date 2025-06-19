@@ -115,13 +115,13 @@ val archiveDir = extraDir.map { it.dir("archive") }
 android {
     namespace = "com.chiller3.bcr"
 
-    compileSdk = 35
-    buildToolsVersion = "35.0.0"
+    compileSdk = 36
+    buildToolsVersion = "36.0.0"
 
     defaultConfig {
         applicationId = "com.chiller3.bcr"
         minSdk = 28
-        targetSdk = 35
+        targetSdk = 36
         versionCode = gitVersionCode
         versionName = gitVersionName
 

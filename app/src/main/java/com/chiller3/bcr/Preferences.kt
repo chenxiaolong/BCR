@@ -13,6 +13,7 @@ import android.os.UserManager
 import android.provider.DocumentsContract
 import android.util.Log
 import androidx.core.content.edit
+import androidx.core.net.toUri
 import androidx.preference.PreferenceManager
 import com.chiller3.bcr.extension.DOCUMENTSUI_AUTHORITY
 import com.chiller3.bcr.extension.safTreeToDocument
@@ -209,7 +210,7 @@ class Preferences(initialContext: Context) {
             // point.
             Uri.fromFile(directBootCompletedDir)
         } else {
-            prefs.getString(PREF_OUTPUT_DIR, null)?.let { Uri.parse(it) }
+            prefs.getString(PREF_OUTPUT_DIR, null)?.toUri()
         }
         set(uri) {
             if (isDirectBoot) {
