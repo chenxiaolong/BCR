@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "8.10.1"
+android-gradle-plugin = "8.11.1"
 androidx-activity = "1.10.1"
 androidx-appcompat = "1.7.1"
 androidx-core = "1.16.0"
@@ -10,8 +10,8 @@ androidx-recyclerview = "1.4.0"
 jgit = "7.3.0.202506031305-r"
 json = "20250517"
 junit = "1.2.1"
-kotlin = "2.1.21"
-kotlinx-serialization = "1.8.1"
+kotlin = "2.2.0"
+kotlinx-serialization = "1.9.0"
 kudzu = "6.0.0"
 material = "1.12.0"
 
