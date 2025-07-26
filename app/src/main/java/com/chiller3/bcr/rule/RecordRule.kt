@@ -195,13 +195,19 @@ data class RecordRule(
                 Log.w(TAG, "Failed to query contacts and contact groups", e)
             }
 
-            for (rule in rules) {
-                val matches = rule.callNumber.matches(contactLookupKeys, contactGroupIds)
-                        && rule.callType.matches(direction)
-                        && rule.simSlot.matches(simSlot)
+            Log.d(TAG, "Contact lookup keys: $contactLookupKeys")
+            Log.d(TAG, "Contact group IDs: $contactGroupIds")
 
-                if (matches) {
-                    Log.i(TAG, "Matched rule: $rule")
+            for (rule in rules) {
+                Log.d(TAG, "Checking rule: $rule")
+
+                val callNumberMatches = rule.callNumber.matches(contactLookupKeys, contactGroupIds)
+                val callTypeMatches = rule.callType.matches(direction)
+                val simSlotMatches = rule.simSlot.matches(simSlot)
+                Log.d(TAG, "- Matches: callNumber=$callNumberMatches, callType=$callTypeMatches, simSlot=${simSlotMatches}")
+
+                if (callNumberMatches && callTypeMatches && simSlotMatches) {
+                    Log.i(TAG, "- Matched this rule")
                     return rule.action
                 }
             }
