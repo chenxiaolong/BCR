@@ -11,6 +11,7 @@
 
 * Target Java 21 ([PR #685 @chenxiaolong])
 * Replace FAT32-invalid code points and ignorable code points in filenames ([Issue #691], [PR #692 @chenxiaolong], [PR #692 @TheDeathDragon])
+* Update dependencies ([PR #693 @chenxiaolong])
 
 ### Version 1.78
 
@@ -1048,3 +1049,4 @@ Non-user-facing changes:
 [PR #685 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/685
 [PR #692 @TheDeathDragon]: https://github.com/chenxiaolong/BCR/pull/692
 [PR #692 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/692
+[PR #693 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/693
