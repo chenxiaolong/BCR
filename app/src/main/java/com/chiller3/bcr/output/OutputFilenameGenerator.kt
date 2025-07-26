@@ -1,11 +1,13 @@
 /*
- * SPDX-FileCopyrightText: 2023-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2023-2025 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
 package com.chiller3.bcr.output
 
 import android.content.Context
+import android.icu.lang.UCharacter
+import android.icu.lang.UProperty
 import android.util.Log
 import com.chiller3.bcr.Preferences
 import com.chiller3.bcr.template.Template
@@ -181,7 +183,7 @@ class OutputFilenameGenerator(
                 else -> result?.replace('/', '_')
             }
         }
-        val newPath = splitPath(newPathString)
+        val newPath = splitPath(newPathString).map(::sanitizePathComponent)
 
         return OutputPath(newPath, redactor.redact(newPath))
     }
@@ -211,11 +213,11 @@ class OutputFilenameGenerator(
 
         return try {
             parsed.query(ZonedDateTime::from)
-        } catch (e: DateTimeException) {
+        } catch (_: DateTimeException) {
             try {
                 // A custom pattern might not specify the time zone
                 parsed.query(LocalDateTime::from)
-            } catch (e: DateTimeException) {
+            } catch (_: DateTimeException) {
                 // A custom pattern might only specify a date with no time
                 parsed.query(LocalDate::from).atStartOfDay()
             }
@@ -239,7 +241,7 @@ class OutputFilenameGenerator(
 
                             try {
                                 return parseTimestamp(input, timestampPos)
-                            } catch (e: DateTimeParseException) {
+                            } catch (_: DateTimeParseException) {
                                 // Ignore
                             } catch (e: DateTimeException) {
                                 Log.w(TAG, "Unexpected non-DateTimeParseException error", e)
@@ -287,6 +289,51 @@ class OutputFilenameGenerator(
         private val TAG = OutputFilenameGenerator::class.java.simpleName
 
         const val DATE_VAR = "date"
+
+        private fun isValidCodePoint(codePoint: Int): Boolean {
+            if (codePoint >= 0x00 && codePoint <= 0x1f) {
+                return false
+            }
+
+            return when (codePoint) {
+                '"'.code,
+                '*'.code,
+                '/'.code,
+                ':'.code,
+                '<'.code,
+                '>'.code,
+                '?'.code,
+                '\\'.code,
+                '|'.code,
+                0x7F -> false
+                else -> !UCharacter.hasBinaryProperty(
+                    codePoint,
+                    UProperty.DEFAULT_IGNORABLE_CODE_POINT,
+                )
+            }
+        }
+
+        /**
+         * Sanitize filenames to avoid code points that Android's MediaProvider does not permit.
+         *
+         * AOSP blocks code points that are invalid in FAT32 only. GrapheneOS additionally blocks
+         * ignorable code points. We'll block both to be safe.
+         */
+        private fun sanitizePathComponent(name: String) = buildString {
+            var i = 0
+
+            while (i < name.length) {
+                val codePoint = name.codePointAt(i)
+
+                if (isValidCodePoint(codePoint)) {
+                    append(Character.toChars(codePoint))
+                } else {
+                    append('_')
+                }
+
+                i += Character.charCount(codePoint)
+            }
+        }
 
         /**
          * List of supported variables.
@@ -344,7 +391,7 @@ class OutputFilenameGenerator(
                                 DateTimeFormatterBuilder()
                                     .appendPattern(varRef.arg)
                                     .toFormatter()
-                            } catch (e: Exception) {
+                            } catch (_: Exception) {
                                 errors.add(ValidationError(
                                     ValidationErrorType.INVALID_ARGUMENT, varRef))
                             }
