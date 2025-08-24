@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update dependencies ([PR #696 @chenxiaolong])
+
 ### Version 1.79
 
 * Target Java 21 ([PR #685 @chenxiaolong])
@@ -1052,3 +1054,4 @@ Non-user-facing changes:
 [PR #692 @TheDeathDragon]: https://github.com/chenxiaolong/BCR/pull/692
 [PR #692 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/692
 [PR #693 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/693
+[PR #696 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/696
