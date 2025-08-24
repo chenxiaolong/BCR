@@ -58,7 +58,7 @@ class RecordRulesFragment : PreferenceBaseFragment(), Preference.OnPreferenceCli
 
         setFragmentResultListener(RecordRuleEditorBottomSheet.TAG) { _, result ->
             val position = result.getInt(RecordRuleEditorBottomSheet.RESULT_POSITION)
-            val recordRule = BundleCompat.getParcelable<RecordRule>(
+            val recordRule = BundleCompat.getParcelable(
                 result,
                 RecordRuleEditorBottomSheet.RESULT_RECORD_RULE,
                 RecordRule::class.java,

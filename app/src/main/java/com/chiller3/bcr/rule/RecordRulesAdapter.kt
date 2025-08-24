@@ -32,8 +32,8 @@ internal class RecordRulesAdapter(
     }
 
     internal inner class CustomViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val iconFrame = view.findViewById<View>(androidx.preference.R.id.icon_frame)
-            ?: view.findViewById<View>(android.R.id.icon_frame)
+        private val iconFrame: View = view.findViewById(androidx.preference.R.id.icon_frame)
+            ?: view.findViewById(android.R.id.icon_frame)
         private val titleView = view.findViewById<TextView>(android.R.id.title)
         private val summaryView = view.findViewById<TextView>(android.R.id.summary)
 

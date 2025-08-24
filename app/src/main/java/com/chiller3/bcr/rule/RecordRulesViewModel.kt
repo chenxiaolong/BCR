@@ -35,8 +35,7 @@ data class DisplayableRules(
 class RecordRulesViewModel(application: Application) : AndroidViewModel(application) {
     private val prefs = Preferences(getApplication())
 
-    private val _rules =
-        MutableStateFlow<DisplayableRules>(DisplayableRules(emptyList(), emptyMap(), emptyMap()))
+    private val _rules = MutableStateFlow(DisplayableRules(emptyList(), emptyMap(), emptyMap()))
     val rules = _rules.asStateFlow()
 
     private val rulesMutex = Mutex()

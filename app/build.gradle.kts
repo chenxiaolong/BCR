@@ -8,6 +8,7 @@ import org.eclipse.jgit.api.ArchiveCommand
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.archive.TarFormat
 import org.eclipse.jgit.lib.ObjectId
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.json.JSONObject
 
 plugins {
@@ -182,9 +183,6 @@ android {
         sourceCompatibility(JavaVersion.VERSION_21)
         targetCompatibility(JavaVersion.VERSION_21)
     }
-    kotlinOptions {
-        jvmTarget = "21"
-    }
     buildFeatures {
         buildConfig = true
         viewBinding = true
@@ -193,6 +191,12 @@ android {
         // The translations are always going to lag behind new strings being
         // added to values/strings.xml
         disable += "MissingTranslation"
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_21
     }
 }
 
@@ -565,9 +569,9 @@ tasks.register("changelogUpdateLinks") {
 }
 
 tasks.register("changelogPreRelease") {
-    doLast {
-        val version = project.property("releaseVersion")
+    val version = project.property("releaseVersion")
 
+    doLast {
         updateChangelog(version.toString(), true)
         updateMagiskChangelog("v$version")
     }
