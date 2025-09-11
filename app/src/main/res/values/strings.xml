@@ -33,6 +33,9 @@
     <string name="pref_inhibit_batt_opt_name">Disable battery optimization</string>
     <string name="pref_inhibit_batt_opt_desc">Reduces the chance of the app being killed by the system.</string>
 
+    <string name="pref_protect_recordings_name">Protect recordings (root)</string>
+    <string name="pref_protect_recordings_desc">Make saved recordings read-only and immutable; new recordings are auto-protected. Requires root. Turn off to make files writable again.</string>
+
     <string name="pref_write_metadata_name">Write metadata file</string>
     <string name="pref_write_metadata_desc">Create a JSON file containing details about the call next to the audio file.</string>
 
@@ -221,6 +224,7 @@
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Background services</string>
     <string name="notification_channel_persistent_desc">Persistent notification for background call recording</string>
+    <string name="notification_protection_active">Recording protection active</string>
     <string name="notification_channel_failure_name">Failure alerts</string>
     <string name="notification_channel_failure_desc">Alerts for errors during call recording</string>
     <string name="notification_channel_success_name">Success alerts</string>

@@ -29,6 +29,9 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+
 
     <!--
         We use android:usesNonSdkApi to bypass Android's hidden API restrictions instead of creating
@@ -93,6 +96,11 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
         </service>
+
+        <service
+            android:name=".service.RecordingProtectionService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
 
         <provider
             android:authorities="@string/provider_authority"

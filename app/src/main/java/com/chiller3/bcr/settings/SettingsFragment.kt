@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toFile
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -50,6 +51,7 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
     private lateinit var prefOutputFormat: Preference
     private lateinit var prefMinDuration: Preference
     private lateinit var prefInhibitBatteryOpt: SwitchPreferenceCompat
+    private lateinit var prefProtectRecordings: SwitchPreferenceCompat
     private lateinit var prefVersion: LongClickablePreference
     private lateinit var prefMigrateDirectBoot: Preference
     private lateinit var prefSaveLogs: Preference
@@ -111,6 +113,9 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
 
         prefInhibitBatteryOpt = findPreference(Preferences.PREF_INHIBIT_BATT_OPT)!!
         prefInhibitBatteryOpt.onPreferenceChangeListener = this
+
+        prefProtectRecordings = findPreference(Preferences.PREF_PROTECT_RECORDINGS)!!
+        prefProtectRecordings.onPreferenceChangeListener = this
 
         prefVersion = findPreference(Preferences.PREF_VERSION)!!
         prefVersion.onPreferenceClickListener = this
@@ -220,6 +225,31 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
                 } else {
                     startActivity(Permissions.getBatteryOptSettingsIntent())
                 }
+            }
+            prefProtectRecordings -> {
+                val enabled = newValue == true
+                val ctx = requireContext()
+                if (enabled) {
+                    // Start foreground service to protect and watch files
+                    val intent = Intent(ctx, com.chiller3.bcr.service.RecordingProtectionService::class.java)
+                    ctx.startForegroundService(intent)
+                } else {
+                    // Stop service and revert permissions
+                    ctx.stopService(Intent(ctx, com.chiller3.bcr.service.RecordingProtectionService::class.java))
+                    // Best-effort revert using root if available
+                    kotlinx.coroutines.GlobalScope.launch {
+                        val root = com.chiller3.bcr.util.RootShell
+                        val dir = prefs.outputDirOrDefault
+                        val path = try { if ("file" == dir.scheme) dir.toFile().absolutePath else null } catch (_: Exception) { null }
+                        if (path != null && root.isRootAvailable()) {
+                            root.runCommands(
+                                "find \"$path\" -type f -print0 | xargs -0 -r chmod 0644",
+                                "command -v chattr >/dev/null 2>&1 && find \"$path\" -type f -print0 | xargs -0 -r chattr -i || true"
+                            )
+                        }
+                    }
+                }
+                return true
             }
         }
 

@@ -45,6 +45,7 @@ class Preferences(initialContext: Context) {
         private const val PREF_FORCE_DIRECT_BOOT = "force_direct_boot"
         const val PREF_MIGRATE_DIRECT_BOOT = "migrate_direct_boot"
         const val PREF_SAVE_LOGS = "save_logs"
+        const val PREF_PROTECT_RECORDINGS = "protect_recordings"
 
         const val PREF_ADD_NEW_RULE = "add_new_rule"
 
@@ -420,6 +421,11 @@ class Preferences(initialContext: Context) {
     var writeMetadata: Boolean
         get() = prefs.getBoolean(PREF_WRITE_METADATA, false)
         set(enabled) = prefs.edit { putBoolean(PREF_WRITE_METADATA, enabled) }
+
+    /** Whether to protect recordings by making them read-only via root. */
+    var protectRecordings: Boolean
+        get() = prefs.getBoolean(PREF_PROTECT_RECORDINGS, false)
+        set(enabled) = prefs.edit { putBoolean(PREF_PROTECT_RECORDINGS, enabled) }
 
     /**
      * Whether to record calls from telecom-integrated apps.

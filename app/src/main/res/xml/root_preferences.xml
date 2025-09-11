@@ -48,6 +48,12 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
+            app:key="protect_recordings"
+            app:title="@string/pref_protect_recordings_name"
+            app:summary="@string/pref_protect_recordings_desc"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
             app:key="write_metadata"
             app:title="@string/pref_write_metadata_name"
             app:summary="@string/pref_write_metadata_desc"
