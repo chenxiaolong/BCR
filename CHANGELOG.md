@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.80
 
 * Update dependencies ([PR #696 @chenxiaolong], [PR #705 @chenxiaolong])
 * Remove dependency info block from APK ([PR #704 @chenxiaolong])
