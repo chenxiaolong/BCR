@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update dependencies ([PR #696 @chenxiaolong])
+* Remove dependency info block from APK ([PR #704 @chenxiaolong])
 
 ### Version 1.79
 
@@ -1055,3 +1056,4 @@ Non-user-facing changes:
 [PR #692 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/692
 [PR #693 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/693
 [PR #696 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/696
+[PR #704 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/704
