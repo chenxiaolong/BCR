@@ -1,0 +1,258 @@
+<!--
+    SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+    SPDX-License-Identifier: GPL-3.0-only
+-->
+<resources>
+    <string name="app_name_full">Sadə Zəng Yazıcı</string>
+
+    <!-- Preference headers -->
+    <string name="pref_header_general">Ümumi</string>
+    <string name="pref_header_about">Haqqında</string>
+    <string name="pref_header_debug">Sazlama</string>
+
+    <!-- General preferences -->
+    <string name="pref_call_recording_name">Zəng yazısı</string>
+    <string name="pref_call_recording_desc">Gələn və gedən telefon zənglərini yazın. Arxa planda yazmaq üçün mikrofon və bildiriş icazələri tələb olunur.</string>
+
+    <string name="pref_record_rules_name">Avtomatik yazma qaydaları</string>
+    <string name="pref_record_rules_desc">Hansı zənglərin avtomatik yazılacağını tənzimləyin.</string>
+
+    <string name="pref_output_dir_name">Çıxış qovluğu</string>
+    <string name="pref_output_dir_desc">Yazılar üçün qovluq seçin. Fayl menecerində açmaq üçün uzun basın.</string>
+
+    <string name="pref_output_format_name">Çıxış formatı</string>
+    <string name="pref_output_format_desc">Yazılar üçün kodlaşdırma formatını seçin.</string>
+
+    <string name="pref_min_duration_name">Minimum yazı müddəti</string>
+    <plurals name="pref_min_duration_desc">
+        <item quantity="one">Yazıları ən az %d saniyə saxlayın.</item>
+        <item quantity="other">Yazıları ən az %d saniyə saxlayın.</item>
+    </plurals>
+    <string name="pref_min_duration_desc_zero">İstənilən uzunluqdakı yazıları saxlayın.</string>
+
+    <string name="pref_inhibit_batt_opt_name">Batareya optimallaşdırmasını deaktiv edin</string>
+    <string name="pref_inhibit_batt_opt_desc">Tətbiqin sistem tərəfindən dayandırılma ehtimalını azaldır.</string>
+
+    <string name="pref_write_metadata_name">Metaverilər faylı yaz</string>
+    <string name="pref_write_metadata_desc">Səs faylının yanında zəng haqqında təfərrüatları ehtiva edən JSON faylı yaradın.</string>
+
+    <string name="pref_record_telecom_apps_name">Telekom inteqrasiya olunmuş tətbiqləri yaz</string>
+    <string name="pref_record_telecom_apps_desc">Android-in telekom sistemi ilə inteqrasiya olunmuş üçüncü tərəf tətbiqlərdən zəngləri yazın. Bu zənglərin yazıları çox güman ki, səssiz olacaq.</string>
+
+    <string name="pref_record_dialing_state_name">Qoşulmadan əvvəl zəngləri yaz</string>
+    <string name="pref_record_dialing_state_desc">Gedən zənglər üçün, zəng qoşulana qədər gözləmək əvəzinə, nömrə yığmağa başlayanda yazıya başlayın.</string>
+
+    <!-- About "preference" -->
+    <string name="pref_version_name">Versiya</string>
+
+    <!-- Debug preferences -->
+    <string name="pref_force_direct_boot_name">Birbaşa yükləmə rejimini məcburi et</string>
+    <string name="pref_force_direct_boot_desc">Test üçün cihazın ilk kiliddən əvvəlki vəziyyətdə olduğunu təqlid edin.</string>
+
+    <string name="pref_migrate_direct_boot_name">Birbaşa yükləmə yazılarını köçür</string>
+    <string name="pref_migrate_direct_boot_desc">İlk kiliddən əvvəl edilən yazıları köçürün. Bu, adətən ilk kiliddən sonra avtomatik olaraq baş verir.</string>
+
+    <string name="pref_save_logs_name">Jurnalları saxla</string>
+    <string name="pref_save_logs_desc">Logcat jurnallarını fayla saxlayın.</string>
+
+    <!-- Pick contact group activity -->
+    <string name="pick_contact_group_title">Əlaqə qrupunu seçin</string>
+    <string name="pick_contact_group_local_group">Yerli qrup</string>
+
+    <!-- Title of the preference category holding the "Add new rule" option and the list of record rules. -->
+    <string name="pref_header_rules">Qaydalar</string>
+    <!-- Message shown above the record rules list that indicates what rules do and how to interact with the list UI. -->
+    <string name="record_rules_info">Qaydalar uyğun gələn telefon zəngi üçün hansı hərəkətin ediləcəyini müəyyənləşdirir. Qaydalar yuxarıdan aşağıya doğru işlənir, uyğunluq tapılana qədər. Qaydaları yenidən sıralamaq üçün toxunub saxlayın və ya silmək üçün sürüşdürün.</string>
+    <!-- Title of preference option for adding a new record rule. -->
+    <string name="pref_add_new_rule_name">Yeni qayda əlavə et</string>
+    <!-- Description of preference option for adding a new record rule. -->
+    <string name="pref_add_new_rule_desc">Uyğun zəng üçün hansı hərəkətin ediləcəyini müəyyənləşdirmək üçün yeni qayda əlavə edin.</string>
+    <!-- Numeric title for every custom rule (excluding the default rule). The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rules_list_custom_name">Qayda %d</string>
+    <!-- Title for the default/fallback rule at the bottom of the list. -->
+    <string name="record_rules_list_default_name">Varsayılan qayda</string>
+    <!-- Accessibility option to move a rule up by one spot in the list. -->
+    <string name="record_rules_list_action_move_up">Qaydanı yuxarı apar</string>
+    <!-- Accessibility option to move a rule down by one spot in the list. -->
+    <string name="record_rules_list_action_move_down">Qaydanı aşağı apar</string>
+    <!-- Accessibility option to remove a rule. -->
+    <string name="record_rules_list_action_remove">Qaydanı sil</string>
+
+    <!-- Button in the record rule editor to select a different contact. -->
+    <string name="record_rule_editor_change_contact">Əlaqəni dəyiş</string>
+    <!-- Button in the record rule editor to select a different contact group. -->
+    <string name="record_rule_editor_change_contact_group">Əlaqə qrupunu dəyiş</string>
+
+    <!-- Title of the record rule editor section for configuring the call number to match. -->
+    <string name="record_rule_number_title">Zəng nömrəsi</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_number_any_chip">Hər hansı</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_number_unknown_chip">Naməlum</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact rules as a category, not a specific contact. -->
+    <string name="record_rule_number_contact_chip">Əlaqə</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact group rules as a category, not a specific contact group. -->
+    <string name="record_rule_number_contact_group_chip">Əlaqə qrupu</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Match: " prefix for visual consistency. -->
+    <string name="record_rule_number_unknown_summary">Uyğunluq: Naməlum nömrələr</string>
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. When the contacts permission is denied, this will display an internal contact ID instead of the contact name. -->
+    <string name="record_rule_number_contact_summary">Əlaqə: %s</string>
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. This variant is only used when the contacts permission is denied and only the group ID is available (not the group name or account). -->
+    <string name="record_rule_number_contact_group_unknown_summary">Əlaqə qrupu: %s</string>
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. -->
+    <string name="record_rule_number_contact_group_with_account_summary">Əlaqə qrupu: %1$s (%2$s)</string>
+
+    <!-- Title of the record rule editor section for configuring the type of call to match. -->
+    <string name="record_rule_type_title">Zəng növü</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_any_chip">Hər hansı</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_incoming_chip">Gələn</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_outgoing_chip">Gedən</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_conference_chip">Konfrans</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_incoming_summary">Növ: Gələn zəng</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_outgoing_summary">Növ: Gedən zəng</string>
+    <!-- Summary shown in the record rules list descriptions compuesto por un prefijo "Type: " para mantener la consistencia visual. -->
+    <string name="record_rule_type_conference_summary">Növ: Konfrans zəngi</string>
+
+    <!-- Title of the record rule editor section for configuring which SIM slot to match. -->
+    <string name="record_rule_sim_title">SIM yuvası</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_sim_any_chip">Hər hansı</string>
+    <!-- Text for the UI chip to select a specific SIM slot in the rule editor. The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rule_sim_specific_chip">SIM %d</string>
+    <!-- Summary shown in the record rules list descriptions. This should have a prefix, like other summary lines, for visual consistency. The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rule_sim_specific_summary">SIM yuvası: %d</string>
+
+    <!-- Title of the record rule editor section to configure the action to take when all conditions match. -->
+    <string name="record_rule_action_title">Hərəkət</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_action_save_chip">Saxla</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_action_discard_chip">At</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_action_ignore_chip">İqnor et</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_save_desc">Yazını saxlayın. Zəng zamanı göstərilən bildiriş vasitəsilə yazının zəngin sonunda silinməsi qeyd oluna bilər.</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_discard_desc">Zəngin sonunda yazını atın. Zəng zamanı göstərilən bildiriş vasitəsilə yazı saxlanıla bilər.</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_ignore_desc">Zəngi tamamilə iqnor edin. Zəng yazılmayacaq və zəng zamanı yazıya başlamaq mümkün olmayacaq.</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_save_summary">Hərəkət: Yazını saxla</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_discard_summary">Hərəkət: Yazını at</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_ignore_summary">Hərəkət: Zəngi iqnor et</string>
+
+    <!-- Output directory bottom sheet -->
+    <string name="output_dir_bottom_sheet_change_dir">Qovluğu dəyiş</string>
+    <string name="output_dir_bottom_sheet_filename_template">Fayl adı şablonu</string>
+    <string name="output_dir_bottom_sheet_edit_template">Şablonu redaktə et</string>
+    <string name="output_dir_bottom_sheet_file_retention">Fayl saxlama</string>
+    <string name="output_dir_bottom_sheet_edit_retention">Saxlamanı redaktə et</string>
+    <string name="retention_keep_all">Hamısını saxla</string>
+    <plurals name="retention_days">
+        <item quantity="one">%d gün saxla</item>
+        <item quantity="other">%d gün saxla</item>
+    </plurals>
+    <string name="retention_unusable">Fayl saxlama cari fayl adı şablonu ilə uyğunsuz olduğu üçün deaktivdir.</string>
+
+    <!-- Output format bottom sheet -->
+    <string name="output_format_bottom_sheet_output_format">Çıxış formatı</string>
+    <string name="output_format_bottom_sheet_compression_level">Sıxılma səviyyəsi</string>
+    <string name="output_format_bottom_sheet_bitrate">Bit sürəti</string>
+    <string name="output_format_bottom_sheet_sample_rate">Nümunə sürəti</string>
+    <string name="output_format_bottom_sheet_custom_param">Xüsusi</string>
+
+    <string name="bottom_sheet_reset">Varsayılanlara sıfırla</string>
+
+    <!-- Filename template dialog -->
+    <string name="filename_template_dialog_title">Fayl adı şablonu</string>
+    <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
+    <string name="filename_template_dialog_message">Çıxış fayl adı üçün xüsusi şablon daxil edin. Dəyişənlər fiqurlu mötərizələrlə göstərilir (məsələn, <annotation type="template">{var}</annotation>). Ehtiyat variantlar kvadrat mötərizələrlə göstərilir (məsələn, <annotation type="template">[{contact_name}|Naməlum]</annotation>).\n\nDəstəklənən dəyişənlər: <annotation type="supported_vars">YER TUTUCU</annotation>. Sintaksisin tam təsviri üçün <annotation type="template_docs">sənədlərə</annotation> baxın.</string>
+    <string name="filename_template_dialog_warning_subdirectories">Android Storage Access Framework-ün zəif performansı səbəbindən alt qovluqların istifadəsi (<annotation type="template">/</annotation> simvolu) bəzi cihazlarda yazının saxlanması zamanı əhəmiyyətli gecikmələrə səbəb ola bilər. Gecikmə zəngin sonunda baş verir və zəng səsinin itməsinə səbəb olmamalıdır.</string>
+    <string name="filename_template_dialog_error_empty">Şablon boş ola bilməz</string>
+    <string name="filename_template_dialog_error_unknown_variable">Naməlum şablon dəyişəni: <annotation type="template">YER TUTUCU</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">Dəyişən arqumentə sahib ola bilməz: <annotation type="template">YER TUTUCU</annotation></string>
+    <string name="filename_template_dialog_error_invalid_argument">Yanlış dəyişən arqumenti: <annotation type="template">YER TUTUCU</annotation></string>
+    <string name="filename_template_dialog_error_invalid_syntax">Şablon sintaksisi yanlışdır</string>
+    <string name="filename_template_dialog_action_reset_to_default">Varsayılana sıfırla</string>
+
+    <!-- File retention dialog -->
+    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_message">Yazıları saxlamaq üçün gün sayını daxil edin.</string>
+    <string name="file_retention_error_too_large">Sayı çox böyükdür</string>
+
+    <!-- Format parameter dialog -->
+    <string name="format_param_dialog_title">Xüsusi parametr</string>
+    <string name="format_param_dialog_message">[%1$s, %2$s] aralığında dəyər daxil edin.</string>
+
+    <!-- Format sample rate dialog -->
+    <string name="format_sample_rate_dialog_title">Xüsusi nümunə sürəti</string>
+    <string name="format_sample_rate_dialog_message_desc">Aşağıdakı aralıqlardan birində nümunə sürəti daxil edin:</string>
+    <string name="format_sample_rate_dialog_message_range">[%1$s, %2$s]</string>
+
+    <!-- Format parameter -->
+    <string name="format_param_bitrate_bps">%s bps</string>
+    <string name="format_param_bitrate_kbps">%s kbps</string>
+    <string name="format_param_compression_level">Səviyyə %s</string>
+
+    <!-- Format sample rate -->
+    <string name="format_sample_rate">%s Hz</string>
+
+    <!-- Min duration dialog -->
+    <string name="min_duration_dialog_title">@string/pref_min_duration_name</string>
+    <string name="min_duration_dialog_message">Yazının saxlanması üçün minimum müddəti daxil edin, fasilələr və zəng gözləmələri xaric. Bu, zəng zamanı bildirişdən həmişə ləğv edilə bilər.</string>
+    <plurals name="min_duration_dialog_seconds">
+        <item quantity="one">%d saniyə</item>
+        <item quantity="other">%d saniyə</item>
+    </plurals>
+
+    <!-- Snackbar alerts -->
+    <string name="alert_logcat_success">Jurnallar %1$s ünvanına uğurla saxlanıldı</string>
+    <string name="alert_logcat_failure">Jurnallar %1$s ünvanına saxlanıla bilmədi: %2$s</string>
+    <string name="alert_contact_group_query_failure">Əlaqə qruplarının sorğusu uğursuz oldu: %1$s</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_persistent_name">Arxa plan xidmətləri</string>
+    <string name="notification_channel_persistent_desc">Arxa planda zəng yazısı üçün daimi bildiriş</string>
+    <string name="notification_channel_failure_name">Uğursuzluq xəbərdarlıqları</string>
+    <string name="notification_channel_failure_desc">Zəng yazısı zamanı səhvlər üçün xəbərdarlıqlar</string>
+    <string name="notification_channel_success_name">Uğurlu xəbərdarlıqlar</string>
+    <string name="notification_channel_success_desc">Uğurlu zəng yazıları üçün xəbərdarlıqlar</string>
+    <string name="notification_channel_silence_name">Tam səssizlik xəbərdarlıqları</string>
+    <string name="notification_channel_silence_desc">Zəng yazıları tam səssiz olduqda xəbərdarlıq edin</string>
+    <string name="notification_direct_boot_migration_failed">Yazılar köçürülə bilmədi</string>
+    <string name="notification_direct_boot_migration_error">Cihazın ilkin kiliddən əvvəl saxlanılan bəzi yazılar çıxış qovluğuna köçürülə bilmədi.</string>
+    <string name="notification_recording_initializing">Zəng yazısı başlatılır</string>
+    <string name="notification_recording_in_progress">Zəng yazısı davam edir</string>
+    <string name="notification_recording_finalizing">Zəng yazısı tamamlanır</string>
+    <string name="notification_recording_paused">Zəng yazısı dayandırılıb</string>
+    <string name="notification_recording_on_hold">Zəng gözləmədədir</string>
+    <string name="notification_recording_failed">Zəng yazısı uğursuz oldu</string>
+    <string name="notification_recording_succeeded">Zəng uğurla yazıldı</string>
+    <string name="notification_message_delete_at_end">Yazı zəngin sonunda silinəcək. Yazını saxlamaq üçün Bərpa et üzərinə toxunun.</string>
+    <plurals name="notification_message_delete_at_end_too_short">
+        <item quantity="one">Yazı %d saniyədən qısa olarsa zəngin sonunda silinəcək. Yazını saxlamaq üçün Bərpa et üzərinə toxunun.</item>
+        <item quantity="other">Yazı %d saniyədən qısa olarsa zəngin sonunda silinəcək. Yazını saxlamaq üçün Bərpa et üzərinə toxunun.</item>
+    </plurals>
+    <string name="notification_internal_android_error">Yazı daxili Android komponentində uğursuz oldu (%s). Bu cihaz və ya proqram təminatı zəng yazısını dəstəkləməyə bilər.</string>
+    <string name="notification_pure_silence_error">Səs tamamilə səssiz olduğu üçün yazı atıldı. Bu cihaz \'%s\' tətbiqi ilə əlaqəli zənglərin yazılmasını dəstəkləməyə bilər.</string>
+    <string name="notification_action_open">Aç</string>
+    <string name="notification_action_share">Paylaş</string>
+    <string name="notification_action_delete">Sil</string>
+    <string name="notification_action_restore">Bərpa et</string>
+    <string name="notification_action_pause">Dayandır</string>
+    <string name="notification_action_resume">Davam et</string>
+
+    <!-- Quick settings tile -->
+    <string name="quick_settings_label">Zəng yazısı</string>
+
+    <!-- Snackbar alerts -->
+    <string name="documentsui_not_found">Android-in daxili fayl meneceri (DocumentsUI) əlçatan deyil.</string>
+</resources>
