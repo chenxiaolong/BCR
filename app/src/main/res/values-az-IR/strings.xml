@@ -1,0 +1,258 @@
+<!--
+    SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+    SPDX-License-Identifier: GPL-3.0-only
+-->
+<resources>
+    <string name="app_name_full">ساده زنگ ضبطی</string>
+
+    <!-- Preference headers -->
+    <string name="pref_header_general">عمومی</string>
+    <string name="pref_header_about">حاقیندا</string>
+    <string name="pref_header_debug">دیباگ</string>
+
+    <!-- General preferences -->
+    <string name="pref_call_recording_name">زنگ ضبط</string>
+    <string name="pref_call_recording_desc">گله‌ن و گئده‌ن زنگلری ضبط ائت. آرخا پلاندا ضبط اوچون میکروفون و اعلان اجازه‌لری لازمدیر.</string>
+
+    <string name="pref_record_rules_name">اوتوماتیک ضبط شروطی</string>
+    <string name="pref_record_rules_desc">هانسی زنگلرین اوتوماتیک ضبط اولاجاغینی تنظیم ائت.</string>
+
+    <string name="pref_output_dir_name">خروجی فولدر</string>
+    <string name="pref_output_dir_desc">ضبطلر اوچون بیر فولدر سئچ. فایل منیجرده آچماق اوچون اوزون باس.</string>
+
+    <string name="pref_output_format_name">خروجی فورمت</string>
+    <string name="pref_output_format_desc">ضبطلر اوچون کودلاشدیرما فورمتینی سئچ.</string>
+
+    <string name="pref_min_duration_name">حداقل ضبط مدتی</string>
+    <plurals name="pref_min_duration_desc">
+        <item quantity="one">ضبطلری ان آز %d ثانیه ساخلا.</item>
+        <item quantity="other">ضبطلری ان آز %d ثانیه ساخلا.</item>
+    </plurals>
+    <string name="pref_min_duration_desc_zero">هر طولده ضبطلری ساخلا.</string>
+
+    <string name="pref_inhibit_batt_opt_name">باتری اوپتیمیزاسیونونو غیرفعال ائت</string>
+    <string name="pref_inhibit_batt_opt_desc">برنامه‌نین سیستم طرفین‌دن دایاندیریلماسی احتیمالینی آزالدیر.</string>
+
+    <string name="pref_write_metadata_name">متادیتا فایلی یاز</string>
+    <string name="pref_write_metadata_desc">سس فایلینین یانیندا زنگ حاقدا تفصیلاتلی JSON فایل یارات.</string>
+
+    <string name="pref_record_telecom_apps_name">تلکوم اپلیکیشنلارینین زنگلرینی ضبط ائت</string>
+    <string name="pref_record_telecom_apps_desc">اندرویدین تلکوم سیستمی ایله اینتگره اولموش اوچونجو طرف اپلیکیشنلردن زنگلری ضبط ائت. بو زنگلرین ضبطلری چوخ احتمال سس‌سیز اولاجاق.</string>
+
+    <string name="pref_record_dialing_state_name">باغلانمادان اول زنگلری ضبط ائت</string>
+    <string name="pref_record_dialing_state_desc">گئده‌ن زنگلر اوچون، زنگ باغلانانا قدر گؤزلمک عئینه‌سینه، شماره چئویریلمک باشلایان کیمی ضبط‌یه باشلا.</string>
+
+    <!-- About "preference" -->
+    <string name="pref_version_name">نسخه</string>
+
+    <!-- Debug preferences -->
+    <string name="pref_force_direct_boot_name">مستقیم یوکلمه رژیمینی زورلا</string>
+    <string name="pref_force_direct_boot_desc">تست اوچون دستگاهین ایلک قیفیل آچیلمامیش وضعیت‌ده اولدوغونو تقلیب ائت.</string>
+
+    <string name="pref_migrate_direct_boot_name">مستقیم یوکلمه ضبطلرینی کؤچور</string>
+    <string name="pref_migrate_direct_boot_desc">ایلک قیفیل آچیلمامیشدان اول اولان ضبطلری کؤچور. بو، عمومیت‌له ایلک قیفیل آچیلدیقدان سونرا اوتوماتیک اولار.</string>
+
+    <string name="pref_save_logs_name">لوقلاری ساخلا</string>
+    <string name="pref_save_logs_desc">لوگ‌کت لوقلارینی بیر فایلا ساخلا.</string>
+
+    <!-- Pick contact group activity -->
+    <string name="pick_contact_group_title">تماس قروپونو سئچ</string>
+    <string name="pick_contact_group_local_group">یئرلی قروپ</string>
+
+    <!-- Title of the preference category holding the "Add new rule" option and the list of record rules. -->
+    <string name="pref_header_rules">شروط</string>
+    <!-- Message shown above the record rules list that indicates what rules do and how to interact with the list UI. -->
+    <string name="record_rules_info">بو شروط اویغون زنگ اوچون هانسی اقدامی ائدیله‌جه‌یینی مشخص ائدیر. شروط یوخاریدان آشاغییا دوغرو ایشله‌نیر، اویغونلوق تاپیلاناجان. شروطی یئنی‌دن سیرالاماق اوچون توخونوب ساخلا و یا سیلیب آتماق اوچون سوروشدور.</string>
+    <!-- Title of preference option for adding a new record rule. -->
+    <string name="pref_add_new_rule_name">یئنی شرط آرتیر</string>
+    <!-- Description of preference option for adding a new record rule. -->
+    <string name="pref_add_new_rule_desc">اویغون زنگ اوچون هانسی اقدامی ائدیله‌جه‌یینی مشخص ائتمک اوچون یئنی شرط آرتیر.</string>
+    <!-- Numeric title for every custom rule (excluding the default rule). The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rules_list_custom_name">شرط %d</string>
+    <!-- Title for the default/fallback rule at the bottom of the list. -->
+    <string name="record_rules_list_default_name">پیش‌فرض شرط</string>
+    <!-- Accessibility option to move a rule up by one spot in the list. -->
+    <string name="record_rules_list_action_move_up">شرطی یوخاری آپار</string>
+    <!-- Accessibility option to move a rule down by one spot in the list. -->
+    <string name="record_rules_list_action_move_down">شرطی آشاغی آپار</string>
+    <!-- Accessibility option to remove a rule. -->
+    <string name="record_rules_list_action_remove">شرطی سیل</string>
+
+    <!-- Button in the record rule editor to select a different contact. -->
+    <string name="record_rule_editor_change_contact">تماس دَییش</string>
+    <!-- Button in the record rule editor to select a different contact group. -->
+    <string name="record_rule_editor_change_contact_group">تماس قروپونو دَییش</string>
+
+    <!-- Title of the record rule editor section for configuring the call number to match. -->
+    <string name="record_rule_number_title">زنگ شماره‌سی</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_number_any_chip">همه</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_number_unknown_chip">نامعلوم</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact rules as a category, not a specific contact. -->
+    <string name="record_rule_number_contact_chip">تماس</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact group rules as a category, not a specific contact group. -->
+    <string name="record_rule_number_contact_group_chip">تماس قروپو</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Match: " prefix for visual consistency. -->
+    <string name="record_rule_number_unknown_summary">اویغونلوق: نامعلوم شماره‌لر</string>
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. When the contacts permission is denied, this will display an internal contact ID instead of the contact name. -->
+    <string name="record_rule_number_contact_summary">تماس: %s</string>
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. This variant is only used when the contacts permission is denied and only the group ID is available (not the group name or account). -->
+    <string name="record_rule_number_contact_group_unknown_summary">تماس قروپو: %s</string>
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. -->
+    <string name="record_rule_number_contact_group_with_account_summary">تماس قروپو: %1$s (%2$s)</string>
+
+    <!-- Title of the record rule editor section for configuring the type of call to match. -->
+    <string name="record_rule_type_title">زنگ نووو</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_any_chip">همه</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_incoming_chip">گله‌ن</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_outgoing_chip">گئده‌ن</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_type_conference_chip">کنفرانس</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_incoming_summary">نوو: گله‌ن زنگ</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_outgoing_summary">نوو: گئده‌ن زنگ</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_conference_summary">نوو: کنفرانس زنگی</string>
+
+    <!-- Title of the record rule editor section for configuring which SIM slot to match. -->
+    <string name="record_rule_sim_title">سیم کارت</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_sim_any_chip">همه</string>
+    <!-- Text for the UI chip to select a specific SIM slot in the rule editor. The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rule_sim_specific_chip">سیم کارت %d</string>
+    <!-- Summary shown in the record rules list descriptions. This should have a prefix, like other summary lines, for visual consistency. The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rule_sim_specific_summary">سیم کارت: %d</string>
+
+    <!-- Title of the record rule editor section to configure the action to take when all conditions match. -->
+    <string name="record_rule_action_title">اقدام</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_action_save_chip">ذخیره</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_action_discard_chip">حذف</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_action_ignore_chip">ایگنور ائت</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_save_desc">ضبط ذخیره ائت. زنگ زامانی گؤستریلن اعلان واسطه‌سیله زنگین سونوندا ضبطین سیلیب آتیلماسی قئید اولونا بیلیر.</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_discard_desc">زنگین سونوندا ضبط حذف ائت. زنگ زامانی گؤستریلن اعلان واسطه‌سیله ضبط ذخیره اولا بیلیر.</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_ignore_desc">زنگی کاملاً ایگنور ائت. زنگ ضبط اولمایاجاق و زنگ زامانی ضبط‌یه باشلاماق ممکن دئییل.</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_save_summary">اقدام: ضبط ذخیره ائت</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_discard_summary">اقدام: ضبط حذف ائت</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_ignore_summary">اقدام: زنگی ایگنور ائت</string>
+
+    <!-- Output directory bottom sheet -->
+    <string name="output_dir_bottom_sheet_change_dir">فولدر دَییش</string>
+    <string name="output_dir_bottom_sheet_filename_template">فایل آدی قالبی</string>
+    <string name="output_dir_bottom_sheet_edit_template">قالب دوزلد</string>
+    <string name="output_dir_bottom_sheet_file_retention">فایل ساخلاما</string>
+    <string name="output_dir_bottom_sheet_edit_retention">ساخلامانی دوزلد</string>
+    <string name="retention_keep_all">هامینی ساخلا</string>
+    <plurals name="retention_days">
+        <item quantity="one">%d گون ساخلا</item>
+        <item quantity="other">%d گون ساخلا</item>
+    </plurals>
+    <string name="retention_unusable">فایل ساخلاما موججود فایل آدی قالبی ایله اویغون اولمادیغی اۆچون غیرفعالدیر.</string>
+
+    <!-- Output format bottom sheet -->
+    <string name="output_format_bottom_sheet_output_format">خروجی فورمت</string>
+    <string name="output_format_bottom_sheet_compression_level">سیخیلما سوییه‌سی</string>
+    <string name="output_format_bottom_sheet_bitrate">نرخ بیت</string>
+    <string name="output_format_bottom_sheet_sample_rate">نرخ نومونه</string>
+    <string name="output_format_bottom_sheet_custom_param">اختصاصی</string>
+
+    <string name="bottom_sheet_reset">پیش‌فرضلره بازنشانی</string>
+
+    <!-- Filename template dialog -->
+    <string name="filename_template_dialog_title">فایل آدی قالبی</string>
+    <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
+    <string name="filename_template_dialog_message">خروجی فایل آدی اۆچون اختصاصی قالب داخیل ائت. دَییشَن‌لر فیقورلی مئتَریزله گؤستریلیر (مثلاً، <annotation type="template">{var}</annotation>). احتیاط واریانت‌لار کؤشه‌لی مئتَریزله گؤستریلیر (مثلاً، <annotation type="template">[{contact_name}|نامعلوم]</annotation>).\n\nدَستَک‌لنه‌ن دَییشَن‌لر: <annotation type="supported_vars">دَییشَن</annotation>. سینتاکسیسین تام تشریحی اۆچون <annotation type="template_docs">سندلره</annotation> باخین.</string>
+    <string name="filename_template_dialog_warning_subdirectories">اندرویدین ذخیره‌یه گیرمک چارچوبونون ضعیف پرفورمانسی سببیله، آلت فولدرلرین ایستیفاده‌سی (<annotation type="template">/</annotation> علامتی) بعضی دستگاهلاردا ضبط ساخلاندیغی زامان اۆزون مئودّتلره سبب اولا بیلیر. بو مئودّت زنگین سونوندا باش وئریر و زنگ سسینین ایتیمه‌سینه سبب اولمامالیدیر.</string>
+    <string name="filename_template_dialog_error_empty">قالب بوش اولا بیلمز</string>
+    <string name="filename_template_dialog_error_unknown_variable">نامعلوم قالب دَییشَنی: <annotation type="template">دَییشَن</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">دَییشَن آرگومنت احتیوا ائده بیلمز: <annotation type="template">دَییشَن</annotation></string>
+    <string name="filename_template_dialog_error_invalid_argument">گئچرسیز دَییشَن آرگومنتی: <annotation type="template">دَییشَن</annotation></string>
+    <string name="filename_template_dialog_error_invalid_syntax">قالب سینتاکسیسی گئچرسیزدیر</string>
+    <string name="filename_template_dialog_action_reset_to_default">پیش‌فرضه بازنشانی</string>
+
+    <!-- File retention dialog -->
+    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_message">ضبطلری ساخلاماق اۆچون گون سایینی داخیل ائت.</string>
+    <string name="file_retention_error_too_large">سای چوخ بؤیوکدور</string>
+
+    <!-- Format parameter dialog -->
+    <string name="format_param_dialog_title">اختصاصی پارامتر</string>
+    <string name="format_param_dialog_message">[%1$s, %2$s] آرالیغین‌دا بیر دَیَر داخیل ائت.</string>
+
+    <!-- Format sample rate dialog -->
+    <string name="format_sample_rate_dialog_title">اختصاصی نومونه سرعت</string>
+    <string name="format_sample_rate_dialog_message_desc">آشاغیداکی آرالیقلاردان بیرینده نومونه سرعت داخیل ائت:</string>
+    <string name="format_sample_rate_dialog_message_range">[%1$s, %2$s]</string>
+
+    <!-- Format parameter -->
+    <string name="format_param_bitrate_bps">%s بیت/ثانیه</string>
+    <string name="format_param_bitrate_kbps">%s کیلوبیت/ثانیه</string>
+    <string name="format_param_compression_level">سَوییه %s</string>
+
+    <!-- Format sample rate -->
+    <string name="format_sample_rate">%s هرتز</string>
+
+    <!-- Min duration dialog -->
+    <string name="min_duration_dialog_title">@string/pref_min_duration_name</string>
+    <string name="min_duration_dialog_message">ضبطین ساخلانماسی اۆچون حداقل مدتی داخیل ائت، توخونوشلار و زنگ گؤزله‌مه‌لری خاریج. بو، زنگ زامانی اعلان‌دان همیشه لغو اولا بیلیر.</string>
+    <plurals name="min_duration_dialog_seconds">
+        <item quantity="one">%d ثانیه</item>
+        <item quantity="other">%d ثانیه</item>
+    </plurals>
+
+    <!-- Snackbar alerts -->
+    <string name="alert_logcat_success">لوقلار %1$s اونا عوقورلو ساخلاندی</string>
+    <string name="alert_logcat_failure">لوقلار %1$s اونا ساخلانا بیلمه‌دی: %2$s</string>
+    <string name="alert_contact_group_query_failure">تماس قروپلارینین سورغوسو عوقورسوز اولدو: %1$s</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_persistent_name">آرخا پلان خیدمتلری</string>
+    <string name="notification_channel_persistent_desc">آرخا پلاندا زنگ ضبط اوچون دایمی اعلان</string>
+    <string name="notification_channel_failure_name">خطا اخطارلاری</string>
+    <string name="notification_channel_failure_desc">زنگ ضبط زامانی خطالار اۆچون اخطارلار</string>
+    <string name="notification_channel_success_name">عوقورلو اخطارلار</string>
+    <string name="notification_channel_success_desc">عوقورلو زنگ ضبطلری اۆچون اخطارلار</string>
+    <string name="notification_channel_silence_name">تام سس‌سیزلیک اخطارلاری</string>
+    <string name="notification_channel_silence_desc">زنگ ضبطلری تام سس‌سیز اولدوغو زامان اخطار وئر</string>
+    <string name="notification_direct_boot_migration_failed">ضبطلر کؤچوروله بیلمه‌دی</string>
+    <string name="notification_direct_boot_migration_error">دستگاهین ایلک قیفیل آچیلمامیشدان اول ساخلانمیش بعضی ضبطلر خروجی فولدره کؤچوروله بیلمه‌دی.</string>
+    <string name="notification_recording_initializing">زنگ ضبط باشلادیلیر</string>
+    <string name="notification_recording_in_progress">زنگ ضبط داوام ائدیر</string>
+    <string name="notification_recording_finalizing">زنگ ضبط تاماملانیر</string>
+    <string name="notification_recording_paused">زنگ ضبط توختادیلیب</string>
+    <string name="notification_recording_on_hold">زنگ گؤزله‌مه‌ده‌دیر</string>
+    <string name="notification_recording_failed">زنگ ضبط عوقورسوز اولدو</string>
+    <string name="notification_recording_succeeded">زنگ عوقورلو ضبط اولدو</string>
+    <string name="notification_message_delete_at_end">ضبط زنگین سونوندا حذف اولاجاق. ضبط ساخلاماق اۆچون بازنشانی اوزَرینه توخون.</string>
+    <plurals name="notification_message_delete_at_end_too_short">
+        <item quantity="one">ضبط %d ثانیه‌دن قیسا اولارسا زنگین سونوندا حذف اولاجاق. ضبط ساخلاماق اۆچون بازنشانی اوزَرینه توخون.</item>
+        <item quantity="other">ضبط %d ثانیه‌دن قیسا اولارسا زنگین سونوندا حذف اولاجاق. ضبط ساخلاماق اۆچون بازنشانی اوزَرینه توخون.</item>
+    </plurals>
+    <string name="notification_internal_android_error">ضبط داخلی اندروید کومپوننتین‌ده عوقورسوز اولدو (%s). بو دستگاه و یا یوموشاق‌دیرمان زنگ ضبطینی دَستَک‌له‌مه‌یه بیلر.</string>
+    <string name="notification_pure_silence_error">سس تام سس‌سیز اولدوغو اۆچون ضبط حذف اولدو. بو دستگاه \'%s\' اپلیکیشنو ایله باغلی زنگلرین ضبطینی دَستَک‌له‌مه‌یه بیلر.</string>
+    <string name="notification_action_open">آچ</string>
+    <string name="notification_action_share">پایلاش</string>
+    <string name="notification_action_delete">حذف</string>
+    <string name="notification_action_restore">بازنشانی</string>
+    <string name="notification_action_pause">توختات</string>
+    <string name="notification_action_resume">داوام ائت</string>
+
+    <!-- Quick settings tile -->
+    <string name="quick_settings_label">زنگ ضبط</string>
+
+    <!-- Snackbar alerts -->
+    <string name="documentsui_not_found">اندرویدین داخلی فایل منیجری (DocumentsUI) الچاتان دئییل.</string>
+</resources>
