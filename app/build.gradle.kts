@@ -573,10 +573,10 @@ tasks.register("changelogUpdateLinks") {
 }
 
 tasks.register("changelogPreRelease") {
-    val version = project.property("releaseVersion")
+    val version = project.findProperty("releaseVersion")
 
     doLast {
-        updateChangelog(version.toString(), true)
+        updateChangelog(version!!.toString(), true)
         updateMagiskChangelog("v$version")
     }
 }
