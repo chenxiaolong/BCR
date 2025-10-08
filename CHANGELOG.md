@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Add Azerbaijani translations ([PR #713 @muctebanesiri])
+* Update dependencies ([PR #714 @chenxiaolong])
 
 ### Version 1.80
 
@@ -1063,3 +1064,4 @@ Non-user-facing changes:
 [PR #704 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/704
 [PR #705 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/705
 [PR #713 @muctebanesiri]: https://github.com/chenxiaolong/BCR/pull/713
+[PR #714 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/714
