@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.81
 
 * Add Azerbaijani translations ([PR #713 @muctebanesiri])
 * Update dependencies ([PR #714 @chenxiaolong])
