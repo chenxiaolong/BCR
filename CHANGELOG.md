@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.82
 
 * Fix file retention setting not refreshing if it was disabled by a bad filename template and the template is reset via long press ([PR #717 @chenxiaolong])
 * Update dependencies ([PR #718 @chenxiaolong])
