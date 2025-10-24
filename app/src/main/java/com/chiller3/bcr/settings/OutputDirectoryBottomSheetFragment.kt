@@ -62,6 +62,7 @@ class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment() {
         binding.editTemplate.setOnLongClickListener {
             prefs.filenameTemplate = null
             refreshFilenameTemplate()
+            refreshOutputRetention()
             true
         }
 
