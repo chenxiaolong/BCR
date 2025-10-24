@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Fix file retention setting not refreshing if it was disabled by a bad filename template and the template is reset via long press ([PR #717 @chenxiaolong])
+
 ### Version 1.81
 
 * Add Azerbaijani translations ([PR #713 @muctebanesiri])
@@ -1067,3 +1069,4 @@ Non-user-facing changes:
 [PR #705 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/705
 [PR #713 @muctebanesiri]: https://github.com/chenxiaolong/BCR/pull/713
 [PR #714 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/714
+[PR #717 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/717
