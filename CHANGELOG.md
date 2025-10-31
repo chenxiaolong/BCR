@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Fix recording being restarted if the call state changes after it was cancelled (eg. due to "ignore" rules) ([Issue #719], [PR #720 @chenxiaolong])
+
 ### Version 1.82
 
 * Fix file retention setting not refreshing if it was disabled by a bad filename template and the template is reset via long press ([PR #717 @chenxiaolong])
@@ -769,6 +771,7 @@ Non-user-facing changes:
 [Issue #643]: https://github.com/chenxiaolong/BCR/issues/643
 [Issue #649]: https://github.com/chenxiaolong/BCR/issues/649
 [Issue #691]: https://github.com/chenxiaolong/BCR/issues/691
+[Issue #719]: https://github.com/chenxiaolong/BCR/issues/719
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -1074,3 +1077,4 @@ Non-user-facing changes:
 [PR #714 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/714
 [PR #717 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/717
 [PR #718 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/718
+[PR #720 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/720
