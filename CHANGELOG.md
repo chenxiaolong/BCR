@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.83
 
 * Fix recording being restarted if the call state changes after it was cancelled (eg. due to "ignore" rules) ([Issue #719], [PR #720 @chenxiaolong])
 
