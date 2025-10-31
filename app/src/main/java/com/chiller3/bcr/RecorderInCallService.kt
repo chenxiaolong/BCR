@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2025 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -435,10 +435,14 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
     }
 
     private fun onRecorderExited(recorder: RecorderThread) {
-        // This may be an early exit if an error occurred while recording. Remove from the map to
-        // make sure the thread doesn't receive any more call-related callbacks.
-        if (callsToRecorders.entries.removeIf { it.value === recorder }) {
+        // This may be an early exit if an error occurred while recording or if the call matched an
+        // "ignore" rule. Make sure we stop receiving state changes for this call or else a new
+        // recorder thread might be started.
+        val call = callsToRecorders.entries.find { it.value === recorder }?.key
+        if (call != null) {
             Log.w(TAG, "$recorder exited before cancellation")
+            callsToRecorders.remove(call)
+            requestStopRecording(call)
         }
 
         // The notification no longer needs to be shown. If this recorder was associated with the
