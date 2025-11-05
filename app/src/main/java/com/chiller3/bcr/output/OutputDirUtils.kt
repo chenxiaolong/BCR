@@ -79,10 +79,23 @@ class OutputDirUtils(private val context: Context, private val redactor: Redacto
      *
      * @throws IOException if [file] cannot be opened
      */
-    fun openFile(file: DocumentFile, truncate: Boolean): ParcelFileDescriptor {
-        val truncParam = if (truncate) { "t" } else { "" }
-        return context.contentResolver.openFileDescriptor(file.uri, "rw$truncParam")
-            ?: throw IOException("Failed to open file at ${file.uri}")
+    fun openFile(
+        file: DocumentFile,
+        read: Boolean = false,
+        write: Boolean = false,
+        truncate: Boolean = false,
+    ): ParcelFileDescriptor {
+        require(read || write) { "At least one of read or write must be true" }
+
+        // Build SAF mode string, e.g. "r", "w", "rw", "wt", etc.
+        val modeBuilder = StringBuilder()
+        if (read) modeBuilder.append("r")
+        if (write) modeBuilder.append("w")
+        if (truncate && write) modeBuilder.append("t")
+
+        val mode = modeBuilder.toString()
+        return context.contentResolver.openFileDescriptor(file.uri, mode)
+            ?: throw IOException("Failed to open file at ${file.uri} with mode '$mode'")
     }
 
     /**
@@ -92,8 +105,8 @@ class OutputDirUtils(private val context: Context, private val redactor: Redacto
      */
     private fun copyAndDelete(sourceFile: DocumentFile, targetFile: DocumentFile) {
         try {
-            openFile(sourceFile, false).use { sourcePfd ->
-                openFile(targetFile, true).use { targetPfd ->
+            openFile(sourceFile, read = true).use { sourcePfd ->
+                openFile(targetFile, write = true, truncate = true).use { targetPfd ->
                     var remain = Os.lseek(sourcePfd.fileDescriptor, 0, OsConstants.SEEK_END)
                     val offset = Int64Ref(0)
 
