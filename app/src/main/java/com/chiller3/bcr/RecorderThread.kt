@@ -262,10 +262,13 @@ class RecorderThread(
                 var recordingInfo: RecordingInfo? = null
 
                 try {
-                    dirUtils.openFile(outputDocFile, true).use {
-                        recordingInfo = recordUntilCancelled(it)
-                        Os.fsync(it.fileDescriptor)
-                    }
+                    // The file must be seekable so that the audio file header can be updated when
+                    // the recording ends.
+                    dirUtils.openFile(outputDocFile, read = true, write = true, truncate = true)
+                        .use {
+                            recordingInfo = recordUntilCancelled(it)
+                            Os.fsync(it.fileDescriptor)
+                        }
 
                     status = Status.Succeeded
                 } finally {
@@ -465,7 +468,7 @@ class RecorderThread(
             // Always create in the default directory and then move to ensure that we don't race
             // with the direct boot file migration process.
             var metadataFile = dirUtils.createFileInDefaultDir(path, MIME_METADATA)
-            dirUtils.openFile(metadataFile, true).use {
+            dirUtils.openFile(metadataFile, write = true, truncate = true).use {
                 writeFully(it.fileDescriptor, metadataBytes, 0, metadataBytes.size)
             }
             dirUtils.tryMoveToOutputDir(metadataFile, path, MIME_METADATA)?.let {

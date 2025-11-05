@@ -75,7 +75,8 @@ class OutputDirUtils(private val context: Context, private val redactor: Redacto
     }
 
     /**
-     * Open seekable file descriptor to [file].
+     * Open file descriptor to [file]. Writable file descriptors are not guaranteed to be seekable
+     * unless they are also opened for reading.
      *
      * @throws IOException if [file] cannot be opened
      */
