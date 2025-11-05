@@ -8,6 +8,7 @@ package com.chiller3.bcr.output
 import android.content.Context
 import android.net.Uri
 import android.os.ParcelFileDescriptor
+import android.system.ErrnoException
 import android.system.Int64Ref
 import android.system.Os
 import android.system.OsConstants
@@ -121,7 +122,15 @@ class OutputDirUtils(private val context: Context, private val redactor: Redacto
                         remain -= ret
                     }
 
-                    Os.fsync(targetPfd.fileDescriptor)
+                    try {
+                        Os.fsync(targetPfd.fileDescriptor)
+                    } catch (e: ErrnoException) {
+                        if (e.errno == OsConstants.EINVAL) {
+                            // This is a pipe, socket, or fifo.
+                        } else {
+                            throw e
+                        }
+                    }
                 }
             }
 
