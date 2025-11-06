@@ -7,6 +7,8 @@
     to update the actual links at the bottom of the file.
 -->
 
+### Unreleased
+
 ### Version 1.84
 
 * Fix recording to output directories that do not support seekable files ([Issue #722], [PR #723 @yeicor])
