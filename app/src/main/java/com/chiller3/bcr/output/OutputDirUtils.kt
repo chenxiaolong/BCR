@@ -53,8 +53,23 @@ class OutputDirUtils(private val context: Context, private val redactor: Redacto
         val redactedRoot = redactor.redact(root.uri)
         Log.d(TAG, "Creating $redactedPath with MIME type $mimeType in $redactedRoot")
 
-        return root.createNestedFile(mimeType, path)
+        val file = root.createNestedFile(mimeType, path)
             ?: throw IOException("Failed to create file $redactedPath in $redactedRoot")
+
+        // Some SAF providers fail to append the file extension, so we'll have to do it ourselves.
+        // We just use the string length as a heuristic since an endsWith() check can fail if one
+        // MIME type has multiple valid extensions (eg. oga and ogg).
+        val name = file.name
+        if (name != null && name.length - path.last().length < 4) {
+            Log.d(TAG, "SAF provider failed to append extension to $redactedPath")
+
+            val extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
+            if (extension != null) {
+                file.renameTo("$name.$extension")
+            }
+        }
+
+        return file
     }
 
     private fun createFileWithFallback(
