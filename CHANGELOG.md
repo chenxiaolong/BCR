@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Fix recording to output directories that do not support seekable files ([Issue #722], [PR #723 @yeicor])
+* Append file extension manually if the SAF provider for the output directory fails to do so ([PR #724 @chenxiaolong])
 
 ### Version 1.83
 
@@ -1084,3 +1085,4 @@ Non-user-facing changes:
 [PR #718 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/718
 [PR #720 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/720
 [PR #723 @yeicor]: https://github.com/chenxiaolong/BCR/pull/723
+[PR #724 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/724
