@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.84
 
 * Fix recording to output directories that do not support seekable files ([Issue #722], [PR #723 @yeicor])
 * Append file extension manually if the SAF provider for the output directory fails to do so ([PR #724 @chenxiaolong])
