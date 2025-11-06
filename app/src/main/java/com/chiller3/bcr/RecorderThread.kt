@@ -240,6 +240,7 @@ class RecorderThread(
 
         var status: Status = Status.Cancelled
         var outputDocFile: DocumentFile? = null
+        var outputDocPath: OutputPath? = null
         val additionalFiles = ArrayList<OutputFile>()
 
         startLogcat()
@@ -258,6 +259,7 @@ class RecorderThread(
                 val initialPath = outputPath
                 outputDocFile = dirUtils.createFileInDefaultDir(
                     initialPath.value, format.mimeTypeContainer)
+                outputDocPath = initialPath
 
                 var recordingInfo: RecordingInfo? = null
 
@@ -285,6 +287,7 @@ class RecorderThread(
                             format.mimeTypeContainer,
                         )?.let {
                             outputDocFile = it
+                            outputDocPath = finalPath
                         }
 
                         writeMetadataFile(finalPath.value, recordingInfo)?.let {
@@ -347,6 +350,7 @@ class RecorderThread(
                 OutputFile(
                     it.uri,
                     outputFilenameGenerator.redactor.redact(it.uri),
+                    outputDocPath!!.value.joinToString("/"),
                     format.mimeTypeContainer,
                 )
             }
@@ -400,6 +404,7 @@ class RecorderThread(
         assert(this::logcatProcess.isInitialized) { "logcat not started" }
 
         var uri = logcatFile.uri
+        var path = logcatPath
 
         try {
             try {
@@ -417,10 +422,16 @@ class RecorderThread(
             val finalLogcatPath = getLogcatPath()
             dirUtils.tryMoveToOutputDir(logcatFile, finalLogcatPath.value, MIME_LOGCAT)?.let {
                 uri = it.uri
+                path = finalLogcatPath
             }
         }
 
-        return OutputFile(uri, outputFilenameGenerator.redactor.redact(uri), MIME_LOGCAT)
+        return OutputFile(
+            uri,
+            outputFilenameGenerator.redactor.redact(uri),
+            path.value.joinToString("/"),
+            MIME_LOGCAT,
+        )
     }
 
     private fun writeMetadataFile(path: List<String>, recordingInfo: RecordingInfo?): OutputFile? {
@@ -478,6 +489,7 @@ class RecorderThread(
             return OutputFile(
                 metadataFile.uri,
                 outputFilenameGenerator.redactor.redact(metadataFile.uri),
+                path.joinToString("/"),
                 MIME_METADATA,
             )
         } catch (e: Exception) {

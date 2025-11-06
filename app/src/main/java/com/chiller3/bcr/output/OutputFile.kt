@@ -24,6 +24,12 @@ data class OutputFile(
     /** String representation of [uri] with private information redacted. */
     val redacted: String,
 
+    /**
+     * Path of the file referred to by [uri]. Displayed to the user when [uri] does not contain a
+     * meaningful path.
+     */
+    val path: String,
+
     /** MIME type of [uri]'s contents. */
     val mimeType: String,
 ) : Parcelable {

@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2024-2025 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -205,6 +205,7 @@ class DirectBootMigrationService : Service() {
                         OutputFile(
                             newFile.uri,
                             redactor.redact(newFile.uri),
+                            fileInfo.path.joinToString("/"),
                             fileInfo.mime.type,
                         )
                     )

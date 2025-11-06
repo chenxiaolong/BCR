@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2025 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -229,6 +229,14 @@ class Notifications(
                 }
                 if (file != null) {
                     if (isNotEmpty()) {
+                        append("\n\n")
+                    }
+
+                    // Some SAF providers have document IDs that aren't paths (eg. auto-incrementing
+                    // number) and are meaningless to the user.
+                    val formattedUri = file.uri.formattedString
+                    if (!formattedUri.contains(file.path)) {
+                        append(file.path)
                         append("\n\n")
                     }
                     append(file.uri.formattedString)
