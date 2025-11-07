@@ -48,6 +48,12 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
+            app:key="hide_launcher_icon"
+            app:title="@string/pref_hide_launcher_icon_name"
+            app:summary="@string/pref_hide_launcher_icon_desc"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
             app:key="write_metadata"
             app:title="@string/pref_write_metadata_name"
             app:summary="@string/pref_write_metadata_desc"

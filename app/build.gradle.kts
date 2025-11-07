@@ -394,6 +394,7 @@ android.applicationVariants.all {
             }
         }
 
+        from(File(magiskDir, "action.sh"))
         from(File(magiskDir, "boot_common.sh"))
         from(File(magiskDir, "post-fs-data.sh"))
         from(File(magiskDir, "service.sh"))

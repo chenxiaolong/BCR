@@ -21,6 +21,9 @@
     <string name="pref_inhibit_batt_opt_name">禁用电池优化</string>
     <string name="pref_inhibit_batt_opt_desc">禁用电池优化可以避免软件在后台被杀死</string>
 
+    <string name="pref_hide_launcher_icon_name">隐藏桌面图标</string>
+    <string name="pref_hide_launcher_icon_desc">从桌面上隐藏 BCR 的图标，你可以通过 Root 管理器的 Action 按钮打开此设置页面</string>
+
     <string name="pref_write_metadata_name">保存元数据文件</string>
     <string name="pref_write_metadata_desc">创建同名 JSON 文件包含通话录音详情</string>
     

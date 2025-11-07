@@ -103,13 +103,17 @@
 
         <activity
             android:name=".settings.SettingsActivity"
+            android:exported="true" />
+        <!-- Activity alias for launcher icon - can be disabled to hide icon while keeping activity accessible -->
+        <activity-alias
+            android:name=".settings.SettingsActivityLauncher"
+            android:targetActivity=".settings.SettingsActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity-alias>
 
         <activity
             android:name=".rule.PickContactGroupActivity"

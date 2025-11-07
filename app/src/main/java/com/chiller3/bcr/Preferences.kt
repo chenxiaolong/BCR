@@ -38,6 +38,7 @@ class Preferences(initialContext: Context) {
         const val PREF_OUTPUT_FORMAT = "output_format"
         const val PREF_MIN_DURATION = "min_duration"
         const val PREF_INHIBIT_BATT_OPT = "inhibit_batt_opt"
+        const val PREF_HIDE_LAUNCHER_ICON = "hide_launcher_icon"
         private const val PREF_WRITE_METADATA = "write_metadata"
         private const val PREF_RECORD_TELECOM_APPS = "record_telecom_apps"
         private const val PREF_RECORD_DIALING_STATE = "record_dialing_state"
@@ -434,6 +435,13 @@ class Preferences(initialContext: Context) {
     var recordDialingState: Boolean
         get() = prefs.getBoolean(PREF_RECORD_DIALING_STATE, false)
         set(enabled) = prefs.edit { putBoolean(PREF_RECORD_DIALING_STATE, enabled) }
+
+    /**
+     * Whether to hide the launcher icon.
+     */
+    var hideLauncherIcon: Boolean
+        get() = prefs.getBoolean(PREF_HIDE_LAUNCHER_ICON, false)
+        set(enabled) = prefs.edit { putBoolean(PREF_HIDE_LAUNCHER_ICON, enabled) }
 
     /**
      * Get a unique notification ID that increments on every call.
