@@ -48,12 +48,6 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
-            app:key="hide_launcher_icon"
-            app:title="@string/pref_hide_launcher_icon_name"
-            app:summary="@string/pref_hide_launcher_icon_desc"
-            app:iconSpaceReserved="false" />
-
-        <SwitchPreferenceCompat
             app:key="write_metadata"
             app:title="@string/pref_write_metadata_name"
             app:summary="@string/pref_write_metadata_desc"
@@ -69,6 +63,13 @@
             app:key="record_dialing_state"
             app:title="@string/pref_record_dialing_state_name"
             app:summary="@string/pref_record_dialing_state_desc"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:key="show_launcher_icon"
+            app:persistent="false"
+            app:title="@string/pref_show_launcher_icon_name"
+            app:summary="@string/pref_show_launcher_icon_desc"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 

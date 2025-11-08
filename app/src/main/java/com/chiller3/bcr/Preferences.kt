@@ -5,8 +5,10 @@
 
 package com.chiller3.bcr
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
 import android.os.UserManager
@@ -21,6 +23,7 @@ import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.output.Retention
 import com.chiller3.bcr.rule.LegacyRecordRule
 import com.chiller3.bcr.rule.RecordRule
+import com.chiller3.bcr.settings.SettingsActivity
 import com.chiller3.bcr.template.Template
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -38,10 +41,10 @@ class Preferences(initialContext: Context) {
         const val PREF_OUTPUT_FORMAT = "output_format"
         const val PREF_MIN_DURATION = "min_duration"
         const val PREF_INHIBIT_BATT_OPT = "inhibit_batt_opt"
-        const val PREF_HIDE_LAUNCHER_ICON = "hide_launcher_icon"
         private const val PREF_WRITE_METADATA = "write_metadata"
         private const val PREF_RECORD_TELECOM_APPS = "record_telecom_apps"
         private const val PREF_RECORD_DIALING_STATE = "record_dialing_state"
+        const val PREF_SHOW_LAUNCHER_ICON = "show_launcher_icon"
         const val PREF_VERSION = "version"
         private const val PREF_FORCE_DIRECT_BOOT = "force_direct_boot"
         const val PREF_MIGRATE_DIRECT_BOOT = "migrate_direct_boot"
@@ -437,11 +440,30 @@ class Preferences(initialContext: Context) {
         set(enabled) = prefs.edit { putBoolean(PREF_RECORD_DIALING_STATE, enabled) }
 
     /**
-     * Whether to hide the launcher icon.
+     * The [ComponentName] for the [SettingsActivity] alias.
+     *
+     * The alias is disabled when the launcher icon is disabled. The regular <activity> manifest
+     * element is kept enabled to allow [com.chiller3.bcr.settings.DialerCodeReceiver] to launch the
+     * activity.
      */
-    var hideLauncherIcon: Boolean
-        get() = prefs.getBoolean(PREF_HIDE_LAUNCHER_ICON, false)
-        set(enabled) = prefs.edit { putBoolean(PREF_HIDE_LAUNCHER_ICON, enabled) }
+    private val launcherComponent =
+        ComponentName(context, SettingsActivity::class.java.name + "Launcher")
+
+    /**
+     * Whether to show the launcher icon.
+     */
+    var showLauncherIcon: Boolean
+        get() = context.packageManager.getComponentEnabledSetting(launcherComponent) !=
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+        set(enabled) = context.packageManager.setComponentEnabledSetting(
+            launcherComponent,
+            if (enabled) {
+                PackageManager.COMPONENT_ENABLED_STATE_DEFAULT
+            } else {
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+            },
+            PackageManager.DONT_KILL_APP,
+        )
 
     /**
      * Get a unique notification ID that increments on every call.

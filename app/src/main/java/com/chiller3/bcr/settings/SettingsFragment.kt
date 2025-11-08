@@ -6,13 +6,9 @@
 package com.chiller3.bcr.settings
 
 import android.content.ActivityNotFoundException
-import android.content.ComponentName
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
@@ -54,7 +50,7 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
     private lateinit var prefOutputFormat: Preference
     private lateinit var prefMinDuration: Preference
     private lateinit var prefInhibitBatteryOpt: SwitchPreferenceCompat
-    private lateinit var prefHideLauncherIcon: SwitchPreferenceCompat
+    private lateinit var prefShowLauncherIcon: SwitchPreferenceCompat
     private lateinit var prefVersion: LongClickablePreference
     private lateinit var prefMigrateDirectBoot: Preference
     private lateinit var prefSaveLogs: Preference
@@ -117,8 +113,9 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
         prefInhibitBatteryOpt = findPreference(Preferences.PREF_INHIBIT_BATT_OPT)!!
         prefInhibitBatteryOpt.onPreferenceChangeListener = this
 
-        prefHideLauncherIcon = findPreference(Preferences.PREF_HIDE_LAUNCHER_ICON)!!
-        prefHideLauncherIcon.onPreferenceChangeListener = this
+        prefShowLauncherIcon = findPreference(Preferences.PREF_SHOW_LAUNCHER_ICON)!!
+        prefShowLauncherIcon.onPreferenceChangeListener = this
+        refreshLauncherIcon()
 
         prefVersion = findPreference(Preferences.PREF_VERSION)!!
         prefVersion.onPreferenceClickListener = this
@@ -193,6 +190,10 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
         }
     }
 
+    private fun refreshLauncherIcon() {
+        prefShowLauncherIcon.isChecked = prefs.showLauncherIcon
+    }
+
     private fun refreshVersion() {
         val suffix = if (prefs.isDebugMode) {
             "+debugmode"
@@ -229,8 +230,8 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
                     startActivity(Permissions.getBatteryOptSettingsIntent())
                 }
             }
-            prefHideLauncherIcon -> {
-                setLauncherIconVisibility(newValue != true)
+            prefShowLauncherIcon -> {
+                prefs.showLauncherIcon = newValue == true
                 return true
             }
         }
@@ -347,19 +348,5 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
                 }
             })
             .show()
-    }
-
-    private fun setLauncherIconVisibility(visible: Boolean) {
-        runCatching {
-            requireContext().packageManager.setComponentEnabledSetting(
-                ComponentName(requireContext(), "com.chiller3.bcr.settings.SettingsActivityLauncher"),
-                if (visible) PackageManager.COMPONENT_ENABLED_STATE_ENABLED else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP
-            )
-            Log.i("SettingsFragment", "Launcher icon visibility set to: $visible")
-        }.onFailure { e ->
-            Log.e("SettingsFragment", "Failed to set launcher icon visibility", e)
-            context?.let { Toast.makeText(it, "Failed: ${e.message}", Toast.LENGTH_LONG).show() }
-        }
     }
 }
