@@ -23,6 +23,9 @@
 
     <string name="pref_write_metadata_name">保存元数据文件</string>
     <string name="pref_write_metadata_desc">创建同名 JSON 文件包含通话录音详情</string>
+
+    <string name="pref_show_launcher_icon_name">显示桌面图标</string>
+    <string name="pref_show_launcher_icon_desc">隐藏桌面图标后，可拨号 <b>*#*#227#*#*</b> 打开此设置页面</string>
     
     <!-- About "preference" -->
     <string name="pref_version_name">软件版本</string>
