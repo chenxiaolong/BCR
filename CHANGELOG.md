@@ -9,6 +9,9 @@
 
 ### Unreleased
 
+* Add support for hiding the app icon ([Issue #727], [PR #728 @People-11])
+  * When hidden, the app can be opened by dialing `*#*#BCR#*#*` (`*#*#227#*#*`)
+
 ### Version 1.84
 
 * Fix recording to output directories that do not support seekable files ([Issue #722], [PR #723 @yeicor])
@@ -781,6 +784,7 @@ Non-user-facing changes:
 [Issue #691]: https://github.com/chenxiaolong/BCR/issues/691
 [Issue #719]: https://github.com/chenxiaolong/BCR/issues/719
 [Issue #722]: https://github.com/chenxiaolong/BCR/issues/722
+[Issue #727]: https://github.com/chenxiaolong/BCR/issues/727
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -1090,3 +1094,4 @@ Non-user-facing changes:
 [PR #723 @yeicor]: https://github.com/chenxiaolong/BCR/pull/723
 [PR #724 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/724
 [PR #725 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/725
+[PR #728 @People-11]: https://github.com/chenxiaolong/BCR/pull/728
