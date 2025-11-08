@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.85
 
 * Add support for hiding the app icon ([Issue #727], [PR #728 @People-11])
   * When hidden, the app can be opened by dialing `*#*#BCR#*#*` (`*#*#227#*#*`)
