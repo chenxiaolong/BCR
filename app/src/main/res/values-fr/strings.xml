@@ -18,7 +18,7 @@
     <string name="pref_record_rules_desc">Configurer quels appels doivent être automatiquement enregistrés.</string>
 
     <string name="pref_output_dir_name">Dossier des enregistrements</string>
-    <string name="pref_output_dir_desc">Choisir un dossier pour stocker les enregistrements.</string>
+    <string name="pref_output_dir_desc">Choisir un dossier pour stocker les enregistrements. Appui long pour ouvrir dans le gestionnaire de fichiers.</string>
 
     <string name="pref_output_format_name">Format des enregistrements</string>
     <string name="pref_output_format_desc">Choisir un encodage pour stocker les enregistrements.</string>
@@ -42,6 +42,9 @@
     <string name="pref_record_dialing_state_name">Enregistrer l\'appel avant décrochage</string>
     <string name="pref_record_dialing_state_desc">Pour les appels sortant, démarrer l\'enregistrement dès le début d\'appel, avant que le correspondant décroche.</string>
 
+    <string name="pref_show_launcher_icon_name">Afficher l\'icone de l\'application</string>
+    <string name="pref_show_launcher_icon_desc">Lorsque l\'icone du lanceur est masquée, composer <b>*#*#BCR#*#*</b> pour ouvrir l\'application.</string>
+
     <!-- About "preference" -->
     <string name="pref_version_name">Version</string>
 
@@ -49,20 +52,20 @@
     <string name="pref_force_direct_boot_name">Forcer le mode démarrage direct</string>
     <string name="pref_force_direct_boot_desc">Simuler l\'appareil dans l\'état précédant le premier déverrouillage pour les tests.</string>
 
-    <string name="pref_migrate_direct_boot_name">Déplacer les enregistrements du démarrage direct</string>
-    <string name="pref_migrate_direct_boot_desc">Déplacer les enregistrements réalisés avant le premier déverrouillage. Cela devrait se produire normalement après le premier déverrouillage.</string>
+    <string name="pref_migrate_direct_boot_name">Migrer les enregistrements du démarrage direct</string>
+    <string name="pref_migrate_direct_boot_desc">Migrer les enregistrements réalisés avant le premier déverrouillage. Cela devrait se produire normalement après le premier déverrouillage.</string>
 
     <string name="pref_save_logs_name">Enregistrer les logs</string>
     <string name="pref_save_logs_desc">Enregistrer les journeaux logs dans un fichier.</string>
 
     <!-- Pick contact group activity -->
     <string name="pick_contact_group_title">Choisir un groupe de contact</string>
-    <string name="pick_contact_group_local_group">Groupe locale</string>
+    <string name="pick_contact_group_local_group">Groupe local</string>
 
     <!-- Title of the preference category holding the "Add new rule" option and the list of record rules. -->
     <string name="pref_header_rules">Règles</string>
     <!-- Message shown above the record rules list that indicates what rules do and how to interact with the list UI. -->
-    <string name="record_rules_info">Les règles détermines les actions à effectuer pour les appels correspondants. Elles sont appliqués de haut en bas jusqu\'à une correspondance trouvée. Maintenir pour les réorganiser ou balayer pour les supprimer.</string>
+    <string name="record_rules_info">Les règles déterminent les actions à effectuer pour les appels correspondants. Elles sont appliquées de haut en bas jusqu\'à une correspondance trouvée. Maintenir pour les réorganiser ou balayer pour les supprimer.</string>
     <!-- Title of preference option for adding a new record rule. -->
     <string name="pref_add_new_rule_name">Ajouter une nouvelle règle</string>
     <!-- Description of preference option for adding a new record rule. -->
@@ -74,7 +77,7 @@
     <!-- Accessibility option to move a rule up by one spot in the list. -->
     <string name="record_rules_list_action_move_up">Remonter la règle</string>
     <!-- Accessibility option to move a rule down by one spot in the list. -->
-    <string name="record_rules_list_action_move_down">Déscendre la règle</string>
+    <string name="record_rules_list_action_move_down">Descendre la règle</string>
     <!-- Accessibility option to remove a rule. -->
     <string name="record_rules_list_action_remove">Supprimer la règle</string>
 
@@ -133,19 +136,19 @@
     <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
     <string name="record_rule_action_save_chip">Sauvegarder</string>
     <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_action_discard_chip">Abandonner</string>
+    <string name="record_rule_action_discard_chip">Rejeter</string>
     <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
     <string name="record_rule_action_ignore_chip">Ignorer</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
     <string name="record_rule_action_save_desc">Sauvegarder l\'enregistrement. L\'enregistrement peut être sélectionné pour suppression à la fin de l\'appel via la notification durant l\'échange.</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
-    <string name="record_rule_action_discard_desc">Abandonner l\'enregistrmement à la fin de l\'appel. L\'enregistrement peut être conservé via la notification durant l\'échange.</string>
+    <string name="record_rule_action_discard_desc">Rejeter l\'enregistrement à la fin de l\'appel. L\'enregistrement peut être conservé via la notification durant l\'échange.</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
     <string name="record_rule_action_ignore_desc">Ignorer complètement l\'appel. L\'appel ne sera pas enregistré et il sera impossible de démarrer l\'enregistrement pendant l\'échange.</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
     <string name="record_rule_action_save_summary">Action : Sauvegarder l\'enregistrement</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
-    <string name="record_rule_action_discard_summary">Action : Abandonner l\'enregistrement</string>
+    <string name="record_rule_action_discard_summary">Action : Rejeter l\'enregistrement</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
     <string name="record_rule_action_ignore_summary">Action : Ignorer l\'appel</string>
 
@@ -154,11 +157,11 @@
     <string name="output_dir_bottom_sheet_filename_template">Modèle du nom de fichier</string>
     <string name="output_dir_bottom_sheet_edit_template">Modifier le modèle</string>
     <string name="output_dir_bottom_sheet_file_retention">Conserver les fichiers</string>
-    <string name="output_dir_bottom_sheet_edit_retention">Modifier la durée des sauvegardes</string>
-    <string name="retention_keep_all">Garder tout</string>
+    <string name="output_dir_bottom_sheet_edit_retention">Modifier la durée de conservation</string>
+    <string name="retention_keep_all">Conserver tout</string>
     <plurals name="retention_days">
-        <item quantity="one">Garder %d jour</item>
-        <item quantity="other">Garder %d jour</item>
+        <item quantity="one">Conserver %d jour</item>
+        <item quantity="other">Conserver %d jours</item>
     </plurals>
     <string name="retention_unusable">La sauvegarde des fichiers est indisponible car le modèle du nom de fichier n\'est pas valide.</string>
 
@@ -175,7 +178,7 @@
     <string name="filename_template_dialog_title">Modèle du fichier</string>
     <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
     <string name="filename_template_dialog_message">Entrer un modèle personnalisé pour le nom des fichiers. Les variables sont spécifiées entre accolades (ex : <annotation type="template">{var}</annotation>). Les fallbacks sont spécifiés entre crochets (ex : <annotation type="template">[{contact_name}|Inconnu]</annotation>).\n\nVariables supportées : <annotation type="supported_vars">PLACEHOLDER</annotation>. Lire <annotation type="template_docs">la documentation</annotation> pour une description complète de la syntaxe.</string>
-    <string name="filename_template_dialog_warning_subdirectories">À cause des piètres performances du Framework Android Storage Access, utiliser des sous-dossiers (caractère <annotation type="template">/</annotation>) peut causer un délais lors de l\'enregistrement sur certains mobiles. Le délais se ressent à la fin de l\'appel mais ne cause aucun problème pour l\'enregistrement.</string>
+    <string name="filename_template_dialog_warning_subdirectories">À cause des piètres performances du Framework Android Storage Access, utiliser des sous-dossiers (caractère <annotation type="template">/</annotation>) peut causer un délai lors de l\'enregistrement sur certains mobiles. Le délais se ressent à la fin de l\'appel mais ne cause aucun problème pour l\'enregistrement.</string>
     <string name="filename_template_dialog_error_empty">Le modèle ne peut pas être vide</string>
     <string name="filename_template_dialog_error_unknown_variable">Variable inconnue : <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_has_argument">La variable ne peut pas avoir d\'argument : <annotation type="template">PLACEHOLDER</annotation></string>
@@ -185,7 +188,7 @@
 
     <!-- File retention dialog -->
     <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
-    <string name="file_retention_dialog_message">Entrer le nombre de jour pour garder les enregistrements.</string>
+    <string name="file_retention_dialog_message">Entrer le nombre de jours pour conserver les enregistrements.</string>
     <string name="file_retention_error_too_large">Le nombre est trop grand</string>
 
     <!-- Format parameter dialog -->
@@ -194,7 +197,7 @@
 
     <!-- Format sample rate dialog -->
     <string name="format_sample_rate_dialog_title">Fréquence d\'échantillonnage personnalisée</string>
-    <string name="format_sample_rate_dialog_message_desc">Entrer une valeur dans cette intervalle :</string>
+    <string name="format_sample_rate_dialog_message_desc">Entrer une valeur dans l\'une de ces plages :</string>
     <string name="format_sample_rate_dialog_message_range">[%1$s, %2$s]</string>
 
     <!-- Format parameter -->
@@ -251,7 +254,7 @@
     <string name="notification_action_resume">Reprendre</string>
 
     <!-- Quick settings tile -->
-    <string name="quick_settings_label">Enregistrements d\'appels</string>
+    <string name="quick_settings_label">Enregistrement d\'appels</string>
 
     <!-- Snackbar alerts -->
     <string name="documentsui_not_found">Le gestionnaire de fichier Android (DocumentsUI) n\'est pas disponible.</string>
