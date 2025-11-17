@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update French translations ([PR #734 @NSO73])
+
 ### Version 1.85
 
 * Add support for hiding the app icon ([Issue #727], [PR #728 @People-11])
@@ -1097,3 +1099,4 @@ Non-user-facing changes:
 [PR #724 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/724
 [PR #725 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/725
 [PR #728 @People-11]: https://github.com/chenxiaolong/BCR/pull/728
+[PR #734 @NSO73]: https://github.com/chenxiaolong/BCR/pull/734
