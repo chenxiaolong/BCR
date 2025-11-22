@@ -1,6 +1,6 @@
 [versions]
-android-gradle-plugin = "8.13.0"
-androidx-activity = "1.11.0"
+android-gradle-plugin = "8.13.1"
+androidx-activity = "1.12.0"
 androidx-appcompat = "1.7.1"
 androidx-core = "1.17.0"
 androidx-documentfile = "1.1.0"
