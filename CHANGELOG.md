@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update French translations ([PR #734 @NSO73])
+* Work around broken root hiding mechanisms that hide the old sysconfig file from the system ([Issue #733], [PR #736 @chenxiaolong])
 
 ### Version 1.85
 
@@ -789,6 +790,7 @@ Non-user-facing changes:
 [Issue #719]: https://github.com/chenxiaolong/BCR/issues/719
 [Issue #722]: https://github.com/chenxiaolong/BCR/issues/722
 [Issue #727]: https://github.com/chenxiaolong/BCR/issues/727
+[Issue #733]: https://github.com/chenxiaolong/BCR/issues/733
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -1100,3 +1102,4 @@ Non-user-facing changes:
 [PR #725 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/725
 [PR #728 @People-11]: https://github.com/chenxiaolong/BCR/pull/728
 [PR #734 @NSO73]: https://github.com/chenxiaolong/BCR/pull/734
+[PR #736 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/736
