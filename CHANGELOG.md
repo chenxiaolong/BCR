@@ -11,6 +11,7 @@
 
 * Update French translations ([PR #734 @NSO73])
 * Work around broken root hiding mechanisms that hide the old sysconfig file from the system ([Issue #733], [PR #736 @chenxiaolong])
+* Update dependencies ([PR #737 @chenxiaolong])
 
 ### Version 1.85
 
@@ -1103,3 +1104,4 @@ Non-user-facing changes:
 [PR #728 @People-11]: https://github.com/chenxiaolong/BCR/pull/728
 [PR #734 @NSO73]: https://github.com/chenxiaolong/BCR/pull/734
 [PR #736 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/736
+[PR #737 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/737
