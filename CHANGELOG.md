@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 1.86
 
 * Update French translations ([PR #734 @NSO73])
 * Work around broken root hiding mechanisms that hide the old sysconfig file from the system ([Issue #733], [PR #736 @chenxiaolong])
