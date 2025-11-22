@@ -6,8 +6,6 @@
 package com.chiller3.bcr.format
 
 import android.media.MediaFormat
-import com.chiller3.bcr.extension.SAMPLE_RATE_HZ_MAX_COMPAT
-import com.chiller3.bcr.extension.SAMPLE_RATE_HZ_MIN_COMPAT
 import java.io.FileDescriptor
 
 data object WaveFormat : Format() {
@@ -23,8 +21,8 @@ data object WaveFormat : Format() {
     override val sampleRateInfo: SampleRateInfo = RangedSampleRateInfo(
         // WAV sample rate field is a 4-byte integer and there's nothing that theoretically prevents
         // using an absurdly large sample rate. However, let's stick to a range that AudioRecord
-        // actually supports.
-        arrayOf(SAMPLE_RATE_HZ_MIN_COMPAT.toUInt()..SAMPLE_RATE_HZ_MAX_COMPAT.toUInt()),
+        // actually supports. See system/media/audio/include/system/audio.h in AOSP.
+        arrayOf(4_000u..192_000u),
         16_000u,
     )
 
