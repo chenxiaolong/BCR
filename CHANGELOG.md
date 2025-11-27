@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Add support for using Unix timestamps in the filename template ([Issue #742], [PR #743 @chenxiaolong])
+
 ### Version 1.86
 
 * Update French translations ([PR #734 @NSO73])
@@ -794,6 +796,7 @@ Non-user-facing changes:
 [Issue #722]: https://github.com/chenxiaolong/BCR/issues/722
 [Issue #727]: https://github.com/chenxiaolong/BCR/issues/727
 [Issue #733]: https://github.com/chenxiaolong/BCR/issues/733
+[Issue #742]: https://github.com/chenxiaolong/BCR/issues/742
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -1107,3 +1110,4 @@ Non-user-facing changes:
 [PR #734 @NSO73]: https://github.com/chenxiaolong/BCR/pull/734
 [PR #736 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/736
 [PR #737 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/737
+[PR #743 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/743
