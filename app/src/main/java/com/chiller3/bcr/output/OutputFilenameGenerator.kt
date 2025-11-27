@@ -106,9 +106,7 @@ class OutputFilenameGenerator(
 
                     synchronized(this) {
                         try {
-                            formatter = DateTimeFormatterBuilder()
-                                .appendPattern(arg)
-                                .toFormatter()
+                            formatter = dateFormatter(arg)
                         } catch (e: Exception) {
                             Log.w(TAG, "Invalid custom datetime pattern: $arg; using default", e)
                         }
@@ -291,7 +289,7 @@ class OutputFilenameGenerator(
         const val DATE_VAR = "date"
 
         private fun isValidCodePoint(codePoint: Int): Boolean {
-            if (codePoint >= 0x00 && codePoint <= 0x1f) {
+            if (codePoint in 0x00..0x1f) {
                 return false
             }
 
@@ -363,6 +361,17 @@ class OutputFilenameGenerator(
             .appendOffset("+HHMMss", "+0000")
             .toFormatter()
 
+        private fun dateFormatter(arg: String) = DateTimeFormatterBuilder().apply {
+            when (arg) {
+                "unix_s" -> appendValue(ChronoField.INSTANT_SECONDS)
+                "unix_ms" -> {
+                    appendValue(ChronoField.INSTANT_SECONDS)
+                    appendValue(ChronoField.MILLI_OF_SECOND, 3)
+                }
+                else -> appendPattern(arg)
+            }
+        }.toFormatter()
+
         fun splitPath(pathString: String) = pathString
             .splitToSequence('/')
             .filter { it.isNotEmpty() && it != "." && it != ".." }
@@ -372,7 +381,7 @@ class OutputFilenameGenerator(
             val n = 2
 
             if (msg.length > 2 * n) {
-                append(msg.substring(0, n))
+                append(msg.take(n))
             }
             append("<...>")
             if (msg.length > 2 * n) {
@@ -388,9 +397,7 @@ class OutputFilenameGenerator(
                     "date" -> {
                         if (varRef.arg != null) {
                             try {
-                                DateTimeFormatterBuilder()
-                                    .appendPattern(varRef.arg)
-                                    .toFormatter()
+                                dateFormatter(varRef.arg)
                             } catch (_: Exception) {
                                 errors.add(ValidationError(
                                     ValidationErrorType.INVALID_ARGUMENT, varRef))
