@@ -102,7 +102,7 @@
     <string name="notification_channel_success_desc">Оповещение об успешной записи звонка</string>
     <string name="notification_recording_initializing">Инициализация записи звонка</string>
     <string name="notification_recording_in_progress">Ведется запись звонка</string>
-    <string name="notification_recording_finalizing">Завершение записи зврека</string>
+    <string name="notification_recording_finalizing">Завершение записи звонка</string>
     <string name="notification_recording_paused">Запись звонка приостановлена</string>
     <string name="notification_recording_on_hold">Звонок на удержании</string>
     <string name="notification_recording_failed">Не удалось записать звонок</string>
