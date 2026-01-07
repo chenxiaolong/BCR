@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Fix Russian translation for `notification_recording_finalizing` string ([Issue #763], [PR #764 @Ololoshevich])
+
 ### Version 1.87
 
 * Add support for using Unix timestamps in the filename template ([Issue #742], [PR #743 @chenxiaolong])
@@ -799,6 +801,7 @@ Non-user-facing changes:
 [Issue #727]: https://github.com/chenxiaolong/BCR/issues/727
 [Issue #733]: https://github.com/chenxiaolong/BCR/issues/733
 [Issue #742]: https://github.com/chenxiaolong/BCR/issues/742
+[Issue #763]: https://github.com/chenxiaolong/BCR/issues/763
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -1113,3 +1116,4 @@ Non-user-facing changes:
 [PR #736 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/736
 [PR #737 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/737
 [PR #743 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/743
+[PR #764 @Ololoshevich]: https://github.com/chenxiaolong/BCR/pull/764
