@@ -49,7 +49,7 @@
         <receiver
             android:name=".DirectBootMigrationReceiver"
             android:enabled="true"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -108,6 +108,7 @@
             </intent-filter>
         </activity-alias>
 
+        <!-- Must be exported to work. -->
         <receiver
             android:name=".settings.DialerCodeReceiver"
             android:enabled="true"

@@ -1,19 +1,21 @@
 /*
- * SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
  * SPDX-FileCopyrightText: 2023 Patryk Miś
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
+import com.android.build.api.artifact.SingleArtifact
+import com.android.build.api.variant.VariantOutputConfiguration
 import org.eclipse.jgit.api.ArchiveCommand
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.archive.TarFormat
 import org.eclipse.jgit.lib.ObjectId
+import org.gradle.kotlin.dsl.support.uppercaseFirstChar
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.json.JSONObject
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
 }
@@ -26,9 +28,9 @@ java {
 
 buildscript {
     dependencies {
-        "classpath"(libs.jgit)
-        "classpath"(libs.jgit.archive)
-        "classpath"(libs.json)
+        classpath(libs.jgit)
+        classpath(libs.jgit.archive)
+        classpath(libs.json)
     }
 }
 
@@ -138,13 +140,6 @@ android {
     androidResources {
         generateLocaleConfig = true
     }
-    sourceSets {
-        getByName("main") {
-            assets {
-                srcDir(archiveDir)
-            }
-        }
-    }
     signingConfigs {
         create("release") {
             val keystore = System.getenv("RELEASE_KEYSTORE")
@@ -185,6 +180,7 @@ android {
     }
     buildFeatures {
         buildConfig = true
+        resValues = true
         viewBinding = true
     }
     lint {
@@ -195,6 +191,14 @@ android {
     dependenciesInfo {
         includeInApk = false
         includeInBundle = false
+    }
+}
+
+androidComponents.onVariants { variant ->
+    variant.sources.assets!!.addGeneratedSourceDirectory(archive) {
+        project.objects.directoryProperty().apply {
+            set(archiveDir)
+        }
     }
 }
 
@@ -243,14 +247,21 @@ val archive = tasks.register("archive") {
     }
 }
 
-android.applicationVariants.all {
-    val variant = this
-    val capitalized = variant.name.replaceFirstChar { it.uppercase() }
+androidComponents.onVariants { variant ->
+    val capitalized = variant.name.uppercaseFirstChar()
     val variantDir = extraDir.map { it.dir(variant.name) }
-
-    variant.preBuildProvider.configure {
-        dependsOn(archive)
+    val variantOutput = variant.outputs.first {
+        it.outputType == VariantOutputConfiguration.OutputType.SINGLE
     }
+    val variantVersionCode = variantOutput.versionCode
+    val variantVersionName = variantOutput.versionName
+    val variantApkFiles = variant.artifacts.get(SingleArtifact.APK).map {
+        variant.artifacts.getBuiltArtifactsLoader().load(it)!!.elements.map { element ->
+            element.outputFile
+        }
+    }
+
+    variant.lifecycleTasks.registerPreBuild(archive)
 
     val moduleProp = tasks.register("moduleProp${capitalized}") {
         inputs.property("projectUrl", projectUrl)
@@ -258,18 +269,18 @@ android.applicationVariants.all {
         inputs.property("rootProject.name", rootProject.name)
         inputs.property("variant.applicationId", variant.applicationId)
         inputs.property("variant.name", variant.name)
-        inputs.property("variant.versionCode", variant.versionCode)
-        inputs.property("variant.versionName", variant.versionName)
+        inputs.property("variantVersionCode", variantVersionCode)
+        inputs.property("variantVersionName", variantVersionName)
 
         val outputFile = variantDir.map { it.file("module.prop") }
         outputs.file(outputFile)
 
         doLast {
             val props = LinkedHashMap<String, String>()
-            props["id"] = variant.applicationId
+            props["id"] = variant.applicationId.get()
             props["name"] = rootProject.name
-            props["version"] = "v${variant.versionName}"
-            props["versionCode"] = variant.versionCode.toString()
+            props["version"] = "v${variantVersionName.get()}"
+            props["versionCode"] = variantVersionCode.get().toString()
             props["author"] = "chenxiaolong"
             props["description"] = "Basic Call Recorder"
 
@@ -285,14 +296,14 @@ android.applicationVariants.all {
     val permissionsXml = tasks.register("permissionsXml${capitalized}") {
         inputs.property("variant.applicationId", variant.applicationId)
 
-        val outputFile = variantDir.map { it.file("privapp-permissions-${variant.applicationId}.xml") }
+        val outputFile = variantDir.map { it.file("privapp-permissions-${variant.applicationId.get()}.xml") }
         outputs.file(outputFile)
 
         doLast {
             outputFile.get().asFile.writeText("""
                 <?xml version="1.0" encoding="utf-8"?>
                 <permissions>
-                    <privapp-permissions package="${variant.applicationId}">
+                    <privapp-permissions package="${variant.applicationId.get()}">
                         <permission name="android.permission.CAPTURE_AUDIO_OUTPUT" />
                         <permission name="android.permission.CONTROL_INCALL_EXPERIENCE" />
                     </privapp-permissions>
@@ -303,32 +314,31 @@ android.applicationVariants.all {
 
     val addonD = tasks.register("addonD${capitalized}") {
         inputs.property("variant.applicationId", variant.applicationId)
+        inputs.files(variantApkFiles)
 
-        // To get output apk filename
-        dependsOn.add(variant.assembleProvider)
-
-        val outputFile = variantDir.map { it.file("51-${variant.applicationId}.sh") }
+        val outputFile = variantDir.map { it.file("51-${variant.applicationId.get()}.sh") }
         outputs.file(outputFile)
 
-        val backupFiles = variant.outputs.map {
-            "priv-app/${variant.applicationId}/${it.outputFile.name}"
-        } + listOf(
-            "etc/permissions/privapp-permissions-${variant.applicationId}.xml",
-        )
-
         doLast {
-            outputFile.get().asFile.writeText("""
+            val backupFiles = variantApkFiles.get().map {
+                "priv-app/${variant.applicationId.get()}/${File(it).name}"
+            } + listOf(
+                "etc/permissions/privapp-permissions-${variant.applicationId.get()}.xml",
+            )
+
+            outputFile.get().asFile.writeText(
+                $$"""
                 #!/sbin/sh
                 # ADDOND_VERSION=2
 
                 . /tmp/backuptool.functions
 
-                files="${backupFiles.joinToString(" ")}"
+                files="$${backupFiles.joinToString(" ")}"
 
-                case "${'$'}{1}" in
+                case "${1}" in
                 backup|restore)
-                    for f in ${'$'}{files}; do
-                        "${'$'}{1}_file" "${'$'}{S}/${'$'}{f}"
+                    for f in ${files}; do
+                        "${1}_file" "${S}/${f}"
                     done
                     ;;
                 esac
@@ -340,17 +350,16 @@ android.applicationVariants.all {
         inputs.property("rootProject.name", rootProject.name)
         inputs.property("variant.applicationId", variant.applicationId)
         inputs.property("variant.name", variant.name)
-        inputs.property("variant.versionName", variant.versionName)
+        inputs.property("variantVersionName", variantVersionName)
+        inputs.files(variantApkFiles)
 
-        archiveFileName.set("${rootProject.name}-${variant.versionName}-${variant.name}.zip")
+        archiveFileName.set("${rootProject.name}-${variantVersionName.get()}-${variant.name}.zip")
         // Force instantiation of old value or else this will cause infinite recursion
         destinationDirectory.set(destinationDirectory.dir(variant.name).get())
 
         // Make the zip byte-for-byte reproducible (note that the APK is still not reproducible)
         isPreserveFileTimestamps = false
         isReproducibleFileOrder = true
-
-        dependsOn.add(variant.assembleProvider)
 
         from(moduleProp.map { it.outputs })
         from(addonD.map { it.outputs }) {
@@ -362,8 +371,8 @@ android.applicationVariants.all {
         from(permissionsXml.map { it.outputs }) {
             into("system/etc/permissions")
         }
-        from(variant.outputs.map { it.outputFile }) {
-            into("system/priv-app/${variant.applicationId}")
+        from(variantApkFiles) {
+            into("system/priv-app/${variant.applicationId.get()}")
         }
 
         val magiskDir = File(projectDir, "magisk")
@@ -388,8 +397,8 @@ android.applicationVariants.all {
         inputs.property("projectUrl", projectUrl)
         inputs.property("rootProject.name", rootProject.name)
         inputs.property("variant.name", variant.name)
-        inputs.property("variant.versionCode", variant.versionCode)
-        inputs.property("variant.versionName", variant.versionName)
+        inputs.property("variantVersionCode", variantVersionCode)
+        inputs.property("variantVersionName", variantVersionName)
 
         val magiskDir = File(projectDir, "magisk")
         val updatesDir = File(magiskDir, "updates")
@@ -404,9 +413,9 @@ android.applicationVariants.all {
             }
 
             val root = JSONObject()
-            root.put("version", variant.versionName)
-            root.put("versionCode", variant.versionCode)
-            root.put("zipUrl", "${projectUrl}/releases/download/${gitVersionTriple.first}/${rootProject.name}-${variant.versionName}-release.zip")
+            root.put("version", variantVersionName.get())
+            root.put("versionCode", variantVersionCode.get())
+            root.put("zipUrl", "${projectUrl}/releases/download/${gitVersionTriple.first}/${rootProject.name}-${variantVersionName.get()}-release.zip")
             root.put("changelog", "${projectUrl}/raw/${gitVersionTriple.first}/app/magisk/updates/${variant.name}/changelog.txt")
 
             jsonFile.writer().use {

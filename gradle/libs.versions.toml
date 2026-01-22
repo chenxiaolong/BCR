@@ -1,16 +1,16 @@
 [versions]
-android-gradle-plugin = "8.13.1"
-androidx-activity = "1.12.0"
+android-gradle-plugin = "9.0.0"
+androidx-activity = "1.12.2"
 androidx-appcompat = "1.7.1"
 androidx-core = "1.17.0"
 androidx-documentfile = "1.1.0"
 androidx-fragment = "1.8.9"
 androidx-preference = "1.2.1"
 androidx-recyclerview = "1.4.0"
-jgit = "7.4.0.202509020913-r"
-json = "20250517"
+jgit = "7.5.0.202512021534-r"
+json = "20251224"
 junit = "1.3.0"
-kotlin = "2.2.21"
+kotlin = "2.3.0"
 kotlinx-serialization = "1.9.0"
 kudzu = "6.1.0"
 material = "1.13.0"
@@ -38,6 +38,5 @@ json = { group = "org.json", name = "json", version.ref = "json" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
