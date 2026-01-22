@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Fix Russian translation for `notification_recording_finalizing` string ([Issue #763], [PR #764 @Ololoshevich])
+* Update AGP to 9.0.0 ([PR #768 @chenxiaolong])
 
 ### Version 1.87
 
@@ -1117,3 +1118,4 @@ Non-user-facing changes:
 [PR #737 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/737
 [PR #743 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/743
 [PR #764 @Ololoshevich]: https://github.com/chenxiaolong/BCR/pull/764
+[PR #768 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/768
