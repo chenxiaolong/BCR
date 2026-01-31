@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -58,6 +58,7 @@ class Preferences(initialContext: Context) {
         private const val PREF_FORMAT_NAME = "codec_name"
         private const val PREF_FORMAT_PARAM_PREFIX = "codec_param_"
         private const val PREF_FORMAT_SAMPLE_RATE_PREFIX = "codec_sample_rate_"
+        private const val PREF_FORMAT_STEREO = "stereo"
         const val PREF_OUTPUT_RETENTION = "output_retention"
         private const val PREF_NEXT_NOTIFICATION_ID = "next_notification_id"
         private const val PREF_ALREADY_MIGRATED = "already_migrated"
@@ -85,6 +86,7 @@ class Preferences(initialContext: Context) {
             key == PREF_FORMAT_NAME
                     || key.startsWith(PREF_FORMAT_PARAM_PREFIX)
                     || key.startsWith(PREF_FORMAT_SAMPLE_RATE_PREFIX)
+                    || key == PREF_FORMAT_STEREO
 
         fun migrateToDeviceProtectedStorage(context: Context) {
             if (context.isDeviceProtectedStorage) {
@@ -310,9 +312,7 @@ class Preferences(initialContext: Context) {
         set(retention) = setOptionalUint(PREF_OUTPUT_RETENTION, UInt.MAX_VALUE,
             retention?.toRawPreferenceValue())
 
-    /**
-     * Whether call recording is enabled.
-     */
+    /** Whether call recording is enabled. */
     var isCallRecordingEnabled: Boolean
         get() = prefs.getBoolean(PREF_CALL_RECORDING, false)
         set(enabled) = prefs.edit { putBoolean(PREF_CALL_RECORDING, enabled) }
@@ -398,9 +398,12 @@ class Preferences(initialContext: Context) {
     fun setFormatSampleRate(format: Format, rate: UInt?) =
         setOptionalUint(PREF_FORMAT_SAMPLE_RATE_PREFIX + format.name, 0U, rate)
 
-    /**
-     * Remove the default format preference and the parameters for all formats.
-     */
+    /** Whether to record the uplink and downlink to separate channels. */
+    var stereo: Boolean
+        get() = prefs.getBoolean(PREF_FORMAT_STEREO, false)
+        set(enabled) = prefs.edit { putBoolean(PREF_FORMAT_STEREO, enabled) }
+
+    /** Remove the default format preference and the parameters for all formats. */
     fun resetAllFormats() {
         val keys = prefs.all.keys.filter(::isFormatKey)
         prefs.edit {
@@ -418,23 +421,17 @@ class Preferences(initialContext: Context) {
         get() = prefs.getInt(PREF_MIN_DURATION, 0)
         set(seconds) = prefs.edit { putInt(PREF_MIN_DURATION, seconds) }
 
-    /**
-     * Whether to write call metadata file.
-     */
+    /** Whether to write call metadata file. */
     var writeMetadata: Boolean
         get() = prefs.getBoolean(PREF_WRITE_METADATA, false)
         set(enabled) = prefs.edit { putBoolean(PREF_WRITE_METADATA, enabled) }
 
-    /**
-     * Whether to record calls from telecom-integrated apps.
-     */
+    /** Whether to record calls from telecom-integrated apps. */
     var recordTelecomApps: Boolean
         get() = prefs.getBoolean(PREF_RECORD_TELECOM_APPS, false)
         set(enabled) = prefs.edit { putBoolean(PREF_RECORD_TELECOM_APPS, enabled) }
 
-    /**
-     * Whether to start recording as soon as a call enters the DIALING state.
-     */
+    /** Whether to start recording as soon as a call enters the DIALING state. */
     var recordDialingState: Boolean
         get() = prefs.getBoolean(PREF_RECORD_DIALING_STATE, false)
         set(enabled) = prefs.edit { putBoolean(PREF_RECORD_DIALING_STATE, enabled) }
@@ -449,9 +446,7 @@ class Preferences(initialContext: Context) {
     private val launcherComponent =
         ComponentName(context, SettingsActivity::class.java.name + "Launcher")
 
-    /**
-     * Whether to show the launcher icon.
-     */
+    /** Whether to show the launcher icon. */
     var showLauncherIcon: Boolean
         get() = context.packageManager.getComponentEnabledSetting(launcherComponent) !=
                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED
@@ -465,9 +460,7 @@ class Preferences(initialContext: Context) {
             PackageManager.DONT_KILL_APP,
         )
 
-    /**
-     * Get a unique notification ID that increments on every call.
-     */
+    /** Get a unique notification ID that increments on every call. */
     val nextNotificationId: Int
         get() = synchronized(context.applicationContext) {
             val nextId = prefs.getInt(PREF_NEXT_NOTIFICATION_ID, 0)

@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -166,18 +166,35 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
     }
 
     private fun refreshOutputFormat() {
-        val (format, formatParamSaved, sampleRateSaved) = Format.fromPreferences(prefs)
-        val formatParam = formatParamSaved ?: format.paramInfo.default
-        val sampleRate = sampleRateSaved ?: format.sampleRateInfo.default
+        val savedFormat = Format.fromPreferences(prefs)
+        val formatParam = savedFormat.param ?: savedFormat.format.paramInfo.default
+        val sampleRate = savedFormat.sampleRate ?: savedFormat.format.sampleRateInfo.default
 
-        val summary = getString(R.string.pref_output_format_desc)
-        val prefix = when (val info = format.paramInfo) {
-            is RangedParamInfo -> "${info.format(requireContext(), formatParam)}, "
-            NoParamInfo -> ""
+        prefOutputFormat.summary = buildString {
+            append(getString(R.string.pref_output_format_desc))
+            append("\n\n")
+            append(savedFormat.format.name)
+            append(" (")
+
+            when (val info = savedFormat.format.paramInfo) {
+                is RangedParamInfo -> {
+                    append(info.format(requireContext(), formatParam))
+                    append(", ")
+                }
+                NoParamInfo -> {}
+            }
+
+            append(savedFormat.format.sampleRateInfo.format(requireContext(), sampleRate))
+            append(", ")
+
+            if (savedFormat.stereo) {
+                append(getString(R.string.channels_stereo))
+            } else {
+                append(getString(R.string.channels_mono))
+            }
+
+            append(")")
         }
-        val sampleRateText = format.sampleRateInfo.format(requireContext(), sampleRate)
-
-        prefOutputFormat.summary = "${summary}\n\n${format.name} (${prefix}${sampleRateText})"
     }
 
     private fun refreshMinDuration() {

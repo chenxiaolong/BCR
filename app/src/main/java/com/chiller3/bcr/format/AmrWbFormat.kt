@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2024-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -29,6 +29,7 @@ class AmrWbFormat : Format() {
     )
     override val sampleRateInfo: SampleRateInfo =
         SampleRateInfo.fromCodec(baseMediaFormat, 16_000u)
+    override val supportsStereo: Boolean = false
 
     override fun updateMediaFormat(mediaFormat: MediaFormat, param: UInt) {
         mediaFormat.apply {

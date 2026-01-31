@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -111,7 +111,7 @@ class MediaCodecEncoder(
 
     companion object {
         private val TAG = MediaCodecEncoder::class.java.simpleName
-        private const val TIMEOUT = 500L
+        private const val TIMEOUT = 10_000L
 
         fun createCodec(mediaFormat: MediaFormat): MediaCodec {
             val encoder = MediaCodecList(MediaCodecList.REGULAR_CODECS).findEncoderForFormat(mediaFormat)

@@ -17,6 +17,8 @@ BCR is a simple Android call recording app for rooted devices or devices running
   * M4A/AAC - Lossy, smaller files, default on Android 9
   * FLAC - Lossless, larger files
   * WAV/PCM - Lossless, largest files, least CPU usage
+* Supports stereo recording (separate uplink and downlink channels)
+  * NOTE: This is only known to work on newer Pixel devices
 * Supports Android's Storage Access Framework (can record to SD cards, USB devices, etc.)
 * Direct boot aware (records calls prior to first unlock after a reboot)
 * Auto-record rules
@@ -24,7 +26,6 @@ BCR is a simple Android call recording app for rooted devices or devices running
 * Material You dynamic theming
 * No persistent notification unless a recording is in progress
 * No network access permission
-* Works with call screening on Pixel devices (records the caller, but not the automated system)
 * Supports both Magisk and KernelSU
 
 ## Non-features

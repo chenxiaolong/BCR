@@ -41,7 +41,7 @@ class FormatSampleRateDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val context = requireContext()
         prefs = Preferences(context)
-        format = Format.fromPreferences(prefs).first
+        format = Format.fromPreferences(prefs).format
 
         val sampleRateInfo = format.sampleRateInfo
         if (sampleRateInfo !is RangedSampleRateInfo) {
@@ -87,7 +87,7 @@ class FormatSampleRateDialogFragment : DialogFragment() {
         val hasPrefix = placeholder > 0
         val hasSuffix = placeholder < translated.length - 1
         if (hasPrefix) {
-            binding.textLayout.prefixText = translated.substring(0, placeholder).trimEnd()
+            binding.textLayout.prefixText = translated.take(placeholder).trimEnd()
         }
         if (hasSuffix) {
             binding.textLayout.suffixText = translated.substring(placeholder + 1).trimStart()
@@ -107,9 +107,9 @@ class FormatSampleRateDialogFragment : DialogFragment() {
                     value = it.toString().toUInt().apply {
                         sampleRateInfo.validate(this)
                     }
-                } catch (e: NumberFormatException) {
+                } catch (_: NumberFormatException) {
                     // Ignore
-                } catch (e: IllegalArgumentException) {
+                } catch (_: IllegalArgumentException) {
                     // Ignore
                 }
             }

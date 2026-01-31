@@ -1,15 +1,14 @@
 /*
- * SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
 package com.chiller3.bcr.format
 
-import android.media.AudioFormat
 import android.media.MediaFormat
 import android.util.Log
 import com.chiller3.bcr.Preferences
-import com.chiller3.bcr.extension.frameSizeInBytesCompat
+import com.chiller3.bcr.RecorderThread
 import java.io.FileDescriptor
 
 sealed class Format {
@@ -35,6 +34,9 @@ sealed class Format {
     /** Defaults about the supported sample rates. */
     abstract val sampleRateInfo: SampleRateInfo
 
+    /** Whether stereo recording is supported. */
+    abstract val supportsStereo: Boolean
+
     /** Bare minimum [MediaFormat] containing only [MediaFormat.KEY_MIME]. */
     protected val baseMediaFormat: MediaFormat
         get() = MediaFormat().apply {
@@ -45,21 +47,21 @@ sealed class Format {
      * Create a [MediaFormat] representing the encoded audio with parameters matching the specified
      * input PCM audio format.
      *
-     * @param audioFormat [AudioFormat.getSampleRate] must not be
-     * [AudioFormat.SAMPLE_RATE_UNSPECIFIED].
+     * @param channels Number of audio channels
+     * @param sampleRate Sample rate of audio stream
      * @param param Format-specific parameter value. Must be valid according to [paramInfo].
      *
      * @throws IllegalArgumentException if [FormatParamInfo.validate] fails
      */
-    fun getMediaFormat(audioFormat: AudioFormat, param: UInt?): MediaFormat {
+    fun getMediaFormat(channels: Int, sampleRate: UInt, param: UInt?): MediaFormat {
         if (param != null) {
             paramInfo.validate(param)
         }
 
         val format = baseMediaFormat.apply {
-            setInteger(MediaFormat.KEY_CHANNEL_COUNT, audioFormat.channelCount)
-            setInteger(MediaFormat.KEY_SAMPLE_RATE, audioFormat.sampleRate)
-            setInteger(KEY_X_FRAME_SIZE_IN_BYTES, audioFormat.frameSizeInBytesCompat)
+            setInteger(MediaFormat.KEY_CHANNEL_COUNT, channels)
+            setInteger(MediaFormat.KEY_SAMPLE_RATE, sampleRate.toInt())
+            setInteger(KEY_X_FRAME_SIZE_IN_BYTES, RecorderThread.BYTES_PER_SAMPLE * channels)
         }
 
         updateMediaFormat(format, param ?: paramInfo.default)
@@ -127,13 +129,20 @@ sealed class Format {
         /** Find output format by name. */
         fun getByName(name: String): Format? = all.find { it.name == name }
 
+        data class SavedFormat(
+            val format: Format,
+            val param: UInt?,
+            val sampleRate: UInt?,
+            val stereo: Boolean,
+        )
+
         /**
          * Get the saved format from the preferences or fall back to the default.
          *
          * The parameter, if set, is clamped to the format's allowed parameter range. Similarly, the
          * sample rate, if set, is set to the nearest valid value.
          */
-        fun fromPreferences(prefs: Preferences): Triple<Format, UInt?, UInt?> {
+        fun fromPreferences(prefs: Preferences): SavedFormat {
             // Use the saved format if it is (still) valid.
             val format = prefs.format ?: default
 
@@ -148,7 +157,9 @@ sealed class Format {
                 format.sampleRateInfo.toNearest(it)
             }
 
-            return Triple(format, param, sampleRate)
+            val stereo = format.supportsStereo && prefs.stereo
+
+            return SavedFormat(format, param, sampleRate, stereo)
         }
     }
 }

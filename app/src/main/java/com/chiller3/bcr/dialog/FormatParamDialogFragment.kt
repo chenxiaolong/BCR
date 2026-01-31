@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2023-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2023-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -40,7 +40,7 @@ class FormatParamDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val context = requireContext()
         prefs = Preferences(context)
-        format = Format.fromPreferences(prefs).first
+        format = Format.fromPreferences(prefs).format
 
         val paramInfo = format.paramInfo
         if (paramInfo !is RangedParamInfo) {
@@ -81,7 +81,7 @@ class FormatParamDialogFragment : DialogFragment() {
         val hasPrefix = placeholder > 0
         val hasSuffix = placeholder < translated.length - 1
         if (hasPrefix) {
-            binding.textLayout.prefixText = translated.substring(0, placeholder).trimEnd()
+            binding.textLayout.prefixText = translated.take(placeholder).trimEnd()
         }
         if (hasSuffix) {
             binding.textLayout.suffixText = translated.substring(placeholder + 1).trimStart()
@@ -102,7 +102,7 @@ class FormatParamDialogFragment : DialogFragment() {
                     if (newValue in paramInfo.range) {
                         value = newValue.toUInt()
                     }
-                } catch (e: NumberFormatException) {
+                } catch (_: NumberFormatException) {
                     // Ignore
                 }
             }

@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022-2025 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -16,8 +16,8 @@ import android.telecom.Call
 import android.util.Log
 import androidx.core.net.toFile
 import androidx.documentfile.provider.DocumentFile
+import com.chiller3.bcr.RecorderThread.Companion.BYTES_PER_SAMPLE
 import com.chiller3.bcr.extension.deleteIfEmptyDir
-import com.chiller3.bcr.extension.frameSizeInBytesCompat
 import com.chiller3.bcr.extension.listFilesWithPathsRecursively
 import com.chiller3.bcr.extension.phoneNumber
 import com.chiller3.bcr.extension.toDocumentFile
@@ -40,10 +40,11 @@ import com.chiller3.bcr.output.RecordingJson
 import com.chiller3.bcr.output.Retention
 import com.chiller3.bcr.rule.RecordRule
 import kotlinx.serialization.json.Json
-import java.lang.Process
 import java.nio.ByteBuffer
 import java.time.Duration
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.math.max
+import kotlin.math.min
 import android.os.Process as AndroidProcess
 
 /**
@@ -163,15 +164,27 @@ class RecorderThread(
 
     private var wallBeginNanos = 0L
 
+    // Sources
+    private val sources: Array<Int>
+
     init {
         Log.i(tag, "Created thread for call: $parentCall")
 
         minDuration = prefs.minDuration
 
         val savedFormat = Format.fromPreferences(prefs)
-        format = savedFormat.first
-        formatParam = savedFormat.second
-        sampleRate = savedFormat.third ?: format.sampleRateInfo.default
+        format = savedFormat.format
+        formatParam = savedFormat.param
+        sampleRate = savedFormat.sampleRate ?: format.sampleRateInfo.default
+
+        sources = if (savedFormat.stereo) {
+            arrayOf(
+                MediaRecorder.AudioSource.VOICE_UPLINK,
+                MediaRecorder.AudioSource.VOICE_DOWNLINK,
+            )
+        } else {
+            arrayOf(MediaRecorder.AudioSource.VOICE_CALL)
+        }
     }
 
     fun onCallDetailsChanged(call: Call, details: Call.Details) {
@@ -552,7 +565,7 @@ class RecorderThread(
     }
 
     /**
-     * Record from [MediaRecorder.AudioSource.VOICE_CALL] until [cancel] is called or an audio
+     * Record from [sources], with interleaving channels, until [cancel] is called or an audio
      * capture or encoding error occurs.
      *
      * [pfd] does not get closed by this method.
@@ -567,38 +580,49 @@ class RecorderThread(
         }
         Log.d(tag, "AudioRecord minimum buffer size: $minBufSize")
 
-        val audioRecord = AudioRecord(
-            MediaRecorder.AudioSource.VOICE_CALL,
-            sampleRate.toInt(),
-            CHANNEL_CONFIG,
-            ENCODING,
-            // On some devices, MediaCodec occasionally has sudden spikes in processing time, so use
-            // a larger internal buffer to reduce the chance of overrun on the recording side.
-            minBufSize * 6,
-        )
-        val initialBufSize = audioRecord.bufferSizeInFrames *
-                audioRecord.format.frameSizeInBytesCompat
-        Log.d(tag, "AudioRecord initial buffer size: $initialBufSize")
+        val audioRecords = ArrayList<AudioRecord>(sources.size)
 
-        Log.d(tag, "AudioRecord format: ${audioRecord.format}")
+        try {
+            for (source in sources) {
+                val audioRecord = AudioRecord(
+                    source,
+                    sampleRate.toInt(),
+                    CHANNEL_CONFIG,
+                    ENCODING,
+                    // On some devices, MediaCodec occasionally has sudden spikes in processing time, so
+                    // use a larger internal buffer to reduce the chance of overrun on the recording
+                    // side.
+                    minBufSize * 6,
+                )
+
+                Log.d(tag, "Created AudioRecord instance:")
+                Log.d(tag, "- Source: ${audioRecord.audioSource}")
+                Log.d(tag, "- Initial buffer size in frames: ${audioRecord.bufferSizeInFrames}")
+                Log.d(tag, "- Format: ${audioRecord.format}")
+
+                audioRecords.add(audioRecord)
+            }
+        } catch (e: Exception) {
+            audioRecords.forEach(AudioRecord::release)
+            throw e
+        }
 
         // Where's my RAII? :(
         try {
-            audioRecord.startRecording()
+            audioRecords.forEach(AudioRecord::startRecording)
 
             try {
                 val container = format.getContainer(pfd.fileDescriptor)
 
                 try {
-                    // audioRecord.format has the detected native sample rate
-                    val mediaFormat = format.getMediaFormat(audioRecord.format, formatParam)
+                    val mediaFormat = format.getMediaFormat(sources.size, sampleRate, formatParam)
                     val encoder = format.getEncoder(mediaFormat, container)
 
                     try {
                         encoder.start()
 
                         try {
-                            return encodeLoop(audioRecord, encoder, minBufSize)
+                            return encodeLoop(audioRecords, encoder, minBufSize)
                         } finally {
                             encoder.stop()
                         }
@@ -609,10 +633,10 @@ class RecorderThread(
                     container.release()
                 }
             } finally {
-                audioRecord.stop()
+                audioRecords.forEach(AudioRecord::stop)
             }
         } finally {
-            audioRecord.release()
+            audioRecords.forEach(AudioRecord::release)
         }
     }
 
@@ -620,22 +644,22 @@ class RecorderThread(
      * Main loop for encoding captured raw audio into an output file.
      *
      * The loop runs forever until [cancel] is called. At that point, no further data will be read
-     * from [audioRecord] and the remaining output data from [encoder] will be written to the output
-     * file. If [audioRecord] fails to capture data, the loop will behave as if [cancel] was called
-     * (ie. abort, but ensuring that the output file is valid).
+     * from any of the [audioRecords] and the remaining output data from [encoder] will be written
+     * to the output file. If any of the [audioRecords] fails to capture data, the loop will behave
+     * as if [cancel] was called (ie. abort, but ensuring that the output file is valid).
      *
      * The approximate amount of time to cancel reading from the audio source is the time it takes
      * to process the minimum buffer size. Additionally, additional time is needed to write out the
      * remaining encoded data to the output file.
      *
-     * @param audioRecord [AudioRecord.startRecording] must have been called
+     * @param audioRecords [AudioRecord.startRecording] must have been called on every instance
      * @param encoder [Encoder.start] must have been called
      * @param bufSize Minimum buffer size for each [AudioRecord.read] operation
      *
      * @throws Exception if the audio recorder or encoder encounters an error
      */
     private fun encodeLoop(
-        audioRecord: AudioRecord,
+        audioRecords: List<AudioRecord>,
         encoder: Encoder,
         bufSize: Int,
     ): RecordingInfo {
@@ -646,81 +670,127 @@ class RecorderThread(
         var wasEverHolding = false
         var wasReadSamplesError = false
         var wasPureSilence = true
-        val frameSize = audioRecord.format.frameSizeInBytesCompat
+        val frameSize = BYTES_PER_SAMPLE * audioRecords.size
 
-        // Use a slightly larger buffer to reduce the chance of problems under load
+        // Use a slightly larger buffer to reduce the chance of problems under load.
         val factor = 2
-        val buffer = ByteBuffer.allocateDirect(bufSize * factor)
-        val bufferFrames = buffer.capacity().toLong() / frameSize
-        val bufferNs = bufferFrames * 1_000_000_000L /
-                audioRecord.sampleRate /
-                audioRecord.channelCount
-        Log.d(tag, "Buffer is ${buffer.capacity()} bytes, $bufferFrames frames, ${bufferNs}ns")
+        val baseSize = bufSize * factor
 
-        while (!isCancelled) {
+        // Input buffers for each AudioRecord.
+        val buffersIn = audioRecords.map { ByteBuffer.allocateDirect(baseSize) }
+        // Output buffer for interleaved channels. This is intentionally not a direct ByteBuffer
+        // because it's only ever accessed from the JVM side. This makes the interleaving much
+        // faster compared to using a direct ByteBuffer.
+        val bufferOut = ByteBuffer.allocate(baseSize * audioRecords.size)
+        // Whether all input buffers have been flushed (encoded to bufferOut).
+        var buffersFlushed = true
+        // Size of output buffer in frames.
+        val bufferFrames = bufferOut.capacity().toLong() / frameSize
+        // Size of output buffer in nanoseconds.
+        val bufferNs = bufferFrames * 1_000_000_000L / sampleRate.toLong()
+        Log.d(tag, "Buffer is ${bufferOut.capacity()} bytes, $bufferFrames frames, ${bufferNs}ns")
+
+        while (!isCancelled || !buffersFlushed) {
             val begin = System.nanoTime()
-            // We do a non-blocking read because on Samsung devices, when the call ends, the audio
-            // device immediately stops producing data and blocks forever until the next call is
-            // active.
-            val n = audioRecord.read(buffer, buffer.remaining(), AudioRecord.READ_NON_BLOCKING)
-            val recordElapsed = System.nanoTime() - begin
-            var encodeElapsed = 0L
 
-            if (n < 0) {
-                Log.e(tag, "Error when reading samples from $audioRecord: $n")
-                isCancelled = true
-                wasReadSamplesError = true
-            } else if (n == 0) {
-                // Wait for the wall clock equivalent of the minimum buffer size
-                sleep(bufferNs / 1_000_000L / factor)
-                continue
+            // We potentially still need to encode any remaining data in the buffers when the call
+            // ends or the recording fails.
+            if (isCancelled) {
+                Log.d(tag, "Skipping recording; flushing buffers only")
+
+                for (buffer in buffersIn) {
+                    buffer.flip()
+                }
             } else {
-                buffer.limit(n)
+                for ((audioRecord, buffer) in audioRecords.asSequence().zip(buffersIn.asSequence())) {
+                    val oldPos = buffer.position()
 
-                if (wasPureSilence) {
-                    for (i in 0 until n / 2) {
-                        if (buffer.getShort(2 * i) != 0.toShort()) {
-                            wasPureSilence = false
-                            break
-                        }
+                    // AudioRecord.read() only supports writing to the beginning of the buffer, so
+                    // give it the empty slice of the buffer to work with.
+                    val unconsumed = buffer.slice()
+
+                    // We do a non-blocking read because on Samsung devices, when the call ends, the
+                    // audio device immediately stops producing data and blocks forever until the
+                    // next call is active.
+                    val nRead = audioRecord.read(
+                        unconsumed,
+                        unconsumed.remaining(),
+                        AudioRecord.READ_NON_BLOCKING,
+                    )
+                    if (nRead < 0) {
+                        Log.e(tag, "Failed to read from source ${audioRecord.audioSource}: $nRead")
+                        isCancelled = true
+                        wasReadSamplesError = true
+                    } else {
+                        // New data might not have been added and there might be old data to encode.
+                        buffer.position(0)
+                        buffer.limit(oldPos + nRead)
                     }
                 }
-
-                val encodeBegin = System.nanoTime()
-
-                // If paused by the user or holding, keep recording, but throw away the data
-                if (!isPaused && !isHolding) {
-                    encoder.encode(buffer, false)
-                    numFramesEncoded += n / frameSize
-                } else {
-                    wasEverPaused = wasEverPaused || isPaused
-                    wasEverHolding = wasEverHolding || isHolding
-                }
-
-                numFramesTotal += n / frameSize
-
-                encodeElapsed = System.nanoTime() - encodeBegin
-
-                buffer.clear()
             }
+
+            val recordElapsed = System.nanoTime() - begin
+
+            val interleaveBegin = System.nanoTime()
+            buffersFlushed = interleaveChannels(buffersIn, bufferOut, isCancelled)
+            val nWritten = bufferOut.limit()
+            val interleaveElapsed = System.nanoTime() - interleaveBegin
+
+            if (wasPureSilence) {
+                for (i in 0 until nWritten / 2) {
+                    if (bufferOut.getShort(2 * i) != 0.toShort()) {
+                        wasPureSilence = false
+                        break
+                    }
+                }
+            }
+
+            val encodeBegin = System.nanoTime()
+
+            // If paused by the user or holding, keep recording, but throw away the data.
+            if (!isPaused && !isHolding) {
+                encoder.encode(bufferOut, false)
+                numFramesEncoded += nWritten / frameSize
+            } else {
+                wasEverPaused = wasEverPaused || isPaused
+                wasEverHolding = wasEverHolding || isHolding
+            }
+
+            numFramesTotal += nWritten / frameSize
+
+            val encodeElapsed = System.nanoTime() - encodeBegin
+
+            // Move unused data in the input buffers to the beginning. Clear output buffer since it
+            // is guaranteed to have been fully written to the container.
+            buffersIn.forEach(ByteBuffer::compact)
+            bufferOut.clear()
+
+            val minSamplesToFull = buffersIn.asSequence().map { it.remaining() }.min() / BYTES_PER_SAMPLE
+            val minTimeToFullNs = minSamplesToFull * 1_000_000_000L / sampleRate.toLong()
 
             val totalElapsed = System.nanoTime() - begin
-            if (encodeElapsed > bufferNs) {
+            if (totalElapsed > bufferNs) {
                 bufferOverruns += 1
-                Log.w(tag, "${encoder.javaClass.simpleName} took too long: " +
-                        "timestampTotal=${numFramesTotal.toDouble() / audioRecord.sampleRate /
-                                audioRecord.channelCount}s, " +
-                        "timestampEncode=${numFramesEncoded.toDouble() / audioRecord.sampleRate /
-                                audioRecord.channelCount}s, " +
-                        "buffer=${bufferNs / 1_000_000.0}ms, " +
+                Log.w(tag, "Loop iteration took too long: " +
+                        "tsTotal=${numFramesTotal.toDouble() / sampleRate.toInt()}s, " +
+                        "tsEncode=${numFramesEncoded.toDouble() / sampleRate.toInt()}s, " +
                         "total=${totalElapsed / 1_000_000.0}ms, " +
                         "record=${recordElapsed / 1_000_000.0}ms, " +
-                        "encode=${encodeElapsed / 1_000_000.0}ms")
+                        "interleave=${interleaveElapsed / 1_000_000.0}ms, " +
+                        "encode=${encodeElapsed / 1_000_000.0}ms, " +
+                        "buffer=${bufferNs / 1_000_000.0}ms, " +
+                        "minTimeToFull=${minTimeToFullNs / 1_000_000.0}ms")
             }
 
-            val secondsEncoded = numFramesEncoded / audioRecord.sampleRate / audioRecord.channelCount
+            val secondsEncoded = numFramesEncoded / sampleRate.toInt()
             if (secondsEncoded >= minDuration) {
                 keepRecordingCompareAndSet(KeepState.DISCARD_TOO_SHORT, KeepState.KEEP)
+            }
+
+            // Sleep for half of the time it takes to fill the rest of the fullest buffer.
+            val sleepNs = minTimeToFullNs / 2 - totalElapsed
+            if (sleepNs > 0 && !isCancelled) {
+                sleep(sleepNs / 1_000_000L)
             }
         }
 
@@ -732,15 +802,15 @@ class RecorderThread(
 
         // Signal EOF with empty buffer
         Log.d(tag, "Sending EOF to encoder")
-        buffer.limit(buffer.position())
-        encoder.encode(buffer, true)
+        bufferOut.limit(bufferOut.position())
+        encoder.encode(bufferOut, true)
 
         val recordingInfo = RecordingInfo(
             System.nanoTime() - wallBeginNanos,
             numFramesTotal,
             numFramesEncoded,
-            audioRecord.sampleRate,
-            audioRecord.channelCount,
+            sampleRate.toInt(),
+            audioRecords.size,
             bufferFrames,
             bufferOverruns,
             wasEverPaused,
@@ -755,12 +825,65 @@ class RecorderThread(
     companion object {
         private const val CHANNEL_CONFIG = AudioFormat.CHANNEL_IN_MONO
         private const val ENCODING = AudioFormat.ENCODING_PCM_16BIT
+        const val BYTES_PER_SAMPLE = 2
 
         const val MIME_LOGCAT = "text/plain"
         const val MIME_METADATA = "application/json"
 
         private val JSON_FORMAT = Json {
             prettyPrint = true
+        }
+
+        /**
+         * Read samples of size [BYTES_PER_SAMPLE] from [buffersIn] and write them to [bufferOut]
+         * interleaved.
+         *
+         * Except when [draining] buffers at the end of the recording, only complete frames will be
+         * written to [bufferOut]. For example, if [buffersIn] has [2 samples remaining, 3 samples
+         * remaining], then only 2 frames are written to [bufferOut]. After the copy is complete,
+         * [bufferOut] will be flipped so that it is ready to be read from.
+         *
+         * @return Whether all buffers in [buffersIn] were fully consumed.
+         */
+        private fun interleaveChannels(
+            buffersIn: List<ByteBuffer>,
+            bufferOut: ByteBuffer,
+            draining: Boolean,
+        ): Boolean {
+            // During normal recording, we can only copy up to the shortest buffer's amount of data.
+            // When draining buffers at the end of the recording, we copy up to the longest buffer's
+            // amount of data and just insert zeros for shorter buffers.
+            var minBytesBufferIn = buffersIn[0].remaining()
+            var maxBytesBufferIn = buffersIn[0].remaining()
+            for (i in 1 until buffersIn.size) {
+                minBytesBufferIn = min(minBytesBufferIn, buffersIn[i].remaining())
+                maxBytesBufferIn = max(maxBytesBufferIn, buffersIn[i].remaining())
+            }
+
+            val bytesToCopy = min(
+                if (draining) maxBytesBufferIn else minBytesBufferIn,
+                bufferOut.remaining() / buffersIn.size,
+            )
+            val framesToCopy = bytesToCopy / BYTES_PER_SAMPLE
+
+            repeat(framesToCopy) {
+                for (bufferIn in buffersIn) {
+                    if (bufferIn.hasRemaining()) {
+                        // Using a Short to hold the intermediate value is significantly faster than
+                        // using ByteArray(2), even if it is pre-allocated. Letting ByteBuffer
+                        // automatically update its internal position is also faster than writing to
+                        // specific offsets and updating the position at the end.
+                        val data = bufferIn.getShort()
+                        bufferOut.putShort(data)
+                    } else {
+                        bufferOut.putShort(0)
+                    }
+                }
+            }
+
+            bufferOut.flip()
+
+            return bytesToCopy == maxBytesBufferIn
         }
     }
 
@@ -776,8 +899,8 @@ class RecorderThread(
         val wasEverHolding: Boolean,
     ) {
         val durationSecsWall = wallDurationNanos.toDouble() / 1_000_000_000.0
-        val durationSecsTotal = framesTotal.toDouble() / sampleRate / channelCount
-        val durationSecsEncoded = framesEncoded.toDouble() / sampleRate / channelCount
+        val durationSecsTotal = framesTotal.toDouble() / sampleRate
+        val durationSecsEncoded = framesEncoded.toDouble() / sampleRate
 
         override fun toString() = buildString {
             append("Wall: ${"%.1f".format(durationSecsWall)}s")

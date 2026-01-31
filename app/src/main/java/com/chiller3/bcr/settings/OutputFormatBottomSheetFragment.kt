@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -37,6 +37,9 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
     private val chipIdToSampleRate = HashMap<Int, UInt?>()
     private val sampleRateToChipId = HashMap<UInt?, Int>()
 
+    private val chipIdToChannels = HashMap<Int, Boolean>()
+    private val channelsToChipId = HashMap<Boolean, Int>()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,6 +61,8 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
 
         binding.sampleRateGroup.setOnCheckedStateChangeListener(this)
 
+        binding.channelsGroup.setOnCheckedStateChangeListener(this)
+
         setFragmentResultListener(FormatParamDialogFragment.TAG) { _, _ ->
             refreshParam()
         }
@@ -69,6 +74,8 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
         refreshFormat()
         refreshParam()
         refreshSampleRate()
+        refreshChannels()
+        refreshStereoWarning()
 
         return binding.root
     }
@@ -121,25 +128,38 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
         sampleRateToChipId[rate] = chipBinding.root.id
     }
 
+    private fun addChannelsChip(inflater: LayoutInflater, stereo: Boolean) {
+        val chipBinding = addChip(inflater, binding.channelsGroup)
+
+        if (stereo) {
+            chipBinding.root.setText(R.string.channels_stereo)
+        } else {
+            chipBinding.root.setText(R.string.channels_mono)
+        }
+
+        chipIdToChannels[chipBinding.root.id] = stereo
+        channelsToChipId[stereo] = chipBinding.root.id
+    }
+
     /**
      * Update UI based on currently selected format in the preferences.
      *
-     * Calls [refreshParam] and [refreshSampleRate] via [onCheckedChanged].
+     * Updates dependent views via [onCheckedChanged].
      */
     private fun refreshFormat() {
-        val (format, _, _) = Format.fromPreferences(prefs)
-        binding.nameGroup.check(formatToChipId[format]!!)
+        val savedFormat = Format.fromPreferences(prefs)
+        binding.nameGroup.check(formatToChipId[savedFormat.format]!!)
     }
 
     private fun refreshParam() {
-        val (format, param, _) = Format.fromPreferences(prefs)
-        val selectedParam = param ?: format.paramInfo.default
+        val savedFormat = Format.fromPreferences(prefs)
+        val selectedParam = savedFormat.param ?: savedFormat.format.paramInfo.default
 
         chipIdToParam.clear()
         paramToChipId.clear()
         binding.paramGroup.removeAllViews()
 
-        when (val info = format.paramInfo) {
+        when (val info = savedFormat.format.paramInfo) {
             is RangedParamInfo -> {
                 binding.paramLayout.isVisible = true
 
@@ -148,14 +168,14 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
                     RangedParamType.Bitrate -> R.string.output_format_bottom_sheet_bitrate
                 })
 
-                for (preset in format.paramInfo.presets) {
-                    addParamChip(layoutInflater, format.paramInfo, preset, false)
+                for (preset in savedFormat.format.paramInfo.presets) {
+                    addParamChip(layoutInflater, savedFormat.format.paramInfo, preset, false)
                 }
 
-                if (selectedParam !in format.paramInfo.presets) {
-                    addParamChip(layoutInflater, format.paramInfo, selectedParam, true)
+                if (selectedParam !in savedFormat.format.paramInfo.presets) {
+                    addParamChip(layoutInflater, savedFormat.format.paramInfo, selectedParam, true)
                 } else {
-                    addParamChip(layoutInflater, format.paramInfo, null, false)
+                    addParamChip(layoutInflater, savedFormat.format.paramInfo, null, false)
                 }
 
                 binding.paramGroup.check(paramToChipId[selectedParam]!!)
@@ -167,26 +187,48 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
     }
 
     private fun refreshSampleRate() {
-        val (format, _, sampleRate) = Format.fromPreferences(prefs)
-        val selectedSampleRate = sampleRate ?: format.sampleRateInfo.default
+        val savedFormat = Format.fromPreferences(prefs)
+        val selectedSampleRate = savedFormat.sampleRate ?: savedFormat.format.sampleRateInfo.default
 
         chipIdToSampleRate.clear()
         sampleRateToChipId.clear()
         binding.sampleRateGroup.removeAllViews()
 
-        for (preset in format.sampleRateInfo.presets) {
-            addSampleRateChip(layoutInflater, format.sampleRateInfo, preset, false)
+        for (preset in savedFormat.format.sampleRateInfo.presets) {
+            addSampleRateChip(layoutInflater, savedFormat.format.sampleRateInfo, preset, false)
         }
 
-        if (format.sampleRateInfo is RangedSampleRateInfo) {
-            if (selectedSampleRate !in format.sampleRateInfo.presets) {
-                addSampleRateChip(layoutInflater, format.sampleRateInfo, selectedSampleRate, true)
+        if (savedFormat.format.sampleRateInfo is RangedSampleRateInfo) {
+            if (selectedSampleRate !in savedFormat.format.sampleRateInfo.presets) {
+                addSampleRateChip(layoutInflater, savedFormat.format.sampleRateInfo, selectedSampleRate, true)
             } else {
-                addSampleRateChip(layoutInflater, format.sampleRateInfo, null, false)
+                addSampleRateChip(layoutInflater, savedFormat.format.sampleRateInfo, null, false)
             }
         }
 
         binding.sampleRateGroup.check(sampleRateToChipId[selectedSampleRate]!!)
+    }
+
+    private fun refreshChannels() {
+        val savedFormat = Format.fromPreferences(prefs)
+
+        chipIdToChannels.clear()
+        channelsToChipId.clear()
+        binding.channelsGroup.removeAllViews()
+
+        addChannelsChip(layoutInflater, false)
+
+        if (savedFormat.format.supportsStereo) {
+            addChannelsChip(layoutInflater, true)
+        }
+
+        binding.channelsGroup.check(channelsToChipId[savedFormat.stereo]!!)
+    }
+
+    private fun refreshStereoWarning() {
+        val savedFormat = Format.fromPreferences(prefs)
+
+        binding.stereoWarning.isVisible = savedFormat.stereo
     }
 
     private fun onChipClosed(chip: View) {
@@ -207,6 +249,8 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
                 prefs.format = chipIdToFormat[checkedIds.first()]!!
                 refreshParam()
                 refreshSampleRate()
+                refreshChannels()
+                refreshStereoWarning()
             }
             binding.paramGroup -> {
                 val format = chipIdToFormat[binding.nameGroup.checkedChipId]!!
@@ -228,6 +272,10 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
                         parentFragmentManager.beginTransaction(), FormatSampleRateDialogFragment.TAG)
                 }
             }
+            binding.channelsGroup -> {
+                prefs.stereo = chipIdToChannels[binding.channelsGroup.checkedChipId]!!
+                refreshStereoWarning()
+            }
         }
     }
 
@@ -239,6 +287,8 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
                 // Need to explicitly refresh the parameter when the default format is already chosen
                 refreshParam()
                 refreshSampleRate()
+                refreshChannels()
+                refreshStereoWarning()
             }
         }
     }

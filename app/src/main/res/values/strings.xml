@@ -1,5 +1,5 @@
 <!--
-    SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+    SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
     SPDX-License-Identifier: GPL-3.0-only
 -->
 <resources>
@@ -171,6 +171,7 @@
     <string name="output_format_bottom_sheet_bitrate">Bitrate</string>
     <string name="output_format_bottom_sheet_sample_rate">Sample rate</string>
     <string name="output_format_bottom_sheet_custom_param">Custom</string>
+    <string name="output_format_bottom_sheet_channels">Channels</string>
 
     <string name="bottom_sheet_reset">Reset to defaults</string>
 
@@ -207,6 +208,11 @@
 
     <!-- Format sample rate -->
     <string name="format_sample_rate">%s Hz</string>
+
+    <!-- Channels -->
+    <string name="channels_mono">Mono</string>
+    <string name="channels_stereo">Stereo</string>
+    <string name="channels_stereo_warning">Very few devices support stereo recording. If recording fails or is missing audio, switch to mono.</string>
 
     <!-- Min duration dialog -->
     <string name="min_duration_dialog_title">@string/pref_min_duration_name</string>

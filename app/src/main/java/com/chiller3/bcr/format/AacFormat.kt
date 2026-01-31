@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -35,6 +35,7 @@ class AacFormat : Format() {
     )
     override val sampleRateInfo: SampleRateInfo =
         SampleRateInfo.fromCodec(baseMediaFormat, 16_000u)
+    override val supportsStereo: Boolean = true
 
     override fun updateMediaFormat(mediaFormat: MediaFormat, param: UInt) {
         mediaFormat.apply {
