@@ -225,6 +225,7 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kudzu)
+    implementation(libs.libphonenumber)
     implementation(libs.material)
     testImplementation(libs.junit)
 }

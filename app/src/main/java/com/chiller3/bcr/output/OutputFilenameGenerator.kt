@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2023-2025 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2023-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -11,6 +11,7 @@ import android.icu.lang.UProperty
 import android.util.Log
 import com.chiller3.bcr.Preferences
 import com.chiller3.bcr.template.Template
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import java.text.ParsePosition
 import java.time.DateTimeException
 import java.time.LocalDate
@@ -81,12 +82,10 @@ class OutputFilenameGenerator(
 
     private fun formatPhoneNumber(number: PhoneNumber, arg: String?): String? {
         return when (arg) {
-            // Default is already E.164
-            null, "E.164" -> number.toString()
-            "digits_only" -> number.format(context, PhoneNumber.Format.DIGITS_ONLY)
-            "formatted" -> number.format(context, PhoneNumber.Format.COUNTRY_SPECIFIC)
-                // Don't fail since this isn't the user's fault
-                ?: number.toString()
+            null -> number.toString()
+            "E.164" -> number.format(context, PhoneNumberUtil.PhoneNumberFormat.E164)
+            "international" -> number.format(context, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL)
+            "national" -> number.format(context, PhoneNumberUtil.PhoneNumberFormat.NATIONAL)
             else -> {
                 Log.w(TAG, "Unknown phone_number format arg: $arg")
                 null
@@ -405,7 +404,7 @@ class OutputFilenameGenerator(
                         }
                     }
                     "phone_number" -> {
-                        if (varRef.arg !in arrayOf(null, "E.164", "digits_only", "formatted")) {
+                        if (varRef.arg !in arrayOf(null, "E.164", "international", "national")) {
                             errors.add(ValidationError(
                                 ValidationErrorType.INVALID_ARGUMENT, varRef))
                         }

@@ -413,4 +413,42 @@ class Preferences(initialContext: Context) {
             prefs.edit { putInt(PREF_NEXT_NOTIFICATION_ID, nextId + 1) }
             nextId
         }
+
+    private object TemplateMigrator {
+        fun recurseClause(node: Template.Clause): Template.Clause = when (node) {
+            is Template.StringLiteral -> node
+            is Template.VariableRef -> when (node.name) {
+                "phone_number" -> when (node.arg) {
+                    "formatted" -> Template.VariableRef(node.name, "national")
+                    "digits_only" -> Template.VariableRef(node.name, null)
+                    else -> node
+                }
+                else -> node
+            }
+            is Template.Fallback -> recurseFallback(node)
+        }
+
+        fun recurseFallback(node: Template.Fallback): Template.Fallback {
+            return Template.Fallback(node.choices.map(::recurseTemplateString))
+        }
+
+        fun recurseTemplateString(node: Template.TemplateString): Template.TemplateString {
+            return Template.TemplateString(node.clauses.map(::recurseClause))
+        }
+    }
+
+    /**
+     * Migrate legacy template variables.
+     *
+     * - Rename {phone_number:formatted} to {phone_number:national}
+     * - Replace {phone_number:digits_only} with {phone_number}
+     *
+     * Can be removed starting with BCR 2.5.
+     */
+    fun migrateTemplate() {
+        val template = filenameTemplate ?: return
+        val migratedAst = TemplateMigrator.recurseTemplateString(template.ast)
+
+        filenameTemplate = Template(migratedAst.toTemplate())
+    }
 }

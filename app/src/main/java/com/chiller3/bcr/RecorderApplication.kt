@@ -42,6 +42,8 @@ class RecorderApplication : Application() {
         DynamicColors.applyToActivitiesIfAvailable(this)
 
         Notifications(this).updateChannels()
+
+        Preferences(this).migrateTemplate()
     }
 
     companion object {

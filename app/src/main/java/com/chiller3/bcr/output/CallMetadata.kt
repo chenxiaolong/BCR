@@ -10,6 +10,7 @@ import com.chiller3.bcr.format.FormatParamInfo
 import com.chiller3.bcr.format.NoParamInfo
 import com.chiller3.bcr.format.RangedParamInfo
 import com.chiller3.bcr.format.RangedParamType
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.ZonedDateTime
@@ -45,7 +46,7 @@ data class CallPartyDetailsJson(
     constructor(context: Context, details: CallPartyDetails) : this(
         phoneNumber = details.phoneNumber?.toString(),
         phoneNumberFormatted = details.phoneNumber
-            ?.format(context, PhoneNumber.Format.COUNTRY_SPECIFIC),
+            ?.format(context, PhoneNumberUtil.PhoneNumberFormat.NATIONAL),
         callerName = details.callerName,
         contactName = details.contactName,
     )
