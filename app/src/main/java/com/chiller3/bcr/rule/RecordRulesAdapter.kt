@@ -50,7 +50,7 @@ internal class RecordRulesAdapter(
             }
 
         init {
-            iconFrame?.isVisible = false
+            iconFrame.isVisible = false
 
             // We currently don't exceed the default 4 line limit, but we potentially could in the
             // future if more conditions are implemented.

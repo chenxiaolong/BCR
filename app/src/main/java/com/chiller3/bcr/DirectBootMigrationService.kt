@@ -34,7 +34,7 @@ class DirectBootMigrationService : Service() {
             if (dot > 0) {
                 val extension = name.substring(dot + 1)
                 if (isKnownExtension(extension)) {
-                    return name.substring(0, dot) to extension
+                    return name.take(dot) to extension
                 }
             }
 
