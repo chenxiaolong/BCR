@@ -14,6 +14,7 @@
 * Remove "Disable battery optimizations" setting ([PR #773 @chenxiaolong])
   * This setting was never useful since Android does not restrict BCR from launching foreground services anyway.
 * Update dependencies ([PR #774 @chenxiaolong])
+* Fix minor lint warnings ([PR #775 @chenxiaolong])
 
 ### Version 1.88
 
@@ -1140,3 +1141,4 @@ Non-user-facing changes:
 [PR #772 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/772
 [PR #773 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/773
 [PR #774 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/774
+[PR #775 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/775
