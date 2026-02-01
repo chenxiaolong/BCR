@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 2.0
 
 * Add support for stereo recording ([Issue #124], [Issue #127], [Issue #389], [Issue #405], [Issue #409], [Issue #410], [Issue #500], [Issue #566], [Issue #667], [Issue #673], [PR #772 @chenxiaolong])
   * **NOTE**: This only works if the hardware supports it. Currently, only newer Pixel devices are known to support it.
