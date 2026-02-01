@@ -30,9 +30,6 @@
     </plurals>
     <string name="pref_min_duration_desc_zero">İstənilən uzunluqdakı yazıları saxlayın.</string>
 
-    <string name="pref_inhibit_batt_opt_name">Batareya optimallaşdırmasını deaktiv edin</string>
-    <string name="pref_inhibit_batt_opt_desc">Tətbiqin sistem tərəfindən dayandırılma ehtimalını azaldır.</string>
-
     <string name="pref_write_metadata_name">Metaverilər faylı yaz</string>
     <string name="pref_write_metadata_desc">Səs faylının yanında zəng haqqında təfərrüatları ehtiva edən JSON faylı yaradın.</string>
 

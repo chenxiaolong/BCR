@@ -49,7 +49,6 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
     private lateinit var prefOutputDir: LongClickablePreference
     private lateinit var prefOutputFormat: Preference
     private lateinit var prefMinDuration: Preference
-    private lateinit var prefInhibitBatteryOpt: SwitchPreferenceCompat
     private lateinit var prefShowLauncherIcon: SwitchPreferenceCompat
     private lateinit var prefVersion: LongClickablePreference
     private lateinit var prefMigrateDirectBoot: Preference
@@ -63,10 +62,6 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
             } else {
                 startActivity(Permissions.getAppInfoIntent(requireContext()))
             }
-        }
-    private val requestInhibitBatteryOpt =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            refreshInhibitBatteryOptState()
         }
     private val requestSafSaveLogs =
         registerForActivityResult(ActivityResultContracts.CreateDocument(Logcat.MIMETYPE)) { uri ->
@@ -110,9 +105,6 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
         prefMinDuration.onPreferenceClickListener = this
         refreshMinDuration()
 
-        prefInhibitBatteryOpt = findPreference(Preferences.PREF_INHIBIT_BATT_OPT)!!
-        prefInhibitBatteryOpt.onPreferenceChangeListener = this
-
         prefShowLauncherIcon = findPreference(Preferences.PREF_SHOW_LAUNCHER_ICON)!!
         prefShowLauncherIcon.onPreferenceChangeListener = this
         refreshLauncherIcon()
@@ -145,9 +137,6 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
         super.onStart()
 
         preferenceScreen.sharedPreferences!!.registerOnSharedPreferenceChangeListener(this)
-
-        // Changing the battery state does not cause a reload of the activity
-        refreshInhibitBatteryOptState()
     }
 
     override fun onStop() {
@@ -224,11 +213,6 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
         categoryDebug.isVisible = prefs.isDebugMode
     }
 
-    private fun refreshInhibitBatteryOptState() {
-        val inhibiting = Permissions.isInhibitingBatteryOpt(requireContext())
-        prefInhibitBatteryOpt.isChecked = inhibiting
-    }
-
     override fun onPreferenceChange(preference: Preference, newValue: Any?): Boolean {
         val context = requireContext()
 
@@ -238,14 +222,6 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
             } else {
                 // Ask for optional permissions the first time only
                 requestPermissionRequired.launch(Permissions.REQUIRED + Permissions.OPTIONAL)
-            }
-            prefInhibitBatteryOpt -> {
-                if (newValue == true) {
-                    requestInhibitBatteryOpt.launch(
-                        Permissions.getInhibitBatteryOptIntent(requireContext()))
-                } else {
-                    startActivity(Permissions.getBatteryOptSettingsIntent())
-                }
             }
             prefShowLauncherIcon -> {
                 prefs.showLauncherIcon = newValue == true

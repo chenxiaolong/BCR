@@ -10,7 +10,6 @@
     <string name="pref_output_dir_desc">اختيار مجلد حفظ التسجيلات ،اضغط من اجل فتح مستعرض مكان الحفظ</string>
     <string name="pref_output_format_name">صيغة حفظ التسجيل</string>
     <string name="pref_output_format_desc">اختيار صيغة التسجيل</string>
-    <string name="pref_inhibit_batt_opt_name"> تعطيل تحسين البطارية</string>
     <string name="pref_version_name">الاصدار</string>
     <string name="pref_header_rules">الارقام المراد تسجيل مكالماتها</string>
     <string name="record_rule_number_contact_summary">الاسم: %s</string>

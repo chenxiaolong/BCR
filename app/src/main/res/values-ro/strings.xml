@@ -27,9 +27,6 @@
     </plurals>
     <string name="pref_min_duration_desc_zero">Păstrați înregistrări de orice durată.</string>
 
-    <string name="pref_inhibit_batt_opt_name">Dezactivați optimizarea bateriei</string>
-    <string name="pref_inhibit_batt_opt_desc">Redu șansele ca aplicația să fie oprită de sistem.</string>
-
     <string name="pref_write_metadata_name">Scrieți fișierul cu metadate</string>
     <string name="pref_write_metadata_desc">Creați un fișier JSON care conține detalii despre apel pe lângă fișierul audio.</string>
 

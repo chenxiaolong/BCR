@@ -18,9 +18,6 @@
     <string name="pref_output_format_name">Formát súborov</string>
     <string name="pref_output_format_desc">Vyberte formát kódovania nahrávok.</string>
 
-    <string name="pref_inhibit_batt_opt_name">Zakázať optimalizáciu batérie</string>
-    <string name="pref_inhibit_batt_opt_desc">Znižuje ryziko ukončenia aplikácie systémom</string>
-
     <string name="pref_write_metadata_name">Zapísať meta údaje do súboru</string>
     <string name="pref_write_metadata_desc">V nastavenom priečinku vytvárať aj JSON súbor s podrobnosťami o nahratom hovore.</string>
 

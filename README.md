@@ -23,7 +23,6 @@ BCR is a simple Android call recording app for rooted devices or devices running
 * Direct boot aware (records calls prior to first unlock after a reboot)
 * Auto-record rules
 * Quick settings toggle
-* Material You dynamic theming
 * No persistent notification unless a recording is in progress
 * No network access permission
 * Supports both Magisk and KernelSU
@@ -35,7 +34,6 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
 * Support for old Android versions (support is dropped as soon as maintenance becomes cumbersome)
 * Workarounds for [OEM-specific battery optimization and app killing behavior](https://dontkillmyapp.com/)
 * Workarounds for devices that don't support the [`VOICE_CALL` audio source](https://developer.android.com/reference/android/media/MediaRecorder.AudioSource#VOICE_CALL) (eg. using microphone + speakerphone)
-* Support for direct boot mode (the state before the device is initially unlocked after reboot)
 * Support for stock, unrooted firmware
 
 ## Usage
@@ -118,10 +116,6 @@ Note that the output directory is not available before the device is unlocked fo
   * Needed to automatically move recordings made before the initial device unlock to the output directory.
 * `READ_PHONE_STATE` (**optional**)
   * If allowed, the SIM slot for devices with multiple active SIMs is added to the output filename.
-* `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` (**optional**)
-  * If allowed, request Android to disable battery optimizations (app killing) for BCR.
-  * This is usually not needed. The way BCR hooks into the telephony system makes it unlikely to be killed.
-  * OEM Android builds that stray further from AOSP may ignore this.
 * `VIBRATE` (**automatically granted at install time**)
   * If vibration is enabled for BCR's notifications in Android's settings, BCR will perform the vibration. Android itself does not respect the vibration option when a phone call is active.
 

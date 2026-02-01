@@ -40,7 +40,6 @@ class Preferences(initialContext: Context) {
         const val PREF_FILENAME_TEMPLATE = "filename_template"
         const val PREF_OUTPUT_FORMAT = "output_format"
         const val PREF_MIN_DURATION = "min_duration"
-        const val PREF_INHIBIT_BATT_OPT = "inhibit_batt_opt"
         private const val PREF_WRITE_METADATA = "write_metadata"
         private const val PREF_RECORD_TELECOM_APPS = "record_telecom_apps"
         private const val PREF_RECORD_DIALING_STATE = "record_dialing_state"

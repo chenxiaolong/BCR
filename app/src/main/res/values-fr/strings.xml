@@ -30,9 +30,6 @@
     </plurals>
     <string name="pref_min_duration_desc_zero">Garder les enregistrements de toutes durées.</string>
 
-    <string name="pref_inhibit_batt_opt_name">Désactiver l\'optimisation de la batterie</string>
-    <string name="pref_inhibit_batt_opt_desc">Réduit les chances que l\'application soit arrêtée par le système.</string>
-
     <string name="pref_write_metadata_name">Écriture fichier metadata</string>
     <string name="pref_write_metadata_desc">Créer un fichier JSON contenant les détails des appels avec le fichier audio.</string>
 

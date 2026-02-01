@@ -30,9 +30,6 @@
     </plurals>
     <string name="pref_min_duration_desc_zero">هر طولده ضبطلری ساخلا.</string>
 
-    <string name="pref_inhibit_batt_opt_name">باتری اوپتیمیزاسیونونو غیرفعال ائت</string>
-    <string name="pref_inhibit_batt_opt_desc">برنامه‌نین سیستم طرفین‌دن دایاندیریلماسی احتیمالینی آزالدیر.</string>
-
     <string name="pref_write_metadata_name">متادیتا فایلی یاز</string>
     <string name="pref_write_metadata_desc">سس فایلینین یانیندا زنگ حاقدا تفصیلاتلی JSON فایل یارات.</string>
 

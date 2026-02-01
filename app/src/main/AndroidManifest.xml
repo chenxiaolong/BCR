@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+    SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
     SPDX-License-Identifier: GPL-3.0-only
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -27,7 +27,6 @@
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application

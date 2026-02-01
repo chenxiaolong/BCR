@@ -11,8 +11,6 @@
     <string name="pref_output_dir_desc">ریکارڈنگز کو ذخیرہ کرنے کے لئے ایک ڈائریکٹری منتخب کریں۔ فائل مینیجر میں کھولنے کے لئے لانگ پریس کریں۔</string>
     <string name="pref_output_format_name">آؤٹپٹ فارمیٹ</string>
     <string name="pref_output_format_desc">ریکارڈنگز کے لئے ایک انکوڈنگ فارمیٹ منتخب کریں۔</string>
-    <string name="pref_inhibit_batt_opt_name">بیٹری انسداد کو غیر فعال کریں</string>
-    <string name="pref_inhibit_batt_opt_desc">سسٹم کے ذریعہ ایپ کو بند کر دینے کی ممکنیت کو کم کرتا ہے۔</string>
     <string name="pref_write_metadata_name">میٹا ڈیٹا فائل لکھیں</string>
     <string name="pref_write_metadata_desc">کال کے بارے میں تفصیلات شامل کرنے والی ایک JSON فائل بنائیں اور اسے آڈیو فائل کے بجائے رکھیں۔</string>
     <string name="pref_version_name">ورژن</string>

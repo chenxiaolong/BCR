@@ -18,9 +18,6 @@
     <string name="pref_output_format_name">Формат записи</string>
     <string name="pref_output_format_desc">Выберите формат записи для звонков.</string>
 
-    <string name="pref_inhibit_batt_opt_name">Отключить оптимизацию батареи.</string>
-    <string name="pref_inhibit_batt_opt_desc">Снижает вероятность того, что приложение будет остановлено системой.</string>
-
     <string name="pref_write_metadata_name">Сохранить файл с метаданными</string>
     <string name="pref_write_metadata_desc">В отдельный JSON файл будут записаны подробные данные о звонке.</string>
 

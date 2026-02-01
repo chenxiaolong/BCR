@@ -26,8 +26,6 @@
         <item quantity="other">שמירת הקלטות באורך של %d שניות לפחות.</item>
     </plurals>
     <string name="pref_min_duration_desc_zero">שמירת הקלטות בכל אורך.</string>
-    <string name="pref_inhibit_batt_opt_name">השבתת מיטוב סוללה</string>
-    <string name="pref_inhibit_batt_opt_desc">מפחית את הסיכוי שהיישום יסגר על ידי המערכת.</string>
     <string name="pref_write_metadata_name">כתיבת קובץ מטה-נתונים</string>
     <string name="pref_write_metadata_desc">צור קובץ JSON המכיל פרטים על השיחה ליד קובץ האודיו.</string>
     <string name="pref_record_telecom_apps_name">הקלטת יישומים משולבי טלקום</string>

@@ -18,9 +18,6 @@
     <string name="pref_output_format_name">Định dạng đầu ra</string>
     <string name="pref_output_format_desc">Chọn một định dạng mã hóa cho các bản ghi âm.</string>
 
-    <string name="pref_inhibit_batt_opt_name">Tắt tối ưu hóa pin</string>
-    <string name="pref_inhibit_batt_opt_desc">Giảm khả năng ứng dụng bị hệ thống tắt.</string>
-
     <string name="pref_write_metadata_name">Ghi tệp metadata</string>
     <string name="pref_write_metadata_desc">Tạo một tệp JSON chứa chi tiết về cuộc gọi bên cạnh tệp âm thanh.</string>
 

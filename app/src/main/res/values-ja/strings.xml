@@ -38,8 +38,6 @@
     <string name="pref_output_dir_desc">録音を保存するディレクトリを選択します。 長押しするとファイルマネージャーで開きます。</string>
     <string name="pref_output_format_name">出力フォーマット</string>
     <string name="pref_output_format_desc">録音のエンコード形式を選択します。</string>
-    <string name="pref_inhibit_batt_opt_name">バッテリーの最適化を無効にする</string>
-    <string name="pref_inhibit_batt_opt_desc">アプリがシステムによって強制終了される可能性が低くなります。</string>
     <string name="filename_template_dialog_message">出力ファイル名のカスタム テンプレートを入力します。 変数は中括弧で指定します (例: <annotation type="template">{var}</annotation>)。 フォールバックは角かっこで指定します (例: <annotation type="template">[{contact_name}|Unknown]</annotation>)。  サポートされている変数: <annotation type="supported_vars">PLACEHOLDER</annotation>。 構文の詳細については、 <annotation type="template_docs">ドキュメント</annotation> を参照してください。</string>
     <string name="format_param_dialog_message">[%1$s, %2$s] の範囲の値を入力します。</string>
     <string name="format_param_bitrate_kbps">%s kbps</string>

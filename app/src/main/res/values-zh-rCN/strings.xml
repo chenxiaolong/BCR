@@ -18,9 +18,6 @@
     <string name="pref_output_format_name">保存格式</string>
     <string name="pref_output_format_desc">选择录音存储编码格式</string>
 
-    <string name="pref_inhibit_batt_opt_name">禁用电池优化</string>
-    <string name="pref_inhibit_batt_opt_desc">禁用电池优化可以避免软件在后台被杀死</string>
-
     <string name="pref_write_metadata_name">保存元数据文件</string>
     <string name="pref_write_metadata_desc">创建同名 JSON 文件包含通话录音详情</string>
 

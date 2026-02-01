@@ -18,9 +18,6 @@
     <string name="pref_output_format_name">Aufnahmeformat</string>
     <string name="pref_output_format_desc">Wähle ein Dateiformat für die Aufnahmen.</string>
 
-    <string name="pref_inhibit_batt_opt_name">Deaktivere die Batterieoptimierung</string>
-    <string name="pref_inhibit_batt_opt_desc">Reduziert die Wahrscheinlichkeit, dass die App vom System beendet wird.</string>
-
     <!-- About "preference" -->
     <string name="pref_version_name">Version</string>
 

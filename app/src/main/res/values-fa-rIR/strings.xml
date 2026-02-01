@@ -26,9 +26,6 @@
     </plurals>
     <string name="pref_min_duration_desc_zero">ضبط‌ها با هر طول را ذخیره کن.</string>
 
-    <string name="pref_inhibit_batt_opt_name">غیرفعال کردن بهینه‌سازی باتری</string>
-    <string name="pref_inhibit_batt_opt_desc">احتمال متوقف شدن برنامه توسط سیستم را کاهش می‌دهد.</string>
-
     <string name="pref_write_metadata_name">نوشتن فایل متادیتا</string>
     <string name="pref_write_metadata_desc">یک فایل JSON حاوی جزئیات تماس در کنار فایل صوتی ایجاد کن.</string>
 
