@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2023-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2023-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -17,20 +17,19 @@ data class PhoneNumber(private val number: String) {
     }
 
     fun format(context: Context, format: Format) = when (format) {
+        Format.E_164 -> {
+            val country = getIsoCountryCode(context) ?: return null
+            PhoneNumberUtils.formatNumberToE164(number, country)
+        }
         Format.DIGITS_ONLY -> number.filter { Character.digit(it, 10) != -1 }
         Format.COUNTRY_SPECIFIC -> {
-            val country = getIsoCountryCode(context)
-            if (country == null) {
-                Log.w(TAG, "Failed to detect country")
+            val country = getIsoCountryCode(context) ?: return null
+            val formatted = PhoneNumberUtils.formatNumber(number, country)
+            if (formatted == null) {
+                Log.w(TAG, "Phone number cannot be formatted for country $country")
                 null
             } else {
-                val formatted = PhoneNumberUtils.formatNumber(number, country)
-                if (formatted == null) {
-                    Log.w(TAG, "Phone number cannot be formatted for country $country")
-                    null
-                } else {
-                    formatted
-                }
+                formatted
             }
         }
     }
@@ -57,6 +56,7 @@ data class PhoneNumber(private val number: String) {
                 result = Locale.getDefault().country
             }
             if (result.isNullOrEmpty()) {
+                Log.w(TAG, "Failed to detect country")
                 return null
             }
             return result.uppercase()
@@ -64,6 +64,7 @@ data class PhoneNumber(private val number: String) {
     }
 
     enum class Format {
+        E_164,
         DIGITS_ONLY,
         COUNTRY_SPECIFIC,
     }

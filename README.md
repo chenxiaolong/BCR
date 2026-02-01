@@ -157,10 +157,11 @@ BCR supports customizing the template used for determining the output filenames 
 * `{direction}`: **[Android 10+ only]** For 1-on-1 calls, either `in` or `out` depending on if the call is an incoming or outgoing call. If the call is a conference call, then `conference` is used instead.
 * `{sim_slot}`: **[Android 11+ only]** The SIM slot number for the call (counting from 1). This is only defined for multi-SIM devices that have multiple SIMs active and if BCR is granted the Phone permission.
   * To include the SIM slot even if there's only one active SIM, use `{sim_slot:always}`.
-* `{phone_number}`: The phone number for the call. This is undefined for private calls. Available formatting options:
-  * `{phone_number:E.164}`: Default (same as just `{phone_number}`). Phone number formatted in the international E.164 format (`+<country code><subscriber>`).
-  * `{phone_number:digits_only}`: Phone number with digits only (no `+` or separators).
-  * `{phone_number:formatted}`: Phone number formatted using the country-specific style.
+* `{phone_number}`: The phone number for the call. This is undefined for private calls. The default formatting is unspecified and the number is presented however Android decides to do so. To format with a specific format:
+  * `{phone_number:E.164}`: International E.164 format (`+<country code><subscriber>`).
+  * `{phone_number:digits_only}`: Default unspecified format, except with numeric digits only.
+  * `{phone_number:formatted}`: Country-specific style.
+  * Sometimes, there is not enough information to format the phone number in these specific formats. It's best to specify a fallback to the default format, such as `[{phone_number:E.164}|{phone_number}|]`.
 * `{caller_name}`: The caller ID as provided by CNAP from the carrier.
 * `{contact_name}` The name of the (first) contact associated with the phone number. This is only defined if BCR is granted the Contacts permission.
 * `{call_log_name}`: The name shown in the call log. This may include more information, like the name of the business, if the system dialer performs reverse lookups. This is only defined if BCR is granted the Read Call Logs permission.

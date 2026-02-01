@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2023-2025 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2023-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -81,8 +81,8 @@ class OutputFilenameGenerator(
 
     private fun formatPhoneNumber(number: PhoneNumber, arg: String?): String? {
         return when (arg) {
-            // Default is already E.164
-            null, "E.164" -> number.toString()
+            null -> number.toString()
+            "E.164" -> number.format(context, PhoneNumber.Format.E_164)
             "digits_only" -> number.format(context, PhoneNumber.Format.DIGITS_ONLY)
             "formatted" -> number.format(context, PhoneNumber.Format.COUNTRY_SPECIFIC)
                 // Don't fail since this isn't the user's fault
