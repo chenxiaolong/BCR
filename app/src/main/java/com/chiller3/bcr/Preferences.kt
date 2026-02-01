@@ -21,7 +21,6 @@ import com.chiller3.bcr.extension.DOCUMENTSUI_AUTHORITY
 import com.chiller3.bcr.extension.safTreeToDocument
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.output.Retention
-import com.chiller3.bcr.rule.LegacyRecordRule
 import com.chiller3.bcr.rule.RecordRule
 import com.chiller3.bcr.settings.SettingsActivity
 import com.chiller3.bcr.template.Template
@@ -53,7 +52,6 @@ class Preferences(initialContext: Context) {
 
         // Not associated with a UI preference
         private const val PREF_DEBUG_MODE = "debug_mode"
-        private const val PREF_LEGACY_RECORD_RULE_PREFIX = "record_rule_"
         private const val PREF_FORMAT_NAME = "codec_name"
         private const val PREF_FORMAT_PARAM_PREFIX = "codec_param_"
         private const val PREF_FORMAT_SAMPLE_RATE_PREFIX = "codec_sample_rate_"
@@ -316,28 +314,6 @@ class Preferences(initialContext: Context) {
         get() = prefs.getBoolean(PREF_CALL_RECORDING, false)
         set(enabled) = prefs.edit { putBoolean(PREF_CALL_RECORDING, enabled) }
 
-    /** No longer used, except for migration to modern rules. */
-    private var legacyRecordRules: List<LegacyRecordRule>?
-        get() {
-            val rules = mutableListOf<LegacyRecordRule>()
-            while (true) {
-                val prefix = "${PREF_LEGACY_RECORD_RULE_PREFIX}${rules.size}_"
-                val rule = LegacyRecordRule.fromRawPreferences(prefs, prefix) ?: break
-                rules.add(rule)
-            }
-            return rules.ifEmpty { null }
-        }
-        set(rules) = prefs.edit {
-            val keys = prefs.all.keys.filter { it.startsWith(PREF_LEGACY_RECORD_RULE_PREFIX) }
-            for (key in keys) {
-                remove(key)
-            }
-
-            if (rules != null) {
-                throw IllegalArgumentException("Setting legacy rules is not supported")
-            }
-        }
-
     /** List of rules to determine which action to take for a specific call. */
     var recordRules: List<RecordRule>?
         get() = prefs.getString(PREF_RECORD_RULES, null)?.let { JSON_FORMAT.decodeFromString(it) }
@@ -466,17 +442,4 @@ class Preferences(initialContext: Context) {
             prefs.edit { putInt(PREF_NEXT_NOTIFICATION_ID, nextId + 1) }
             nextId
         }
-
-    /**
-     * Migrate legacy rules to modern rules.
-     *
-     * This migration will be removed in version 1.80.
-     */
-    fun migrateLegacyRules() {
-        val legacyRules = legacyRecordRules
-        if (legacyRules != null) {
-            recordRules = LegacyRecordRule.convertToModernRules(legacyRules)
-            legacyRecordRules = null
-        }
-    }
 }
