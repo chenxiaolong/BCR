@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -29,12 +29,10 @@ val Uri.formattedString: String
 
             // If this looks like a SAF tree/document URI, then try and show the document ID. This
             // cannot be implemented in a way that prevents all false positives.
-            if (segments.size == 4 && segments[0] == "tree" && segments[2] == "document") {
-                prefix + segments[3]
-            } else if (segments.size == 2 && (segments[0] == "tree" || segments[0] == "document")) {
-                prefix + segments[1]
-            } else {
-                toString()
+            when (segments.size) {
+                4 if segments[0] == "tree" && segments[2] == "document" -> prefix + segments[3]
+                2 if (segments[0] == "tree" || segments[0] == "document") -> prefix + segments[1]
+                else -> toString()
             }
         }
         else -> toString()
@@ -60,14 +58,12 @@ fun Uri.toDocumentFile(context: Context): DocumentFile =
             val segments = pathSegments
 
             // These only return null on API <21.
-            if (segments.size == 4 && segments[0] == "tree" && segments[2] == "document") {
-                DocumentFile.fromSingleUri(context, this)!!
-            } else if (segments.size == 2 && segments[0] == "document") {
-                DocumentFile.fromSingleUri(context, this)!!
-            } else if (segments.size == 2 && segments[0] == "tree") {
-                DocumentFile.fromTreeUri(context, this)!!
-            } else {
-                throw IllegalStateException("Unsupported content URI: $this")
+            when (segments.size) {
+                4 if segments[0] == "tree" && segments[2] == "document" ->
+                    DocumentFile.fromSingleUri(context, this)!!
+                2 if segments[0] == "document" -> DocumentFile.fromSingleUri(context, this)!!
+                2 if segments[0] == "tree" -> DocumentFile.fromTreeUri(context, this)!!
+                else -> throw IllegalStateException("Unsupported content URI: $this")
             }
         }
         else -> throw IllegalArgumentException("Unsupported URI: $this")

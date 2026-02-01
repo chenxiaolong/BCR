@@ -46,7 +46,7 @@ private object ServiceManagerProxy {
 }
 
 private fun getService(interfaceClass: Class<*>, serviceName: String): IInterface {
-    val stubCls = Class.forName("${interfaceClass.canonicalName}\$Stub")
+    val stubCls = Class.forName($$"$${interfaceClass.canonicalName}$Stub")
     val stubMethodAsInterface = stubCls.getDeclaredMethod("asInterface", IBinder::class.java)
 
     // ServiceManager.waitForService() tries to start the service, which we want to avoid to be 100%

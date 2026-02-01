@@ -80,7 +80,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
      * However, because this service is required to be exported, the intents could potentially come
      * from third party apps and we don't want those interfering with the recordings.
      */
-    private val token = Random.Default.nextBytes(128)
+    private val token = Random.nextBytes(128)
 
     private val callback = object : Call.Callback() {
         override fun onStateChanged(call: Call, state: Int) {
