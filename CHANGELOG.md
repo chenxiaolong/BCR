@@ -13,6 +13,7 @@
   * **NOTE**: This only works if the hardware supports it. Currently, only newer Pixel devices are known to support it.
 * Remove "Disable battery optimizations" setting ([PR #773 @chenxiaolong])
   * This setting was never useful since Android does not restrict BCR from launching foreground services anyway.
+* Update dependencies ([PR #774 @chenxiaolong])
 
 ### Version 1.88
 
@@ -1138,3 +1139,4 @@ Non-user-facing changes:
 [PR #768 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/768
 [PR #772 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/772
 [PR #773 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/773
+[PR #774 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/774
