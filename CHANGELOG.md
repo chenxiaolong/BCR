@@ -17,6 +17,8 @@
 * Fix minor lint warnings ([PR #775 @chenxiaolong])
 * Remove settings migration for legacy record rules ([PR #777 @chenxiaolong])
   * If upgrading from an old version before 1.75, upgrade to 1.88 first.
+* Remove settings migration for legacy notification channels ([PR #778 @chenxiaolong])
+  * If upgrading from an old version before 1.24, upgrade to 1.88 first.
 
 ### Version 1.88
 
@@ -1145,3 +1147,4 @@ Non-user-facing changes:
 [PR #774 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/774
 [PR #775 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/775
 [PR #777 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/777
+[PR #778 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/778
