@@ -33,6 +33,7 @@ class Template(template: String) {
          * or any character in [requireEscape] unless escaped with a backslash. The input must not
          * be empty.
          */
+        @Suppress("SameParameterValue")
         private fun createLiteralParser(vararg requireEscape: Char) =
             FlatMappedParser(
                 SequenceParser(

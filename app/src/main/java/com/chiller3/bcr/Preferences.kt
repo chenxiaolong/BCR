@@ -131,6 +131,7 @@ class Preferences(initialContext: Context) {
     }
 
     /** Whether to show debug preferences and enable creation of debug logs for all calls. */
+    @Suppress("KotlinConstantConditions", "SimplifyBooleanWithConstants")
     var isDebugMode: Boolean
         get() = BuildConfig.FORCE_DEBUG_MODE || prefs.getBoolean(PREF_DEBUG_MODE, false)
         set(enabled) = prefs.edit { putBoolean(PREF_DEBUG_MODE, enabled) }

@@ -55,7 +55,7 @@ class FileRetentionDialogFragment : DialogFragment() {
                     } else {
                         DaysRetention(days)
                     }
-                } catch (e: NumberFormatException) {
+                } catch (_: NumberFormatException) {
                     binding.textLayout.error = getString(R.string.file_retention_error_too_large)
                     null
                 }

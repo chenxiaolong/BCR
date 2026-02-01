@@ -20,6 +20,7 @@ import com.chiller3.bcr.RecorderThread.Companion.BYTES_PER_SAMPLE
 import com.chiller3.bcr.extension.deleteIfEmptyDir
 import com.chiller3.bcr.extension.listFilesWithPathsRecursively
 import com.chiller3.bcr.extension.phoneNumber
+import com.chiller3.bcr.extension.threadIdCompat
 import com.chiller3.bcr.extension.toDocumentFile
 import com.chiller3.bcr.format.Encoder
 import com.chiller3.bcr.format.Format
@@ -66,7 +67,7 @@ class RecorderThread(
     private val listener: OnRecordingCompletedListener,
     private val parentCall: Call,
 ) : Thread(RecorderThread::class.java.simpleName) {
-    private val tag = "${RecorderThread::class.java.simpleName}/${id}"
+    private val tag = "${RecorderThread::class.java.simpleName}/$threadIdCompat"
     private val prefs = Preferences(context)
 
     enum class State {

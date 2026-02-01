@@ -49,7 +49,7 @@ sealed class SampleRateInfo(
 
                 val capabilities = try {
                     info.getCapabilitiesForType(format.getString(MediaFormat.KEY_MIME))
-                } catch (e: IllegalArgumentException) {
+                } catch (_: IllegalArgumentException) {
                     continue
                 }
 

@@ -156,6 +156,7 @@ class FilenameTemplateDialogFragment : DialogFragment() {
             val start = message.getSpanStart(annotation)
             val end = message.getSpanEnd(annotation)
 
+            @Suppress("CascadeIf")
             if (annotation.key == "type" && annotation.value == "supported_vars") {
                 val separator = ", "
                 var nextOffset = start

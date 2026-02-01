@@ -323,7 +323,7 @@ fun DocumentFile.moveToDirectory(targetParent: DocumentFile): DocumentFile? {
                 )
 
                 targetUri?.let { DocumentFile.fromTreeUri(context!!, targetUri) }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 null
             }
         }

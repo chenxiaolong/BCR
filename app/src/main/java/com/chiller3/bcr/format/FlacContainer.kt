@@ -69,6 +69,7 @@ class FlacContainer(private val fd: FileDescriptor) : Container {
         }
 
         track = 0
+        @Suppress("KotlinConstantConditions")
         return track
     }
 

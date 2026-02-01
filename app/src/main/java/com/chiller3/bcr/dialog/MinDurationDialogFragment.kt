@@ -52,7 +52,7 @@ class MinDurationDialogFragment : DialogFragment() {
                     } else {
                         null
                     }
-                } catch (e: NumberFormatException) {
+                } catch (_: NumberFormatException) {
                     null
                 }
             }

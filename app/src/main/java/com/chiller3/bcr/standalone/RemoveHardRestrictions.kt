@@ -223,9 +223,9 @@ private class PermissionManagerProxy private constructor(private val iFace: IInt
                     VirtualDeviceManagerProxy.PERSISTENT_DEVICE_ID_DEFAULT,
                     userId,
                 ) as Int
-            } catch (e: NoSuchMethodException) {
+            } catch (_: NoSuchMethodException) {
                 // 14 QPR3 has a breaking change in the interface, but no version bump.
-            } catch (e: NoSuchFieldException) {
+            } catch (_: NoSuchFieldException) {
                 // PERSISTENT_DEVICE_ID_DEFAULT only exists in QPR3 too.
             }
 
@@ -237,7 +237,7 @@ private class PermissionManagerProxy private constructor(private val iFace: IInt
                     Context.DEVICE_ID_DEFAULT,
                     userId,
                 ) as Int
-            } catch (e: NoSuchMethodException) {
+            } catch (_: NoSuchMethodException) {
                 // 14 QPR2 has a breaking change in the interface, but no version bump.
             }
         }
@@ -267,9 +267,9 @@ private class PermissionManagerProxy private constructor(private val iFace: IInt
                 )
 
                 return
-            } catch (e: NoSuchMethodException) {
+            } catch (_: NoSuchMethodException) {
                 // 14 QPR3 has a breaking change in the interface, but no version bump.
-            } catch (e: NoSuchFieldException) {
+            } catch (_: NoSuchFieldException) {
                 // PERSISTENT_DEVICE_ID_DEFAULT only exists in QPR3 too.
             }
 
@@ -286,7 +286,7 @@ private class PermissionManagerProxy private constructor(private val iFace: IInt
                 )
 
                 return
-            } catch (e: NoSuchMethodException) {
+            } catch (_: NoSuchMethodException) {
                 // 14 QPR2 has a breaking change in the interface, but no version bump.
             }
         }

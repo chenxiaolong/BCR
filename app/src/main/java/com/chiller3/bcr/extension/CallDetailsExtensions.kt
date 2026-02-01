@@ -12,7 +12,7 @@ val Call.Details.phoneNumber: PhoneNumber?
     get() = handle?.phoneNumber?.let {
         try {
             PhoneNumber(it)
-        } catch (e: IllegalArgumentException) {
+        } catch (_: IllegalArgumentException) {
             null
         }
     }

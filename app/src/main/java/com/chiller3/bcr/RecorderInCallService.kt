@@ -15,6 +15,7 @@ import android.telecom.Call
 import android.telecom.InCallService
 import android.util.Log
 import androidx.annotation.StringRes
+import com.chiller3.bcr.extension.threadIdCompat
 import com.chiller3.bcr.output.OutputFile
 import kotlin.random.Random
 
@@ -467,7 +468,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         additionalFiles: List<OutputFile>,
         status: RecorderThread.Status,
     ) {
-        Log.i(TAG, "Recording completed: ${thread.id}: ${file?.redacted}: $status")
+        Log.i(TAG, "Recording completed: ${thread.threadIdCompat}: ${file?.redacted}: $status")
         handler.post {
             onRecorderExited(thread)
 
