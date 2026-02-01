@@ -1,6 +1,6 @@
 [versions]
 android-gradle-plugin = "9.0.0"
-androidx-activity = "1.12.2"
+androidx-activity = "1.12.3"
 androidx-appcompat = "1.7.1"
 androidx-core = "1.17.0"
 androidx-documentfile = "1.1.0"
@@ -11,7 +11,7 @@ jgit = "7.5.0.202512021534-r"
 json = "20251224"
 junit = "1.3.0"
 kotlin = "2.3.0"
-kotlinx-serialization = "1.9.0"
+kotlinx-serialization = "1.10.0"
 kudzu = "6.1.0"
 material = "1.13.0"
 
