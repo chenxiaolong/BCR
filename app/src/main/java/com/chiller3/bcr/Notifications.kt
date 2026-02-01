@@ -36,7 +36,7 @@ class Notifications(
         const val CHANNEL_ID_SUCCESS = "success"
         const val CHANNEL_ID_SILENCE = "silence"
 
-        private val LEGACY_CHANNEL_IDS = arrayOf("alerts")
+        private val LEGACY_CHANNEL_IDS = arrayOf<String>()
 
         /** For access to system/internal resource values. */
         private val systemRes = Resources.getSystem()
