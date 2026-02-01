@@ -13,14 +13,14 @@
   * **NOTE**: This only works if the hardware supports it. Currently, only newer Pixel devices are known to support it.
 * Remove "Disable battery optimizations" setting ([PR #773 @chenxiaolong])
   * This setting was never useful since Android does not restrict BCR from launching foreground services anyway.
-* Update dependencies ([PR #774 @chenxiaolong])
-* Fix minor lint warnings ([PR #775 @chenxiaolong])
 * Remove settings migration for legacy record rules ([PR #777 @chenxiaolong])
   * If upgrading from an old version before 1.75, upgrade to 1.88 first.
 * Remove settings migration for legacy notification channels ([PR #778 @chenxiaolong])
   * If upgrading from an old version before 1.24, upgrade to 1.88 first.
 * Remove settings migration for direct boot support ([PR #779 @chenxiaolong])
   * If upgrading from an old version before 1.68, upgrade to 1.88 first.
+* Update dependencies ([PR #774 @chenxiaolong])
+* Fix minor lint warnings ([PR #775 @chenxiaolong], [PR #780 @chenxiaolong])
 
 ### Version 1.88
 
@@ -1151,3 +1151,4 @@ Non-user-facing changes:
 [PR #777 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/777
 [PR #778 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/778
 [PR #779 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/779
+[PR #780 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/780
