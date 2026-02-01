@@ -9,6 +9,9 @@
 
 ### Unreleased
 
+* Add support for stereo recording ([Issue #124], [Issue #127], [Issue #389], [Issue #405], [Issue #409], [Issue #410], [Issue #500], [Issue #566], [Issue #667], [Issue #673], [PR #772 @chenxiaolong])
+  * **NOTE**: This only works if the hardware supports it. Currently, only newer Pixel devices are known to support it.
+
 ### Version 1.88
 
 * Fix Russian translation for `notification_recording_finalizing` string ([Issue #763], [PR #764 @Ololoshevich])
@@ -726,6 +729,8 @@ Non-user-facing changes:
 [Issue #93]: https://github.com/chenxiaolong/BCR/issues/93
 [Issue #108]: https://github.com/chenxiaolong/BCR/issues/108
 [Issue #111]: https://github.com/chenxiaolong/BCR/issues/111
+[Issue #124]: https://github.com/chenxiaolong/BCR/issues/124
+[Issue #127]: https://github.com/chenxiaolong/BCR/issues/127
 [Issue #128]: https://github.com/chenxiaolong/BCR/issues/128
 [Issue #131]: https://github.com/chenxiaolong/BCR/issues/131
 [Issue #135]: https://github.com/chenxiaolong/BCR/issues/135
@@ -769,14 +774,19 @@ Non-user-facing changes:
 [Issue #376]: https://github.com/chenxiaolong/BCR/issues/376
 [Issue #380]: https://github.com/chenxiaolong/BCR/issues/380
 [Issue #388]: https://github.com/chenxiaolong/BCR/issues/388
+[Issue #389]: https://github.com/chenxiaolong/BCR/issues/389
 [Issue #394]: https://github.com/chenxiaolong/BCR/issues/394
+[Issue #405]: https://github.com/chenxiaolong/BCR/issues/405
 [Issue #406]: https://github.com/chenxiaolong/BCR/issues/406
+[Issue #409]: https://github.com/chenxiaolong/BCR/issues/409
+[Issue #410]: https://github.com/chenxiaolong/BCR/issues/410
 [Issue #411]: https://github.com/chenxiaolong/BCR/issues/411
 [Issue #422]: https://github.com/chenxiaolong/BCR/issues/422
 [Issue #429]: https://github.com/chenxiaolong/BCR/issues/429
 [Issue #433]: https://github.com/chenxiaolong/BCR/issues/433
 [Issue #455]: https://github.com/chenxiaolong/BCR/issues/455
 [Issue #491]: https://github.com/chenxiaolong/BCR/issues/491
+[Issue #500]: https://github.com/chenxiaolong/BCR/issues/500
 [Issue #507]: https://github.com/chenxiaolong/BCR/issues/507
 [Issue #509]: https://github.com/chenxiaolong/BCR/issues/509
 [Issue #513]: https://github.com/chenxiaolong/BCR/issues/513
@@ -785,6 +795,7 @@ Non-user-facing changes:
 [Issue #546]: https://github.com/chenxiaolong/BCR/issues/546
 [Issue #554]: https://github.com/chenxiaolong/BCR/issues/554
 [Issue #563]: https://github.com/chenxiaolong/BCR/issues/563
+[Issue #566]: https://github.com/chenxiaolong/BCR/issues/566
 [Issue #569]: https://github.com/chenxiaolong/BCR/issues/569
 [Issue #574]: https://github.com/chenxiaolong/BCR/issues/574
 [Issue #576]: https://github.com/chenxiaolong/BCR/issues/576
@@ -798,6 +809,8 @@ Non-user-facing changes:
 [Issue #628]: https://github.com/chenxiaolong/BCR/issues/628
 [Issue #643]: https://github.com/chenxiaolong/BCR/issues/643
 [Issue #649]: https://github.com/chenxiaolong/BCR/issues/649
+[Issue #667]: https://github.com/chenxiaolong/BCR/issues/667
+[Issue #673]: https://github.com/chenxiaolong/BCR/issues/673
 [Issue #691]: https://github.com/chenxiaolong/BCR/issues/691
 [Issue #719]: https://github.com/chenxiaolong/BCR/issues/719
 [Issue #722]: https://github.com/chenxiaolong/BCR/issues/722
@@ -1121,3 +1134,4 @@ Non-user-facing changes:
 [PR #743 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/743
 [PR #764 @Ololoshevich]: https://github.com/chenxiaolong/BCR/pull/764
 [PR #768 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/768
+[PR #772 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/772
