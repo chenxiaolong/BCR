@@ -58,7 +58,6 @@ class Preferences(initialContext: Context) {
         private const val PREF_FORMAT_STEREO = "stereo"
         const val PREF_OUTPUT_RETENTION = "output_retention"
         private const val PREF_NEXT_NOTIFICATION_ID = "next_notification_id"
-        private const val PREF_ALREADY_MIGRATED = "already_migrated"
 
         // Defaults
         val DEFAULT_FILENAME_TEMPLATE = Template(
@@ -84,35 +83,6 @@ class Preferences(initialContext: Context) {
                     || key.startsWith(PREF_FORMAT_PARAM_PREFIX)
                     || key.startsWith(PREF_FORMAT_SAMPLE_RATE_PREFIX)
                     || key == PREF_FORMAT_STEREO
-
-        fun migrateToDeviceProtectedStorage(context: Context) {
-            if (context.isDeviceProtectedStorage) {
-                Log.w(TAG, "Cannot migrate preferences in BFU state")
-                return
-            }
-
-            val deviceContext = context.createDeviceProtectedStorageContext()
-            var devicePrefs = PreferenceManager.getDefaultSharedPreferences(deviceContext)
-
-            if (devicePrefs.getBoolean(PREF_ALREADY_MIGRATED, false)) {
-                Log.i(TAG, "Already migrated preferences to device protected storage")
-                return
-            }
-
-            Log.i(TAG, "Migrating preferences to device protected storage")
-
-            // getDefaultSharedPreferencesName() is not public, but realistically, Android can't
-            // ever change the default shared preferences name without breaking nearly every app.
-            val sharedPreferencesName = context.packageName + "_preferences"
-
-            // This returns true if the shared preferences didn't exist.
-            if (!deviceContext.moveSharedPreferencesFrom(context, sharedPreferencesName)) {
-                Log.e(TAG, "Failed to migrate preferences to device protected storage")
-            }
-
-            devicePrefs = PreferenceManager.getDefaultSharedPreferences(deviceContext)
-            devicePrefs.edit { putBoolean(PREF_ALREADY_MIGRATED, true) }
-        }
     }
 
     private val context = if (initialContext.isDeviceProtectedStorage) {

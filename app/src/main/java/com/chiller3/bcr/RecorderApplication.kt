@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -42,9 +42,6 @@ class RecorderApplication : Application() {
         DynamicColors.applyToActivitiesIfAvailable(this)
 
         Notifications(this).updateChannels()
-
-        // Move preferences to device-protected storage for direct boot support.
-        Preferences.migrateToDeviceProtectedStorage(this)
     }
 
     companion object {
