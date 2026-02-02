@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2023-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2023-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -234,13 +234,20 @@ class CallMetadataCollector(
             && context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE)
                 == PackageManager.PERMISSION_GRANTED) {
             val subscriptionManager = context.getSystemService(SubscriptionManager::class.java)
-
             val telephonyManager = context.getSystemService(TelephonyManager::class.java)
-            val subscriptionId = telephonyManager.getSubscriptionId(parentDetails.accountHandle)
-            val subscriptionInfo = subscriptionManager.getActiveSubscriptionInfo(subscriptionId)
 
-            simCount = subscriptionManager.activeSubscriptionInfoCount
-            simSlot = subscriptionInfo?.let { it.simSlotIndex + 1 }
+            try {
+                val subscriptionId = telephonyManager.getSubscriptionId(parentDetails.accountHandle)
+                val subscriptionInfo = subscriptionManager.getActiveSubscriptionInfo(subscriptionId)
+
+                simCount = subscriptionManager.activeSubscriptionInfoCount
+                simSlot = subscriptionInfo?.let { it.simSlotIndex + 1 }
+            } catch (e: Exception) {
+                // Some devices fail to behave correctly and throw:
+                //   java.lang.SecurityException: getSubIdForPhoneAccountHandle
+                // during the TelephonyManager.getSubscriptionId() call.
+                Log.w(TAG, "Failed to query SIM slot info", e)
+            }
         }
 
         val (callLogNumber, callLogName) = getCallLogDetails(parentDetails, allowBlockingCalls)
