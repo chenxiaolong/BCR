@@ -13,6 +13,12 @@
   * **NOTE**: This only works if the hardware supports it. Currently, only newer Pixel devices are known to support it.
 * Remove "Disable battery optimizations" setting ([PR #773 @chenxiaolong])
   * This setting was never useful since Android does not restrict BCR from launching foreground services anyway.
+* Switch to libphonenumber for formatting phone numbers in the output filename ([PR #782 @chenxiaolong])
+  * `{phone_number:E.164}` is now guaranteed to actually be E.164-formatted
+  * `{phone_number:international}` has been added
+  * `{phone_number:formatted}` has been renamed to `{phone_number:national}` and will be automatically migrated
+  * `{phone_number:national}` will no longer implicitly fall back to `{phone_number}`
+  * `{phone_number:digits_only}` has been removed and will be automatically migrated to `{phone_number}`
 * Remove settings migration for legacy record rules ([PR #777 @chenxiaolong])
   * If upgrading from an old version before 1.75, upgrade to 1.88 first.
 * Remove settings migration for legacy notification channels ([PR #778 @chenxiaolong])
@@ -1152,3 +1158,4 @@ Non-user-facing changes:
 [PR #778 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/778
 [PR #779 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/779
 [PR #780 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/780
+[PR #782 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/782
