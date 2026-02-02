@@ -19,6 +19,8 @@
   * `{phone_number:formatted}` has been renamed to `{phone_number:national}` and will be automatically migrated
   * `{phone_number:national}` will no longer implicitly fall back to `{phone_number}`
   * `{phone_number:digits_only}` has been removed and will be automatically migrated to `{phone_number}`
+* Work around crash on some devices when querying the SIM slot ([Issue #761], [PR #783 @chenxiaolong])
+  * This just avoids an Android bug. On affected multi-SIM devices, the SIM slot will still be missing in the recording's filename.
 * Remove settings migration for legacy record rules ([PR #777 @chenxiaolong])
   * If upgrading from an old version before 1.75, upgrade to 1.88 first.
 * Remove settings migration for legacy notification channels ([PR #778 @chenxiaolong])
@@ -833,6 +835,7 @@ Non-user-facing changes:
 [Issue #727]: https://github.com/chenxiaolong/BCR/issues/727
 [Issue #733]: https://github.com/chenxiaolong/BCR/issues/733
 [Issue #742]: https://github.com/chenxiaolong/BCR/issues/742
+[Issue #761]: https://github.com/chenxiaolong/BCR/issues/761
 [Issue #763]: https://github.com/chenxiaolong/BCR/issues/763
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
@@ -1159,3 +1162,4 @@ Non-user-facing changes:
 [PR #779 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/779
 [PR #780 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/780
 [PR #782 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/782
+[PR #783 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/783
