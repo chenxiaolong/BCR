@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update Chinese translations ([PR #789 @lofx-lee])
+
 ### Version 2.0
 
 * Add support for stereo recording ([Issue #124], [Issue #127], [Issue #389], [Issue #405], [Issue #409], [Issue #410], [Issue #500], [Issue #566], [Issue #667], [Issue #673], [PR #772 @chenxiaolong])
@@ -1165,3 +1167,4 @@ Non-user-facing changes:
 [PR #780 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/780
 [PR #782 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/782
 [PR #783 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/783
+[PR #789 @lofx-lee]: https://github.com/chenxiaolong/BCR/pull/789
