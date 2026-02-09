@@ -1,96 +1,222 @@
+<!--
+    SPDX-FileCopyrightText: 2022-2026 @newsn23, @ElsAr4e
+    SPDX-License-Identifier: GPL-3.0-only
+-->
 <resources>
     <string name="app_name_full">Basic Call Recorder</string>
 
     <!-- Preference headers -->
     <string name="pref_header_general">Allgemein</string>
     <string name="pref_header_about">Über</string>
+    <string name="pref_header_debug">Debug</string>
 
     <!-- General preferences -->
-    <string name="pref_call_recording_name">Anrufaufnahme</string>
-    <string name="pref_call_recording_desc">Nehme ankommende und ausgehende Anrufe auf. Mikrofon- und Benachrichtigungserlaubnis sind erforderlich, um im Hintergrund aufnehmen zu können.</string>
+    <string name="pref_call_recording_name">Anrufaufzeichnung</string>
+    <string name="pref_call_recording_desc">Eingehende und ausgehende Anrufe aufnehmen. Berechtigungen für Mikrofon und Benachrichtigung werden benötigt, um Anrufaufnahmen im Hintergrund zu erstellen.</string>
 
-    <string name="pref_record_rules_name">Automatische Aufnahme Regeln</string>
-    <string name="pref_record_rules_desc">Stelle eine welche Anrufe automatisch aufgenommen werden sollen.</string>
+    <string name="pref_record_rules_name">Regeln für automatische Aufnahmen</string>
+    <string name="pref_record_rules_desc">Konfigurieren, welche Anrufe automatisch aufgenommen werden sollen.</string>
 
-    <string name="pref_output_dir_name">Aufnahmen Verzeichnis</string>
-    <string name="pref_output_dir_desc">Wähle den Ordner, in dem die Aufnahmen gespeichert werden sollen.</string>
+    <string name="pref_output_dir_name">Ausgabeverzeichnis</string>
+    <string name="pref_output_dir_desc">Verzeichnis für Aufnahmen auswählen. Lange drücken, um im Dateimanager zu öffnen.</string>
 
-    <string name="pref_output_format_name">Aufnahmeformat</string>
-    <string name="pref_output_format_desc">Wähle ein Dateiformat für die Aufnahmen.</string>
+    <string name="pref_output_format_name">Ausgabeformat</string>
+    <string name="pref_output_format_desc">Kodierungsformat für Aufnahmen auswählen.</string>
+
+    <string name="pref_min_duration_name">Mindestdauer der Aufnahme</string>
+    <plurals name="pref_min_duration_desc">
+        <item quantity="one">Aufnahmen mindestens %d Sekunde lang behalten.</item>
+        <item quantity="other">Aufnahmen mindestens %d Sekunden lang behalten.</item>
+    </plurals>
+    <string name="pref_min_duration_desc_zero">Aufnahmen beliebiger Länge behalten.</string>
+
+    <string name="pref_write_metadata_name">Metadaten-Datei erstellen</string>
+    <string name="pref_write_metadata_desc">JSON-Datei mit Details zum Anruf neben der Audioaufnahme erstellen.</string>
+
+    <string name="pref_record_telecom_apps_name">Telekom-integrierte Apps aufzeichnen</string>
+    <string name="pref_record_telecom_apps_desc">Anrufe von Drittanbieter-Apps aufnehmen, die in Androids Telekom-System integriert sind. Diese Aufnahmen enthalten wahrscheinlich nur Stille.</string>
+
+    <string name="pref_record_dialing_state_name">Anrufe vor Verbindung aufnehmen</string>
+    <string name="pref_record_dialing_state_desc">Bei ausgehenden Anrufen Aufnahme starten, sobald mit dem Wählen begonnen wird, anstatt zu warten, bis der Anruf verbunden ist.</string>
+
+    <string name="pref_show_launcher_icon_name">Launcher-Symbol anzeigen</string>
+    <string name="pref_show_launcher_icon_desc">Wenn das Launcher-Symbol ausgeblendet ist, *#*#BCR#*#* wählen, um die App zu öffnen.</string>
 
     <!-- About "preference" -->
     <string name="pref_version_name">Version</string>
 
-    <!-- Record rules activity -->
+    <!-- Debug preferences -->
+    <string name="pref_force_direct_boot_name">Direct Boot-Modus erzwingen</string>
+    <string name="pref_force_direct_boot_desc">So tun, als befände sich das Gerät zum Testen im Zustand vor der ersten Entsperrung.</string>
+
+    <string name="pref_migrate_direct_boot_name">Direct Boot-Aufnahmen migrieren</string>
+    <string name="pref_migrate_direct_boot_desc">Aufnahmen vor der ersten Entsperrung migrieren. Dies geschieht normalerweise automatisch nach der ersten Entsperrung.</string>
+
+    <string name="pref_save_logs_name">Logs speichern</string>
+    <string name="pref_save_logs_desc">Logcat-Logs in einer Datei speichern.</string>
+
+    <!-- Pick contact group activity -->
+    <string name="pick_contact_group_title">Kontaktgruppe wählen</string>
+    <string name="pick_contact_group_local_group">Lokale Gruppe</string>
+
+    <!-- Rules section -->
+    <string name="pref_header_rules">Regeln</string>
+    <string name="record_rules_info">Regeln bestimmen, welche Aktion bei übereinstimmenden Anrufen ausgeführt wird. Sie werden von oben nach unten geprüft, bis eine Übereinstimmung gefunden ist. Zum Verschieben lange tippen, zum Löschen wischen.</string>
+    <string name="pref_add_new_rule_name">Neue Regel hinzufügen</string>
+    <string name="pref_add_new_rule_desc">Neue Regel erstellen, um festzulegen, welche Aktion für einen übereinstimmenden Anruf ausgeführt wird.</string>
+    <string name="record_rules_list_custom_name">Regel %d</string>
+    <string name="record_rules_list_default_name">Standardregel</string>
+    <string name="record_rules_list_action_move_up">Regel nach oben verschieben</string>
+    <string name="record_rules_list_action_move_down">Regel nach unten verschieben</string>
+    <string name="record_rules_list_action_remove">Regel entfernen</string>
+
+    <string name="record_rule_editor_change_contact">Kontakt ändern</string>
+    <string name="record_rule_editor_change_contact_group">Kontaktgruppe ändern</string>
+
+    <string name="record_rule_number_title">Rufnummer</string>
+    <string name="record_rule_number_any_chip">Beliebig</string>
+    <string name="record_rule_number_unknown_chip">Unbekannt</string>
+    <string name="record_rule_number_contact_chip">Kontakt</string>
+    <string name="record_rule_number_contact_group_chip">Kontaktgruppe</string>
+    <string name="record_rule_number_unknown_summary">Übereinstimmung: Unbekannte Nummern</string>
     <string name="record_rule_number_contact_summary">Kontakt: %s</string>
+    <string name="record_rule_number_contact_group_unknown_summary">Kontaktgruppe: %s</string>
+    <string name="record_rule_number_contact_group_with_account_summary">Kontaktgruppe: %1$s (%2$s)</string>
+
+    <string name="record_rule_type_title">Anruftyp</string>
+    <string name="record_rule_type_any_chip">Beliebig</string>
+    <string name="record_rule_type_incoming_chip">Eingehend</string>
+    <string name="record_rule_type_outgoing_chip">Ausgehend</string>
+    <string name="record_rule_type_conference_chip">Konferenz</string>
+    <string name="record_rule_type_incoming_summary">Typ: Eingehender Anruf</string>
+    <string name="record_rule_type_outgoing_summary">Typ: Ausgehender Anruf</string>
+    <string name="record_rule_type_conference_summary">Typ: Konferenzanruf</string>
+
+    <string name="record_rule_sim_title">SIM-Steckplatz</string>
+    <string name="record_rule_sim_any_chip">Beliebig</string>
+    <string name="record_rule_sim_specific_chip">SIM %d</string>
+    <string name="record_rule_sim_specific_summary">SIM-Steckplatz: %d</string>
+
+    <string name="record_rule_action_title">Aktion</string>
+    <string name="record_rule_action_save_chip">Speichern</string>
+    <string name="record_rule_action_discard_chip">Verwerfen</string>
+    <string name="record_rule_action_ignore_chip">Ignorieren</string>
+    <string name="record_rule_action_save_desc">Aufnahme speichern. Die Aufnahme kann am Ende des Anrufs über die während des Anrufs angezeigte Benachrichtigung zum Löschen markiert werden.</string>
+    <string name="record_rule_action_discard_desc">Aufnahme am Ende des Anrufs verwerfen. Die Aufnahme kann über die während eines Anrufs angezeigte Benachrichtigung behalten werden.</string>
+    <string name="record_rule_action_ignore_desc">Anruf komplett ignorieren. Der Anruf wird nicht aufgenommen und es ist nicht möglich, die Aufnahme während des Anrufs zu starten.</string>
+    <string name="record_rule_action_save_summary">Aktion: Aufnahme speichern</string>
+    <string name="record_rule_action_discard_summary">Aktion: Aufnahme verwerfen</string>
+    <string name="record_rule_action_ignore_summary">Aktion: Anruf ignorieren</string>
 
     <!-- Output directory bottom sheet -->
-    <string name="output_dir_bottom_sheet_change_dir">Ändere Ordner</string>
-    <string name="output_dir_bottom_sheet_filename_template">Dateinamen Vorlage</string>
-    <string name="output_dir_bottom_sheet_edit_template">Vorlage ändern</string>
-    <string name="output_dir_bottom_sheet_file_retention">Aufbewahrung</string>
-    <string name="output_dir_bottom_sheet_edit_retention">Bearbeite Aufbewahrung</string>
-    <string name="retention_keep_all">Behalte alle</string>
+    <string name="output_dir_bottom_sheet_change_dir">Verzeichnis ändern</string>
+    <string name="output_dir_bottom_sheet_filename_template">Dateinamenvorlage</string>
+    <string name="output_dir_bottom_sheet_edit_template">Vorlage bearbeiten</string>
+    <string name="output_dir_bottom_sheet_file_retention">Datei-Aufbewahrung</string>
+    <string name="output_dir_bottom_sheet_edit_retention">Aufbewahrung bearbeiten</string>
+    <string name="retention_keep_all">Alle behalten</string>
     <plurals name="retention_days">
-        <item quantity="one">Behalte für %d Tage</item>
-        <item quantity="other">Behalte für %d Tage</item>
+        <item quantity="one">%d Tag behalten</item>
+        <item quantity="other">%d Tage behalten</item>
     </plurals>
-    <string name="retention_unusable">Dateiaufbewahrung ist deaktiviert, da die aktuelle Dateinamenvorlage mit dieser Funktion inkompatibel ist.</string>
+    <string name="retention_unusable">Datei-Aufbewahrung deaktiviert, da die aktuelle Dateinamenvorlage inkompatibel ist.</string>
 
     <!-- Output format bottom sheet -->
-    <string name="output_format_bottom_sheet_output_format">Aufnahmeformat</string>
-    <string name="output_format_bottom_sheet_compression_level">Komprimierungsstufe</string>
+    <string name="output_format_bottom_sheet_output_format">Ausgabeformat</string>
+    <string name="output_format_bottom_sheet_compression_level">Kompressionsstufe</string>
     <string name="output_format_bottom_sheet_bitrate">Bitrate</string>
     <string name="output_format_bottom_sheet_sample_rate">Abtastrate</string>
     <string name="output_format_bottom_sheet_custom_param">Benutzerdefiniert</string>
+    <string name="output_format_bottom_sheet_channels">Kanäle</string>
 
-    <string name="bottom_sheet_reset">Standardeinstellungen wiederherstellen</string>
+    <string name="bottom_sheet_reset">Auf Standardeinstellungen zurücksetzen</string>
 
     <!-- Filename template dialog -->
-    <string name="filename_template_dialog_title">Dateinamen Vorlage</string>
-    <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
-    <string name="filename_template_dialog_message">Gebe eine eigene Vorlage für die Aufnahmebezeichnung an. Variablen werden mit geschweiften Klammern gekennzeichnet. (z.B. <annotation type="template">{var}</annotation>). Ausweichlösungen werden mit eckigen Klammern gekennzeichnet (z.B. <annotation type="template">[{kontakt_name}|Unbekannt]</annotation>).\n\nUnterstützte Variablen: <annotation type="supported_vars">PLACEHOLDER</annotation>. Siehe in<annotation type="template_docs">der Dokumentation</annotation> für eine komplette Beschreibung der Syntax nach.</string>
-    <string name="filename_template_dialog_error_empty">Vorlage darf nicht leer sein</string>
-    <string name="filename_template_dialog_error_unknown_variable">Unbekannte Vorlagen Variable: <annotation type="template">PLACEHOLDER</annotation></string>
-    <string name="filename_template_dialog_error_has_argument">Variable kann kein Parameter beinhalten: <annotation type="template">PLACEHOLDER</annotation></string>
-    <string name="filename_template_dialog_error_invalid_argument">Ungültiges Variablenparameter: <annotation type="template">PLACEHOLDER</annotation></string>
-    <string name="filename_template_dialog_error_invalid_syntax">Vorlagen Syntax ist ungültig</string>
-    <string name="filename_template_dialog_action_reset_to_default">Standardeinstellungen wiederherstellen</string>
+    <string name="filename_template_dialog_title">Dateinamenvorlage</string>
+    <string name="filename_template_dialog_message">Eigene Vorlage für Dateinamen eingeben. Variablen in geschweiften Klammern angeben (z. B. <annotation type="template">{var}</annotation>). Fallbacks in eckigen Klammern (z. B. <annotation type="template">[{contact_name}|Unbekannt]</annotation>).\n\nUnterstützte Variablen: <annotation type="supported_vars">PLACEHOLDER</annotation>. Siehe <annotation type="template_docs">Dokumentation</annotation> für die vollständige Syntax.</string>
+    <string name="filename_template_dialog_warning_subdirectories">Unterverzeichnisse (<annotation type="template">/</annotation>) können Verzögerungen beim Speichern verursachen. Kein Verlust von Audio.</string>
+    <string name="filename_template_dialog_error_empty">Die Vorlage darf nicht leer sein.</string>
+    <string name="filename_template_dialog_error_unknown_variable">Unbekannte Vorlagenvariable: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">Variable darf kein Argument haben: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_argument">Ungültiges Argument für Variable: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_syntax">Die Syntax der Vorlage ist ungültig.</string>
+    <string name="filename_template_dialog_action_reset_to_default">Auf Standard zurücksetzen</string>
 
     <!-- File retention dialog -->
     <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
-    <string name="file_retention_dialog_message">Gebe die Anzahl der Tage ein, für die, die Aufnahmen aufbewahrt werden sollen.</string>
-    <string name="file_retention_error_too_large">Nummer ist zu groß</string>
+    <string name="file_retention_dialog_message">Anzahl der Tage eingeben, für die Aufnahmen behalten werden.</string>
+    <string name="file_retention_error_too_large">Die Zahl ist zu groß.</string>
 
     <!-- Format parameter dialog -->
-    <string name="format_param_dialog_title">Benutzerdefinierte Parameter</string>
-    <string name="format_param_dialog_message">Gebe einen Wert von [%1$s, %2$s] ein.</string>
+    <string name="format_param_dialog_title">Benutzerdefinierter Parameter</string>
+    <string name="format_param_dialog_message">Wert im Bereich [%1$s, %2$s] eingeben.</string>
+
+    <!-- Format sample rate dialog -->
+    <string name="format_sample_rate_dialog_title">Benutzerdefinierte Abtastrate</string>
+    <string name="format_sample_rate_dialog_message_desc">Abtastrate innerhalb eines dieser Bereiche eingeben:</string>
+    <string name="format_sample_rate_dialog_message_range">[%1$s, %2$s]</string>
 
     <!-- Format parameter -->
+    <string name="format_param_bitrate_bps">%s bps</string>
     <string name="format_param_bitrate_kbps">%s kbps</string>
-    <string name="format_param_compression_level">Komprimierungsstufe %s</string>
+    <string name="format_param_compression_level">Stufe %s</string>
+
+    <!-- Format sample rate -->
+    <string name="format_sample_rate">%s Hz</string>
+
+    <!-- Channels -->
+    <string name="channels_mono">Mono</string>
+    <string name="channels_stereo">Stereo</string>
+    <string name="channels_stereo_warning">Sehr wenige Geräte unterstützen Stereo-Aufnahme. Bei fehlgeschlagener Aufnahme oder fehlendem Audio zu Mono wechseln.</string>
+
+    <!-- Min duration dialog -->
+    <string name="min_duration_dialog_title">@string/pref_min_duration_name</string>
+    <string name="min_duration_dialog_message">Mindestdauer für die Aufnahme eingeben, Pausen und Halten von Anrufen ausgenommen. Dies kann jederzeit während eines laufenden Anrufs über die Benachrichtigung überschrieben werden.</string>
+    <plurals name="min_duration_dialog_seconds">
+        <item quantity="one">%d Sekunde</item>
+        <item quantity="other">%d Sekunden</item>
+    </plurals>
+
+    <!-- Snackbar alerts -->
+    <string name="alert_logcat_success">Logs erfolgreich unter %1$s gespeichert</string>
+    <string name="alert_logcat_failure">Logs konnten nicht unter %1$s gespeichert werden: %2$s</string>
+    <string name="alert_contact_group_query_failure">Fehler beim Abfragen der Kontaktgruppen: %1$s</string>
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">Hintergrunddienste</string>
-    <string name="notification_channel_persistent_desc">Persistierende Benachrichtigung für Aufnahmen im Hintergrund</string>
-    <string name="notification_channel_failure_name">Fehlfunktionswarnung</string>
-    <string name="notification_channel_failure_desc">Warnung für Fehler während einer Anrufaufnahme</string>
-    <string name="notification_channel_success_name">Erfolgsbenachrichtigung</string>
-    <string name="notification_channel_success_desc">Benachrichtigung für erfolgreiche Anrufaufnahmen</string>
-    <string name="notification_recording_in_progress">Anrufaufnahme in Gange</string>
+    <string name="notification_channel_persistent_desc">Dauerhafte Benachrichtigung für Hintergrund-Anrufaufnahme</string>
+    <string name="notification_channel_failure_name">Fehlerbenachrichtigungen</string>
+    <string name="notification_channel_failure_desc">Benachrichtigungen bei Fehlern während der Anrufaufnahme</string>
+    <string name="notification_channel_success_name">Erfolgsbenachrichtigungen</string>
+    <string name="notification_channel_success_desc">Benachrichtigungen bei erfolgreichen Anrufaufnahmen</string>
+    <string name="notification_channel_silence_name">Benachrichtigungen bei vollständiger Stille</string>
+    <string name="notification_channel_silence_desc">Warnung, wenn Anrufaufnahmen vollständige Stille enthalten</string>
+    <string name="notification_direct_boot_migration_failed">Migration der Aufnahmen fehlgeschlagen</string>
+    <string name="notification_direct_boot_migration_error">Einige Aufnahmen, die vor der ersten Entsperrung des Geräts gespeichert wurden, konnten nicht in das Ausgabeverzeichnis verschoben werden.</string>
+    <string name="notification_recording_initializing">Anrufaufnahme wird initialisiert</string>
+    <string name="notification_recording_in_progress">Anrufaufnahme läuft</string>
+    <string name="notification_recording_finalizing">Anrufaufnahme wird abgeschlossen</string>
     <string name="notification_recording_paused">Anrufaufnahme pausiert</string>
     <string name="notification_recording_on_hold">Anruf wird gehalten</string>
-    <string name="notification_recording_failed">Fehler bei Anrufaufnahme</string>
-    <string name="notification_recording_succeeded">Erfolgreiche Anrufaufnahme</string>
-    <string name="notification_message_delete_at_end">Die Aufnahme wird am Ende des Gesprächs gelöscht. Tippe "Behalten", um die Aufnahme zu erhalten.</string>
-    <string name="notification_internal_android_error">Die Aufnahme ist aufgrund eines internen Android Bestandteils gescheitert (%s). Dieses Gerät oder die Firmware unterstützt eventuell keine Anrufaufnahmen.</string>
+    <string name="notification_recording_failed">Anrufaufnahme fehlgeschlagen</string>
+    <string name="notification_recording_succeeded">Anruf erfolgreich aufgenommen</string>
+    <string name="notification_message_delete_at_end">Die Aufnahme wird am Ende des Anrufs gelöscht. Auf „Wiederherstellen“ tippen, um die Aufnahme zu behalten.</string>
+    <plurals name="notification_message_delete_at_end_too_short">
+        <item quantity="one">Die Aufnahme wird am Ende des Anrufs gelöscht, wenn sie kürzer als %d Sekunden ist. Auf „Wiederherstellen“ tippen, um die Aufzeichnung zu behalten.</item>
+        <item quantity="other">Die Aufnahme wird am Ende des Anrufs gelöscht, wenn sie kürzer als %d Sekunden ist. Auf „Wiederherstellen“ tippen, um die Aufnahme zu behalten.</item>
+    </plurals>
+    <string name="notification_internal_android_error">Die Aufnahme ist in einer internen Android-Komponente (%s) fehlgeschlagen. Dieses Gerät oder die Firmware unterstützt möglicherweise keine Anrufaufnahme.</string>
+    <string name="notification_pure_silence_error">Die Anrufaufnahme wurde verworfen, da der Ton vollständig stumm war. Dieses Gerät unterstützt möglicherweise keine Anrufaufnahme für die App ‚%s‘.</string>
     <string name="notification_action_open">Öffnen</string>
     <string name="notification_action_share">Teilen</string>
     <string name="notification_action_delete">Löschen</string>
-    <string name="notification_action_restore">Behalten</string>
+    <string name="notification_action_restore">Wiederherstellen</string>
     <string name="notification_action_pause">Pause</string>
     <string name="notification_action_resume">Fortsetzen</string>
 
     <!-- Quick settings tile -->
     <string name="quick_settings_label">Anrufaufnahme</string>
+
+    <!-- Snackbar alerts -->
+    <string name="documentsui_not_found">Der integrierte Android-Dateimanager (DocumentsUI) ist nicht verfügbar.</string>
 </resources>
