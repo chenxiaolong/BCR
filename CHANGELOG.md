@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update Chinese translations ([PR #789 @lofx-lee])
+* Update German translations ([Issue #791], [PR #792 @ElsAr4e])
 
 ### Version 2.0
 
@@ -841,6 +842,7 @@ Non-user-facing changes:
 [Issue #742]: https://github.com/chenxiaolong/BCR/issues/742
 [Issue #761]: https://github.com/chenxiaolong/BCR/issues/761
 [Issue #763]: https://github.com/chenxiaolong/BCR/issues/763
+[Issue #791]: https://github.com/chenxiaolong/BCR/issues/791
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -1168,3 +1170,4 @@ Non-user-facing changes:
 [PR #782 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/782
 [PR #783 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/783
 [PR #789 @lofx-lee]: https://github.com/chenxiaolong/BCR/pull/789
+[PR #792 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/792
