@@ -12,48 +12,48 @@
 
     <!-- General preferences -->
     <string name="pref_call_recording_name">通话录音</string>
-    <string name="pref_call_recording_desc">对来电和去电进行通话录音，录音时需要麦克风和通知权限</string>
+    <string name="pref_call_recording_desc">录制来电和去电。后台录音需要麦克风和通知权限</string>
 
     <string name="pref_record_rules_name">自动录音规则</string>
-    <string name="pref_record_rules_desc">设置哪些通话将被自动录音</string>
+    <string name="pref_record_rules_desc">配置哪些通话应自动录音</string>
 
     <string name="pref_output_dir_name">保存目录</string>
-    <string name="pref_output_dir_desc">选择一个目录用来保存录音文件</string>
+    <string name="pref_output_dir_desc">选择存储录音文件的目录。长按可在文件管理器中打开</string>
 
     <string name="pref_output_format_name">保存格式</string>
-    <string name="pref_output_format_desc">选择录音存储编码格式</string>
+    <string name="pref_output_format_desc">选择录音的编码格式</string>
 
     <string name="pref_min_duration_name">最短录音时长</string>
     <plurals name="pref_min_duration_desc">
-        <item quantity="one">仅保留至少 %d 秒的录音</item>
-        <item quantity="other">仅保留至少 %d 秒的录音</item>
+        <item quantity="one">保留至少 %d 秒长的录音</item>
+        <item quantity="other">保留至少 %d 秒长的录音</item>
     </plurals>
-    <string name="pref_min_duration_desc_zero">保留任意长度的录音</string>
+    <string name="pref_min_duration_desc_zero">保留任意时长的录音</string>
 
     <string name="pref_write_metadata_name">保存元数据文件</string>
     <string name="pref_write_metadata_desc">创建同名 JSON 文件包含通话录音详情</string>
 
-    <string name="pref_record_telecom_apps_name">录制集成电信框架的应用</string>
-    <string name="pref_record_telecom_apps_desc">录制与安卓电信系统集成的第三方应用通话。这些通话的录音很可能只包含静音</string>
+    <string name="pref_record_telecom_apps_name">录制集成通话系统的应用</string>
+    <string name="pref_record_telecom_apps_desc">录制集成了Android通话系统（Telecom system）的第三方应用通话。这些通话的录音很可能只包含静音</string>
 
-    <string name="pref_record_dialing_state_name">在接通前开始录音</string>
-    <string name="pref_record_dialing_state_desc">对于拨出电话，在拨号开始时立即录音，而不是等待通话接通</string>
+    <string name="pref_record_dialing_state_name">接通前开始录音</string>
+    <string name="pref_record_dialing_state_desc">对于去电，在拨号开始时立即录音，而不是等待通话接通</string>
 
-    <string name="pref_show_launcher_icon_name">显示桌面图标</string>
-    <string name="pref_show_launcher_icon_desc">隐藏桌面图标后，拨打 <b>*#*#227#*#*</b> 打开此设置页面</string>
+    <string name="pref_show_launcher_icon_name">显示图标</string>
+    <string name="pref_show_launcher_icon_desc">隐藏图标时，请在拨号盘输入 <b>*#*#227#*#*</b> 以打开此应用</string>
 
     <!-- About "preference" -->
     <string name="pref_version_name">软件版本</string>
 
     <!-- Debug preferences -->
     <string name="pref_force_direct_boot_name">强制直接启动模式</string>
-    <string name="pref_force_direct_boot_desc">模拟设备处于首次解锁前的状态以进行测试。</string>
+    <string name="pref_force_direct_boot_desc">模拟设备处于首次解锁前的状态以进行测试</string>
 
     <string name="pref_migrate_direct_boot_name">迁移直接启动录音</string>
-    <string name="pref_migrate_direct_boot_desc">迁移首次解锁前生成的录音。通常在首次解锁后自动完成。</string>
+    <string name="pref_migrate_direct_boot_desc">迁移首次解锁前录制的录音。通常在首次解锁后自动完成</string>
 
     <string name="pref_save_logs_name">保存日志</string>
-    <string name="pref_save_logs_desc">将 logcat 日志保存到文件中。</string>
+    <string name="pref_save_logs_desc">将日志保存到文件</string>
 
     <!-- Pick contact group activity -->
     <string name="pick_contact_group_title">选择联系人分组</string>
@@ -113,9 +113,9 @@
     <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
     <string name="record_rule_type_conference_chip">电话会议</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
-    <string name="record_rule_type_incoming_summary">类型：呼入通话</string>
+    <string name="record_rule_type_incoming_summary">类型：来电</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
-    <string name="record_rule_type_outgoing_summary">类型：拨出通话</string>
+    <string name="record_rule_type_outgoing_summary">类型：去电</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
     <string name="record_rule_type_conference_summary">类型：电话会议</string>
 
@@ -137,11 +137,11 @@
     <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
     <string name="record_rule_action_ignore_chip">忽略</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
-    <string name="record_rule_action_save_desc">保存录音。通话期间显示的通知可将录音标记为通话结束后删除</string>
+    <string name="record_rule_action_save_desc">保存录音。通话期间可通过通知在通话结束时将录音标记为删除</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
-    <string name="record_rule_action_discard_desc">通话结束后舍弃录音。通话期间显示的通知可手动保留录音</string>
+    <string name="record_rule_action_discard_desc">通话结束后舍弃录音。通话期间可通过通知保存录音</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
-    <string name="record_rule_action_ignore_desc">完全忽略该通话。不会进行录音，且无法在通话中手动开始录制</string>
+    <string name="record_rule_action_ignore_desc">完全忽略该通话。不会录制该通话，且在通话期间无法开始录音</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
     <string name="record_rule_action_save_summary">动作：保存录音</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
@@ -150,21 +150,21 @@
     <string name="record_rule_action_ignore_summary">动作：忽略通话</string>
 
     <!-- Output directory bottom sheet -->
-    <string name="output_dir_bottom_sheet_change_dir">修改</string>
+    <string name="output_dir_bottom_sheet_change_dir">更改目录</string>
     <string name="output_dir_bottom_sheet_filename_template">文件名模板</string>
     <string name="output_dir_bottom_sheet_edit_template">编辑模板</string>
-    <string name="output_dir_bottom_sheet_file_retention">保存时间</string>
-    <string name="output_dir_bottom_sheet_edit_retention">修改</string>
+    <string name="output_dir_bottom_sheet_file_retention">文件保留策略</string>
+    <string name="output_dir_bottom_sheet_edit_retention">编辑策略</string>
     <string name="retention_keep_all">永久保存</string>
     <plurals name="retention_days">
-        <item quantity="one">保存 %d 天</item>
-        <item quantity="other">保存 %d 天</item>
+        <item quantity="one">保留 %d 天</item>
+        <item quantity="other">保留 %d 天</item>
     </plurals>
     <string name="retention_unusable">文件保留功能已禁用，因为当前文件名模板与不兼容此特征</string>
 
     <!-- Output format bottom sheet -->
     <string name="output_format_bottom_sheet_output_format">输出格式</string>
-    <string name="output_format_bottom_sheet_compression_level">压缩等级</string>
+    <string name="output_format_bottom_sheet_compression_level">压缩级别</string>
     <string name="output_format_bottom_sheet_bitrate">比特率</string>
     <string name="output_format_bottom_sheet_sample_rate">采样率</string>
     <string name="output_format_bottom_sheet_custom_param">自定义</string>
@@ -186,8 +186,8 @@
 
     <!-- File retention dialog -->
     <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
-    <string name="file_retention_dialog_message">请输入需要录音保存天数。</string>
-    <string name="file_retention_error_too_large">超过最大值，请减小保存天数</string>
+    <string name="file_retention_dialog_message">请输入保留录音天数。</string>
+    <string name="file_retention_error_too_large">超过最大值，请减小保留天数</string>
 
     <!-- Format parameter dialog -->
     <string name="format_param_dialog_title">自定义参数</string>
@@ -201,15 +201,15 @@
     <!-- Format parameter -->
     <string name="format_param_bitrate_bps">%s bps</string>
     <string name="format_param_bitrate_kbps">%s kbps</string>
-    <string name="format_param_compression_level">Level %s</string>
+    <string name="format_param_compression_level">级别 %s</string>
 
     <!-- Format sample rate -->
     <string name="format_sample_rate">%s Hz</string>
 
     <!-- Channels -->
     <string name="channels_mono">单声道</string>
-    <string name="channels_stereo">双声道</string>
-    <string name="channels_stereo_warning">极少数设备支持双声道录音。如果录音失败或没有声音，请切换回单声道</string>
+    <string name="channels_stereo">立体声</string>
+    <string name="channels_stereo_warning">极少数设备支持立体声录音。如果录音失败或没有声音，请切换到单声道</string>
 
     <!-- Min duration dialog -->
     <string name="min_duration_dialog_title">@string/pref_min_duration_name</string>
@@ -226,20 +226,20 @@
 
     <!-- Notifications -->
     <string name="notification_channel_persistent_name">后台服务</string>
-    <string name="notification_channel_persistent_desc">通话录音期间通知</string>
-    <string name="notification_channel_failure_name">失败警告</string>
-    <string name="notification_channel_failure_desc">录音发生错误通知</string>
-    <string name="notification_channel_success_name">成功警告</string>
-    <string name="notification_channel_success_desc">通话录音完成通知</string>
-    <string name="notification_channel_silence_name">全静音警告</string>
-    <string name="notification_channel_silence_desc">如果通话录音内容全为静音则发出警告</string>
+    <string name="notification_channel_persistent_desc">后台通话录音的常驻通知</string>
+    <string name="notification_channel_failure_name">失败提醒</string>
+    <string name="notification_channel_failure_desc">通话录音期间发生错误的通知</string>
+    <string name="notification_channel_success_name">成功提醒</string>
+    <string name="notification_channel_success_desc">成功录制完成通话的通知</string>
+    <string name="notification_channel_silence_name">纯静音警告</string>
+    <string name="notification_channel_silence_desc">如果通话录音内容为纯静音则发出警告</string>
     <string name="notification_direct_boot_migration_failed">录音迁移失败</string>
     <string name="notification_direct_boot_migration_error">部分在设备初始解锁前保存的录音无法移动到存储目录</string>
-    <string name="notification_recording_initializing">录音开启中</string>
-    <string name="notification_recording_in_progress">通话录音中</string>
-    <string name="notification_recording_finalizing">录音处理中</string>
-    <string name="notification_recording_paused">录音已暂停</string>
-    <string name="notification_recording_on_hold">通话已挂起</string>
+    <string name="notification_recording_initializing">通话录音开启中</string>
+    <string name="notification_recording_in_progress">通话录音进行中</string>
+    <string name="notification_recording_finalizing">通话录音处理中</string>
+    <string name="notification_recording_paused">通话录音已暂停</string>
+    <string name="notification_recording_on_hold">通话保持中</string>
     <string name="notification_recording_failed">通话录音失败</string>
     <string name="notification_recording_succeeded">通话录音完成</string>
     <string name="notification_message_delete_at_end">通话结束后将会删除录音，需要保存录音请点击保存按钮</string>
@@ -248,7 +248,7 @@
         <item quantity="other">录音时长不足 %d 秒，将在通话结束后删除。点击“恢复”以保留录音</item>
     </plurals>
     <string name="notification_internal_android_error">通话录音在 Android 内部组件(%s)中失败。此设备或固件可能不支持通话录音</string>
-    <string name="notification_pure_silence_error">录音已被舍弃，因为音频内容完全静音。该设备可能不支持录制与“%s”应用相关的通话</string>
+    <string name="notification_pure_silence_error">录音因音频内容完全静音而被舍弃。该设备可能不支持录制与“%s”应用相关的通话</string>
     <string name="notification_action_open">打开</string>
     <string name="notification_action_share">分享</string>
     <string name="notification_action_delete">删除</string>
