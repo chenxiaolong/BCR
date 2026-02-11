@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update Chinese translations ([PR #793 @lofx-lee])
+
 ### Version 2.1
 
 * Update Chinese translations ([PR #789 @lofx-lee])
@@ -1173,3 +1175,4 @@ Non-user-facing changes:
 [PR #783 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/783
 [PR #789 @lofx-lee]: https://github.com/chenxiaolong/BCR/pull/789
 [PR #792 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/792
+[PR #793 @lofx-lee]: https://github.com/chenxiaolong/BCR/pull/793
