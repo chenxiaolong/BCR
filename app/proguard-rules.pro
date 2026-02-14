@@ -12,22 +12,15 @@
 #   public *;
 #}
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
--keepattributes SourceFile,LineNumberTable
-
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
-
-# Disable obfuscation completely for BCR. As an open source project,
-# shrinking is the only goal of minification.
--dontobfuscate
-
 # We construct TreeDocumentFile via reflection in DocumentFileExtensions
 # to speed up SAF performance when doing path lookups.
 -keepclassmembers class androidx.documentfile.provider.TreeDocumentFile {
     <init>(androidx.documentfile.provider.DocumentFile, android.content.Context, android.net.Uri);
+}
+
+# ChipGroupCentered accesses this via reflection.
+-keep class com.google.android.material.internal.FlowLayout {
+    private int rowCount;
 }
 
 # Keep standalone CLI utilities
