@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update Chinese translations ([PR #793 @lofx-lee])
+* Notify when a file could not be moved to the output directory ([Issue #797], [PR #798 @chenxiaolong])
 
 ### Version 2.1
 
@@ -847,6 +848,7 @@ Non-user-facing changes:
 [Issue #761]: https://github.com/chenxiaolong/BCR/issues/761
 [Issue #763]: https://github.com/chenxiaolong/BCR/issues/763
 [Issue #791]: https://github.com/chenxiaolong/BCR/issues/791
+[Issue #797]: https://github.com/chenxiaolong/BCR/issues/797
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -1176,3 +1178,4 @@ Non-user-facing changes:
 [PR #789 @lofx-lee]: https://github.com/chenxiaolong/BCR/pull/789
 [PR #792 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/792
 [PR #793 @lofx-lee]: https://github.com/chenxiaolong/BCR/pull/793
+[PR #798 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/798
