@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022-2025 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -385,18 +385,48 @@ class Notifications(
         vibrateIfEnabled(CHANNEL_ID_SILENCE)
     }
 
+    /** Send a file move failure alert notification. */
+    fun notifyMoveFailure(errorMsg: String?) {
+        val notificationId = prefs.nextNotificationId
+
+        val notification = Notification.Builder(context, CHANNEL_ID_FAILURE).run {
+            setContentTitle(context.getString(R.string.notification_move_failed))
+
+            setContentText(buildString {
+                append(context.getString(R.string.notification_move_error))
+
+                errorMsg?.trim()?.let {
+                    append("\n\n")
+                    append(it)
+                }
+            })
+            style = Notification.BigTextStyle()
+
+            setSmallIcon(R.drawable.ic_launcher_quick_settings)
+
+            build()
+        }
+
+        notificationManager.notify(notificationId, notification)
+    }
+
     /** Send a direct boot file migration failure alert notification. */
     fun notifyMigrationFailure(errorMsg: String?) {
         val notificationId = prefs.nextNotificationId
 
         val notification = Notification.Builder(context, CHANNEL_ID_FAILURE).run {
-            val text = errorMsg?.trim() ?: ""
-
             setContentTitle(context.getString(R.string.notification_direct_boot_migration_failed))
-            if (text.isNotBlank()) {
-                setContentText(text)
-                style = Notification.BigTextStyle()
-            }
+
+            setContentText(buildString {
+                append(context.getString(R.string.notification_direct_boot_migration_error))
+
+                errorMsg?.trim()?.let {
+                    append("\n\n")
+                    append(it)
+                }
+            })
+            style = Notification.BigTextStyle()
+
             setSmallIcon(R.drawable.ic_launcher_quick_settings)
 
             build()

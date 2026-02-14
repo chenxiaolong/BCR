@@ -256,6 +256,7 @@ class RecorderThread(
         var outputDocFile: DocumentFile? = null
         var outputDocPath: OutputPath? = null
         val additionalFiles = ArrayList<OutputFile>()
+        var moveError: Exception? = null
 
         startLogcat()
 
@@ -295,13 +296,15 @@ class RecorderThread(
                     val finalPath = outputPath
 
                     if (keepRecording == KeepState.KEEP) {
-                        dirUtils.tryMoveToOutputDir(
-                            outputDocFile,
-                            finalPath.value,
-                            format.mimeTypeContainer,
-                        )?.let {
-                            outputDocFile = it
+                        try {
+                            outputDocFile = dirUtils.moveToOutputDir(
+                                outputDocFile,
+                                finalPath.value,
+                                format.mimeTypeContainer,
+                            )
                             outputDocPath = finalPath
+                        } catch (e: Exception) {
+                            moveError = e
                         }
 
                         writeMetadataFile(finalPath.value, recordingInfo)?.let {
@@ -365,6 +368,7 @@ class RecorderThread(
                     it.uri,
                     outputFilenameGenerator.redactor.redact(it.uri),
                     outputDocPath!!.value.joinToString("/"),
+                    moveError,
                     format.mimeTypeContainer,
                 )
             }
@@ -419,6 +423,7 @@ class RecorderThread(
 
         var uri = logcatFile.uri
         var path = logcatPath
+        var moveError: Exception? = null
 
         try {
             try {
@@ -434,9 +439,11 @@ class RecorderThread(
             }
         } finally {
             val finalLogcatPath = getLogcatPath()
-            dirUtils.tryMoveToOutputDir(logcatFile, finalLogcatPath.value, MIME_LOGCAT)?.let {
-                uri = it.uri
+            try {
+                uri = dirUtils.moveToOutputDir(logcatFile, finalLogcatPath.value, MIME_LOGCAT).uri
                 path = finalLogcatPath
+            } catch (e: Exception) {
+                moveError = e
             }
         }
 
@@ -444,6 +451,7 @@ class RecorderThread(
             uri,
             outputFilenameGenerator.redactor.redact(uri),
             path.value.joinToString("/"),
+            moveError,
             MIME_LOGCAT,
         )
     }
@@ -496,14 +504,19 @@ class RecorderThread(
             dirUtils.openFile(metadataFile, write = true, truncate = true).use {
                 writeFully(it.fileDescriptor, metadataBytes, 0, metadataBytes.size)
             }
-            dirUtils.tryMoveToOutputDir(metadataFile, path, MIME_METADATA)?.let {
-                metadataFile = it
+
+            var moveError: Exception? = null
+            try {
+                metadataFile = dirUtils.moveToOutputDir(metadataFile, path, MIME_METADATA)
+            } catch (e: Exception) {
+                moveError = e
             }
 
             return OutputFile(
                 metadataFile.uri,
                 outputFilenameGenerator.redactor.redact(metadataFile.uri),
                 path.joinToString("/"),
+                moveError,
                 MIME_METADATA,
             )
         } catch (e: Exception) {

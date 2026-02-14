@@ -31,7 +31,11 @@ class RecorderApplication : Application() {
                 try {
                     Logcat.dump(logcatFile.uri.toFile())
                 } finally {
-                    dirUtils.tryMoveToOutputDir(logcatFile, logcatPath, "text/plain")
+                    try {
+                        dirUtils.moveToOutputDir(logcatFile, logcatPath, "text/plain")
+                    } catch (_: Exception) {
+                        // Ignore.
+                    }
                 }
             } finally {
                 oldCrashHandler?.uncaughtException(t, e)

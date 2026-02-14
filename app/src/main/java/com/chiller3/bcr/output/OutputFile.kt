@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022-2023 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -29,6 +29,9 @@ data class OutputFile(
      * meaningful path.
      */
     val path: String,
+
+    /** Error when moving file to the desired output directory. */
+    val moveError: Exception?,
 
     /** MIME type of [uri]'s contents. */
     val mimeType: String,

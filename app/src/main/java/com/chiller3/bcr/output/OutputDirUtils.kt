@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2023-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2023-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -243,13 +243,13 @@ class OutputDirUtils(private val context: Context, private val redactor: Redacto
     /**
      * Try to move [sourceFile] to the user output directory at [path].
      *
-     * @return Whether the user output directory is set and the file was successfully moved
+     * @return The new file, which may be the same as [sourceFile] if moving was not needed.
      */
-    fun tryMoveToOutputDir(
+    fun moveToOutputDir(
         sourceFile: DocumentFile,
         path: List<String>,
         mimeType: String,
-    ): DocumentFile? {
+    ): DocumentFile {
         val userDir = prefs.outputDirOrDefault.toDocumentFile(context)
         val redactedSource = redactor.redact(sourceFile.uri)
 
@@ -273,7 +273,7 @@ class OutputDirUtils(private val context: Context, private val redactor: Redacto
             targetFile
         } catch (e: Exception) {
             Log.e(TAG, "Failed to move $redactedSource to $userDir", e)
-            null
+            throw e
         }
     }
 

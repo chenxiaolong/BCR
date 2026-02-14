@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022-2025 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -471,6 +471,12 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
         Log.i(TAG, "Recording completed: ${thread.threadIdCompat}: ${file?.redacted}: $status")
         handler.post {
             onRecorderExited(thread)
+
+            val firstMoveError = file?.moveError
+                ?: additionalFiles.firstNotNullOfOrNull { it.moveError }
+            if (firstMoveError != null) {
+                notifications.notifyMoveFailure(firstMoveError.localizedMessage)
+            }
 
             when (status) {
                 RecorderThread.Status.Succeeded -> {

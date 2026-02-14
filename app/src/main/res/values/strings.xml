@@ -242,6 +242,8 @@
     <string name="notification_recording_on_hold">Call on hold</string>
     <string name="notification_recording_failed">Failed to record call</string>
     <string name="notification_recording_succeeded">Successfully recorded call</string>
+    <string name="notification_move_failed">Failed to move recording</string>
+    <string name="notification_move_error">One or more files could not be moved to the selected output directory. They are still present in the default output directory.</string>
     <string name="notification_message_delete_at_end">The recording will be deleted at the end of the call. Tap Restore to keep the recording.</string>
     <plurals name="notification_message_delete_at_end_too_short">
         <item quantity="one">The recording will be deleted at the end of the call if it is shorter than %d second. Tap Restore to keep the recording.</item>

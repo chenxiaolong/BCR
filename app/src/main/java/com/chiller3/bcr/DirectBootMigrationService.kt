@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2024-2025 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2024-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -79,7 +79,14 @@ class DirectBootMigrationService : Service() {
             migrateFiles()
         } catch (e: Exception) {
             Log.w(TAG, "Failed to migrate files", e)
-            onFailure(e.localizedMessage)
+
+            val message = if (e is FailedMoveException) {
+                null
+            } else {
+                e.localizedMessage
+            }
+
+            onFailure(message)
         } finally {
             handler.post {
                 tryStop()
@@ -194,23 +201,24 @@ class DirectBootMigrationService : Service() {
             val groupFiles = ArrayDeque<OutputFile>()
 
             for (fileInfo in group) {
-                val newFile = dirUtils.tryMoveToOutputDir(
-                    DocumentFile.fromFile(fileInfo.file),
-                    fileInfo.path,
-                    fileInfo.mime.type,
-                )
+                try {
+                    val newFile = dirUtils.moveToOutputDir(
+                        DocumentFile.fromFile(fileInfo.file),
+                        fileInfo.path,
+                        fileInfo.mime.type,
+                    )
 
-                if (newFile != null) {
                     groupFiles.add(
                         OutputFile(
                             newFile.uri,
                             redactor.redact(newFile.uri),
                             fileInfo.path.joinToString("/"),
+                            null,
                             fileInfo.mime.type,
                         )
                     )
                     succeeded += 1
-                } else {
+                } catch (_: Exception) {
                     notifySuccess = false
                     failed += 1
                 }
@@ -224,11 +232,11 @@ class DirectBootMigrationService : Service() {
             }
         }
 
-        if (failed != 0) {
-            onFailure(getString(R.string.notification_direct_boot_migration_error))
-        }
-
         Log.i(TAG, "$succeeded succeeded, $failed failed")
+
+        if (failed != 0) {
+            throw FailedMoveException("Failed to move $failed recording(s)")
+        }
     }
 
     private fun onSuccess(file: OutputFile, additionalFiles: List<OutputFile>) {
@@ -242,4 +250,7 @@ class DirectBootMigrationService : Service() {
             notifications.notifyMigrationFailure(errorMsg)
         }
     }
+
+    private class FailedMoveException(message: String? = null, cause: Throwable? = null)
+        : Exception(message, cause)
 }
