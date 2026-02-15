@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Fix obfuscated tags after proguard changes in version 2.2 ([PR #801 @chenxiaolong])
+
 ### Version 2.2
 
 * Update Chinese translations ([PR #793 @lofx-lee])
@@ -1186,3 +1188,4 @@ Non-user-facing changes:
 [PR #798 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/798
 [PR #799 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/799
 [PR #800 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/800
+[PR #801 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/801
