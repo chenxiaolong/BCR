@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Fix obfuscated tags after proguard changes in version 2.2 ([PR #801 @chenxiaolong])
+* Remove unused `debugOpt` build type ([PR #803 @chenxiaolong])
 
 ### Version 2.2
 
@@ -1189,3 +1190,4 @@ Non-user-facing changes:
 [PR #799 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/799
 [PR #800 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/800
 [PR #801 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/801
+[PR #803 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/803
