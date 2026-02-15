@@ -12,6 +12,13 @@
 #   public *;
 #}
 
+# Keep log tags.
+-keepclasseswithmembers,allowoptimization,allowshrinking class com.chiller3.bcr.** {
+    static final java.lang.String TAG;
+}
+-keep,allowoptimization,allowshrinking class com.chiller3.bcr.RecorderThread {
+}
+
 # We construct TreeDocumentFile via reflection in DocumentFileExtensions
 # to speed up SAF performance when doing path lookups.
 -keepclassmembers class androidx.documentfile.provider.TreeDocumentFile {
@@ -19,11 +26,11 @@
 }
 
 # ChipGroupCentered accesses this via reflection.
--keep class com.google.android.material.internal.FlowLayout {
+-keepclassmembers class com.google.android.material.internal.FlowLayout {
     private int rowCount;
 }
 
 # Keep standalone CLI utilities
 -keep class com.chiller3.bcr.standalone.* {
-    *;
+    void main(java.lang.String[]);
 }
