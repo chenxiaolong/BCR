@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 2.3
 
 * Fix obfuscated tags after proguard changes in version 2.2 ([PR #801 @chenxiaolong])
 * Remove unused `debugOpt` build type ([PR #803 @chenxiaolong])
