@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 2.2
 
 * Update Chinese translations ([PR #793 @lofx-lee])
 * Notify when a file could not be moved to the output directory ([Issue #797], [PR #798 @chenxiaolong])
