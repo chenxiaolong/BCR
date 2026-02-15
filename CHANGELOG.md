@@ -12,7 +12,8 @@
 * Update Chinese translations ([PR #793 @lofx-lee])
 * Notify when a file could not be moved to the output directory ([Issue #797], [PR #798 @chenxiaolong])
 * Reenable default proguard optimizations ([PR #799 @chenxiaolong])
-  * For folks who want to decode stack traces from log files, the mapping files are now included with the official releases in `mappings.zip`
+  * For folks who want to decode stack traces from log files, the mapping files are now included with the official releases in `mappings.tar.zst`
+* Update dependencies ([PR #800 @chenxiaolong])
 
 ### Version 2.1
 
@@ -1182,3 +1183,4 @@ Non-user-facing changes:
 [PR #793 @lofx-lee]: https://github.com/chenxiaolong/BCR/pull/793
 [PR #798 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/798
 [PR #799 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/799
+[PR #800 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/800
