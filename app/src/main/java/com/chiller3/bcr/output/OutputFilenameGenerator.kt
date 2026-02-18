@@ -41,10 +41,14 @@ class OutputFilenameGenerator(
     // Templates
     private val filenameTemplate = Preferences(context).filenameTemplate
         ?: Preferences.DEFAULT_FILENAME_TEMPLATE
-    private val dateVarLocations = filenameTemplate.findVariableRef(DATE_VAR, true)?.second
+    private val dateVar = filenameTemplate.findVariableRef(DATE_VAR, true)
 
     // Timestamps
-    private var formatter = FORMATTER
+    private val retentionFormatter = try {
+        dateVar?.first?.arg?.let(::dateFormatter)
+    } catch (_: Exception) {
+        null
+    } ?: FORMATTER
 
     // Redactions
     private val redactions = HashMap<String, String>()
@@ -100,15 +104,15 @@ class OutputFilenameGenerator(
     ): String? {
         when (name) {
             "date" -> {
+                var formatter = FORMATTER
+
                 if (arg != null) {
                     Log.d(TAG, "Using custom datetime pattern: $arg")
 
-                    synchronized(this) {
-                        try {
-                            formatter = dateFormatter(arg)
-                        } catch (e: Exception) {
-                            Log.w(TAG, "Invalid custom datetime pattern: $arg; using default", e)
-                        }
+                    try {
+                        formatter = dateFormatter(arg)
+                    } catch (e: Exception) {
+                        Log.w(TAG, "Invalid custom datetime pattern: $arg; using default", e)
                     }
                 }
 
@@ -204,9 +208,7 @@ class OutputFilenameGenerator(
 
     private fun parseTimestamp(input: String, startPos: Int): Temporal? {
         val pos = ParsePosition(startPos)
-        val parsed = synchronized(this) {
-            formatter.parse(input, pos)
-        }
+        val parsed = retentionFormatter.parse(input, pos)
 
         return try {
             parsed.query(ZonedDateTime::from)
@@ -222,8 +224,8 @@ class OutputFilenameGenerator(
     }
 
     private fun parseTimestamp(input: String): Temporal? {
-        if (dateVarLocations != null) {
-            for (location in dateVarLocations) {
+        if (dateVar?.second != null) {
+            for (location in dateVar.second) {
                 when (location) {
                     is Template.VariableRefLocation.AfterPrefix -> {
                         var searchIndex = 0
