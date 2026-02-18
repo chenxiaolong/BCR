@@ -9,9 +9,11 @@
 
 ### Unreleased
 
+* Fix incorrect output directory when subdirectories are used ([Issue #806], [PR #807 @chenxiaolong])
+
 ### Version 2.3
 
-* Fix obfuscated tags after proguard changes in version 2.2 ([PR #801 @chenxiaolong])
+* Fix obfuscated log tags after proguard changes in version 2.2 ([PR #801 @chenxiaolong])
 * Remove unused `debugOpt` build type ([PR #803 @chenxiaolong])
 
 ### Version 2.2
@@ -859,6 +861,7 @@ Non-user-facing changes:
 [Issue #763]: https://github.com/chenxiaolong/BCR/issues/763
 [Issue #791]: https://github.com/chenxiaolong/BCR/issues/791
 [Issue #797]: https://github.com/chenxiaolong/BCR/issues/797
+[Issue #806]: https://github.com/chenxiaolong/BCR/issues/806
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -1193,3 +1196,4 @@ Non-user-facing changes:
 [PR #800 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/800
 [PR #801 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/801
 [PR #803 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/803
+[PR #807 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/807
