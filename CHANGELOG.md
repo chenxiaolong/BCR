@@ -7,9 +7,9 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 2.4
 
-* Fix incorrect output directory when subdirectories are used ([Issue #806], [PR #807 @chenxiaolong])
+* Fix regression from version 2.2 where recordings were saved to the incorrect directory when subdirectories are used ([Issue #806], [PR #807 @chenxiaolong])
 * Disable file retention feature when the filename template has `{date}` more than once ([PR #808 @chenxiaolong])
   * This was not meant to work and could cause the file retention feature to delete unexpected recordings.
   * If you use multiple `{date}` items in the filename template due to subfolders, consider using a single one like `{date:yyyy/yyyy-MM-dd}` instead.
