@@ -21,8 +21,13 @@
 
 # We construct TreeDocumentFile via reflection in DocumentFileExtensions
 # to speed up SAF performance when doing path lookups.
+-keepclassmembers class androidx.documentfile.provider.SingleDocumentFile {
+    private android.content.Context mContext;
+}
 -keepclassmembers class androidx.documentfile.provider.TreeDocumentFile {
     <init>(androidx.documentfile.provider.DocumentFile, android.content.Context, android.net.Uri);
+
+    private android.content.Context mContext;
 }
 
 # ChipGroupCentered accesses this via reflection.
