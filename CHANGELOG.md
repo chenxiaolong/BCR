@@ -7,6 +7,8 @@
     to update the actual links at the bottom of the file.
 -->
 
+### Unreleased
+
 ### Version 2.4
 
 * Fix regression from version 2.2 where recordings were saved to the incorrect directory when subdirectories are used ([Issue #806], [PR #807 @chenxiaolong])
