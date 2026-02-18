@@ -10,6 +10,9 @@
 ### Unreleased
 
 * Fix incorrect output directory when subdirectories are used ([Issue #806], [PR #807 @chenxiaolong])
+* Disable file retention feature when the filename template has `{date}` more than once ([PR #808 @chenxiaolong])
+  * This was not meant to work and could cause the file retention feature to delete unexpected recordings.
+  * If you use multiple `{date}` items in the filename template due to subfolders, consider using a single one like `{date:yyyy/yyyy-MM-dd}` instead.
 
 ### Version 2.3
 
@@ -1197,3 +1200,4 @@ Non-user-facing changes:
 [PR #801 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/801
 [PR #803 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/803
 [PR #807 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/807
+[PR #808 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/808
