@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2023 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2023-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -340,37 +340,48 @@ class TemplateTest {
         assertEquals(
             Pair(
                 Template.VariableRef("var", null),
-                setOf(Template.VariableRefLocation.AfterPrefix("foo", true)),
+                setOf(Template.VariableRefLocation.AfterPrefix("", true)),
             ),
-            Template("foo{var}").findVariableRef("var"),
+            Template("{var}{var}").findVariableRef("var", false),
+        )
+        assertEquals(
+            null,
+            Template("{var}{var}").findVariableRef("var", true),
         )
         assertEquals(
             Pair(
                 Template.VariableRef("var", null),
                 setOf(Template.VariableRefLocation.AfterPrefix("foo", true)),
             ),
-            Template("[]foo{var}").findVariableRef("var"),
+            Template("foo{var}").findVariableRef("var", true),
         )
         assertEquals(
             Pair(
                 Template.VariableRef("var", null),
                 setOf(Template.VariableRefLocation.AfterPrefix("foo", true)),
             ),
-            Template("foo[]{var}").findVariableRef("var"),
+            Template("[]foo{var}").findVariableRef("var", true),
+        )
+        assertEquals(
+            Pair(
+                Template.VariableRef("var", null),
+                setOf(Template.VariableRefLocation.AfterPrefix("foo", true)),
+            ),
+            Template("foo[]{var}").findVariableRef("var", true),
         )
         assertEquals(
             Pair(
                 Template.VariableRef("var", "arg"),
                 setOf(Template.VariableRefLocation.AfterPrefix("", true)),
             ),
-            Template("{var:arg}").findVariableRef("var"),
+            Template("{var:arg}").findVariableRef("var", true),
         )
         assertEquals(
             Pair(
                 Template.VariableRef("date", null),
                 setOf(Template.VariableRefLocation.AfterPrefix("", true)),
             ),
-            Preferences.DEFAULT_FILENAME_TEMPLATE.findVariableRef("date"),
+            Preferences.DEFAULT_FILENAME_TEMPLATE.findVariableRef("date", true),
         )
     }
 

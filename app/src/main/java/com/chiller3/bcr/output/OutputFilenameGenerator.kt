@@ -41,7 +41,7 @@ class OutputFilenameGenerator(
     // Templates
     private val filenameTemplate = Preferences(context).filenameTemplate
         ?: Preferences.DEFAULT_FILENAME_TEMPLATE
-    private val dateVarLocations = filenameTemplate.findVariableRef(DATE_VAR)?.second
+    private val dateVarLocations = filenameTemplate.findVariableRef(DATE_VAR, true)?.second
 
     // Timestamps
     private var formatter = FORMATTER

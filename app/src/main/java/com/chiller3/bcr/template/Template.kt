@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2023-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2023-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -411,12 +411,22 @@ class Template(template: String) {
      * Find the first reference to the specified variable and the set of string literal prefixes
      * that can be used to potentially find it inside a string produced by the template.
      *
+     * @param unique Whether to only return a result if there is a single occurrence of the variable
+     * reference
+     *
      * @return the variable name, argument, and the locations where its value could start in a
      * output string.
      */
-    fun findVariableRef(name: String): Pair<VariableRef, Set<VariableRefLocation>>? {
+    fun findVariableRef(
+        name: String,
+        unique: Boolean,
+    ): Pair<VariableRef, Set<VariableRefLocation>>? {
         val (varRef, prefixes) = findVariableRefInternal(ast, name)
         if (varRef == null) {
+            return null
+        }
+
+        if (unique && findAllVariableRefs().count { it.name == name } > 1) {
             return null
         }
 

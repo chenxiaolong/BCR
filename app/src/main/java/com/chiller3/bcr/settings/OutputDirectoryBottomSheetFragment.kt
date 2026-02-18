@@ -116,7 +116,7 @@ class OutputDirectoryBottomSheetFragment : BottomSheetDialogFragment() {
     private fun refreshOutputRetention() {
         // Disable retention options if the template makes it impossible for the feature to work
         val template = prefs.filenameTemplate ?: Preferences.DEFAULT_FILENAME_TEMPLATE
-        val locations = template.findVariableRef(OutputFilenameGenerator.DATE_VAR)
+        val locations = template.findVariableRef(OutputFilenameGenerator.DATE_VAR, true)
         val retentionUsable = locations != null &&
                 locations.second != setOf(Template.VariableRefLocation.Arbitrary)
 
