@@ -186,6 +186,10 @@ The JSON structure is shown in the following example. Note that only `timestamp_
     // The timestamp represented as ISO8601 (+ offset) in the local time zone.
     "timestamp": "2023-07-19T21:53:08.931-04:00",
 
+    // The Android app handling the call. "com.android.phone" is a native
+    // cellular call.
+    "package_name": "com.android.phone",
+
     // The call direction ("in", "out", or "conference").
     // [Android 10+ only]
     "direction": "in",

@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2023-2025 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2023-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -54,6 +54,7 @@ data class CallPartyDetailsJson(
 
 data class CallMetadata(
     val timestamp: ZonedDateTime,
+    val packageName: String,
     val direction: CallDirection?,
     val simCount: Int?,
     val simSlot: Int?,
@@ -66,6 +67,8 @@ data class CallMetadataJson(
     @SerialName("timestamp_unix_ms")
     val timestampUnixMs: Long,
     val timestamp: String,
+    @SerialName("package_name")
+    val packageName: String,
     val direction: CallDirection?,
     @SerialName("sim_slot")
     val simSlot: Int?,
@@ -76,6 +79,7 @@ data class CallMetadataJson(
 ) {
     constructor(context: Context, metadata: CallMetadata, output: OutputJson) : this(
         timestampUnixMs = metadata.timestamp.toInstant().toEpochMilli(),
+        packageName = metadata.packageName,
         timestamp = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(metadata.timestamp),
         direction = metadata.direction,
         simSlot = metadata.simSlot,

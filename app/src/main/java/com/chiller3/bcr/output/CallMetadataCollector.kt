@@ -210,6 +210,7 @@ class CallMetadataCollector(
     ): CallMetadata {
         val instant = Instant.ofEpochMilli(parentDetails.creationTimeMillis)
         val timestamp = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
+        val packageName = parentDetails.accountHandle.componentName.packageName
 
         // AOSP's telephony framework has internal documentation that specifies that the call
         // direction is meaningless for conference calls until enough participants hang up that it
@@ -275,6 +276,7 @@ class CallMetadataCollector(
 
         return CallMetadata(
             timestamp,
+            packageName,
             direction,
             simCount,
             simSlot,
