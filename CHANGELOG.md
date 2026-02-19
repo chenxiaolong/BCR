@@ -11,6 +11,8 @@
 
 * Add new "package_name" field to call metadata JSON files to indicate which app handled the call ([PR #811 @chenxiaolong])
   * This can be used to differentiate between cellular calls (`com.android.phone`) or telecom-integrated VOIP calls.
+* Request InCallService events for self-managed calls ([Issue #804], [PR #812 @chenxiaolong])
+  * Improves compatibility for detecting telecom-integrated VOIP calls.
 
 ### Version 2.4
 
@@ -870,6 +872,7 @@ Non-user-facing changes:
 [Issue #763]: https://github.com/chenxiaolong/BCR/issues/763
 [Issue #791]: https://github.com/chenxiaolong/BCR/issues/791
 [Issue #797]: https://github.com/chenxiaolong/BCR/issues/797
+[Issue #804]: https://github.com/chenxiaolong/BCR/issues/804
 [Issue #806]: https://github.com/chenxiaolong/BCR/issues/806
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
@@ -1209,3 +1212,4 @@ Non-user-facing changes:
 [PR #808 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/808
 [PR #809 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/809
 [PR #811 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/811
+[PR #812 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/812
