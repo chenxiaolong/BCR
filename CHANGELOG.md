@@ -13,6 +13,7 @@
   * This can be used to differentiate between cellular calls (`com.android.phone`) or telecom-integrated VOIP calls.
 * Request InCallService events for self-managed calls ([Issue #804], [PR #812 @chenxiaolong])
   * Improves compatibility for detecting telecom-integrated VOIP calls.
+* Add new toggle to make tapping on the completion notification open the output directory instead of the file ([Issue #794], [PR #814 @chenxiaolong])
 
 ### Version 2.4
 
@@ -871,6 +872,7 @@ Non-user-facing changes:
 [Issue #761]: https://github.com/chenxiaolong/BCR/issues/761
 [Issue #763]: https://github.com/chenxiaolong/BCR/issues/763
 [Issue #791]: https://github.com/chenxiaolong/BCR/issues/791
+[Issue #794]: https://github.com/chenxiaolong/BCR/issues/794
 [Issue #797]: https://github.com/chenxiaolong/BCR/issues/797
 [Issue #804]: https://github.com/chenxiaolong/BCR/issues/804
 [Issue #806]: https://github.com/chenxiaolong/BCR/issues/806
@@ -1213,3 +1215,4 @@ Non-user-facing changes:
 [PR #809 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/809
 [PR #811 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/811
 [PR #812 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/812
+[PR #814 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/814
