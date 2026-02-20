@@ -14,6 +14,7 @@
 * Request InCallService events for self-managed calls ([Issue #804], [PR #812 @chenxiaolong])
   * Improves compatibility for detecting telecom-integrated VOIP calls.
 * Add new toggle to make tapping on the completion notification open the output directory instead of the file ([Issue #794], [PR #814 @chenxiaolong])
+* Update German translations ([Issue #791], [PR #815 @ElsAr4e])
 
 ### Version 2.4
 
@@ -1216,3 +1217,4 @@ Non-user-facing changes:
 [PR #811 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/811
 [PR #812 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/812
 [PR #814 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/814
+[PR #815 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/815
