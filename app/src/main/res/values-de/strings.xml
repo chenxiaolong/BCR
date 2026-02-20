@@ -39,6 +39,9 @@
     <string name="pref_record_dialing_state_name">Anrufe vor Verbindung aufnehmen</string>
     <string name="pref_record_dialing_state_desc">Bei ausgehenden Anrufen Aufnahme starten, sobald mit dem Wählen begonnen wird, anstatt zu warten, bis der Anruf verbunden ist.</string>
 
+    <string name="pref_notification_open_dir_name">Ordner von der Benachrichtigung aus öffnen</string>
+    <string name="pref_notification_open_dir_desc">Öffnet das Ausgabeverzeichnis statt der Aufnahmedatei, wenn auf die Benachrichtigung über die abgeschlossene Aufnahme getippt wird.</string>
+
     <string name="pref_show_launcher_icon_name">Launcher-Symbol anzeigen</string>
     <string name="pref_show_launcher_icon_desc">Wenn das Launcher-Symbol ausgeblendet ist, *#*#BCR#*#* wählen, um die App zu öffnen.</string>
 
@@ -134,7 +137,7 @@
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">Dateinamenvorlage</string>
     <string name="filename_template_dialog_message">Eigene Vorlage für Dateinamen eingeben. Variablen in geschweiften Klammern angeben (z. B. <annotation type="template">{var}</annotation>). Fallbacks in eckigen Klammern (z. B. <annotation type="template">[{contact_name}|Unbekannt]</annotation>).\n\nUnterstützte Variablen: <annotation type="supported_vars">PLACEHOLDER</annotation>. Siehe <annotation type="template_docs">Dokumentation</annotation> für die vollständige Syntax.</string>
-    <string name="filename_template_dialog_warning_subdirectories">Unterverzeichnisse (<annotation type="template">/</annotation>) können Verzögerungen beim Speichern verursachen. Kein Verlust von Audio.</string>
+    <string name="filename_template_dialog_warning_subdirectories">Aufgrund der schlechten Leistung des Android Storage Access Frameworks kann die Verwendung von Unterverzeichnissen (<annotation type="template">/</annotation>-Zeichen) auf einigen Geräten zu erheblichen Verzögerungen beim Speichern der Aufnahme führen. Die Verzögerung tritt am Ende des Anrufs auf und sollte nicht zu einem Verlust des Audios des Anrufs führen.</string>
     <string name="filename_template_dialog_error_empty">Die Vorlage darf nicht leer sein.</string>
     <string name="filename_template_dialog_error_unknown_variable">Unbekannte Vorlagenvariable: <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_has_argument">Variable darf kein Argument haben: <annotation type="template">PLACEHOLDER</annotation></string>
@@ -200,9 +203,11 @@
     <string name="notification_recording_on_hold">Anruf wird gehalten</string>
     <string name="notification_recording_failed">Anrufaufnahme fehlgeschlagen</string>
     <string name="notification_recording_succeeded">Anruf erfolgreich aufgenommen</string>
+    <string name="notification_move_failed">Verschieben der Aufnahme fehlgeschlagen</string>
+    <string name="notification_move_error">Eine oder mehrere Dateien konnten nicht in das ausgewählte Ausgabeverzeichnis verschoben werden. Sie befinden sich weiterhin im Standard-Ausgabeverzeichnis.</string>
     <string name="notification_message_delete_at_end">Die Aufnahme wird am Ende des Anrufs gelöscht. Auf „Wiederherstellen“ tippen, um die Aufnahme zu behalten.</string>
     <plurals name="notification_message_delete_at_end_too_short">
-        <item quantity="one">Die Aufnahme wird am Ende des Anrufs gelöscht, wenn sie kürzer als %d Sekunden ist. Auf „Wiederherstellen“ tippen, um die Aufzeichnung zu behalten.</item>
+        <item quantity="one">Die Aufnahme wird am Ende des Anrufs gelöscht, wenn sie kürzer als %d Sekunde ist. Auf „Wiederherstellen“ tippen, um die Aufzeichnung zu behalten.</item>
         <item quantity="other">Die Aufnahme wird am Ende des Anrufs gelöscht, wenn sie kürzer als %d Sekunden ist. Auf „Wiederherstellen“ tippen, um die Aufnahme zu behalten.</item>
     </plurals>
     <string name="notification_internal_android_error">Die Aufnahme ist in einer internen Android-Komponente (%s) fehlgeschlagen. Dieses Gerät oder die Firmware unterstützt möglicherweise keine Anrufaufnahme.</string>
