@@ -59,6 +59,12 @@
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
+            app:key="notification_open_dir"
+            app:title="@string/pref_notification_open_dir_name"
+            app:summary="@string/pref_notification_open_dir_desc"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
             app:key="show_launcher_icon"
             app:persistent="false"
             app:title="@string/pref_show_launcher_icon_name"

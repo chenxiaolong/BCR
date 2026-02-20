@@ -254,6 +254,12 @@ class Notifications(
                 // It is not possible to grant access to SAF URIs to other applications
                 val wrappedUri = RecorderProvider.fromOrigUri(file.uri)
 
+                val openDirIntent = PendingIntent.getActivity(
+                    context,
+                    0,
+                    prefs.outputDirOrDefaultIntent,
+                    PendingIntent.FLAG_IMMUTABLE,
+                )
                 val openIntent = PendingIntent.getActivity(
                     context,
                     0,
@@ -305,10 +311,13 @@ class Notifications(
                     deleteIntent,
                 ).build())
 
-                // Clicking on the notification behaves like the open action, except the
-                // notification gets dismissed. The open and share actions do not dismiss the
-                // notification.
-                setContentIntent(openIntent)
+                // Unlike the notification action buttons, clicking on the notification itself will
+                // cause it to be dismissed.
+                if (prefs.notificationOpenDir) {
+                    setContentIntent(openDirIntent)
+                } else {
+                    setContentIntent(openIntent)
+                }
                 setAutoCancel(true)
             }
 

@@ -39,6 +39,9 @@
     <string name="pref_record_dialing_state_name">Record calls before connection</string>
     <string name="pref_record_dialing_state_desc">For outgoing calls, start recording as soon as dialing begins instead of waiting until the call connects.</string>
 
+    <string name="pref_notification_open_dir_name">Open directory from notification</string>
+    <string name="pref_notification_open_dir_desc">Open the output directory instead of the recording file when tapping on the recording completed notification.</string>
+
     <string name="pref_show_launcher_icon_name">Show launcher icon</string>
     <string name="pref_show_launcher_icon_desc">When the launcher icon is hidden, dial <b>*#*#BCR#*#*</b> to open the app.</string>
 

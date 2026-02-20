@@ -42,6 +42,7 @@ class Preferences(initialContext: Context) {
         private const val PREF_WRITE_METADATA = "write_metadata"
         private const val PREF_RECORD_TELECOM_APPS = "record_telecom_apps"
         private const val PREF_RECORD_DIALING_STATE = "record_dialing_state"
+        private const val PREF_NOTIFICATION_OPEN_DIR = "notification_open_dir"
         const val PREF_SHOW_LAUNCHER_ICON = "show_launcher_icon"
         const val PREF_VERSION = "version"
         private const val PREF_FORCE_DIRECT_BOOT = "force_direct_boot"
@@ -381,6 +382,11 @@ class Preferences(initialContext: Context) {
     var recordDialingState: Boolean
         get() = prefs.getBoolean(PREF_RECORD_DIALING_STATE, false)
         set(enabled) = prefs.edit { putBoolean(PREF_RECORD_DIALING_STATE, enabled) }
+
+    /** Whether to open the directory instead of the file on completion notifications. */
+    var notificationOpenDir: Boolean
+        get() = prefs.getBoolean(PREF_NOTIFICATION_OPEN_DIR, false)
+        set(enabled) = prefs.edit { putBoolean(PREF_NOTIFICATION_OPEN_DIR, enabled) }
 
     /**
      * The [ComponentName] for the [SettingsActivity] alias.
