@@ -1,3 +1,4 @@
+ 
 /*
  * SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
@@ -160,7 +161,13 @@ class Preferences(initialContext: Context) {
     val defaultOutputDir: File = if (isDirectBoot) {
         directBootInProgressDir
     } else {
-        context.getExternalFilesDir(null)!!
+        try {
+            context.getExternalFilesDir(null)?.let { extDir ->
+                if (extDir.exists() || extDir.mkdirs()) extDir else null
+            } ?: context.filesDir
+        } catch (e: Exception) {
+            context.filesDir
+        }
     }
 
     /**
