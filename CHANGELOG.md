@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update Chinese translations ([PR #827 @lofx-lee])
+* Improve workaround for Android binder bug to work in more situations ([Issue #819], [PR #828 @chenxiaolong])
 
 ### Version 2.6
 
@@ -1233,3 +1234,4 @@ Non-user-facing changes:
 [PR #823 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/823
 [PR #824 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/824
 [PR #827 @lofx-lee]: https://github.com/chenxiaolong/BCR/pull/827
+[PR #828 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/828
