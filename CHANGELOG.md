@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update Chinese translations ([PR #827 @lofx-lee])
+
 ### Version 2.6
 
 * Work around an Android binder bug that sometimes breaks moving recordings to the output directory ([Issue #638], [Issue #732], [Issue #819], [PR #823 @chenxiaolong])
@@ -1230,3 +1232,4 @@ Non-user-facing changes:
 [PR #815 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/815
 [PR #823 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/823
 [PR #824 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/824
+[PR #827 @lofx-lee]: https://github.com/chenxiaolong/BCR/pull/827
