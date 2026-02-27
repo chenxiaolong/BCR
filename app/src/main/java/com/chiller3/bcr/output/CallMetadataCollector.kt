@@ -153,13 +153,14 @@ class CallMetadataCollector(
                     if (number == null) {
                         val index = cursor.getColumnIndex(CallLog.Calls.NUMBER)
                         if (index != -1) {
-                            number = cursor.getStringOrNull(index)?.let {
-                                Log.d(TAG, "${prefix}Found call log phone number")
-                                try {
-                                    PhoneNumber(it)
-                                } catch (e: IllegalArgumentException) {
-                                    Log.w(TAG, "${prefix}Invalid call log phone number", e)
-                                    null
+                            cursor.getStringOrNull(index)?.let {
+                                if (it.isNotEmpty()) {
+                                    Log.d(TAG, "${prefix}Found call log phone number")
+                                    try {
+                                        number = PhoneNumber(it)
+                                    } catch (e: IllegalArgumentException) {
+                                        Log.w(TAG, "${prefix}Invalid call log phone number", e)
+                                    }
                                 }
                             }
                         } else {
