@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Work around an Android binder bug that sometimes breaks moving recordings to the output directory ([Issue #638], [Issue #732], [Issue #819], [PR #823 @chenxiaolong])
+
 ### Version 2.5
 
 * Add new "package_name" field to call metadata JSON files to indicate which app handled the call ([PR #811 @chenxiaolong])
@@ -862,6 +864,7 @@ Non-user-facing changes:
 [Issue #607]: https://github.com/chenxiaolong/BCR/issues/607
 [Issue #620]: https://github.com/chenxiaolong/BCR/issues/620
 [Issue #628]: https://github.com/chenxiaolong/BCR/issues/628
+[Issue #638]: https://github.com/chenxiaolong/BCR/issues/638
 [Issue #643]: https://github.com/chenxiaolong/BCR/issues/643
 [Issue #649]: https://github.com/chenxiaolong/BCR/issues/649
 [Issue #667]: https://github.com/chenxiaolong/BCR/issues/667
@@ -870,6 +873,7 @@ Non-user-facing changes:
 [Issue #719]: https://github.com/chenxiaolong/BCR/issues/719
 [Issue #722]: https://github.com/chenxiaolong/BCR/issues/722
 [Issue #727]: https://github.com/chenxiaolong/BCR/issues/727
+[Issue #732]: https://github.com/chenxiaolong/BCR/issues/732
 [Issue #733]: https://github.com/chenxiaolong/BCR/issues/733
 [Issue #742]: https://github.com/chenxiaolong/BCR/issues/742
 [Issue #761]: https://github.com/chenxiaolong/BCR/issues/761
@@ -879,6 +883,7 @@ Non-user-facing changes:
 [Issue #797]: https://github.com/chenxiaolong/BCR/issues/797
 [Issue #804]: https://github.com/chenxiaolong/BCR/issues/804
 [Issue #806]: https://github.com/chenxiaolong/BCR/issues/806
+[Issue #819]: https://github.com/chenxiaolong/BCR/issues/819
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -1220,3 +1225,4 @@ Non-user-facing changes:
 [PR #812 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/812
 [PR #814 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/814
 [PR #815 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/815
+[PR #823 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/823
