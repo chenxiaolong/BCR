@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2023-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2023-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -185,11 +185,46 @@ fun DocumentFile.findOrCreateDirectories(path: List<String>): DocumentFile? {
 }
 
 /**
+ * This is a horrible workaround to reduce the chance of an Android bug. Sometimes, when making
+ * DocumentsContract calls, com.android.externalstorage will be frozen according to:
+ *
+ *   adb shell dumpsys activity processes | grep -e 'UID.*ProcessRecord' -e Frozen
+ *
+ * and the calls (mostly [DocumentsContract.createDocument]) fail with:
+ *
+ *   W/libbinder.IPCThreadState(27223): Transaction failed because process frozen.
+ *   I/binder  (27302): 27302:27223 dead process or thread
+ *   E/libbinder.IPCThreadState(27223): Binder transaction failure. id: 3705901, cmd: BR_FROZEN_REPLY (29202), error: 0 (Success)
+ *   D/ActivityThread(27223): Too many transaction errors, throttling freezer binder callback.
+ *   E/JavaBinder(27223): !!! FAILED BINDER TRANSACTION !!!  (parcel size = 736)
+ *
+ * This just repeatedly tries to talk to com.android.externalstorage to try and get it out of the
+ * frozen state.
+ */
+fun DocumentFile.workAroundBinderBug() {
+    Log.d(TAG, "Working around Android binder bug")
+    val deadline = System.nanoTime() + 2_000_000_000L
+
+    while (System.nanoTime() < deadline) {
+        if (name != null) {
+            Log.d(TAG, "Got binder response")
+            return
+        }
+
+        Thread.sleep(100)
+    }
+
+    Log.w(TAG, "Likely did not get binder response")
+}
+
+/**
  * Like [DocumentFile.createFile], but explicitly appends file extensions for certain MIME types
  * that are not supported in older versions of Android. This special handling is only applied for
  * local files.
  */
 fun DocumentFile.createFileCompat(mimeType: String, displayName: String): DocumentFile? {
+    workAroundBinderBug()
+
     val finalDisplayName = if (isLocal) {
         buildString {
             append(displayName)
