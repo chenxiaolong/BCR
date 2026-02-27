@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 2.7
 
 * Update Chinese translations ([PR #827 @lofx-lee])
 * Improve workaround for Android binder bug to work in more situations ([Issue #819], [PR #828 @chenxiaolong])
