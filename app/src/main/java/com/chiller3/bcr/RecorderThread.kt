@@ -276,6 +276,25 @@ class RecorderThread(
                     initialPath.value, format.mimeTypeContainer)
                 outputDocPath = initialPath
 
+                // This is a horrible workaround to reduce the chance of an Android bug. Sometimes,
+                // when moving the recording after the call ends, com.android.externalstorage will
+                // be frozen according to:
+                //
+                //   adb shell dumpsys activity processes | grep -e 'UID.*ProcessRecord' -e Frozen
+                //
+                // and DocumentsContract calls (mostly createDocument()) will fail with:
+                //
+                //   W/libbinder.IPCThreadState(27223): Transaction failed because process frozen.
+                //   I/binder  (27302): 27302:27223 dead process or thread
+                //   E/libbinder.IPCThreadState(27223): Binder transaction failure. id: 3705901, cmd: BR_FROZEN_REPLY (29202), error: 0 (Success)
+                //   D/ActivityThread(27223): Too many transaction errors, throttling freezer binder callback.
+                //   E/JavaBinder(27223): !!! FAILED BINDER TRANSACTION !!!  (parcel size = 736)
+                //
+                // For some unknown reason. Talking to com.android.externalstorage early seems to
+                // prevent this from happening, so just query the name once.
+                val horribleHack = prefs.outputDirOrDefault.toDocumentFile(context)
+                Log.wtf(tag, "Working around Android binder bug: ${horribleHack.name.hashCode()}")
+
                 var recordingInfo: RecordingInfo? = null
 
                 try {
