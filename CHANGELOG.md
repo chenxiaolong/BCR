@@ -7,6 +7,8 @@
     to update the actual links at the bottom of the file.
 -->
 
+### Unreleased
+
 ### Version 2.6
 
 * Work around an Android binder bug that sometimes breaks moving recordings to the output directory ([Issue #638], [Issue #732], [Issue #819], [PR #823 @chenxiaolong])
