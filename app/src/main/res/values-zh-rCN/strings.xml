@@ -38,7 +38,10 @@
 
     <string name="pref_record_dialing_state_name">接通前开始录音</string>
     <string name="pref_record_dialing_state_desc">对于去电，在拨号开始时立即录音，而不是等待通话接通</string>
-
+    
+    <string name="pref_notification_open_dir_name">从通知中打开目录</string>
+    <string name="pref_notification_open_dir_desc">点击录制完成通知时打开输出目录而非录制文件</string>
+    
     <string name="pref_show_launcher_icon_name">显示图标</string>
     <string name="pref_show_launcher_icon_desc">隐藏图标时，请在拨号盘输入 <b>*#*#227#*#*</b> 以打开此应用</string>
 
