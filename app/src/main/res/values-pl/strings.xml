@@ -8,7 +8,7 @@
     <!-- General preferences -->
     <string name="pref_call_recording_name">Nagrywanie rozmów</string>
     <string name="pref_call_recording_desc">Nagrywaj przychodzące i wychodzące rozmowy telefoniczne. Do nagrywania w tle wymagane są uprawnienia do mikrofonu i powiadomień.</string>
-    
+
     <string name="pref_record_rules_name">Reguły automatycznego nagrywania</string>
     <string name="pref_record_rules_desc">Określ, które połączenia mają być rejestrowane automatycznie.</string>
 
@@ -26,7 +26,7 @@
 
     <!-- About "preference" -->
     <string name="pref_version_name">Wersja</string>
-    
+
     <!-- Record rules activity -->
     <string name="pref_header_rules">Reguły</string>
     <string name="record_rule_number_contact_summary">Kontakt: %s</string>
@@ -54,7 +54,7 @@
     <string name="output_format_bottom_sheet_custom_param">Inna</string>
 
     <string name="bottom_sheet_reset">Przywróć domyślne ustawienia</string>
-    
+
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">Szablon nazwy pliku</string>
     <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
