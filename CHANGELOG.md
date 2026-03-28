@@ -10,7 +10,7 @@
 ### Unreleased
 
 * Add support for recording uplink or downlink only ([Issue #833], [PR #834 @chenxiaolong])
-* Update dependencies ([PR #835 @chenxiaolong])
+* Update dependencies ([PR #835 @chenxiaolong], [PR #836 @chenxiaolong])
 
 ### Version 2.7
 
@@ -1243,3 +1243,4 @@ Non-user-facing changes:
 [PR #828 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/828
 [PR #834 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/834
 [PR #835 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/835
+[PR #836 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/836
