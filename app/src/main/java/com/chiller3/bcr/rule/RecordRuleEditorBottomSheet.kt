@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2024-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -17,7 +17,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.BundleCompat
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
@@ -32,7 +31,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.ChipGroup
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import kotlin.getValue
 import kotlin.math.max
 
 class RecordRuleEditorBottomSheet : BottomSheetDialogFragment(),
@@ -216,10 +214,10 @@ class RecordRuleEditorBottomSheet : BottomSheetDialogFragment(),
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
 
-        setFragmentResult(TAG, bundleOf(
-            RESULT_POSITION to position,
-            RESULT_RECORD_RULE to recordRule,
-        ))
+        setFragmentResult(TAG, Bundle().apply {
+            putInt(RESULT_POSITION, position)
+            putParcelable(RESULT_RECORD_RULE, recordRule)
+        })
     }
 
     private fun addChip(inflater: LayoutInflater, parent: ViewGroup): BottomSheetChipBinding {
@@ -547,11 +545,11 @@ class RecordRuleEditorBottomSheet : BottomSheetDialogFragment(),
             recordRule: RecordRule,
             isDefault: Boolean,
         ) = RecordRuleEditorBottomSheet().apply {
-            arguments = bundleOf(
-                ARG_POSITION to position,
-                ARG_RECORD_RULE to recordRule,
-                ARG_IS_DEFAULT to isDefault,
-            )
+            arguments = Bundle().apply {
+                putInt(ARG_POSITION, position)
+                putParcelable(ARG_RECORD_RULE, recordRule)
+                putBoolean(ARG_IS_DEFAULT, isDefault)
+            }
         }
     }
 }

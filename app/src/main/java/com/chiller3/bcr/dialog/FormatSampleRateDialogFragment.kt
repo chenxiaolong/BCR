@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2024-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -14,7 +14,6 @@ import android.text.SpannableStringBuilder
 import android.text.style.BulletSpan
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
@@ -139,7 +138,7 @@ class FormatSampleRateDialogFragment : DialogFragment() {
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
 
-        setFragmentResult(tag!!, bundleOf(RESULT_SUCCESS to success))
+        setFragmentResult(tag!!, Bundle().apply { putBoolean(RESULT_SUCCESS, success) })
     }
 
     private fun refreshOkButtonEnabledState() {
