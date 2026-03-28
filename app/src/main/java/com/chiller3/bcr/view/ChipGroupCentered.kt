@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -11,12 +11,13 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.view.isGone
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.internal.FlowLayout
 import java.lang.Integer.max
 import java.lang.Integer.min
 
 /** Hacky wrapper around [ChipGroup] to make every row individually centered. */
 class ChipGroupCentered : ChipGroup {
-    private val _rowCountField = javaClass.superclass.superclass.getDeclaredField("rowCount")
+    private val _rowCountField = FlowLayout::class.java.getDeclaredField("rowCount")
     private var rowCountField
         get() = _rowCountField.getInt(this)
         set(value) = _rowCountField.setInt(this, value)
