@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 2.8
 
 * Add support for recording uplink or downlink only ([Issue #833], [PR #834 @chenxiaolong])
 * Update dependencies ([PR #835 @chenxiaolong], [PR #836 @chenxiaolong])
