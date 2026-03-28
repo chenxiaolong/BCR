@@ -127,8 +127,7 @@ class OutputFilenameGenerator(
             }
             "phone_number" -> {
                 val joined = metadata.calls.asSequence()
-                    .map { it.phoneNumber?.let { number -> formatPhoneNumber(number, arg) } }
-                    .filterNotNull()
+                    .mapNotNull { it.phoneNumber?.let { number -> formatPhoneNumber(number, arg) } }
                     .joinToString(",")
                 if (joined.isNotEmpty()) {
                     addRedaction(joined, "<phone number(s)>")

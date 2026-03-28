@@ -49,7 +49,6 @@
 
         <receiver
             android:name=".DirectBootMigrationReceiver"
-            android:enabled="true"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -62,7 +61,6 @@
 
         <service
             android:name=".RecorderInCallService"
-            android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="microphone"
             android:directBootAware="true"
@@ -78,7 +76,6 @@
 
         <service
             android:name=".RecorderTileService"
-            android:enabled="true"
             android:exported="true"
             android:icon="@drawable/ic_launcher_quick_settings"
             android:label="@string/quick_settings_label"
@@ -116,7 +113,6 @@
         <!-- Must be exported to work. -->
         <receiver
             android:name=".settings.DialerCodeReceiver"
-            android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.telephony.action.SECRET_CODE" />

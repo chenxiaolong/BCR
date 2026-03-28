@@ -772,7 +772,7 @@ class RecorderThread(
             buffersIn.forEach(ByteBuffer::compact)
             bufferOut.clear()
 
-            val minSamplesToFull = buffersIn.asSequence().map { it.remaining() }.min() / BYTES_PER_SAMPLE
+            val minSamplesToFull = buffersIn.minOf { it.remaining() } / BYTES_PER_SAMPLE
             val minTimeToFullNs = minSamplesToFull * 1_000_000_000L / sampleRate.toLong()
 
             val totalElapsed = System.nanoTime() - begin

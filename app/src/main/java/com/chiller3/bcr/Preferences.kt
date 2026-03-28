@@ -350,11 +350,6 @@ class Preferences(initialContext: Context) {
     fun setFormatSampleRate(format: Format, rate: UInt?) =
         setOptionalUint(PREF_FORMAT_SAMPLE_RATE_PREFIX + format.name, 0U, rate)
 
-    /** Whether to record the uplink and downlink to separate channels. */
-    var stereo: Boolean
-        get() = prefs.getBoolean(PREF_FORMAT_STEREO, false)
-        set(enabled) = prefs.edit { putBoolean(PREF_FORMAT_STEREO, enabled) }
-
     /** Which audio source to record. */
     var audioSource: AudioSource?
         get() = prefs.getString(PREF_FORMAT_AUDIO_SOURCE, null)?.let { AudioSource.getByName(it) }
