@@ -37,8 +37,8 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
     private val chipIdToSampleRate = HashMap<Int, UInt?>()
     private val sampleRateToChipId = HashMap<UInt?, Int>()
 
-    private val chipIdToChannels = HashMap<Int, Boolean>()
-    private val channelsToChipId = HashMap<Boolean, Int>()
+    private val chipIdToAudioSource = HashMap<Int, AudioSource>()
+    private val audioSourceToChipId = HashMap<AudioSource, Int>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -61,7 +61,7 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
 
         binding.sampleRateGroup.setOnCheckedStateChangeListener(this)
 
-        binding.channelsGroup.setOnCheckedStateChangeListener(this)
+        binding.audioSourceGroup.setOnCheckedStateChangeListener(this)
 
         setFragmentResultListener(FormatParamDialogFragment.TAG) { _, _ ->
             refreshParam()
@@ -74,7 +74,7 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
         refreshFormat()
         refreshParam()
         refreshSampleRate()
-        refreshChannels()
+        refreshAudioSource()
         refreshStereoWarning()
 
         return binding.root
@@ -128,17 +128,13 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
         sampleRateToChipId[rate] = chipBinding.root.id
     }
 
-    private fun addChannelsChip(inflater: LayoutInflater, stereo: Boolean) {
-        val chipBinding = addChip(inflater, binding.channelsGroup)
+    private fun addAudioSourceChip(inflater: LayoutInflater, audioSource: AudioSource) {
+        val chipBinding = addChip(inflater, binding.audioSourceGroup)
 
-        if (stereo) {
-            chipBinding.root.setText(R.string.channels_stereo)
-        } else {
-            chipBinding.root.setText(R.string.channels_mono)
-        }
+        chipBinding.root.setText(audioSource.nameResId)
 
-        chipIdToChannels[chipBinding.root.id] = stereo
-        channelsToChipId[stereo] = chipBinding.root.id
+        chipIdToAudioSource[chipBinding.root.id] = audioSource
+        audioSourceToChipId[audioSource] = chipBinding.root.id
     }
 
     /**
@@ -209,26 +205,26 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
         binding.sampleRateGroup.check(sampleRateToChipId[selectedSampleRate]!!)
     }
 
-    private fun refreshChannels() {
+    private fun refreshAudioSource() {
         val savedFormat = Format.fromPreferences(prefs)
 
-        chipIdToChannels.clear()
-        channelsToChipId.clear()
-        binding.channelsGroup.removeAllViews()
+        chipIdToAudioSource.clear()
+        audioSourceToChipId.clear()
+        binding.audioSourceGroup.removeAllViews()
 
-        addChannelsChip(layoutInflater, false)
-
-        if (savedFormat.format.supportsStereo) {
-            addChannelsChip(layoutInflater, true)
+        for (audioSource in AudioSource.entries) {
+            if (!audioSource.isStereo || savedFormat.format.supportsStereo) {
+                addAudioSourceChip(layoutInflater, audioSource)
+            }
         }
 
-        binding.channelsGroup.check(channelsToChipId[savedFormat.stereo]!!)
+        binding.audioSourceGroup.check(audioSourceToChipId[savedFormat.audioSource]!!)
     }
 
     private fun refreshStereoWarning() {
         val savedFormat = Format.fromPreferences(prefs)
 
-        binding.stereoWarning.isVisible = savedFormat.stereo
+        binding.stereoWarning.isVisible = savedFormat.audioSource.isStereo
     }
 
     private fun onChipClosed(chip: View) {
@@ -249,7 +245,7 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
                 prefs.format = chipIdToFormat[checkedIds.first()]!!
                 refreshParam()
                 refreshSampleRate()
-                refreshChannels()
+                refreshAudioSource()
                 refreshStereoWarning()
             }
             binding.paramGroup -> {
@@ -272,8 +268,8 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
                         parentFragmentManager.beginTransaction(), FormatSampleRateDialogFragment.TAG)
                 }
             }
-            binding.channelsGroup -> {
-                prefs.stereo = chipIdToChannels[binding.channelsGroup.checkedChipId]!!
+            binding.audioSourceGroup -> {
+                prefs.audioSource = chipIdToAudioSource[binding.audioSourceGroup.checkedChipId]!!
                 refreshStereoWarning()
             }
         }
@@ -287,7 +283,7 @@ class OutputFormatBottomSheetFragment : BottomSheetDialogFragment(),
                 // Need to explicitly refresh the parameter when the default format is already chosen
                 refreshParam()
                 refreshSampleRate()
-                refreshChannels()
+                refreshAudioSource()
                 refreshStereoWarning()
             }
         }

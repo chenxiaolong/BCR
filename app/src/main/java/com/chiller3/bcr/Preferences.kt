@@ -19,6 +19,7 @@ import androidx.core.net.toUri
 import androidx.preference.PreferenceManager
 import com.chiller3.bcr.extension.DOCUMENTSUI_AUTHORITY
 import com.chiller3.bcr.extension.safTreeToDocument
+import com.chiller3.bcr.format.AudioSource
 import com.chiller3.bcr.format.Format
 import com.chiller3.bcr.output.Retention
 import com.chiller3.bcr.rule.RecordRule
@@ -56,9 +57,12 @@ class Preferences(initialContext: Context) {
         private const val PREF_FORMAT_NAME = "codec_name"
         private const val PREF_FORMAT_PARAM_PREFIX = "codec_param_"
         private const val PREF_FORMAT_SAMPLE_RATE_PREFIX = "codec_sample_rate_"
-        private const val PREF_FORMAT_STEREO = "stereo"
+        private const val PREF_FORMAT_AUDIO_SOURCE = "audio_source"
         const val PREF_OUTPUT_RETENTION = "output_retention"
         private const val PREF_NEXT_NOTIFICATION_ID = "next_notification_id"
+
+        // Legacy preferences
+        private const val PREF_FORMAT_STEREO = "stereo"
 
         // Defaults
         val DEFAULT_FILENAME_TEMPLATE = Template(
@@ -84,6 +88,7 @@ class Preferences(initialContext: Context) {
                     || key.startsWith(PREF_FORMAT_PARAM_PREFIX)
                     || key.startsWith(PREF_FORMAT_SAMPLE_RATE_PREFIX)
                     || key == PREF_FORMAT_STEREO
+                    || key == PREF_FORMAT_AUDIO_SOURCE
     }
 
     private val context = if (initialContext.isDeviceProtectedStorage) {
@@ -350,6 +355,17 @@ class Preferences(initialContext: Context) {
         get() = prefs.getBoolean(PREF_FORMAT_STEREO, false)
         set(enabled) = prefs.edit { putBoolean(PREF_FORMAT_STEREO, enabled) }
 
+    /** Which audio source to record. */
+    var audioSource: AudioSource?
+        get() = prefs.getString(PREF_FORMAT_AUDIO_SOURCE, null)?.let { AudioSource.getByName(it) }
+        set(source) = prefs.edit {
+            if (source == null) {
+                remove(PREF_FORMAT_AUDIO_SOURCE)
+            } else {
+                putString(PREF_FORMAT_AUDIO_SOURCE, source.name)
+            }
+        }
+
     /** Remove the default format preference and the parameters for all formats. */
     fun resetAllFormats() {
         val keys = prefs.all.keys.filter(::isFormatKey)
@@ -456,5 +472,16 @@ class Preferences(initialContext: Context) {
         val migratedAst = TemplateMigrator.recurseTemplateString(template.ast)
 
         filenameTemplate = Template(migratedAst.toTemplate())
+    }
+
+    /** Can be removed starting with BCR 2.12. */
+    fun migrateAudioSource() {
+        if (prefs.contains(PREF_FORMAT_STEREO)) {
+            if (prefs.getBoolean(PREF_FORMAT_STEREO, false)) {
+                audioSource = AudioSource.VOICE_UPLINK_DOWNLINK
+            }
+
+            prefs.edit { remove(PREF_FORMAT_STEREO) }
+        }
     }
 }

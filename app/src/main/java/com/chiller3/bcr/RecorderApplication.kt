@@ -47,7 +47,9 @@ class RecorderApplication : Application() {
 
         Notifications(this).updateChannels()
 
-        Preferences(this).migrateTemplate()
+        val prefs = Preferences(this)
+        prefs.migrateTemplate()
+        prefs.migrateAudioSource()
     }
 
     companion object {

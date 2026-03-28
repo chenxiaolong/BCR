@@ -265,8 +265,7 @@ The JSON structure is shown in the following example. Note that only `timestamp_
             // The number of samples per second of audio.
             "sample_rate": 48000,
 
-            // The number of channels in the audio. This is currently always 1
-            // because no device supports stereo call audio.
+            // The number of channels in the audio.
             "channel_count": 1,
 
             // The total wall time from when the recording process began to when

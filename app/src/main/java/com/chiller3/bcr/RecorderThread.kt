@@ -178,14 +178,7 @@ class RecorderThread(
         formatParam = savedFormat.param
         sampleRate = savedFormat.sampleRate ?: format.sampleRateInfo.default
 
-        sources = if (savedFormat.stereo) {
-            arrayOf(
-                MediaRecorder.AudioSource.VOICE_UPLINK,
-                MediaRecorder.AudioSource.VOICE_DOWNLINK,
-            )
-        } else {
-            arrayOf(MediaRecorder.AudioSource.VOICE_CALL)
-        }
+        sources = savedFormat.audioSource.sources
     }
 
     fun onCallDetailsChanged(call: Call, details: Call.Details) {

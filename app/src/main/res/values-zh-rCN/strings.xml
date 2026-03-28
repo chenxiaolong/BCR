@@ -171,7 +171,6 @@
     <string name="output_format_bottom_sheet_bitrate">比特率</string>
     <string name="output_format_bottom_sheet_sample_rate">采样率</string>
     <string name="output_format_bottom_sheet_custom_param">自定义</string>
-    <string name="output_format_bottom_sheet_channels">声道</string>
 
     <string name="bottom_sheet_reset">恢复默认</string>
 
@@ -209,10 +208,8 @@
     <!-- Format sample rate -->
     <string name="format_sample_rate">%s Hz</string>
 
-    <!-- Channels -->
-    <string name="channels_mono">单声道</string>
-    <string name="channels_stereo">立体声</string>
-    <string name="channels_stereo_warning">极少数设备支持立体声录音。如果录音失败或没有声音，请切换到单声道</string>
+    <!-- Audio source -->
+    <string name="audio_source_stereo_warning">极少数设备支持立体声录音。如果录音失败或没有声音，请切换到单声道</string>
 
     <!-- Min duration dialog -->
     <string name="min_duration_dialog_title">@string/pref_min_duration_name</string>

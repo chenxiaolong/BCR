@@ -176,11 +176,7 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
             append(savedFormat.format.sampleRateInfo.format(requireContext(), sampleRate))
             append(", ")
 
-            if (savedFormat.stereo) {
-                append(getString(R.string.channels_stereo))
-            } else {
-                append(getString(R.string.channels_mono))
-            }
+            append(getString(savedFormat.audioSource.nameResId))
 
             append(")")
         }

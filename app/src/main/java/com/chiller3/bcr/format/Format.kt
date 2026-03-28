@@ -133,7 +133,7 @@ sealed class Format {
             val format: Format,
             val param: UInt?,
             val sampleRate: UInt?,
-            val stereo: Boolean,
+            val audioSource: AudioSource,
         )
 
         /**
@@ -157,9 +157,12 @@ sealed class Format {
                 format.sampleRateInfo.toNearest(it)
             }
 
-            val stereo = format.supportsStereo && prefs.stereo
+            var audioSource = prefs.audioSource
+            if (audioSource == null || (audioSource.isStereo && !format.supportsStereo)) {
+                audioSource = AudioSource.VOICE_CALL
+            }
 
-            return SavedFormat(format, param, sampleRate, stereo)
+            return SavedFormat(format, param, sampleRate, audioSource)
         }
     }
 }

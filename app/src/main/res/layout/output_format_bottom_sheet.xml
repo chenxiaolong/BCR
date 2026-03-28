@@ -71,11 +71,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/bottom_sheet_section_separation"
             android:layout_marginBottom="@dimen/bottom_sheet_title_margin_bottom"
-            android:text="@string/output_format_bottom_sheet_channels"
+            android:text="@string/output_format_bottom_sheet_audio_source"
             android:textAppearance="?attr/textAppearanceHeadline6" />
 
         <com.chiller3.bcr.view.ChipGroupCentered
-            android:id="@+id/channels_group"
+            android:id="@+id/audio_source_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:selectionRequired="true"
@@ -86,7 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/bottom_sheet_title_margin_bottom"
-            android:text="@string/channels_stereo_warning"
+            android:text="@string/audio_source_stereo_warning"
             android:textAlignment="center" />
 
         <com.google.android.material.button.MaterialButton

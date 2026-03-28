@@ -130,7 +130,6 @@
     <string name="output_format_bottom_sheet_bitrate">Bitrate</string>
     <string name="output_format_bottom_sheet_sample_rate">Abtastrate</string>
     <string name="output_format_bottom_sheet_custom_param">Benutzerdefiniert</string>
-    <string name="output_format_bottom_sheet_channels">Kanäle</string>
 
     <string name="bottom_sheet_reset">Auf Standardeinstellungen zurücksetzen</string>
 
@@ -167,10 +166,8 @@
     <!-- Format sample rate -->
     <string name="format_sample_rate">%s Hz</string>
 
-    <!-- Channels -->
-    <string name="channels_mono">Mono</string>
-    <string name="channels_stereo">Stereo</string>
-    <string name="channels_stereo_warning">Sehr wenige Geräte unterstützen Stereo-Aufnahme. Bei fehlgeschlagener Aufnahme oder fehlendem Audio zu Mono wechseln.</string>
+    <!-- Audio source -->
+    <string name="audio_source_stereo_warning">Sehr wenige Geräte unterstützen Stereo-Aufnahme. Bei fehlgeschlagener Aufnahme oder fehlendem Audio zu Mono wechseln.</string>
 
     <!-- Min duration dialog -->
     <string name="min_duration_dialog_title">@string/pref_min_duration_name</string>
