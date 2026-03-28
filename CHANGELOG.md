@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Add support for recording uplink or downlink only ([Issue #833], [PR #834 @chenxiaolong])
+
 ### Version 2.7
 
 * Update Chinese translations ([PR #827 @lofx-lee])
@@ -892,6 +894,7 @@ Non-user-facing changes:
 [Issue #804]: https://github.com/chenxiaolong/BCR/issues/804
 [Issue #806]: https://github.com/chenxiaolong/BCR/issues/806
 [Issue #819]: https://github.com/chenxiaolong/BCR/issues/819
+[Issue #833]: https://github.com/chenxiaolong/BCR/issues/833
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -1237,3 +1240,4 @@ Non-user-facing changes:
 [PR #824 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/824
 [PR #827 @lofx-lee]: https://github.com/chenxiaolong/BCR/pull/827
 [PR #828 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/828
+[PR #834 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/834
