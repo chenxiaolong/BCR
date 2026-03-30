@@ -130,6 +130,7 @@
     <string name="output_format_bottom_sheet_bitrate">Bitrate</string>
     <string name="output_format_bottom_sheet_sample_rate">Abtastrate</string>
     <string name="output_format_bottom_sheet_custom_param">Benutzerdefiniert</string>
+    <string name="output_format_bottom_sheet_audio_source">Audioquelle</string>
 
     <string name="bottom_sheet_reset">Auf Standardeinstellungen zurücksetzen</string>
 
@@ -159,14 +160,18 @@
     <string name="format_sample_rate_dialog_message_range">[%1$s, %2$s]</string>
 
     <!-- Format parameter -->
-    <string name="format_param_bitrate_bps">%s bps</string>
-    <string name="format_param_bitrate_kbps">%s kbps</string>
+    <string name="format_param_bitrate_bps">%s bit/s</string>
+    <string name="format_param_bitrate_kbps">%s kbit/s</string>
     <string name="format_param_compression_level">Stufe %s</string>
 
     <!-- Format sample rate -->
     <string name="format_sample_rate">%s Hz</string>
 
     <!-- Audio source -->
+    <string name="audio_source_voice_call">Kombiniert</string>
+    <string name="audio_source_voice_uplink_downlink">Aufwärtsverbindung + Abwärtsverbindung</string>
+    <string name="audio_source_voice_uplink">Nur Aufwärtsverbindung</string>
+    <string name="audio_source_voice_downlink">Nur Abwärtsverbindung</string>
     <string name="audio_source_stereo_warning">Sehr wenige Geräte unterstützen Stereo-Aufnahme. Bei fehlgeschlagener Aufnahme oder fehlendem Audio zu Mono wechseln.</string>
 
     <!-- Min duration dialog -->
