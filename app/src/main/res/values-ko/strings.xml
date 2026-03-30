@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name_full">Basic Call Recorder</string>
+
+    <!-- Preference headers -->
+    <string name="pref_header_general">일반</string>
+    <string name="pref_header_about">정보</string>
+    <string name="pref_header_debug">디버그</string>
+
+    <!-- General preferences -->
+    <string name="pref_call_recording_name">통화 녹음</string>
+    <string name="pref_call_recording_desc">착신 및 발신 통화를 녹음합니다. 백그라운드 녹음에는 마이크 및 알림 권한이 필요합니다.</string>
+
+    <string name="pref_record_rules_name">자동 녹음 규칙</string>
+    <string name="pref_record_rules_desc">어떤 통화를 자동으로 녹음할지 설정합니다.</string>
+
+    <string name="pref_output_dir_name">저장 디렉터리</string>
+    <string name="pref_output_dir_desc">녹음 파일을 저장할 디렉터리를 선택합니다. 길게 누르면 파일 관리자에서 엽니다.</string>
+
+    <string name="pref_output_format_name">저장 형식</string>
+    <string name="pref_output_format_desc">녹음 파일의 인코딩 형식을 선택합니다.</string>
+
+    <string name="pref_min_duration_name">최소 녹음 길이</string>
+    <plurals name="pref_min_duration_desc">
+        <item quantity="one">최소 %d초 이상의 녹음만 보관합니다.</item>
+        <item quantity="other">최소 %d초 이상의 녹음만 보관합니다.</item>
+    </plurals>
+    <string name="pref_min_duration_desc_zero">모든 길이의 녹음을 보관합니다.</string>
+
+    <string name="pref_write_metadata_name">메타데이터 파일 생성</string>
+    <string name="pref_write_metadata_desc">오디오 파일 옆에 통화 세부 정보가 포함된 JSON 파일을 생성합니다.</string>
+
+    <string name="pref_record_telecom_apps_name">통신 시스템 통합 앱 녹음</string>
+    <string name="pref_record_telecom_apps_desc">안드로이드 통신 시스템과 통합된 서드파티 앱의 통화를 녹음합니다. 이러한 통화는 무음으로 녹음될 가능성이 높습니다.</string>
+
+    <string name="pref_record_dialing_state_name">연결 전 녹음 시작</string>
+    <string name="pref_record_dialing_state_desc">발신 통화의 경우, 상대방이 전화를 받기 전인 다이얼 단계부터 바로 녹음을 시작합니다.</string>
+
+    <string name="pref_notification_open_dir_name">알림에서 디렉터리 열기</string>
+    <string name="pref_notification_open_dir_desc">녹음 완료 알림을 탭했을 때 녹음 파일 대신 저장 디렉터리를 엽니다.</string>
+
+    <string name="pref_show_launcher_icon_name">런처 아이콘 표시</string>
+    <string name="pref_show_launcher_icon_desc">런처 아이콘을 숨긴 경우, 다이얼 패드에 <b>*#*#BCR#*#*</b>를 입력하여 앱을 열 수 있습니다.</string>
+
+    <!-- About "preference" -->
+    <string name="pref_version_name">버전</string>
+
+    <!-- Debug preferences -->
+    <string name="pref_force_direct_boot_name">다이렉트 부트 모드 강제 적용</string>
+    <string name="pref_force_direct_boot_desc">테스트를 위해 기기가 첫 잠금 해제 전인 상태인 것처럼 시뮬레이션합니다.</string>
+
+    <string name="pref_migrate_direct_boot_name">다이렉트 부트 녹음 파일 이전</string>
+    <string name="pref_migrate_direct_boot_desc">첫 잠금 해제 전에 저장된 녹음 파일을 이전합니다. 보통 잠금 해제 후 자동으로 수행됩니다.</string>
+
+    <string name="pref_save_logs_name">로그 저장</string>
+    <string name="pref_save_logs_desc">logcat 로그를 파일로 저장합니다.</string>
+
+    <!-- Pick contact group activity -->
+    <string name="pick_contact_group_title">연락처 그룹 선택</string>
+    <string name="pick_contact_group_local_group">로컬 그룹</string>
+
+    <!-- Rules list and editor -->
+    <string name="pref_header_rules">규칙</string>
+    <string name="record_rules_info">규칙은 일치하는 통화에 대해 수행할 동작을 결정합니다. 목록의 위에서 아래로 처리되며 일치 항목을 찾으면 중단됩니다. 길게 눌러 순서를 변경하거나 스와이프하여 삭제할 수 있습니다.</string>
+    <string name="pref_add_new_rule_name">새 규칙 추가</string>
+    <string name="pref_add_new_rule_desc">일치하는 통화를 처리할 새 규칙을 추가합니다.</string>
+    <string name="record_rules_list_custom_name">규칙 %d</string>
+    <string name="record_rules_list_default_name">기본 규칙</string>
+    <string name="record_rules_list_action_move_up">규칙 위로 이동</string>
+    <string name="record_rules_list_action_move_down">규칙 아래로 이동</string>
+    <string name="record_rules_list_action_remove">규칙 제거</string>
+
+    <string name="record_rule_editor_change_contact">연락처 변경</string>
+    <string name="record_rule_editor_change_contact_group">연락처 그룹 변경</string>
+
+    <string name="record_rule_number_title">통화 번호</string>
+    <string name="record_rule_number_any_chip">모두</string>
+    <string name="record_rule_number_unknown_chip">알 수 없음</string>
+    <string name="record_rule_number_contact_chip">연락처</string>
+    <string name="record_rule_number_contact_group_chip">연락처 그룹</string>
+    <string name="record_rule_number_unknown_summary">일치: 알 수 없는 번호</string>
+    <string name="record_rule_number_contact_summary">연락처: %s</string>
+    <string name="record_rule_number_contact_group_unknown_summary">연락처 그룹: %s</string>
+    <string name="record_rule_number_contact_group_with_account_summary">연락처 그룹: %1$s (%2$s)</string>
+
+    <string name="record_rule_type_title">통화 유형</string>
+    <string name="record_rule_type_any_chip">모두</string>
+    <string name="record_rule_type_incoming_chip">수신</string>
+    <string name="record_rule_type_outgoing_chip">발신</string>
+    <string name="record_rule_type_conference_chip">회의</string>
+    <string name="record_rule_type_incoming_summary">유형: 수신 통화</string>
+    <string name="record_rule_type_outgoing_summary">유형: 발신 통화</string>
+    <string name="record_rule_type_conference_summary">유형: 회의 통화</string>
+
+    <string name="record_rule_sim_title">SIM 슬롯</string>
+    <string name="record_rule_sim_any_chip">모두</string>
+    <string name="record_rule_sim_specific_chip">SIM %d</string>
+    <string name="record_rule_sim_specific_summary">SIM 슬롯: %d</string>
+
+    <string name="record_rule_action_title">동작</string>
+    <string name="record_rule_action_save_chip">저장</string>
+    <string name="record_rule_action_discard_chip">삭제</string>
+    <string name="record_rule_action_ignore_chip">무시</string>
+    <string name="record_rule_action_save_desc">녹음을 저장합니다. 통화 중 표시되는 알림을 통해 통화 종료 시 녹음을 삭제 대상으로 표시할 수 있습니다.</string>
+    <string name="record_rule_action_discard_desc">통화 종료 시 녹음을 삭제합니다. 통화 중 표시되는 알림을 통해 녹음을 보존할 수 있습니다.</string>
+    <string name="record_rule_action_ignore_desc">해당 통화를 완전히 무시합니다. 녹음이 진행되지 않으며 통화 중 수동으로 녹음을 시작할 수 없습니다.</string>
+    <string name="record_rule_action_save_summary">동작: 녹음 저장</string>
+    <string name="record_rule_action_discard_summary">동작: 녹음 삭제</string>
+    <string name="record_rule_action_ignore_summary">동작: 통화 무시</string>
+
+    <!-- Output directory bottom sheet -->
+    <string name="output_dir_bottom_sheet_change_dir">디렉터리 변경</string>
+    <string name="output_dir_bottom_sheet_filename_template">파일명 템플릿</string>
+    <string name="output_dir_bottom_sheet_edit_template">템플릿 편집</string>
+    <string name="output_dir_bottom_sheet_file_retention">파일 보존</string>
+    <string name="output_dir_bottom_sheet_edit_retention">보존 기간 편집</string>
+    <string name="retention_keep_all">영구 보존</string>
+    <plurals name="retention_days">
+        <item quantity="one">%d일 보관</item>
+        <item quantity="other">%d일 보관</item>
+    </plurals>
+    <string name="retention_unusable">현재 파일명 템플릿이 이 기능과 호환되지 않아 파일 보존 기능을 사용할 수 없습니다.</string>
+
+    <!-- Output format bottom sheet -->
+    <string name="output_format_bottom_sheet_output_format">저장 형식</string>
+    <string name="output_format_bottom_sheet_compression_level">압축 수준</string>
+    <string name="output_format_bottom_sheet_bitrate">비트레이트</string>
+    <string name="output_format_bottom_sheet_sample_rate">샘플 레이트</string>
+    <string name="output_format_bottom_sheet_custom_param">사용자 정의</string>
+    <string name="output_format_bottom_sheet_audio_source">오디오 소스</string>
+
+    <string name="bottom_sheet_reset">기본값으로 재설정</string>
+
+    <!-- Filename template dialog -->
+    <string name="filename_template_dialog_title">파일명 템플릿</string>
+    <string name="filename_template_dialog_message">출력 파일 이름에 사용할 사용자 지정 템플릿을 입력하세요. 변수는 중괄호로 지정합니다(예: <annotation type="template">{var}</annotation>). 대체값은 대괄호로 지정합니다(예: <annotation type="template">[{contact_name}|Unknown]</annotation>).
+
+지원되는 변수: <annotation type="supported_vars">PLACEHOLDER</annotation>. 구문 전체 설명은 <annotation type="template_docs">문서</annotation>를 참조하세요.</string>
+    <string name="filename_template_dialog_warning_subdirectories">안드로이드 Storage Access Framework의 성능 저하로 인해 하위 디렉터리(<annotation type="template">/</annotation> 문자)를 사용하면 일부 기기에서 녹음 저장 시 지연이 발생할 수 있습니다. 이 지연은 통화 종료 시 발생하며 오디오 손실을 초래하지 않습니다.</string>
+    <string name="filename_template_dialog_error_empty">템플릿은 비워둘 수 없습니다.</string>
+    <string name="filename_template_dialog_error_unknown_variable">알 수 없는 템플릿 변수: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">변수에는 인수를 포함할 수 없습니다: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_argument">잘못된 변수 인수: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_syntax">템플릿 구문이 올바르지 않습니다</string>
+    <string name="filename_template_dialog_action_reset_to_default">기본값으로 재설정</string>
+
+    <!-- File retention dialog -->
+    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_message">녹음을 보관할 일수를 입력하세요.</string>
+    <string name="file_retention_error_too_large">숫자가 너무 큽니다</string>
+
+    <!-- Format parameter dialog -->
+    <string name="format_param_dialog_title">사용자 지정 매개변수</string>
+    <string name="format_param_dialog_message">[%1$s, %2$s] 범위의 값을 입력하세요.</string>
+
+    <!-- Format sample rate dialog -->
+    <string name="format_sample_rate_dialog_title">사용자 지정 샘플 레이트</string>
+    <string name="format_sample_rate_dialog_message_desc">다음 범위 중 하나에 해당하는 샘플 레이트를 입력하세요:</string>
+    <string name="format_sample_rate_dialog_message_range">[%1$s, %2$s]</string>
+
+    <!-- Format parameter -->
+    <string name="format_param_bitrate_bps">%s bps</string>
+    <string name="format_param_bitrate_kbps">%s kbps</string>
+    <string name="format_param_compression_level">수준 %s</string>
+
+    <!-- Format sample rate -->
+    <string name="format_sample_rate">%s Hz</string>
+
+    <!-- Audio source -->
+    <string name="audio_source_voice_call">결합됨</string>
+    <string name="audio_source_voice_uplink_downlink">업링크 + 다운링크</string>
+    <string name="audio_source_voice_uplink">업링크만</string>
+    <string name="audio_source_voice_downlink">다운링크만</string>
+    <string name="audio_source_stereo_warning">스테레오 녹음을 지원하는 기기는 매우 드뭅니다. 녹음이 실패하거나 오디오가 누락되면 모노 오디오 소스로 전환하세요.</string>
+
+    <!-- Min duration dialog -->
+    <string name="min_duration_dialog_title">@string/pref_min_duration_name</string>
+    <string name="min_duration_dialog_message">일시 중지와 통화 대기를 제외한, 유지할 녹음의 최소 길이를 입력하세요. 이 설정은 통화 중 알림에서 언제든지 재정의할 수 있습니다.</string>
+    <plurals name="min_duration_dialog_seconds">
+        <item quantity="one">%d초</item>
+        <item quantity="other">%d초</item>
+    </plurals>
+
+    <!-- Snackbar alerts -->
+    <string name="alert_logcat_success">로그를 %1$s에 성공적으로 저장했습니다</string>
+    <string name="alert_logcat_failure">로그를 %1$s에 저장하지 못했습니다: %2$s</string>
+    <string name="alert_contact_group_query_failure">연락처 그룹을 조회하지 못했습니다: %1$s</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_persistent_name">백그라운드 서비스</string>
+    <string name="notification_channel_persistent_desc">백그라운드 통화 녹음을 위한 고정 알림</string>
+    <string name="notification_channel_failure_name">실패 알림</string>
+    <string name="notification_channel_failure_desc">통화 녹음 중 오류 알림</string>
+    <string name="notification_channel_success_name">성공 알림</string>
+    <string name="notification_channel_success_desc">통화 녹음 성공 알림</string>
+    <string name="notification_channel_silence_name">완전 무음 경고</string>
+    <string name="notification_channel_silence_desc">통화 녹음이 완전히 무음이면 경고합니다</string>
+    <string name="notification_direct_boot_migration_failed">녹음 이전 실패</string>
+    <string name="notification_direct_boot_migration_error">기기가 처음 잠금 해제되기 전에 저장된 일부 녹음을 저장 디렉터리로 옮길 수 없었습니다.</string>
+    <string name="notification_recording_initializing">통화 녹음 초기화 중</string>
+    <string name="notification_recording_in_progress">통화 녹음 진행 중</string>
+    <string name="notification_recording_finalizing">통화 녹음 마무리 중</string>
+    <string name="notification_recording_paused">통화 녹음 일시 중지됨</string>
+    <string name="notification_recording_on_hold">통화 대기 중</string>
+    <string name="notification_recording_failed">통화 녹음 실패</string>
+    <string name="notification_recording_succeeded">통화 녹음 완료</string>
+    <string name="notification_move_failed">녹음 이동 실패</string>
+    <string name="notification_move_error">하나 이상의 파일을 선택한 저장 디렉터리로 옮길 수 없습니다. 해당 파일은 여전히 기본 저장 디렉터리에 있습니다.</string>
+    <string name="notification_message_delete_at_end">이 녹음은 통화 종료 시 삭제됩니다. 녹음을 유지하려면 복원을 탭하세요.</string>
+    <plurals name="notification_message_delete_at_end_too_short">
+        <item quantity="one">이 녹음이 %d초보다 짧으면 통화 종료 시 삭제됩니다. 녹음을 유지하려면 복원을 탭하세요.</item>
+        <item quantity="other">이 녹음이 %d초보다 짧으면 통화 종료 시 삭제됩니다. 녹음을 유지하려면 복원을 탭하세요.</item>
+    </plurals>
+    <string name="notification_internal_android_error">내부 안드로이드 구성 요소(%s)에서 녹음에 실패했습니다. 이 기기 또는 펌웨어는 통화 녹음을 지원하지 않을 수 있습니다.</string>
+    <string name="notification_pure_silence_error">오디오가 완전히 무음이어서 녹음이 삭제되었습니다. 이 기기는 '%s' 앱과 관련된 통화 녹음을 지원하지 않을 수 있습니다.</string>
+    <string name="notification_action_open">열기</string>
+    <string name="notification_action_share">공유</string>
+    <string name="notification_action_delete">삭제</string>
+    <string name="notification_action_restore">복원</string>
+    <string name="notification_action_pause">일시 중지</string>
+    <string name="notification_action_resume">다시 시작</string>
+
+    <!-- Quick settings tile -->
+    <string name="quick_settings_label">통화 녹음</string>
+
+    <!-- Snackbar alerts -->
+    <string name="documentsui_not_found">안드로이드 기본 파일 관리자(DocumentsUI)를 사용할 수 없습니다.</string>
+</resources>
+
