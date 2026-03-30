@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update German translations ([Issue #791], [PR #837 @ElsAr4e])
+
 ### Version 2.8
 
 * Add support for recording uplink or downlink only ([Issue #833], [PR #834 @chenxiaolong])
@@ -1246,3 +1248,4 @@ Non-user-facing changes:
 [PR #834 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/834
 [PR #835 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/835
 [PR #836 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/836
+[PR #837 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/837
