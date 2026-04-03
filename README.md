@@ -44,7 +44,7 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
 2. Install BCR as a system app.
 
     * **For devices rooted with Magisk/KernelSU**, simply flash the zip as a Magisk/KernelSU module from within the respective application.
-        * **For OnePlus and Realme devices running the stock firmware (or custom firmware based on the stock firmware)**, also extract the `.apk` from the zip and install it manually before rebooting. This is necessary to work around a bug in the firmware where the app data directory does not get created, causing BCR to open up to a blank screen.
+        * **If you use any type of root hiding feature**, also extract the `.apk` from the zip and install it manually before rebooting. This works around crashes and other issues caused by BCR's APK being hidden from the system.
 
     * **For unrooted custom firmware**, flash the zip while booted into recovery.
         * **NOTE**: The `READ_CALL_LOG` permission is hard restricted in Android 10+, which prevents it from being granted, even via Android's settings. To remove this restriction, run via adb after rebooting back into Android:
