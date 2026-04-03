@@ -242,26 +242,26 @@ The JSON structure is shown in the following example. Note that only `timestamp_
             "parameter_type": "bitrate",
 
             // The encoder quality/size parameter.
-            "parameter": 48000,
+            "parameter": 48000
         },
 
         // Details about the recording and encoding process. If the recording
         // process fails, this is set to null.
         "recording": {
             // The total number of audio frames that BCR read from the audio
-            // device. This includes the periods of time when the recording was
-            // paused or on hold.
-            // (Number of frames == number of samples * channel count)
-            "frames_total": 96000,
+            // device. A frame is defined as a bundle of samples, with one
+            // sample per channel. This value includes the periods of time where
+            // the recording was paused or on hold.
+            "frames_total": 40000,
 
             // The number of audio frames that were actually saved to the output
-            // file. This excludes the periods of time when the recording was
-            // paused or on hold.
-            // (Number of frames == number of samples * channel count)
-            "frames_encoded": 48000,
+            // file. A frame is defined as a bundle of samples, with one sample
+            // per channel. This value excludes the periods of time where the
+            // recording was paused or on hold.
+            "frames_encoded": 32000,
 
             // The number of samples per second of audio.
-            "sample_rate": 48000,
+            "sample_rate": 16000,
 
             // The number of channels in the audio.
             "channel_count": 1,
@@ -272,21 +272,22 @@ The JSON structure is shown in the following example. Note that only `timestamp_
             "duration_secs_wall": 3.0,
 
             // The total time in seconds that BCR read from the audio device.
-            // (Equal to: frames_total / sample_rate / channel_count)
-            "duration_secs_total": 2.0,
+            // (Equal to: frames_total / sample_rate)
+            "duration_secs_total": 2.5,
 
             // The time in seconds of audio actually saved to the output file.
-            // (Equal to: frames_encoded / sample_rate / channel_count)
-            "duration_secs_encoded": 1.0,
+            // (Equal to: frames_encoded / sample_rate)
+            "duration_secs_encoded": 2.0,
 
             // The size of the recording buffer in frames. This is the maximum
             // number of audio frames read from the audio driver before it is
             // passed to the audio encoder.
-            "buffer_frames": 640,
+            "buffer_frames": 3840,
 
             // The number of buffer overruns. This is the number of times that
             // the CPU or storage couldn't keep up while encoding the raw audio,
-            // resulting in skips (loss of audio).
+            // resulting in skips (loss of audio). This value cannot be
+            // calculated accurately and is just an estimate.
             "buffer_overruns": 0,
 
             // Whether the call was ever paused by the user.
