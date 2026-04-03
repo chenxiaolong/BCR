@@ -70,11 +70,6 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
 
     See the [permissions section](#permissions) below for more details about the permissions.
 
-5. To install future updates, there are a couple methods:
-
-    * If installed via Magisk, the module can be updated right from Magisk Manager's modules tab. Flashing the new version in Magisk manually also works just as well.
-    * The `.apk` can also be extracted from the zip and be directly installed. With this method, the old version exists as a system app and the new version exists as a user-installed update to the system app. This method is more convenient if BCR is baked into the Android firmware image.
-
 ## Recording announcement
 
 Unlike the built-in call recording functionality of the preinstalled dialer app on some devices, BCR does not announce that the call is being recorded to the other party. BCR never outputs audio of any kind to the call audio stream.
