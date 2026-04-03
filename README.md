@@ -62,6 +62,8 @@ As the name alludes, BCR intends to be a basic as possible. The project will hav
 
     If other call recorders are installed, make sure to disable their phone call recording functionality. On most devices, a phone call cannot be recorded by two apps at the same time. However, it is fine to have BCR record phone calls and another app record eg. VOIP calls.
 
+    Also, disable any AI-related functionality in the dialer app. These features also rely on Android's call recording APIs.
+
 4. Enable call recording and pick an output directory.
 
     If no output directory is selected or if the output directory is no longer accessible, then recordings will be saved to `/sdcard/Android/data/com.chiller3.bcr/files`. Note that on Android 12+, `/sdcard/Android/data/` is only accessible via USB or DocumentsUI (AOSP's built in file manager).
