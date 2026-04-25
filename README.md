@@ -2,9 +2,6 @@
 
 <img src="app/images/icon.svg" alt="app icon" width="72" />
 
-[![latest release badge](https://img.shields.io/github/v/release/chenxiaolong/BCR?sort=semver)](https://github.com/chenxiaolong/BCR/releases/latest)
-[![license badge](https://img.shields.io/github/license/chenxiaolong/BCR)](./LICENSE)
-
 BCR is a simple Android call recording app for rooted devices or devices running custom firmware. Once enabled, it stays out of the way and automatically records incoming and outgoing calls in the background.
 
 <img src="app/images/light.png" alt="light mode screenshot" width="200" /> <img src="app/images/dark.png" alt="dark mode screenshot" width="200" />
@@ -396,4 +393,4 @@ If you are interested in implementing a new feature and would like to see it inc
 
 ## License
 
-BCR is licensed under GPLv3. Please see [`LICENSE`](./LICENSE) for the full license text.
+BCR is licensed under GPL-3.0-only. Please see [`LICENSE`](./LICENSE) for the full license text.
