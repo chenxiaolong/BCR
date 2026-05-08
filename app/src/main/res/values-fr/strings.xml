@@ -40,7 +40,7 @@
     <string name="pref_record_dialing_state_desc">Pour les appels sortant, démarrer l\'enregistrement dès le début d\'appel, avant que le correspondant décroche.</string>
 
     <string name="pref_notification_open_dir_name">Ouvrir le dossier depuis les notifications</string>
-    <string name="pref_notification_open_dir_desc">Ouvrir le dossier de destination plutôt que le fichier enregistré lors d\'un appui sur la notification d'enregistrement terminé.</string>
+    <string name="pref_notification_open_dir_desc">Ouvrir le dossier de destination plutôt que le fichier enregistré lors d\'un appui sur la notification d\'enregistrement terminé.</string>
 
     <string name="pref_show_launcher_icon_name">Afficher l\'icone de l\'application</string>
     <string name="pref_show_launcher_icon_desc">Lorsque l\'icone du lanceur est masquée, composer <b>*#*#BCR#*#*</b> pour ouvrir l\'application.</string>
@@ -159,13 +159,13 @@
     <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
     <string name="record_rule_initial_state_paused_chip">Suspendu</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
-    <string name="record_rule_initial_state_recording_desc">L'\enregistrement débute immédiatement lorsque l'appel débute.</string>
+    <string name="record_rule_initial_state_recording_desc">L\'enregistrement débute immédiatement lorsque l\'appel débute.</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
-    <string name="record_rule_initial_state_paused_desc">L'\enregistrement sera mis en pause lorsque l'appel débute. L'audio ne sera pas enregistré jusqu'\à la reprise via la notification.</string>
+    <string name="record_rule_initial_state_paused_desc">L\'enregistrement sera mis en pause lorsque l\'appel débute. L\'audio ne sera pas enregistré jusqu\'à la reprise via la notification.</string>
     <!-- Summary shown in the record rules list descriptions. This should include an "Initial state: " prefix for visual consistency. -->
     <string name="record_rule_initial_state_recording_summary">État initial : Enregistrement immédiat</string>
     <!-- Summary shown in the record rules list descriptions. This should include an "Initial state: " prefix for visual consistency. -->
-    <string name="record_rule_initial_state_paused_summary">État initial : En pause jusqu'\à reprise manuelle</string>
+    <string name="record_rule_initial_state_paused_summary">État initial : En pause jusqu\'à reprise manuelle</string>
 
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Changer le dossier</string>
