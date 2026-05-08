@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update French translations ([PR #857 @NSO73])
+
 ### Version 2.10
 
 * Update German translations ([Issue #791], [PR #852 @ElsAr4e])
@@ -1265,3 +1267,4 @@ Non-user-facing changes:
 [PR #851 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/851
 [PR #852 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/852
 [PR #854 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/854
+[PR #857 @NSO73]: https://github.com/chenxiaolong/BCR/pull/857
