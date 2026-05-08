@@ -39,6 +39,9 @@
     <string name="pref_record_dialing_state_name">Enregistrer l\'appel avant décrochage</string>
     <string name="pref_record_dialing_state_desc">Pour les appels sortant, démarrer l\'enregistrement dès le début d\'appel, avant que le correspondant décroche.</string>
 
+    <string name="pref_notification_open_dir_name">Ouvrir le dossier depuis les notifications</string>
+    <string name="pref_notification_open_dir_desc">Ouvrir le dossier de destination plutôt que le fichier enregistré lors d\'un appui sur la notification d'enregistrement terminé.</string>
+
     <string name="pref_show_launcher_icon_name">Afficher l\'icone de l\'application</string>
     <string name="pref_show_launcher_icon_desc">Lorsque l\'icone du lanceur est masquée, composer <b>*#*#BCR#*#*</b> pour ouvrir l\'application.</string>
 
@@ -149,6 +152,21 @@
     <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
     <string name="record_rule_action_ignore_summary">Action : Ignorer l\'appel</string>
 
+    <!-- Title of the record rule editor section to configure whether the recording begins immediately or starts in the paused state. -->
+    <string name="record_rule_initial_state_title">État initial</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_initial_state_recording_chip">Enregistrement</string>
+    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
+    <string name="record_rule_initial_state_paused_chip">Suspendu</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_initial_state_recording_desc">L'\enregistrement débute immédiatement lorsque l'appel débute.</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_initial_state_paused_desc">L'\enregistrement sera mis en pause lorsque l'appel débute. L'audio ne sera pas enregistré jusqu'\à la reprise via la notification.</string>
+    <!-- Summary shown in the record rules list descriptions. This should include an "Initial state: " prefix for visual consistency. -->
+    <string name="record_rule_initial_state_recording_summary">État initial : Enregistrement immédiat</string>
+    <!-- Summary shown in the record rules list descriptions. This should include an "Initial state: " prefix for visual consistency. -->
+    <string name="record_rule_initial_state_paused_summary">État initial : En pause jusqu'\à reprise manuelle</string>
+
     <!-- Output directory bottom sheet -->
     <string name="output_dir_bottom_sheet_change_dir">Changer le dossier</string>
     <string name="output_dir_bottom_sheet_filename_template">Modèle du nom de fichier</string>
@@ -168,6 +186,7 @@
     <string name="output_format_bottom_sheet_bitrate">Débit binaire</string>
     <string name="output_format_bottom_sheet_sample_rate">Fréquence d\'échantillonnage</string>
     <string name="output_format_bottom_sheet_custom_param">Personnalisé</string>
+    <string name="output_format_bottom_sheet_audio_source">Source audio</string>
 
     <string name="bottom_sheet_reset">Remise à défaut</string>
 
@@ -205,6 +224,13 @@
     <!-- Format sample rate -->
     <string name="format_sample_rate">%s Hz</string>
 
+    <!-- Audio source -->
+    <string name="audio_source_voice_call">Combiné</string>
+    <string name="audio_source_voice_uplink_downlink">Émission + réception</string>
+    <string name="audio_source_voice_uplink">Émission uniquement</string>
+    <string name="audio_source_voice_downlink">Réception uniquement</string>
+    <string name="audio_source_stereo_warning">Très peu d\'appareils supportent l\'enregistrement stéréo. Si l\'enregistrement échoue ou que l\'audio est manquant, passez à une source audio mono.</string>
+
     <!-- Min duration dialog -->
     <string name="min_duration_dialog_title">@string/pref_min_duration_name</string>
     <string name="min_duration_dialog_message">Renseigner une durée minimale pour conserver un enregistrement, excluant les pauses et les mises en attente. Ce paramètre peut être modifié pendant un appel via la notification.</string>
@@ -236,6 +262,8 @@
     <string name="notification_recording_on_hold">Enregistrement en attente</string>
     <string name="notification_recording_failed">Échec de l\'enregistrement</string>
     <string name="notification_recording_succeeded">Enregistrement réussi</string>
+    <string name="notification_move_failed">Échec du déplacement de l\'enregistrement</string>
+    <string name="notification_move_error">Un ou plusieurs fichiers n\'ont pas pu être déplacés vers le dossier de destination sélectionné. Ils sont toujours présents dans le dossier par défaut.</string>
     <string name="notification_message_delete_at_end">L\'enregistrement sera supprimé à la fin de l\'appel. Toucher Restaurer pour le conserver.</string>
     <plurals name="notification_message_delete_at_end_too_short">
         <item quantity="one">L\'enregistrement sera supprimé à la fin de l\'appel si sa durée est plus courte que %d seconde. Toucher Restaurer pour le conserver.</item>
