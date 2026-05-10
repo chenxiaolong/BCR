@@ -12,6 +12,7 @@
 * Update French translations ([PR #857 @NSO73])
 * Replace bottom sheet UI layouts with regular preferences ([Issue #858], [PR #862 @chenxiaolong])
 * Add mono and stereo suffixes to audio source labels ([Issue #833], [PR #863 @ElsAr4e])
+* Make the `, ` separator in the output directory and output format settings summaries translatable ([PR #864 @chenxiaolong])
 
 ### Version 2.10
 
@@ -1273,3 +1274,4 @@ Non-user-facing changes:
 [PR #857 @NSO73]: https://github.com/chenxiaolong/BCR/pull/857
 [PR #862 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/862
 [PR #863 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/863
+[PR #864 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/864
