@@ -30,11 +30,6 @@
     private android.content.Context mContext;
 }
 
-# ChipGroupCentered accesses this via reflection.
--keepclassmembers class com.google.android.material.internal.FlowLayout {
-    private int rowCount;
-}
-
 # Keep standalone CLI utilities
 -keep class com.chiller3.bcr.standalone.* {
     void main(java.lang.String[]);

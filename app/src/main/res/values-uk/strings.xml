@@ -24,12 +24,9 @@
     <!-- Record rules activity -->
     <string name="record_rule_number_contact_summary">Контакт: %s</string>
 
-    <!-- Output directory bottom sheet -->
-    <string name="output_dir_bottom_sheet_change_dir">Змінити каталог</string>
-    <string name="output_dir_bottom_sheet_filename_template">Шаблон імені файлу</string>
-    <string name="output_dir_bottom_sheet_edit_template">Редагувати шаблон</string>
-    <string name="output_dir_bottom_sheet_file_retention">Збереження записів</string>
-    <string name="output_dir_bottom_sheet_edit_retention">Редагувати збереження</string>
+    <!-- Output directory settings -->
+    <string name="pref_filename_template_name">Шаблон імені файлу</string>
+    <string name="pref_file_retention_name">Збереження записів</string>
     <string name="retention_keep_all">Зберегти назавжди</string>
     <plurals name="retention_days">
         <item quantity="one">Зберегти %d день</item>
@@ -39,14 +36,13 @@
     </plurals>
     <string name="retention_unusable">Збереження файлів вимкнено, оскільки поточний шаблон імені файлу несумісний із цією функцією.</string>
 
-    <!-- Output format bottom sheet -->
-    <string name="output_format_bottom_sheet_output_format">Вихідний формат</string>
-    <string name="output_format_bottom_sheet_compression_level">Рівень стиснення</string>
-    <string name="output_format_bottom_sheet_bitrate">Бітрейт</string>
-    <string name="output_format_bottom_sheet_sample_rate">Частота дискретизації</string>
-    <string name="output_format_bottom_sheet_custom_param">Вручну</string>
+    <!-- Output format settings -->
+    <string name="pref_format_param_desc_compression_level">Рівень стиснення</string>
+    <string name="pref_format_param_desc_bitrate">Бітрейт</string>
+    <string name="pref_sample_rate_name">Частота дискретизації</string>
+    <string name="custom_param_value">Вручну</string>
 
-    <string name="bottom_sheet_reset">Відновити налаштування за замовчуванням</string>
+    <string name="reset_to_defaults">Відновити налаштування за замовчуванням</string>
 
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">Шаблон імені файлу</string>
@@ -60,7 +56,7 @@
     <string name="filename_template_dialog_action_reset_to_default">Відновити налаштування за замовчуванням</string>
 
     <!-- File retention dialog -->
-    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_title">@string/pref_file_retention_name</string>
     <string name="file_retention_dialog_message">Введіть кількість днів для зберігання записів.</string>
     <string name="file_retention_error_too_large">Число завелике</string>
 

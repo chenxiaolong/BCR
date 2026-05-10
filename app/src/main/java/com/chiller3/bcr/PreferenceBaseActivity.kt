@@ -1,10 +1,11 @@
 /*
- * SPDX-FileCopyrightText: 2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2024-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
 package com.chiller3.bcr
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.ViewGroup
@@ -13,15 +14,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
-import androidx.fragment.app.Fragment
 import com.chiller3.bcr.databinding.SettingsActivityBinding
 
 abstract class PreferenceBaseActivity : AppCompatActivity() {
-    protected abstract val titleResId: Int
+    protected abstract val actionBarTitle: CharSequence?
 
     protected abstract val showUpButton: Boolean
 
-    protected abstract fun createFragment(): Fragment
+    protected abstract fun createFragment(): PreferenceBaseFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -30,11 +30,22 @@ abstract class PreferenceBaseActivity : AppCompatActivity() {
         val binding = SettingsActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val fragment: PreferenceBaseFragment
+
         if (savedInstanceState == null) {
+            fragment = createFragment()
+
             supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.settings, createFragment())
+                .replace(R.id.settings, fragment)
                 .commit()
+        } else {
+            fragment = supportFragmentManager.findFragmentById(R.id.settings)
+                    as PreferenceBaseFragment
+        }
+
+        supportFragmentManager.setFragmentResultListener(fragment.requestTag, this) { _, result ->
+            setResult(RESULT_OK, Intent().apply { putExtras(result) })
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.toolbar) { v, windowInsets ->
@@ -55,7 +66,9 @@ abstract class PreferenceBaseActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(showUpButton)
 
-        setTitle(titleResId)
+        actionBarTitle?.let {
+            title = it
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

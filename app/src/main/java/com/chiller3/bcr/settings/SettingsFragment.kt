@@ -40,6 +40,8 @@ import kotlinx.coroutines.launch
 class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChangeListener,
     Preference.OnPreferenceClickListener, OnPreferenceLongClickListener,
     SharedPreferences.OnSharedPreferenceChangeListener {
+    override val requestTag: String = SettingsFragment::class.java.simpleName
+
     private val viewModel: SettingsViewModel by viewModels()
 
     private lateinit var prefs: Preferences
@@ -63,6 +65,14 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
                 startActivity(Permissions.getAppInfoIntent(requireContext()))
             }
         }
+    private val requestOutputDirectorySettings =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            refreshOutputDir()
+        }
+    private val requestOutputFormatSettings =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            refreshOutputFormat()
+        }
     private val requestSafSaveLogs =
         registerForActivityResult(ActivityResultContracts.CreateDocument(Logcat.MIMETYPE)) { uri ->
             uri?.let {
@@ -74,7 +84,7 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
         val context = requireContext()
 
         preferenceManager.setStorageDeviceProtected()
-        setPreferencesFromResource(R.xml.root_preferences, rootKey)
+        setPreferencesFromResource(R.xml.preferences_root, rootKey)
 
         prefs = Preferences(context)
 
@@ -235,15 +245,13 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
                 return true
             }
             prefOutputDir -> {
-                OutputDirectoryBottomSheetFragment().show(
-                    childFragmentManager, OutputDirectoryBottomSheetFragment.TAG
-                )
+                val intent = Intent(requireContext(), OutputDirectoryActivity::class.java)
+                requestOutputDirectorySettings.launch(intent)
                 return true
             }
             prefOutputFormat -> {
-                OutputFormatBottomSheetFragment().show(
-                    childFragmentManager, OutputFormatBottomSheetFragment.TAG
-                )
+                val intent = Intent(requireContext(), OutputFormatActivity::class.java)
+                requestOutputFormatSettings.launch(intent)
                 return true
             }
             prefMinDuration -> {
@@ -296,27 +304,19 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?) {
-        when {
-            key == null -> return
+        when (key) {
+            null -> return
             // Update the switch state if it was toggled outside of the preference (eg. from the
             // quick settings toggle).
-            key == prefCallRecording.key -> {
+            prefCallRecording.key -> {
                 val current = prefCallRecording.isChecked
                 val expected = sharedPreferences.getBoolean(key, current)
                 if (current != expected) {
                     prefCallRecording.isChecked = expected
                 }
             }
-            // Update the output directory state when it's changed by the bottom sheet.
-            key == Preferences.PREF_OUTPUT_DIR || key == Preferences.PREF_OUTPUT_RETENTION -> {
-                refreshOutputDir()
-            }
-            // Update the output format state when it's changed by the bottom sheet.
-            Preferences.isFormatKey(key) -> {
-                refreshOutputFormat()
-            }
             // Update when it's changed by the dialog.
-            key == Preferences.PREF_MIN_DURATION -> {
+            Preferences.PREF_MIN_DURATION -> {
                 refreshMinDuration()
             }
         }

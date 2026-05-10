@@ -14,7 +14,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import com.chiller3.bcr.Preferences
 import com.chiller3.bcr.R
 import com.chiller3.bcr.databinding.DialogTextInputBinding
 import com.chiller3.bcr.format.Format
@@ -26,19 +25,35 @@ class FormatParamDialogFragment : DialogFragment() {
     companion object {
         val TAG: String = FormatParamDialogFragment::class.java.simpleName
 
-        const val RESULT_SUCCESS = "success"
+        private const val ARG_FORMAT_INDEX = "format_index"
+        private const val RESULT_FORMAT_INDEX = ARG_FORMAT_INDEX
+        private const val RESULT_VALUE = "value"
+
+        fun newInstance(format: Format) =
+            FormatParamDialogFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_FORMAT_INDEX, Format.all.indexOf(format))
+                }
+            }
+
+        fun getResult(bundle: Bundle): Pair<Format, UInt>? {
+            if (!bundle.containsKey(RESULT_VALUE)) {
+                return null
+            }
+
+            val formatIndex = bundle.getInt(RESULT_FORMAT_INDEX)
+            val value = bundle.getInt(RESULT_VALUE).toUInt()
+
+            return Format.all[formatIndex] to value
+        }
     }
 
-    private lateinit var prefs: Preferences
-    private lateinit var format: Format
     private lateinit var binding: DialogTextInputBinding
     private var value: UInt? = null
-    private var success: Boolean = false
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val context = requireContext()
-        prefs = Preferences(context)
-        format = Format.fromPreferences(prefs).format
+        val format = Format.all[requireArguments().getInt(ARG_FORMAT_INDEX)]
 
         val paramInfo = format.paramInfo
         if (paramInfo !is RangedParamInfo) {
@@ -111,11 +126,10 @@ class FormatParamDialogFragment : DialogFragment() {
         return MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.format_param_dialog_title)
             .setView(binding.root)
-            .setPositiveButton(android.R.string.ok) { _, _ ->
-                prefs.setFormatParam(format, value!!)
-                success = true
+            .setPositiveButton(android.R.string.ok, null)
+            .setNegativeButton(android.R.string.cancel) { _, _ ->
+                value = null
             }
-            .setNegativeButton(android.R.string.cancel, null)
             .create()
             .apply {
                 setCanceledOnTouchOutside(false)
@@ -130,7 +144,12 @@ class FormatParamDialogFragment : DialogFragment() {
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
 
-        setFragmentResult(tag!!, Bundle().apply { putBoolean(RESULT_SUCCESS, success) })
+        setFragmentResult(tag!!, Bundle().apply {
+            putInt(RESULT_FORMAT_INDEX, requireArguments().getInt(ARG_FORMAT_INDEX))
+            value?.let {
+                putInt(RESULT_VALUE, it.toInt())
+            }
+        })
     }
 
     private fun refreshOkButtonEnabledState() {

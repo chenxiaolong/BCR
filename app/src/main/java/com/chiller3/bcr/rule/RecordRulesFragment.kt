@@ -12,9 +12,9 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.BundleCompat
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.IntentCompat
 import androidx.core.view.MenuProvider
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -31,6 +31,8 @@ import kotlinx.coroutines.launch
 
 class RecordRulesFragment : PreferenceBaseFragment(), Preference.OnPreferenceClickListener,
     RecordRulesAdapter.Listener {
+    override val requestTag: String = RecordRulesFragment::class.java.simpleName
+
     private val viewModel: RecordRulesViewModel by viewModels()
 
     private lateinit var prefAddNewRule: Preference
@@ -38,8 +40,27 @@ class RecordRulesFragment : PreferenceBaseFragment(), Preference.OnPreferenceCli
     private val globalAdapter = ConcatAdapter()
     private lateinit var rulesAdapter: RecordRulesAdapter
 
+    private val requestRecordRuleSettings =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            val result = it.data!!
+            val position = result.getIntExtra(RecordRuleEditorActivity.RESULT_POSITION, -1)
+            val recordRule = IntentCompat.getParcelableExtra(
+                result,
+                RecordRuleEditorActivity.RESULT_RECORD_RULE,
+                RecordRule::class.java,
+            )!!
+
+            if (position >= 0) {
+                viewModel.replaceRule(position, recordRule)
+            } else {
+                viewModel.addRule(recordRule)
+            }
+        }
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.record_rules_preferences, rootKey)
+        // Not strictly necessary since all preferences here are non-persistent.
+        preferenceManager.setStorageDeviceProtected()
+        setPreferencesFromResource(R.xml.preferences_record_rules, rootKey)
 
         val context = requireContext()
 
@@ -55,21 +76,6 @@ class RecordRulesFragment : PreferenceBaseFragment(), Preference.OnPreferenceCli
                 }
             }
         }
-
-        setFragmentResultListener(RecordRuleEditorBottomSheet.TAG) { _, result ->
-            val position = result.getInt(RecordRuleEditorBottomSheet.RESULT_POSITION)
-            val recordRule = BundleCompat.getParcelable(
-                result,
-                RecordRuleEditorBottomSheet.RESULT_RECORD_RULE,
-                RecordRule::class.java,
-            )!!
-
-            if (position >= 0) {
-                viewModel.replaceRule(position, recordRule)
-            } else {
-                viewModel.addRule(recordRule)
-            }
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,17 +83,15 @@ class RecordRulesFragment : PreferenceBaseFragment(), Preference.OnPreferenceCli
 
         requireActivity().addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.record_rules, menu)
+                menuInflater.inflate(R.menu.reset, menu)
             }
 
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.reset -> {
-                        viewModel.reset()
-                        true
-                    }
-                    else -> false
+            override fun onMenuItemSelected(menuItem: MenuItem) = when (menuItem.itemId) {
+                R.id.reset -> {
+                    viewModel.reset()
+                    true
                 }
+                else -> false
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
@@ -120,8 +124,10 @@ class RecordRulesFragment : PreferenceBaseFragment(), Preference.OnPreferenceCli
                     action = RecordRule.Action.Save(initialState = RecordRule.InitialState.RECORDING),
                 )
 
-                RecordRuleEditorBottomSheet.newInstance(-1, newRule, false)
-                    .show(parentFragmentManager.beginTransaction(), RecordRuleEditorBottomSheet.TAG)
+                val context = requireContext()
+                val intent = RecordRuleEditorActivity.createIntent(context, -1, newRule, false)
+                requestRecordRuleSettings.launch(intent)
+
                 return true
             }
         }
@@ -134,7 +140,8 @@ class RecordRulesFragment : PreferenceBaseFragment(), Preference.OnPreferenceCli
     }
 
     override fun onRuleSelected(position: Int, rule: RecordRule, isDefault: Boolean) {
-        RecordRuleEditorBottomSheet.newInstance(position, rule, isDefault)
-            .show(parentFragmentManager.beginTransaction(), RecordRuleEditorBottomSheet.TAG)
+        val context = requireContext()
+        val intent = RecordRuleEditorActivity.createIntent(context, position, rule, isDefault)
+        requestRecordRuleSettings.launch(intent)
     }
 }

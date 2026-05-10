@@ -55,12 +55,9 @@
     <string name="record_rule_number_contact_group_unknown_summary">Grup de contact: %s</string>
     <string name="record_rule_number_contact_group_with_account_summary">Grup de contact: %1$s (%2$s)</string>
 
-    <!-- Output directory bottom sheet -->
-    <string name="output_dir_bottom_sheet_change_dir">Schimbați directorul</string>
-    <string name="output_dir_bottom_sheet_filename_template">Șablon nume fișier</string>
-    <string name="output_dir_bottom_sheet_edit_template">Editați șablonul</string>
-    <string name="output_dir_bottom_sheet_file_retention">Perioadă păstrare fișiere</string>
-    <string name="output_dir_bottom_sheet_edit_retention">Editați perioada</string>
+    <!-- Output directory settings -->
+    <string name="pref_filename_template_name">Șablon nume fișier</string>
+    <string name="pref_file_retention_name">Perioadă păstrare fișiere</string>
     <string name="retention_keep_all">Păstrează totul</string>
     <plurals name="retention_days">
         <item quantity="one">Păstrează %d zi</item>
@@ -69,14 +66,13 @@
     </plurals>
     <string name="retention_unusable">Păstrare fișierelor este dezactivată deoarece șablonul actual pentru numele fișierului este incompatibil cu caracteristica.</string>
 
-    <!-- Output format bottom sheet -->
-    <string name="output_format_bottom_sheet_output_format">Format de ieșire</string>
-    <string name="output_format_bottom_sheet_compression_level">Nivel de compresie</string>
-    <string name="output_format_bottom_sheet_bitrate">Rata de biți</string>
-    <string name="output_format_bottom_sheet_sample_rate">Rata de eșantion</string>
-    <string name="output_format_bottom_sheet_custom_param">Personalizat</string>
+    <!-- Output format settings -->
+    <string name="pref_format_param_desc_compression_level">Nivel de compresie</string>
+    <string name="pref_format_param_desc_bitrate">Rata de biți</string>
+    <string name="pref_sample_rate_name">Rata de eșantion</string>
+    <string name="custom_param_value">Personalizat</string>
 
-    <string name="bottom_sheet_reset">Resetați la valorile implicite</string>
+    <string name="reset_to_defaults">Resetați la valorile implicite</string>
 
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">Șablon nume fișier</string>
@@ -91,7 +87,7 @@
     <string name="filename_template_dialog_action_reset_to_default">Resetați la valoarea implicită</string>
 
     <!-- File retention dialog -->
-    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_title">@string/pref_file_retention_name</string>
     <string name="file_retention_dialog_message">Introduceți numărul de zile pentru a păstra înregistrările.</string>
     <string name="file_retention_error_too_large">Numărul este prea mare</string>
 

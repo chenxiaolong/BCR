@@ -75,21 +75,16 @@
     <!-- Accessibility option to remove a rule. -->
     <string name="record_rules_list_action_remove">Qaydanı sil</string>
 
-    <!-- Button in the record rule editor to select a different contact. -->
-    <string name="record_rule_editor_change_contact">Əlaqəni dəyiş</string>
-    <!-- Button in the record rule editor to select a different contact group. -->
-    <string name="record_rule_editor_change_contact_group">Əlaqə qrupunu dəyiş</string>
-
     <!-- Title of the record rule editor section for configuring the call number to match. -->
     <string name="record_rule_number_title">Zəng nömrəsi</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_number_any_chip">Hər hansı</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_number_unknown_chip">Naməlum</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact rules as a category, not a specific contact. -->
-    <string name="record_rule_number_contact_chip">Əlaqə</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact group rules as a category, not a specific contact group. -->
-    <string name="record_rule_number_contact_group_chip">Əlaqə qrupu</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_number_any_item">Hər hansı</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_number_unknown_item">Naməlum</string>
+    <!-- Text for the UI item to select this element in the rule editor. This represents contact rules as a category, not a specific contact. -->
+    <string name="record_rule_number_contact_item">Əlaqə</string>
+    <!-- Text for the UI item to select this element in the rule editor. This represents contact group rules as a category, not a specific contact group. -->
+    <string name="record_rule_number_contact_group_item">Əlaqə qrupu</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Match: " prefix for visual consistency. -->
     <string name="record_rule_number_unknown_summary">Uyğunluq: Naməlum nömrələr</string>
     <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. When the contacts permission is denied, this will display an internal contact ID instead of the contact name. -->
@@ -101,14 +96,14 @@
 
     <!-- Title of the record rule editor section for configuring the type of call to match. -->
     <string name="record_rule_type_title">Zəng növü</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_type_any_chip">Hər hansı</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_type_incoming_chip">Gələn</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_type_outgoing_chip">Gedən</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_type_conference_chip">Konfrans</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_any_item">Hər hansı</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_incoming_item">Gələn</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_outgoing_item">Gedən</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_conference_item">Konfrans</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
     <string name="record_rule_type_incoming_summary">Növ: Gələn zəng</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
@@ -118,21 +113,21 @@
 
     <!-- Title of the record rule editor section for configuring which SIM slot to match. -->
     <string name="record_rule_sim_title">SIM yuvası</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_sim_any_chip">Hər hansı</string>
-    <!-- Text for the UI chip to select a specific SIM slot in the rule editor. The placeholder value (Arabic numerals) is a number starting at 1. -->
-    <string name="record_rule_sim_specific_chip">SIM %d</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_sim_any_item">Hər hansı</string>
+    <!-- Text for the UI item to select a specific SIM slot in the rule editor. The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rule_sim_specific_item">SIM %d</string>
     <!-- Summary shown in the record rules list descriptions. This should have a prefix, like other summary lines, for visual consistency. The placeholder value (Arabic numerals) is a number starting at 1. -->
     <string name="record_rule_sim_specific_summary">SIM yuvası: %d</string>
 
     <!-- Title of the record rule editor section to configure the action to take when all conditions match. -->
     <string name="record_rule_action_title">Hərəkət</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_action_save_chip">Saxla</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_action_discard_chip">At</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_action_ignore_chip">İqnor et</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_action_save_item">Saxla</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_action_discard_item">At</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_action_ignore_item">İqnor et</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
     <string name="record_rule_action_save_desc">Yazını saxlayın. Zəng zamanı göstərilən bildiriş vasitəsilə yazının zəngin sonunda silinməsi qeyd oluna bilər.</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
@@ -146,12 +141,9 @@
     <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
     <string name="record_rule_action_ignore_summary">Hərəkət: Zəngi iqnor et</string>
 
-    <!-- Output directory bottom sheet -->
-    <string name="output_dir_bottom_sheet_change_dir">Qovluğu dəyiş</string>
-    <string name="output_dir_bottom_sheet_filename_template">Fayl adı şablonu</string>
-    <string name="output_dir_bottom_sheet_edit_template">Şablonu redaktə et</string>
-    <string name="output_dir_bottom_sheet_file_retention">Fayl saxlama</string>
-    <string name="output_dir_bottom_sheet_edit_retention">Saxlamanı redaktə et</string>
+    <!-- Output directory settings -->
+    <string name="pref_filename_template_name">Fayl adı şablonu</string>
+    <string name="pref_file_retention_name">Fayl saxlama</string>
     <string name="retention_keep_all">Hamısını saxla</string>
     <plurals name="retention_days">
         <item quantity="one">%d gün saxla</item>
@@ -159,14 +151,13 @@
     </plurals>
     <string name="retention_unusable">Fayl saxlama cari fayl adı şablonu ilə uyğunsuz olduğu üçün deaktivdir.</string>
 
-    <!-- Output format bottom sheet -->
-    <string name="output_format_bottom_sheet_output_format">Çıxış formatı</string>
-    <string name="output_format_bottom_sheet_compression_level">Sıxılma səviyyəsi</string>
-    <string name="output_format_bottom_sheet_bitrate">Bit sürəti</string>
-    <string name="output_format_bottom_sheet_sample_rate">Nümunə sürəti</string>
-    <string name="output_format_bottom_sheet_custom_param">Xüsusi</string>
+    <!-- Output format settings -->
+    <string name="pref_format_param_desc_compression_level">Sıxılma səviyyəsi</string>
+    <string name="pref_format_param_desc_bitrate">Bit sürəti</string>
+    <string name="pref_sample_rate_name">Nümunə sürəti</string>
+    <string name="custom_param_value">Xüsusi</string>
 
-    <string name="bottom_sheet_reset">Varsayılanlara sıfırla</string>
+    <string name="reset_to_defaults">Varsayılanlara sıfırla</string>
 
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">Fayl adı şablonu</string>
@@ -181,7 +172,7 @@
     <string name="filename_template_dialog_action_reset_to_default">Varsayılana sıfırla</string>
 
     <!-- File retention dialog -->
-    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_title">@string/pref_file_retention_name</string>
     <string name="file_retention_dialog_message">Yazıları saxlamaq üçün gün sayını daxil edin.</string>
     <string name="file_retention_error_too_large">Sayı çox böyükdür</string>
 

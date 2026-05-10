@@ -66,22 +66,18 @@
     <string name="record_rules_list_action_move_down">העבת כלל למטה</string>
     <!-- Accessibility option to remove a rule. -->
     <string name="record_rules_list_action_remove">הסרת כלל</string>
-    <!-- Button in the record rule editor to select a different contact. -->
-    <string name="record_rule_editor_change_contact">שינוי איש קשר</string>
-    <!-- Button in the record rule editor to select a different contact group. -->
-    <string name="record_rule_editor_change_contact_group">שינוי קבוצת איש קשר</string>
 
     <!-- Number preferences -->
 
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_number_unknown_chip">לא ידוע</string>
-    <string name="record_rule_number_any_chip">הכל</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_number_unknown_item">לא ידוע</string>
+    <string name="record_rule_number_any_item">הכל</string>
     <!-- Title of the record rule editor section for configuring the call number to match. -->
     <string name="record_rule_number_title">מספר טלפון</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact rules as a category, not a specific contact. -->
-    <string name="record_rule_number_contact_chip">איש קשר</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact group rules as a category, not a specific contact group. -->
-    <string name="record_rule_number_contact_group_chip">קבוצת איש קשר</string>
+    <!-- Text for the UI item to select this element in the rule editor. This represents contact rules as a category, not a specific contact. -->
+    <string name="record_rule_number_contact_item">איש קשר</string>
+    <!-- Text for the UI item to select this element in the rule editor. This represents contact group rules as a category, not a specific contact group. -->
+    <string name="record_rule_number_contact_group_item">קבוצת איש קשר</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Match: " prefix for visual consistency. -->
     <string name="record_rule_number_unknown_summary">התאמה: מספרים לא ידועים</string>
     <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. When the contacts permission is denied, this will display an internal contact ID instead of the contact name. -->
@@ -95,11 +91,11 @@
 
     <!-- Title of the record rule editor section for configuring the type of call to match. -->
     <string name="record_rule_type_title">סוג שיחה</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_type_any_chip">הכל</string>
-    <string name="record_rule_type_incoming_chip">נכנסות</string>
-    <string name="record_rule_type_outgoing_chip">יוצאות</string>
-    <string name="record_rule_type_conference_chip">ועידה</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_any_item">הכל</string>
+    <string name="record_rule_type_incoming_item">נכנסות</string>
+    <string name="record_rule_type_outgoing_item">יוצאות</string>
+    <string name="record_rule_type_conference_item">ועידה</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
     <string name="record_rule_type_incoming_summary">סוג: שיחה נכנסת</string>
     <string name="record_rule_type_outgoing_summary">סוג: שיחה יוצאת</string>
@@ -109,19 +105,19 @@
 
     <!-- Title of the record rule editor section for configuring which SIM slot to match. -->
     <string name="record_rule_sim_title">חריץ סים</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_sim_any_chip">הכל</string>
-    <!-- Text for the UI chip to select a specific SIM slot in the rule editor. The placeholder value (Arabic numerals) is a number starting at 1. -->
-    <string name="record_rule_sim_specific_chip">סים %d</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_sim_any_item">הכל</string>
+    <!-- Text for the UI item to select a specific SIM slot in the rule editor. The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rule_sim_specific_item">סים %d</string>
     <!-- Summary shown in the record rules list descriptions. This should have a prefix, like other summary lines, for visual consistency. The placeholder value (Arabic numerals) is a number starting at 1. -->
     <string name="record_rule_sim_specific_summary">חריץ סים: %d</string>
 
     <!-- Action preferences -->
 
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_action_save_chip">שמירה</string>
-    <string name="record_rule_action_discard_chip">השלכה</string>
-    <string name="record_rule_action_ignore_chip">התעלמות</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_action_save_item">שמירה</string>
+    <string name="record_rule_action_discard_item">השלכה</string>
+    <string name="record_rule_action_ignore_item">התעלמות</string>
     <!-- Title of the record rule editor section to configure the action to take when all conditions match. -->
     <string name="record_rule_action_title">פעולה</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
@@ -133,12 +129,9 @@
     <string name="record_rule_action_discard_summary">פעולה: מחיקת הקלטה</string>
     <string name="record_rule_action_ignore_summary">פעולה: התעלמות מהשיחה</string>
 
-    <!-- Output directory bottom sheet -->
-    <string name="output_dir_bottom_sheet_change_dir">שינוי תיקיה</string>
-    <string name="output_dir_bottom_sheet_filename_template">תבנית שם קובץ</string>
-    <string name="output_dir_bottom_sheet_edit_template">עריכת תבנית</string>
-    <string name="output_dir_bottom_sheet_file_retention">שמירת קבצים</string>
-    <string name="output_dir_bottom_sheet_edit_retention">עריכת שמירה</string>
+    <!-- Output directory settings -->
+    <string name="pref_filename_template_name">תבנית שם קובץ</string>
+    <string name="pref_file_retention_name">שמירת קבצים</string>
     <string name="retention_keep_all">שמירת הכול</string>
     <plurals name="retention_days">
         <item quantity="one">שמירה ליום אחד</item>
@@ -147,13 +140,13 @@
     </plurals>
     <string name="retention_unusable">שמירת קבצים אינה זמינה מכיוון שתבנית שם הקובץ הנוכחית אינה תואמת לתכונה.</string>
 
-    <!-- Output format bottom sheet -->
-    <string name="output_format_bottom_sheet_output_format">פורמט הפלט</string>
-    <string name="output_format_bottom_sheet_compression_level">רמת דחיסה</string>
-    <string name="output_format_bottom_sheet_bitrate">קצב סיביות</string>
-    <string name="output_format_bottom_sheet_sample_rate">קצב דגימה</string>
-    <string name="output_format_bottom_sheet_custom_param">מותאם אישית</string>
-    <string name="bottom_sheet_reset">איפוס ברירות מחדל</string>
+    <!-- Output format settings -->
+    <string name="pref_format_param_desc_compression_level">רמת דחיסה</string>
+    <string name="pref_format_param_desc_bitrate">קצב סיביות</string>
+    <string name="pref_sample_rate_name">קצב דגימה</string>
+    <string name="custom_param_value">מותאם אישית</string>
+
+    <string name="reset_to_defaults">איפוס ברירות מחדל</string>
 
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">תבנית שם קובץ</string>
@@ -169,7 +162,7 @@
     <string name="filename_template_dialog_action_reset_to_default">איפוס לברירת המחדל</string>
 
     <!-- File retention dialog -->
-    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_title">@string/pref_file_retention_name</string>
     <string name="file_retention_dialog_message">הזנת מספר הימים לשמירת הקלטות.</string>
     <string name="file_retention_error_too_large">המספר גדול מדי</string>
 

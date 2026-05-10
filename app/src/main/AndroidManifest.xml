@@ -96,6 +96,26 @@
         </provider>
 
         <activity
+            android:name=".rule.PickContactGroupActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".rule.RecordRuleEditorActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".rule.RecordRulesActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".settings.OutputDirectoryActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".settings.OutputFormatActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".settings.SettingsActivity"
             android:exported="false" />
 
@@ -119,13 +139,5 @@
                 <data android:scheme="android_secret_code" android:host="227" />
             </intent-filter>
         </receiver>
-
-        <activity
-            android:name=".rule.PickContactGroupActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".rule.RecordRulesActivity"
-            android:exported="false" />
     </application>
 </manifest>

@@ -73,37 +73,34 @@
     <string name="record_rules_list_action_move_down">Regel nach unten verschieben</string>
     <string name="record_rules_list_action_remove">Regel entfernen</string>
 
-    <string name="record_rule_editor_change_contact">Kontakt ändern</string>
-    <string name="record_rule_editor_change_contact_group">Kontaktgruppe ändern</string>
-
     <string name="record_rule_number_title">Rufnummer</string>
-    <string name="record_rule_number_any_chip">Beliebig</string>
-    <string name="record_rule_number_unknown_chip">Unbekannt</string>
-    <string name="record_rule_number_contact_chip">Kontakt</string>
-    <string name="record_rule_number_contact_group_chip">Kontaktgruppe</string>
+    <string name="record_rule_number_any_item">Beliebig</string>
+    <string name="record_rule_number_unknown_item">Unbekannt</string>
+    <string name="record_rule_number_contact_item">Kontakt</string>
+    <string name="record_rule_number_contact_group_item">Kontaktgruppe</string>
     <string name="record_rule_number_unknown_summary">Übereinstimmung: Unbekannte Nummern</string>
     <string name="record_rule_number_contact_summary">Kontakt: %s</string>
     <string name="record_rule_number_contact_group_unknown_summary">Kontaktgruppe: %s</string>
     <string name="record_rule_number_contact_group_with_account_summary">Kontaktgruppe: %1$s (%2$s)</string>
 
     <string name="record_rule_type_title">Anruftyp</string>
-    <string name="record_rule_type_any_chip">Beliebig</string>
-    <string name="record_rule_type_incoming_chip">Eingehend</string>
-    <string name="record_rule_type_outgoing_chip">Ausgehend</string>
-    <string name="record_rule_type_conference_chip">Konferenz</string>
+    <string name="record_rule_type_any_item">Beliebig</string>
+    <string name="record_rule_type_incoming_item">Eingehend</string>
+    <string name="record_rule_type_outgoing_item">Ausgehend</string>
+    <string name="record_rule_type_conference_item">Konferenz</string>
     <string name="record_rule_type_incoming_summary">Typ: Eingehender Anruf</string>
     <string name="record_rule_type_outgoing_summary">Typ: Ausgehender Anruf</string>
     <string name="record_rule_type_conference_summary">Typ: Konferenzanruf</string>
 
     <string name="record_rule_sim_title">SIM-Steckplatz</string>
-    <string name="record_rule_sim_any_chip">Beliebig</string>
-    <string name="record_rule_sim_specific_chip">SIM %d</string>
+    <string name="record_rule_sim_any_item">Beliebig</string>
+    <string name="record_rule_sim_specific_item">SIM %d</string>
     <string name="record_rule_sim_specific_summary">SIM-Steckplatz: %d</string>
 
     <string name="record_rule_action_title">Aktion</string>
-    <string name="record_rule_action_save_chip">Speichern</string>
-    <string name="record_rule_action_discard_chip">Verwerfen</string>
-    <string name="record_rule_action_ignore_chip">Ignorieren</string>
+    <string name="record_rule_action_save_item">Speichern</string>
+    <string name="record_rule_action_discard_item">Verwerfen</string>
+    <string name="record_rule_action_ignore_item">Ignorieren</string>
     <string name="record_rule_action_save_desc">Aufnahme speichern. Die Aufnahme kann am Ende des Anrufs über die während des Anrufs angezeigte Benachrichtigung zum Löschen markiert werden.</string>
     <string name="record_rule_action_discard_desc">Aufnahme am Ende des Anrufs verwerfen. Die Aufnahme kann über die während eines Anrufs angezeigte Benachrichtigung behalten werden.</string>
     <string name="record_rule_action_ignore_desc">Anruf komplett ignorieren. Der Anruf wird nicht aufgenommen und es ist nicht möglich, die Aufnahme während des Anrufs zu starten.</string>
@@ -112,19 +109,16 @@
     <string name="record_rule_action_ignore_summary">Aktion: Anruf ignorieren</string>
 
     <string name="record_rule_initial_state_title">Initial state</string>
-    <string name="record_rule_initial_state_recording_chip">Recording</string>
-    <string name="record_rule_initial_state_paused_chip">Paused</string>
+    <string name="record_rule_initial_state_recording_item">Recording</string>
+    <string name="record_rule_initial_state_paused_item">Paused</string>
     <string name="record_rule_initial_state_recording_desc">The recording will begin immediately when the call connects.</string>
     <string name="record_rule_initial_state_paused_desc">The recording will be paused when the call connects. Audio will not be recorded until the recording is resumed via the notification.</string>
     <string name="record_rule_initial_state_recording_summary">Initial state: Record immediately</string>
     <string name="record_rule_initial_state_paused_summary">Initial state: Paused until manually resumed</string>
 
-    <!-- Output directory bottom sheet -->
-    <string name="output_dir_bottom_sheet_change_dir">Verzeichnis ändern</string>
-    <string name="output_dir_bottom_sheet_filename_template">Dateinamenvorlage</string>
-    <string name="output_dir_bottom_sheet_edit_template">Vorlage bearbeiten</string>
-    <string name="output_dir_bottom_sheet_file_retention">Dateiaufbewahrung</string>
-    <string name="output_dir_bottom_sheet_edit_retention">Aufbewahrung bearbeiten</string>
+    <!-- Output directory settings -->
+    <string name="pref_filename_template_name">Dateinamenvorlage</string>
+    <string name="pref_file_retention_name">Dateiaufbewahrung</string>
     <string name="retention_keep_all">Alle behalten</string>
     <plurals name="retention_days">
         <item quantity="one">%d Tag behalten</item>
@@ -132,15 +126,14 @@
     </plurals>
     <string name="retention_unusable">Dateiaufbewahrung deaktiviert, da die aktuelle Dateinamenvorlage inkompatibel ist.</string>
 
-    <!-- Output format bottom sheet -->
-    <string name="output_format_bottom_sheet_output_format">Ausgabeformat</string>
-    <string name="output_format_bottom_sheet_compression_level">Kompressionsstufe</string>
-    <string name="output_format_bottom_sheet_bitrate">Bitrate</string>
-    <string name="output_format_bottom_sheet_sample_rate">Abtastrate</string>
-    <string name="output_format_bottom_sheet_custom_param">Benutzerdefiniert</string>
-    <string name="output_format_bottom_sheet_audio_source">Audioquelle</string>
+    <!-- Output format settings -->
+    <string name="pref_format_param_desc_compression_level">Kompressionsstufe</string>
+    <string name="pref_format_param_desc_bitrate">Bitrate</string>
+    <string name="pref_sample_rate_name">Abtastrate</string>
+    <string name="pref_audio_source_name">Audioquelle</string>
+    <string name="custom_param_value">Benutzerdefiniert</string>
 
-    <string name="bottom_sheet_reset">Auf Standardeinstellungen zurücksetzen</string>
+    <string name="reset_to_defaults">Auf Standardeinstellungen zurücksetzen</string>
 
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">Dateinamenvorlage</string>
@@ -154,7 +147,7 @@
     <string name="filename_template_dialog_action_reset_to_default">Auf Standard zurücksetzen</string>
 
     <!-- File retention dialog -->
-    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_title">@string/pref_file_retention_name</string>
     <string name="file_retention_dialog_message">Anzahl der Tage eingeben, für die Aufnahmen behalten werden.</string>
     <string name="file_retention_error_too_large">Die Zahl ist zu groß.</string>
 

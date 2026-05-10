@@ -1,0 +1,46 @@
+<!--
+    SPDX-FileCopyrightText: 2026 Andrew Gunnerson
+    SPDX-License-Identifier: GPL-3.0-only
+-->
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        app:key="rule_conditions"
+        app:title="@string/pref_header_rule_conditions"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            app:key="call_number"
+            app:persistent="false"
+            app:title="@string/record_rule_number_title"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            app:key="call_type"
+            app:persistent="false"
+            app:title="@string/record_rule_type_title"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            app:key="sim_slot"
+            app:persistent="false"
+            app:title="@string/record_rule_sim_title"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="@string/pref_header_rule_actions"
+        app:iconSpaceReserved="false">
+
+        <Preference
+            app:key="action"
+            app:persistent="false"
+            app:title="@string/record_rule_action_title"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            app:key="initial_state"
+            app:persistent="false"
+            app:title="@string/record_rule_initial_state_title"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

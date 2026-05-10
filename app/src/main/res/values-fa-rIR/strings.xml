@@ -62,21 +62,16 @@
     <string name="record_rules_list_action_move_down">انتقال شرط به پایین</string>
     <string name="record_rules_list_action_remove">حذف شرط</string>
 
-    <!-- Button in the record rule editor to select a different contact. -->
-    <string name="record_rule_editor_change_contact">تغییر مخاطب</string>
-    <!-- Button in the record rule editor to select a different contact group. -->
-    <string name="record_rule_editor_change_contact_group">تغییر گروه مخاطب</string>
-
     <!-- Title of the record rule editor section for configuring the call number to match. -->
     <string name="record_rule_number_title">شماره تماس</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_number_any_chip">همه</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_number_unknown_chip">ناشناس</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact rules as a category, not a specific contact. -->
-    <string name="record_rule_number_contact_chip">مخاطب</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact group rules as a category, not a specific contact group. -->
-    <string name="record_rule_number_contact_group_chip">گروه مخاطب</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_number_any_item">همه</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_number_unknown_item">ناشناس</string>
+    <!-- Text for the UI item to select this element in the rule editor. This represents contact rules as a category, not a specific contact. -->
+    <string name="record_rule_number_contact_item">مخاطب</string>
+    <!-- Text for the UI item to select this element in the rule editor. This represents contact group rules as a category, not a specific contact group. -->
+    <string name="record_rule_number_contact_group_item">گروه مخاطب</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Match: " prefix for visual consistency. -->
     <string name="record_rule_number_unknown_summary">تطابق: شماره‌های ناشناس</string>
     <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. When the contacts permission is denied, this will display an internal contact ID instead of the contact name. -->
@@ -88,14 +83,14 @@
 
     <!-- Title of the record rule editor section for configuring the type of call to match. -->
     <string name="record_rule_type_title">نوع تماس</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_type_any_chip">همه</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_type_incoming_chip">ورودی</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_type_outgoing_chip">خروجی</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_type_conference_chip">کنفرانس</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_any_item">همه</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_incoming_item">ورودی</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_outgoing_item">خروجی</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_conference_item">کنفرانس</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
     <string name="record_rule_type_incoming_summary">نوع: تماس ورودی</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
@@ -105,21 +100,21 @@
 
     <!-- Title of the record rule editor section for configuring which SIM slot to match. -->
     <string name="record_rule_sim_title">سیمکارت</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_sim_any_chip">همه</string>
-    <!-- Text for the UI chip to select a specific SIM slot in the rule editor. The placeholder value (Arabic numerals) is a number starting at 1. -->
-    <string name="record_rule_sim_specific_chip">سیمکارت %d</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_sim_any_item">همه</string>
+    <!-- Text for the UI item to select a specific SIM slot in the rule editor. The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rule_sim_specific_item">سیمکارت %d</string>
     <!-- Summary shown in the record rules list descriptions. This should have a prefix, like other summary lines, for visual consistency. The placeholder value (Arabic numerals) is a number starting at 1. -->
     <string name="record_rule_sim_specific_summary">سیمکارت: %d</string>
 
     <!-- Title of the record rule editor section to configure the action to take when all conditions match. -->
     <string name="record_rule_action_title">اقدام</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_action_save_chip">ذخیره</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_action_discard_chip">حذف</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_action_ignore_chip">نادیده گرفتن</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_action_save_item">ذخیره</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_action_discard_item">حذف</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_action_ignore_item">نادیده گرفتن</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
     <string name="record_rule_action_save_desc">ذخیره‌سازی ضبط. ضبط را می‌توان در پایان تماس از طریق اعلان نمایش داده شده در حین تماس برای حذف آن اقدام کرد.</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
@@ -134,12 +129,9 @@
     <string name="record_rule_action_ignore_summary">اقدام: نادیده گرفتن تماس</string>
 
     <!-- Common UI elements -->
-    <string name="bottom_sheet_reset">بازنشانی به پیش‌فرض</string>
-    <string name="output_dir_bottom_sheet_change_dir">تغییر فولدر</string>
-    <string name="output_dir_bottom_sheet_filename_template">الگوی نام فایل</string>
-    <string name="output_dir_bottom_sheet_edit_template">ویرایش الگو</string>
-    <string name="output_dir_bottom_sheet_file_retention">نگه داشتن فایل</string>
-    <string name="output_dir_bottom_sheet_edit_retention">ویرایش نگه داشتن</string>
+    <string name="reset_to_defaults">بازنشانی به پیش‌فرض</string>
+    <string name="pref_filename_template_name">الگوی نام فایل</string>
+    <string name="pref_file_retention_name">نگه داشتن فایل</string>
     <string name="retention_keep_all">نگه داشتن همه</string>
     <plurals name="retention_days">
         <item quantity="one">نگه داشتن %d روز</item>
@@ -147,12 +139,11 @@
     </plurals>
     <string name="retention_unusable">ذخیره‌سازی فایل غیرفعال است زیرا قالب نام فایل فعلی با این ویژگی ناسازگار است.</string>
 
-    <!-- Output format bottom sheet -->
-    <string name="output_format_bottom_sheet_output_format">فرمت خروجی</string>
-    <string name="output_format_bottom_sheet_compression_level">سطح فشرده‌سازی</string>
-    <string name="output_format_bottom_sheet_bitrate">نرخ بیت</string>
-    <string name="output_format_bottom_sheet_sample_rate">نرخ نمونه‌برداری</string>
-    <string name="output_format_bottom_sheet_custom_param">سفارشی</string>
+    <!-- Output format settings -->
+    <string name="pref_format_param_desc_compression_level">سطح فشرده‌سازی</string>
+    <string name="pref_format_param_desc_bitrate">نرخ بیت</string>
+    <string name="pref_sample_rate_name">نرخ نمونه‌برداری</string>
+    <string name="custom_param_value">سفارشی</string>
 
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">الگوی نام فایل</string>
@@ -167,7 +158,7 @@
     <string name="filename_template_dialog_action_reset_to_default">بازنشانی به پیش‌فرض</string>
 
     <!-- File retention dialog -->
-    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_title">@string/pref_file_retention_name</string>
     <string name="file_retention_dialog_message">تعداد روزهای نگهداری ضبط‌ها را وارد کنید.</string>
     <string name="file_retention_error_too_large">عدد بسیار بزرگ است</string>
 

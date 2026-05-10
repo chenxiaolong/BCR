@@ -81,21 +81,16 @@
     <!-- Accessibility option to remove a rule. -->
     <string name="record_rules_list_action_remove">Supprimer la règle</string>
 
-    <!-- Button in the record rule editor to select a different contact. -->
-    <string name="record_rule_editor_change_contact">Changer contact</string>
-    <!-- Button in the record rule editor to select a different contact group. -->
-    <string name="record_rule_editor_change_contact_group">Changer groupe de contact</string>
-
     <!-- Title of the record rule editor section for configuring the call number to match. -->
     <string name="record_rule_number_title">Numéro d\'appel</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_number_any_chip">Tous</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_number_unknown_chip">Inconnu</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact rules as a category, not a specific contact. -->
-    <string name="record_rule_number_contact_chip">Contact</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact group rules as a category, not a specific contact group. -->
-    <string name="record_rule_number_contact_group_chip">Groupe de contact</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_number_any_item">Tous</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_number_unknown_item">Inconnu</string>
+    <!-- Text for the UI item to select this element in the rule editor. This represents contact rules as a category, not a specific contact. -->
+    <string name="record_rule_number_contact_item">Contact</string>
+    <!-- Text for the UI item to select this element in the rule editor. This represents contact group rules as a category, not a specific contact group. -->
+    <string name="record_rule_number_contact_group_item">Groupe de contact</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Match: " prefix for visual consistency. -->
     <string name="record_rule_number_unknown_summary">Correspondance : Numéros inconnus</string>
     <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. When the contacts permission is denied, this will display an internal contact ID instead of the contact name. -->
@@ -107,14 +102,14 @@
 
     <!-- Title of the record rule editor section for configuring the type of call to match. -->
     <string name="record_rule_type_title">Type d\'appel</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_type_any_chip">Tous</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_type_incoming_chip">Entrant</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_type_outgoing_chip">Sortant</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_type_conference_chip">Groupé</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_any_item">Tous</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_incoming_item">Entrant</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_outgoing_item">Sortant</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_conference_item">Groupé</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
     <string name="record_rule_type_incoming_summary">Type : Appel entrant</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
@@ -124,21 +119,21 @@
 
     <!-- Title of the record rule editor section for configuring which SIM slot to match. -->
     <string name="record_rule_sim_title">Emplacement SIM</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_sim_any_chip">Tous</string>
-    <!-- Text for the UI chip to select a specific SIM slot in the rule editor. The placeholder value (Arabic numerals) is a number starting at 1. -->
-    <string name="record_rule_sim_specific_chip">SIM %d</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_sim_any_item">Tous</string>
+    <!-- Text for the UI item to select a specific SIM slot in the rule editor. The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rule_sim_specific_item">SIM %d</string>
     <!-- Summary shown in the record rules list descriptions. This should have a prefix, like other summary lines, for visual consistency. The placeholder value (Arabic numerals) is a number starting at 1. -->
     <string name="record_rule_sim_specific_summary">Emplacement SIM : %d</string>
 
     <!-- Title of the record rule editor section to configure the action to take when all conditions match. -->
     <string name="record_rule_action_title">Action</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_action_save_chip">Sauvegarder</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_action_discard_chip">Rejeter</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_action_ignore_chip">Ignorer</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_action_save_item">Sauvegarder</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_action_discard_item">Rejeter</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_action_ignore_item">Ignorer</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
     <string name="record_rule_action_save_desc">Sauvegarder l\'enregistrement. L\'enregistrement peut être sélectionné pour suppression à la fin de l\'appel via la notification durant l\'échange.</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
@@ -154,10 +149,10 @@
 
     <!-- Title of the record rule editor section to configure whether the recording begins immediately or starts in the paused state. -->
     <string name="record_rule_initial_state_title">État initial</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_initial_state_recording_chip">Enregistrement</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_initial_state_paused_chip">Suspendu</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_initial_state_recording_item">Enregistrement</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_initial_state_paused_item">Suspendu</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
     <string name="record_rule_initial_state_recording_desc">L\'enregistrement débute immédiatement lorsque l\'appel débute.</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
@@ -167,12 +162,9 @@
     <!-- Summary shown in the record rules list descriptions. This should include an "Initial state: " prefix for visual consistency. -->
     <string name="record_rule_initial_state_paused_summary">État initial : En pause jusqu\'à reprise manuelle</string>
 
-    <!-- Output directory bottom sheet -->
-    <string name="output_dir_bottom_sheet_change_dir">Changer le dossier</string>
-    <string name="output_dir_bottom_sheet_filename_template">Modèle du nom de fichier</string>
-    <string name="output_dir_bottom_sheet_edit_template">Modifier le modèle</string>
-    <string name="output_dir_bottom_sheet_file_retention">Conserver les fichiers</string>
-    <string name="output_dir_bottom_sheet_edit_retention">Modifier la durée de conservation</string>
+    <!-- Output directory settings -->
+    <string name="pref_filename_template_name">Modèle du nom de fichier</string>
+    <string name="pref_file_retention_name">Conserver les fichiers</string>
     <string name="retention_keep_all">Conserver tout</string>
     <plurals name="retention_days">
         <item quantity="one">Conserver %d jour</item>
@@ -180,15 +172,14 @@
     </plurals>
     <string name="retention_unusable">La sauvegarde des fichiers est indisponible car le modèle du nom de fichier n\'est pas valide.</string>
 
-    <!-- Output format bottom sheet -->
-    <string name="output_format_bottom_sheet_output_format">Format des enregistrements</string>
-    <string name="output_format_bottom_sheet_compression_level">Niveau de compression</string>
-    <string name="output_format_bottom_sheet_bitrate">Débit binaire</string>
-    <string name="output_format_bottom_sheet_sample_rate">Fréquence d\'échantillonnage</string>
-    <string name="output_format_bottom_sheet_custom_param">Personnalisé</string>
-    <string name="output_format_bottom_sheet_audio_source">Source audio</string>
+    <!-- Output format settings -->
+    <string name="pref_format_param_desc_compression_level">Niveau de compression</string>
+    <string name="pref_format_param_desc_bitrate">Débit binaire</string>
+    <string name="pref_sample_rate_name">Fréquence d\'échantillonnage</string>
+    <string name="pref_audio_source_name">Source audio</string>
+    <string name="custom_param_value">Personnalisé</string>
 
-    <string name="bottom_sheet_reset">Remise à défaut</string>
+    <string name="reset_to_defaults">Remise à défaut</string>
 
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">Modèle du fichier</string>
@@ -203,7 +194,7 @@
     <string name="filename_template_dialog_action_reset_to_default">Remise à défaut</string>
 
     <!-- File retention dialog -->
-    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_title">@string/pref_file_retention_name</string>
     <string name="file_retention_dialog_message">Entrer le nombre de jours pour conserver les enregistrements.</string>
     <string name="file_retention_error_too_large">Le nombre est trop grand</string>
 

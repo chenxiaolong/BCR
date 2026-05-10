@@ -31,12 +31,9 @@
     <string name="pref_header_rules">Quy tắc</string>
     <string name="record_rule_number_contact_summary">Liên hệ: %s</string>
 
-    <!-- Output directory bottom sheet -->
-    <string name="output_dir_bottom_sheet_change_dir">Thay đổi thư mục</string>
-    <string name="output_dir_bottom_sheet_filename_template">Mẫu tên tệp</string>
-    <string name="output_dir_bottom_sheet_edit_template">Chỉnh sửa mẫu</string>
-    <string name="output_dir_bottom_sheet_file_retention">Lưu trữ tệp</string>
-    <string name="output_dir_bottom_sheet_edit_retention">Chỉnh sửa lưu trữ</string>
+    <!-- Output directory settings -->
+    <string name="pref_filename_template_name">Mẫu tên tệp</string>
+    <string name="pref_file_retention_name">Lưu trữ tệp</string>
     <string name="retention_keep_all">Giữ tất cả</string>
     <plurals name="retention_days">
         <item quantity="other">Giữ %d ngày</item>
@@ -44,13 +41,12 @@
     <string name="retention_unusable">Lưu trữ tệp bị tắt vì mẫu tên tệp hiện tại không tương thích với tính năng này.</string>
 
     <!-- Định dạng đầu ra -->
-    <string name="output_format_bottom_sheet_output_format">Định dạng đầu ra</string>
-    <string name="output_format_bottom_sheet_compression_level">Mức nén</string>
-    <string name="output_format_bottom_sheet_bitrate">Bitrate</string>
-    <string name="output_format_bottom_sheet_sample_rate">Tần số mẫu</string>
-    <string name="output_format_bottom_sheet_custom_param">Tùy chỉnh</string>
+    <string name="pref_format_param_desc_compression_level">Mức nén</string>
+    <string name="pref_format_param_desc_bitrate">Bitrate</string>
+    <string name="pref_sample_rate_name">Tần số mẫu</string>
+    <string name="custom_param_value">Tùy chỉnh</string>
 
-    <string name="bottom_sheet_reset">Đặt lại về mặc định</string>
+    <string name="reset_to_defaults">Đặt lại về mặc định</string>
 
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">Mẫu tên tệp</string>
@@ -65,7 +61,7 @@
     <string name="filename_template_dialog_action_reset_to_default">Đặt lại về mặc định</string>
 
     <!-- File retention dialog -->
-    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_title">@string/pref_file_retention_name</string>
     <string name="file_retention_dialog_message">Nhập số ngày giữ các bản ghi âm.</string>
     <string name="file_retention_error_too_large">Số quá lớn</string>
 

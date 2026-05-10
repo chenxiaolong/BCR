@@ -28,12 +28,9 @@
     <string name="pref_header_rules">नियम</string>
     <string name="record_rule_number_contact_summary">संपर्क: %s</string>
 
-    <!-- Output directory bottom sheet -->
-    <string name="output_dir_bottom_sheet_change_dir">निर्देशिका बदलें</string>
-    <string name="output_dir_bottom_sheet_filename_template">फ़ाइल नाम टेम्पलेट</string>
-    <string name="output_dir_bottom_sheet_edit_template">टेम्पलेट संपादित करें</string>
-    <string name="output_dir_bottom_sheet_file_retention">फ़ाइल प्रतिधारण</string>
-    <string name="output_dir_bottom_sheet_edit_retention">प्रतिधारण संपादित करें</string>
+    <!-- Output directory settings -->
+    <string name="pref_filename_template_name">फ़ाइल नाम टेम्पलेट</string>
+    <string name="pref_file_retention_name">फ़ाइल प्रतिधारण</string>
     <string name="retention_keep_all">सभी रखना</string>
     <plurals name="retention_days">
         <item quantity="one">%d दिन रखें</item>
@@ -41,14 +38,13 @@
     </plurals>
     <string name="retention_unusable">फ़ाइल प्रतिधारण अक्षम है क्योंकि वर्तमान फ़ाइल नाम टेम्पलेट सुविधा के साथ असंगत है।</string>
 
-    <!-- Output format bottom sheet -->
-    <string name="output_format_bottom_sheet_output_format">आउटपुट स्वरूप</string>
-    <string name="output_format_bottom_sheet_compression_level">संपीड़न स्तर</string>
-    <string name="output_format_bottom_sheet_bitrate">बिटरेट</string>
-    <string name="output_format_bottom_sheet_sample_rate">नमूना दर</string>
-    <string name="output_format_bottom_sheet_custom_param">कस्टम</string>
+    <!-- Output format settings -->
+    <string name="pref_format_param_desc_compression_level">संपीड़न स्तर</string>
+    <string name="pref_format_param_desc_bitrate">बिटरेट</string>
+    <string name="pref_sample_rate_name">नमूना दर</string>
+    <string name="custom_param_value">कस्टम</string>
 
-    <string name="bottom_sheet_reset">डिफ़ॉल्ट पर पुनः सेट करें</string>
+    <string name="reset_to_defaults">डिफ़ॉल्ट पर पुनः सेट करें</string>
 
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">फ़ाइल नाम टेम्पलेट</string>
@@ -63,7 +59,7 @@
     <string name="filename_template_dialog_action_reset_to_default">डिफ़ॉल्ट पर पुनः सेट करें</string>
 
     <!-- File retention dialog -->
-    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_title">@string/pref_file_retention_name</string>
     <string name="file_retention_dialog_message">रिकॉर्डिंग रखने के लिए दिनों की संख्या दर्ज करें।</string>
     <string name="file_retention_error_too_large">संख्या बहुत बड़ी है</string>
 

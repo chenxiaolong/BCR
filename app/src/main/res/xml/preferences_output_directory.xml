@@ -1,0 +1,23 @@
+<!--
+    SPDX-FileCopyrightText: 2026 Andrew Gunnerson
+    SPDX-License-Identifier: GPL-3.0-only
+-->
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.chiller3.bcr.view.LongClickablePreference
+        app:key="output_dir"
+        app:persistent="false"
+        app:title="@string/pref_output_dir_name"
+        app:iconSpaceReserved="false" />
+
+    <com.chiller3.bcr.view.LongClickablePreference
+        app:key="filename_template"
+        app:persistent="false"
+        app:title="@string/pref_filename_template_name"
+        app:iconSpaceReserved="false" />
+
+    <com.chiller3.bcr.view.LongClickablePreference
+        app:key="output_retention"
+        app:persistent="false"
+        app:title="@string/pref_file_retention_name"
+        app:iconSpaceReserved="false" />
+</PreferenceScreen>

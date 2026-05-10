@@ -38,7 +38,6 @@ class Preferences(initialContext: Context) {
         const val PREF_CALL_RECORDING = "call_recording"
         const val PREF_RECORD_RULES = "record_rules"
         const val PREF_OUTPUT_DIR = "output_dir"
-        const val PREF_FILENAME_TEMPLATE = "filename_template"
         const val PREF_OUTPUT_FORMAT = "output_format"
         const val PREF_MIN_DURATION = "min_duration"
         private const val PREF_WRITE_METADATA = "write_metadata"
@@ -51,15 +50,34 @@ class Preferences(initialContext: Context) {
         const val PREF_MIGRATE_DIRECT_BOOT = "migrate_direct_boot"
         const val PREF_SAVE_LOGS = "save_logs"
 
+        // Record rules preferences.
         const val PREF_ADD_NEW_RULE = "add_new_rule"
 
-        // Not associated with a UI preference
+        // Record rule editor preferences.
+        const val CATEGORY_RULE_CONDITIONS = "rule_conditions"
+        const val PREF_CALL_NUMBER = "call_number"
+        const val PREF_CALL_TYPE = "call_type"
+        const val PREF_SIM_SLOT = "sim_slot"
+        const val PREF_ACTION = "action"
+        const val PREF_INITIAL_STATE = "initial_state"
+
+        // Output directory preferences.
+        // Reuses PREF_OUTPUT_DIR.
+        const val PREF_FILENAME_TEMPLATE = "filename_template"
+        const val PREF_OUTPUT_RETENTION = "output_retention"
+
+        // Output format preferences.
+        // Reuses PREF_OUTPUT_FORMAT.
+        const val PREF_FORMAT_PARAM = "format_param"
+        const val PREF_SAMPLE_RATE = "sample_rate"
+        const val PREF_AUDIO_SOURCE = "audio_source"
+
+        // Not associated with a UI preference.
         private const val PREF_DEBUG_MODE = "debug_mode"
         private const val PREF_FORMAT_NAME = "codec_name"
         private const val PREF_FORMAT_PARAM_PREFIX = "codec_param_"
         private const val PREF_FORMAT_SAMPLE_RATE_PREFIX = "codec_sample_rate_"
         private const val PREF_FORMAT_AUDIO_SOURCE = "audio_source"
-        const val PREF_OUTPUT_RETENTION = "output_retention"
         private const val PREF_NEXT_NOTIFICATION_ID = "next_notification_id"
 
         // Legacy preferences
@@ -84,7 +102,7 @@ class Preferences(initialContext: Context) {
 
         private val JSON_FORMAT = Json { ignoreUnknownKeys = true }
 
-        fun isFormatKey(key: String): Boolean =
+        private fun isFormatKey(key: String): Boolean =
             key == PREF_FORMAT_NAME
                     || key.startsWith(PREF_FORMAT_PARAM_PREFIX)
                     || key.startsWith(PREF_FORMAT_SAMPLE_RATE_PREFIX)

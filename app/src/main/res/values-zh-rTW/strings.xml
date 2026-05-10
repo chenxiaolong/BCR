@@ -31,26 +31,22 @@
     <string name="pref_header_rules">規則</string>
     <string name="record_rule_number_contact_summary">聯絡人：%s</string>
 
-    <!-- Output directory bottom sheet -->
-    <string name="output_dir_bottom_sheet_change_dir">變更目錄</string>
-    <string name="output_dir_bottom_sheet_filename_template">檔案名稱模板</string>
-    <string name="output_dir_bottom_sheet_edit_template">編輯模板</string>
-    <string name="output_dir_bottom_sheet_file_retention">檔案保留</string>
-    <string name="output_dir_bottom_sheet_edit_retention">編輯保留時間</string>
+    <!-- Output directory settings -->
+    <string name="pref_filename_template_name">檔案名稱模板</string>
+    <string name="pref_file_retention_name">檔案保留</string>
     <string name="retention_keep_all">全部保留</string>
     <plurals name="retention_days">
         <item quantity="other">保留 %d 天</item>
     </plurals>
     <string name="retention_unusable">檔案保留已停用，因為目前的檔案名稱模板與此功能不相容。</string>
 
-    <!-- Output format bottom sheet -->
-    <string name="output_format_bottom_sheet_output_format">輸出格式</string>
-    <string name="output_format_bottom_sheet_compression_level">壓縮等級</string>
-    <string name="output_format_bottom_sheet_bitrate">位元率</string>
-    <string name="output_format_bottom_sheet_sample_rate">採樣率</string>
-    <string name="output_format_bottom_sheet_custom_param">自訂</string>
+    <!-- Output format settings -->
+    <string name="pref_format_param_desc_compression_level">壓縮等級</string>
+    <string name="pref_format_param_desc_bitrate">位元率</string>
+    <string name="pref_sample_rate_name">採樣率</string>
+    <string name="custom_param_value">自訂</string>
 
-    <string name="bottom_sheet_reset">重設為預設值</string>
+    <string name="reset_to_defaults">重設為預設值</string>
 
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">檔案名稱模板</string>
@@ -65,7 +61,7 @@
     <string name="filename_template_dialog_action_reset_to_default">重設為預設值</string>
 
     <!-- File retention dialog -->
-    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_title">@string/pref_file_retention_name</string>
     <string name="file_retention_dialog_message">輸入保留錄音檔的天數。</string>
     <string name="file_retention_error_too_large">數字太大</string>
 

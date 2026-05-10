@@ -10,7 +10,7 @@
     <string name="filename_template_dialog_error_invalid_argument">無効な変数引数: <annotation type="template">PLACEHOLDER</annotation></string>
     <string name="filename_template_dialog_error_invalid_syntax">テンプレート構文が無効です</string>
     <string name="filename_template_dialog_action_reset_to_default">デフォルトにリセットする</string>
-    <string name="file_retention_dialog_title">\@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_title">@string/pref_file_retention_name</string>
     <string name="file_retention_dialog_message">録音を保存する日数を入力します。</string>
     <string name="file_retention_error_too_large">数値が大きすぎます</string>
     <string name="format_param_dialog_title">カスタムパラメータ</string>
@@ -56,19 +56,15 @@
     <string name="pref_version_name">バージョン</string>
     <string name="pref_header_rules">ルール</string>
     <string name="record_rule_number_contact_summary">連絡先: %s</string>
-    <string name="output_dir_bottom_sheet_change_dir">ディレクトリを変更する</string>
-    <string name="output_dir_bottom_sheet_filename_template">ファイル名のテンプレート</string>
-    <string name="output_dir_bottom_sheet_edit_template">テンプレートの編集</string>
-    <string name="output_dir_bottom_sheet_file_retention">ファイルの保持</string>
-    <string name="output_dir_bottom_sheet_edit_retention">保持期間の編集</string>
+    <string name="pref_filename_template_name">ファイル名のテンプレート</string>
+    <string name="pref_file_retention_name">ファイルの保持</string>
     <string name="retention_keep_all">すべて保持</string>
     <string name="retention_unusable">現在のファイル名テンプレートがこの機能と互換性がないため、ファイルの保持は無効になっています。</string>
-    <string name="output_format_bottom_sheet_output_format">出力フォーマット</string>
-    <string name="output_format_bottom_sheet_compression_level">圧縮レベル</string>
-    <string name="output_format_bottom_sheet_bitrate">ビットレート</string>
-    <string name="output_format_bottom_sheet_sample_rate">サンプルレート</string>
-    <string name="output_format_bottom_sheet_custom_param">カスタム</string>
-    <string name="bottom_sheet_reset">デフォルトにリセット</string>
+    <string name="pref_format_param_desc_compression_level">圧縮レベル</string>
+    <string name="pref_format_param_desc_bitrate">ビットレート</string>
+    <string name="pref_sample_rate_name">サンプルレート</string>
+    <string name="custom_param_value">カスタム</string>
+    <string name="reset_to_defaults">デフォルトにリセット</string>
     <string name="filename_template_dialog_title">ファイル名テンプレート</string>
     <string name="filename_template_dialog_warning_subdirectories">Android Storage Access Framework のパフォーマンスが低いため、サブディレクトリ (<annotation type="template">/</annotation> 文字) を使用すると、一部のデバイスで録画を保存するときに大幅な遅延が発生する可能性があります。 遅延は通話の終了時に発生しますが、通話音声が失われることはありません。</string>
     <string name="format_sample_rate_dialog_message_range">[%1$s, %2$s]</string>

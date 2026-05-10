@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2024-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -22,10 +22,14 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
 class PickContactGroupFragment : PreferenceBaseFragment(), Preference.OnPreferenceClickListener {
+    override val requestTag: String = PickContactGroupFragment::class.java.simpleName
+
     private val viewModel: PickContactGroupViewModel by viewModels()
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.record_rules_preferences, rootKey)
+        // Not strictly necessary since all preferences here are non-persistent.
+        preferenceManager.setStorageDeviceProtected()
+        setPreferencesFromResource(R.xml.preferences_pick_contact_group, rootKey)
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

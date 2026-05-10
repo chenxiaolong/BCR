@@ -80,21 +80,16 @@
     <!-- Accessibility option to remove a rule. -->
     <string name="record_rules_list_action_remove">移除规则</string>
 
-    <!-- Button in the record rule editor to select a different contact. -->
-    <string name="record_rule_editor_change_contact">更改联系人</string>
-    <!-- Button in the record rule editor to select a different contact group. -->
-    <string name="record_rule_editor_change_contact_group">更改联系人分组</string>
-
     <!-- Title of the record rule editor section for configuring the call number to match. -->
     <string name="record_rule_number_title">电话号码</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_number_any_chip">任意</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_number_unknown_chip">未知</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact rules as a category, not a specific contact. -->
-    <string name="record_rule_number_contact_chip">联系人</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. This represents contact group rules as a category, not a specific contact group. -->
-    <string name="record_rule_number_contact_group_chip">联系人分组</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_number_any_item">任意</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_number_unknown_item">未知</string>
+    <!-- Text for the UI item to select this element in the rule editor. This represents contact rules as a category, not a specific contact. -->
+    <string name="record_rule_number_contact_item">联系人</string>
+    <!-- Text for the UI item to select this element in the rule editor. This represents contact group rules as a category, not a specific contact group. -->
+    <string name="record_rule_number_contact_group_item">联系人分组</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Match: " prefix for visual consistency. -->
     <string name="record_rule_number_unknown_summary">匹配：未知号码</string>
     <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. When the contacts permission is denied, this will display an internal contact ID instead of the contact name. -->
@@ -106,14 +101,14 @@
 
     <!-- Title of the record rule editor section for configuring the type of call to match. -->
     <string name="record_rule_type_title">通话类型</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_type_any_chip">任意</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_type_incoming_chip">来电</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_type_outgoing_chip">去电</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_type_conference_chip">电话会议</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_any_item">任意</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_incoming_item">来电</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_outgoing_item">去电</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_conference_item">电话会议</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
     <string name="record_rule_type_incoming_summary">类型：来电</string>
     <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
@@ -123,21 +118,21 @@
 
     <!-- Title of the record rule editor section for configuring which SIM slot to match. -->
     <string name="record_rule_sim_title">SIM 卡</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_sim_any_chip">任意</string>
-    <!-- Text for the UI chip to select a specific SIM slot in the rule editor. The placeholder value (Arabic numerals) is a number starting at 1. -->
-    <string name="record_rule_sim_specific_chip">SIM %d</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_sim_any_item">任意</string>
+    <!-- Text for the UI item to select a specific SIM slot in the rule editor. The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rule_sim_specific_item">SIM %d</string>
     <!-- Summary shown in the record rules list descriptions. This should have a prefix, like other summary lines, for visual consistency. The placeholder value (Arabic numerals) is a number starting at 1. -->
     <string name="record_rule_sim_specific_summary">SIM 卡: %d</string>
 
     <!-- Title of the record rule editor section to configure the action to take when all conditions match. -->
     <string name="record_rule_action_title">动作</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_action_save_chip">保存</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_action_discard_chip">舍弃</string>
-    <!-- Text for the UI chip to select this element in the rule editor. The text should be as short as possible. -->
-    <string name="record_rule_action_ignore_chip">忽略</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_action_save_item">保存</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_action_discard_item">舍弃</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_action_ignore_item">忽略</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
     <string name="record_rule_action_save_desc">保存录音。通话期间可通过通知在通话结束时将录音标记为删除</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
@@ -151,27 +146,23 @@
     <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
     <string name="record_rule_action_ignore_summary">动作：忽略通话</string>
 
-    <!-- Output directory bottom sheet -->
-    <string name="output_dir_bottom_sheet_change_dir">更改目录</string>
-    <string name="output_dir_bottom_sheet_filename_template">文件名模板</string>
-    <string name="output_dir_bottom_sheet_edit_template">编辑模板</string>
-    <string name="output_dir_bottom_sheet_file_retention">文件保留策略</string>
-    <string name="output_dir_bottom_sheet_edit_retention">编辑策略</string>
+    <!-- Output directory settings -->
+    <string name="pref_filename_template_name">文件名模板</string>
+    <string name="pref_file_retention_name">文件保留策略</string>
     <string name="retention_keep_all">永久保存</string>
     <plurals name="retention_days">
         <item quantity="other">保留 %d 天</item>
     </plurals>
     <string name="retention_unusable">文件保留功能已禁用，因为当前文件名模板与不兼容此特征</string>
 
-    <!-- Output format bottom sheet -->
-    <string name="output_format_bottom_sheet_output_format">输出格式</string>
-    <string name="output_format_bottom_sheet_compression_level">压缩级别</string>
-    <string name="output_format_bottom_sheet_bitrate">比特率</string>
-    <string name="output_format_bottom_sheet_sample_rate">采样率</string>
-    <string name="output_format_bottom_sheet_custom_param">自定义</string>
-    <string name="output_format_bottom_sheet_audio_source">音频源</string>
+    <!-- Output format settings -->
+    <string name="pref_format_param_desc_compression_level">压缩级别</string>
+    <string name="pref_format_param_desc_bitrate">比特率</string>
+    <string name="pref_sample_rate_name">采样率</string>
+    <string name="pref_audio_source_name">音频源</string>
+    <string name="custom_param_value">自定义</string>
 
-    <string name="bottom_sheet_reset">恢复默认</string>
+    <string name="reset_to_defaults">恢复默认</string>
 
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">文件名模板</string>
@@ -186,7 +177,7 @@
     <string name="filename_template_dialog_action_reset_to_default">恢复默认</string>
 
     <!-- File retention dialog -->
-    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_title">@string/pref_file_retention_name</string>
     <string name="file_retention_dialog_message">请输入保留录音天数。</string>
     <string name="file_retention_error_too_large">超过最大值，请减小保留天数</string>
 

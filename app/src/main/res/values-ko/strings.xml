@@ -69,37 +69,34 @@
     <string name="record_rules_list_action_move_down">규칙 아래로 이동</string>
     <string name="record_rules_list_action_remove">규칙 제거</string>
 
-    <string name="record_rule_editor_change_contact">연락처 변경</string>
-    <string name="record_rule_editor_change_contact_group">연락처 그룹 변경</string>
-
     <string name="record_rule_number_title">전화번호</string>
-    <string name="record_rule_number_any_chip">모두</string>
-    <string name="record_rule_number_unknown_chip">알 수 없음</string>
-    <string name="record_rule_number_contact_chip">연락처</string>
-    <string name="record_rule_number_contact_group_chip">연락처 그룹</string>
+    <string name="record_rule_number_any_item">모두</string>
+    <string name="record_rule_number_unknown_item">알 수 없음</string>
+    <string name="record_rule_number_contact_item">연락처</string>
+    <string name="record_rule_number_contact_group_item">연락처 그룹</string>
     <string name="record_rule_number_unknown_summary">일치: 알 수 없는 번호</string>
     <string name="record_rule_number_contact_summary">연락처: %s</string>
     <string name="record_rule_number_contact_group_unknown_summary">연락처 그룹: %s</string>
     <string name="record_rule_number_contact_group_with_account_summary">연락처 그룹: %1$s (%2$s)</string>
 
     <string name="record_rule_type_title">통화 유형</string>
-    <string name="record_rule_type_any_chip">모두</string>
-    <string name="record_rule_type_incoming_chip">수신</string>
-    <string name="record_rule_type_outgoing_chip">발신</string>
-    <string name="record_rule_type_conference_chip">회의</string>
+    <string name="record_rule_type_any_item">모두</string>
+    <string name="record_rule_type_incoming_item">수신</string>
+    <string name="record_rule_type_outgoing_item">발신</string>
+    <string name="record_rule_type_conference_item">회의</string>
     <string name="record_rule_type_incoming_summary">유형: 수신 통화</string>
     <string name="record_rule_type_outgoing_summary">유형: 발신 통화</string>
     <string name="record_rule_type_conference_summary">유형: 회의 통화</string>
 
     <string name="record_rule_sim_title">SIM 슬롯</string>
-    <string name="record_rule_sim_any_chip">모두</string>
-    <string name="record_rule_sim_specific_chip">SIM %d</string>
+    <string name="record_rule_sim_any_item">모두</string>
+    <string name="record_rule_sim_specific_item">SIM %d</string>
     <string name="record_rule_sim_specific_summary">SIM 슬롯: %d</string>
 
     <string name="record_rule_action_title">동작</string>
-    <string name="record_rule_action_save_chip">저장</string>
-    <string name="record_rule_action_discard_chip">삭제</string>
-    <string name="record_rule_action_ignore_chip">무시</string>
+    <string name="record_rule_action_save_item">저장</string>
+    <string name="record_rule_action_discard_item">삭제</string>
+    <string name="record_rule_action_ignore_item">무시</string>
     <string name="record_rule_action_save_desc">녹음을 저장합니다. 통화 중 표시되는 알림을 통해 통화 종료 시 녹음을 삭제 대상으로 표시할 수 있습니다.</string>
     <string name="record_rule_action_discard_desc">통화 종료 시 녹음을 삭제합니다. 통화 중 표시되는 알림을 통해 녹음을 보존할 수 있습니다.</string>
     <string name="record_rule_action_ignore_desc">해당 통화를 완전히 무시합니다. 녹음이 진행되지 않으며 통화 중 수동으로 녹음을 시작할 수 없습니다.</string>
@@ -107,27 +104,23 @@
     <string name="record_rule_action_discard_summary">동작: 녹음 삭제</string>
     <string name="record_rule_action_ignore_summary">동작: 통화 무시</string>
 
-    <!-- Output directory bottom sheet -->
-    <string name="output_dir_bottom_sheet_change_dir">디렉터리 변경</string>
-    <string name="output_dir_bottom_sheet_filename_template">파일명 템플릿</string>
-    <string name="output_dir_bottom_sheet_edit_template">템플릿 편집</string>
-    <string name="output_dir_bottom_sheet_file_retention">파일 보존</string>
-    <string name="output_dir_bottom_sheet_edit_retention">보존 기간 편집</string>
+    <!-- Output directory settings -->
+    <string name="pref_filename_template_name">파일명 템플릿</string>
+    <string name="pref_file_retention_name">파일 보존</string>
     <string name="retention_keep_all">영구 보존</string>
     <plurals name="retention_days">
         <item quantity="other">%d일 보관</item>
     </plurals>
     <string name="retention_unusable">현재 파일명 템플릿이 이 기능과 호환되지 않아 파일 보존 기능을 사용할 수 없습니다.</string>
 
-    <!-- Output format bottom sheet -->
-    <string name="output_format_bottom_sheet_output_format">저장 형식</string>
-    <string name="output_format_bottom_sheet_compression_level">압축 수준</string>
-    <string name="output_format_bottom_sheet_bitrate">비트레이트</string>
-    <string name="output_format_bottom_sheet_sample_rate">샘플 레이트</string>
-    <string name="output_format_bottom_sheet_custom_param">사용자 정의</string>
-    <string name="output_format_bottom_sheet_audio_source">오디오 소스</string>
+    <!-- Output format settings -->
+    <string name="pref_format_param_desc_compression_level">압축 수준</string>
+    <string name="pref_format_param_desc_bitrate">비트레이트</string>
+    <string name="pref_sample_rate_name">샘플 레이트</string>
+    <string name="pref_audio_source_name">오디오 소스</string>
+    <string name="custom_param_value">사용자 정의</string>
 
-    <string name="bottom_sheet_reset">기본값으로 재설정</string>
+    <string name="reset_to_defaults">기본값으로 재설정</string>
 
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">파일명 템플릿</string>
@@ -143,7 +136,7 @@
     <string name="filename_template_dialog_action_reset_to_default">기본값으로 재설정</string>
 
     <!-- File retention dialog -->
-    <string name="file_retention_dialog_title">@string/output_dir_bottom_sheet_file_retention</string>
+    <string name="file_retention_dialog_title">@string/pref_file_retention_name</string>
     <string name="file_retention_dialog_message">녹음을 보관할 일수를 입력하세요.</string>
     <string name="file_retention_error_too_large">숫자가 너무 큽니다</string>
 

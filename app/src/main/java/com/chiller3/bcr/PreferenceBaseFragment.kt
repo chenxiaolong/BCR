@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2024-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -15,6 +15,8 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.recyclerview.widget.RecyclerView
 
 abstract class PreferenceBaseFragment : PreferenceFragmentCompat() {
+    abstract val requestTag: String
+
     override fun onCreateRecyclerView(
         inflater: LayoutInflater,
         parent: ViewGroup,

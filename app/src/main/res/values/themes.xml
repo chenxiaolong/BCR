@@ -5,10 +5,5 @@
 <resources>
     <style name="Theme.BCR" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="switchPreferenceCompatStyle">@style/SwitchPreferenceCompat.Material3</item>
-        <item name="bottomSheetDialogTheme">@style/ThemeOverlay.BCR.BottomSheetDialog</item>
-    </style>
-
-    <style name="ThemeOverlay.BCR.BottomSheetDialog" parent="ThemeOverlay.Material3.BottomSheetDialog">
-        <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
 </resources>
