@@ -220,9 +220,9 @@
     <!-- Format sample rate -->
     <string name="format_sample_rate">%s Hz</string>
 
-    <!-- Audio source -->
+    <!-- Audio sources. There is no length limit to these strings and a newline can be added before the (parentheses) if needed. Translations do not need to 100% match the original English string if rewording them makes the text clearer. -->
     <string name="audio_source_voice_call">Combined (Mono)</string>
-    <string name="audio_source_voice_uplink_downlink">Uplink + downlink (Stereo)</string>
+    <string name="audio_source_voice_uplink_downlink">Uplink + downlink\n(Stereo, separate channels)</string>
     <string name="audio_source_voice_uplink">Uplink only (Mono)</string>
     <string name="audio_source_voice_downlink">Downlink only (Mono)</string>
     <string name="audio_source_stereo_warning">Very few devices support stereo recording. If recording fails or is missing audio, switch to a mono audio source.</string>
