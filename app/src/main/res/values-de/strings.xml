@@ -169,10 +169,10 @@
     <string name="format_sample_rate">%s Hz</string>
 
     <!-- Audio source -->
-    <string name="audio_source_voice_call">Kombiniert</string>
-    <string name="audio_source_voice_uplink_downlink">Aufwärtsverbindung + Abwärtsverbindung</string>
-    <string name="audio_source_voice_uplink">Nur Aufwärtsverbindung</string>
-    <string name="audio_source_voice_downlink">Nur Abwärtsverbindung</string>
+    <string name="audio_source_voice_call">Kombiniert (Mono)</string>
+    <string name="audio_source_voice_uplink_downlink">Aufwärtsverbindung + Abwärtsverbindung\n(Stereo, getrennte Kanäle)</string>
+    <string name="audio_source_voice_uplink">Nur Aufwärtsverbindung (Mono)</string>
+    <string name="audio_source_voice_downlink">Nur Abwärtsverbindung (Mono)</string>
     <string name="audio_source_stereo_warning">Sehr wenige Geräte unterstützen Stereoaufnahmen. Wenn die Aufnahme fehlschlägt oder Audio fehlt, zu einer Mono-Audioquelle wechseln.</string>
 
     <!-- Min duration dialog -->
