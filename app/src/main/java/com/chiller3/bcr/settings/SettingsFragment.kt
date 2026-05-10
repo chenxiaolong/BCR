@@ -161,7 +161,7 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
         val outputRetention = Retention.fromPreferences(prefs).toFormattedString(context)
 
         val summary = getString(R.string.pref_output_dir_desc)
-        prefOutputDir.summary = "${summary}\n\n${outputDirUri.formattedString} (${outputRetention})"
+        prefOutputDir.summary = "${summary}\n\n${outputDirUri.formattedString}, ${outputRetention}"
     }
 
     private fun refreshOutputFormat() {
@@ -173,7 +173,7 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
             append(getString(R.string.pref_output_format_desc))
             append("\n\n")
             append(savedFormat.format.name)
-            append(" (")
+            append(", ")
 
             when (val info = savedFormat.format.paramInfo) {
                 is RangedParamInfo -> {
@@ -187,8 +187,6 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
             append(", ")
 
             append(getString(savedFormat.audioSource.nameResId))
-
-            append(")")
         }
     }
 

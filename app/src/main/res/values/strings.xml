@@ -221,10 +221,10 @@
     <string name="format_sample_rate">%s Hz</string>
 
     <!-- Audio source -->
-    <string name="audio_source_voice_call">Combined</string>
-    <string name="audio_source_voice_uplink_downlink">Uplink + downlink</string>
-    <string name="audio_source_voice_uplink">Uplink only</string>
-    <string name="audio_source_voice_downlink">Downlink only</string>
+    <string name="audio_source_voice_call">Combined (Mono)</string>
+    <string name="audio_source_voice_uplink_downlink">Uplink + downlink (Stereo)</string>
+    <string name="audio_source_voice_uplink">Uplink only (Mono)</string>
+    <string name="audio_source_voice_downlink">Downlink only (Mono)</string>
     <string name="audio_source_stereo_warning">Very few devices support stereo recording. If recording fails or is missing audio, switch to a mono audio source.</string>
 
     <!-- Min duration dialog -->
