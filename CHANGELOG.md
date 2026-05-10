@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update French translations ([PR #857 @NSO73])
+* Replace bottom sheet UI layouts with regular preferences ([Issue #858], [PR #862 @chenxiaolong])
 
 ### Version 2.10
 
@@ -913,6 +914,7 @@ Non-user-facing changes:
 [Issue #819]: https://github.com/chenxiaolong/BCR/issues/819
 [Issue #833]: https://github.com/chenxiaolong/BCR/issues/833
 [Issue #853]: https://github.com/chenxiaolong/BCR/issues/853
+[Issue #858]: https://github.com/chenxiaolong/BCR/issues/858
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -1268,3 +1270,4 @@ Non-user-facing changes:
 [PR #852 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/852
 [PR #854 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/854
 [PR #857 @NSO73]: https://github.com/chenxiaolong/BCR/pull/857
+[PR #862 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/862
