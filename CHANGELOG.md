@@ -11,6 +11,7 @@
 
 * Update French translations ([PR #857 @NSO73])
 * Replace bottom sheet UI layouts with regular preferences ([Issue #858], [PR #862 @chenxiaolong])
+* Add mono and stereo suffixes to audio source labels ([Issue #833], [PR #863 @ElsAr4e])
 
 ### Version 2.10
 
@@ -1271,3 +1272,4 @@ Non-user-facing changes:
 [PR #854 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/854
 [PR #857 @NSO73]: https://github.com/chenxiaolong/BCR/pull/857
 [PR #862 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/862
+[PR #863 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/863
