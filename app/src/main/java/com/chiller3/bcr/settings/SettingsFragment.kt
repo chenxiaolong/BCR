@@ -158,10 +158,15 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
     private fun refreshOutputDir() {
         val context = requireContext()
         val outputDirUri = prefs.outputDirOrDefault
-        val outputRetention = Retention.fromPreferences(prefs).toFormattedString(context)
+        val outputRetention = Retention.fromPreferences(prefs)
 
-        val summary = getString(R.string.pref_output_dir_desc)
-        prefOutputDir.summary = "${summary}\n\n${outputDirUri.formattedString}, ${outputRetention}"
+        prefOutputDir.summary = buildString {
+            append(getString(R.string.pref_output_dir_desc))
+            append("\n\n")
+            append(outputDirUri.formattedString)
+            append(getString(R.string.summary_separator))
+            append(outputRetention.toFormattedString(context))
+        }
     }
 
     private fun refreshOutputFormat() {
@@ -170,21 +175,23 @@ class SettingsFragment : PreferenceBaseFragment(), Preference.OnPreferenceChange
         val sampleRate = savedFormat.sampleRate ?: savedFormat.format.sampleRateInfo.default
 
         prefOutputFormat.summary = buildString {
+            val separator = getString(R.string.summary_separator)
+
             append(getString(R.string.pref_output_format_desc))
             append("\n\n")
             append(savedFormat.format.name)
-            append(", ")
+            append(separator)
 
             when (val info = savedFormat.format.paramInfo) {
                 is RangedParamInfo -> {
                     append(info.format(requireContext(), formatParam))
-                    append(", ")
+                    append(separator)
                 }
                 NoParamInfo -> {}
             }
 
             append(savedFormat.format.sampleRateInfo.format(requireContext(), sampleRate))
-            append(", ")
+            append(separator)
 
             append(getString(savedFormat.audioSource.nameResId))
         }
