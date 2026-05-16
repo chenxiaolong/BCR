@@ -108,13 +108,13 @@
     <string name="record_rule_action_discard_summary">Aktion: Aufnahme verwerfen</string>
     <string name="record_rule_action_ignore_summary">Aktion: Anruf ignorieren</string>
 
-    <string name="record_rule_initial_state_title">Initial state</string>
-    <string name="record_rule_initial_state_recording_item">Recording</string>
-    <string name="record_rule_initial_state_paused_item">Paused</string>
-    <string name="record_rule_initial_state_recording_desc">The recording will begin immediately when the call connects.</string>
-    <string name="record_rule_initial_state_paused_desc">The recording will be paused when the call connects. Audio will not be recorded until the recording is resumed via the notification.</string>
-    <string name="record_rule_initial_state_recording_summary">Initial state: Record immediately</string>
-    <string name="record_rule_initial_state_paused_summary">Initial state: Paused until manually resumed</string>
+    <string name="record_rule_initial_state_title">Ausgangszustand</string>
+    <string name="record_rule_initial_state_recording_item">Aufnahme</string>
+    <string name="record_rule_initial_state_paused_item">Pausiert</string>
+    <string name="record_rule_initial_state_recording_desc">Die Aufnahme beginnt sofort, wenn der Anruf verbunden wird.</string>
+    <string name="record_rule_initial_state_paused_desc">Die Aufnahme wird pausiert, wenn der Anruf verbunden wird. Es wird kein Audio aufgenommen, bis die Aufnahme über die Benachrichtigung fortgesetzt wird.</string>
+    <string name="record_rule_initial_state_recording_summary">Ausgangszustand: Sofort aufnehmen</string>
+    <string name="record_rule_initial_state_paused_summary">Ausgangszustand: Pausiert, bis manuell fortgesetzt</string>
 
     <!-- Output directory settings -->
     <string name="pref_filename_template_name">Dateinamenvorlage</string>
