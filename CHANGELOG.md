@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Update Traditional Chinese (zh-TW) translations ([PR #869 @anenasa])
+* Update German translations ([Issue #791], [PR #870 @ElsAr4e])
 
 ### Version 2.11
 
@@ -1285,3 +1286,4 @@ Non-user-facing changes:
 [PR #866 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/866
 [PR #867 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/867
 [PR #869 @anenasa]: https://github.com/chenxiaolong/BCR/pull/869
+[PR #870 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/870
