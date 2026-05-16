@@ -9,10 +9,14 @@
 
 ### Unreleased
 
+### Version 2.11
+
 * Update French translations ([PR #857 @NSO73])
 * Replace bottom sheet UI layouts with regular preferences ([Issue #858], [PR #862 @chenxiaolong])
 * Add mono and stereo suffixes to audio source labels ([Issue #833], [PR #863 @ElsAr4e], [PR #865 @chenxiaolong])
 * Make the `, ` separator in the output directory and output format settings summaries translatable ([PR #864 @chenxiaolong])
+* Fix titles of switch preferences being truncated when they don't fit ([Issue #858], [PR #866 @chenxiaolong])
+* Update German translations ([Issue #791], [PR #867 @ElsAr4e])
 
 ### Version 2.10
 
@@ -1276,3 +1280,5 @@ Non-user-facing changes:
 [PR #863 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/863
 [PR #864 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/864
 [PR #865 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/865
+[PR #866 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/866
+[PR #867 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/867
