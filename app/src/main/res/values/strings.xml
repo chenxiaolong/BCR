@@ -159,9 +159,9 @@
     <!-- Text for the UI item to select this element in the rule editor. -->
     <string name="record_rule_initial_state_paused_item">Paused until manually resumed</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
-    <string name="record_rule_initial_state_recording_desc">The recording will begin immediately when the call connects.</string>
+    <string name="record_rule_initial_state_recording_desc">The recording will begin immediately and the entire call will be recorded unless the \"Pause\" option is manually selected in the notification.</string>
     <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
-    <string name="record_rule_initial_state_paused_desc">The recording will be paused when the call connects. Audio will not be recorded until the recording is resumed via the notification.</string>
+    <string name="record_rule_initial_state_paused_desc">Audio will not be recorded until the \"Resume\" option is manually selected in the notification.</string>
     <!-- Summary shown in the record rules list descriptions. This should include an "Initial state: " prefix for visual consistency. -->
     <string name="record_rule_initial_state_recording_summary">Initial state: Record immediately</string>
     <!-- Summary shown in the record rules list descriptions. This should include an "Initial state: " prefix for visual consistency. -->
