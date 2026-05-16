@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Update Traditional Chinese (zh-TW) translations ([PR #869 @anenasa])
+
 ### Version 2.11
 
 * Update French translations ([PR #857 @NSO73])
@@ -1282,3 +1284,4 @@ Non-user-facing changes:
 [PR #865 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/865
 [PR #866 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/866
 [PR #867 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/867
+[PR #869 @anenasa]: https://github.com/chenxiaolong/BCR/pull/869
