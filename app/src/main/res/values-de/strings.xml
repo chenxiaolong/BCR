@@ -111,8 +111,8 @@
     <string name="record_rule_initial_state_title">Ausgangszustand</string>
     <string name="record_rule_initial_state_recording_item">Aufnahme</string>
     <string name="record_rule_initial_state_paused_item">Pausiert</string>
-    <string name="record_rule_initial_state_recording_desc">Die Aufnahme beginnt sofort, wenn der Anruf verbunden wird.</string>
-    <string name="record_rule_initial_state_paused_desc">Die Aufnahme wird pausiert, wenn der Anruf verbunden wird. Es wird kein Audio aufgenommen, bis die Aufnahme über die Benachrichtigung fortgesetzt wird.</string>
+    <string name="record_rule_initial_state_recording_desc">Die Aufnahme beginnt sofort und der gesamte Anruf wird aufgenommen, sofern nicht die Option \"Pausieren\" in der Benachrichtigung manuell ausgewählt wird.</string>
+    <string name="record_rule_initial_state_paused_desc">Audio wird nicht aufgenommen, bis die Option \"Fortsetzen\" in der Benachrichtigung manuell ausgewählt wird.</string>
     <string name="record_rule_initial_state_recording_summary">Ausgangszustand: Sofort aufnehmen</string>
     <string name="record_rule_initial_state_paused_summary">Ausgangszustand: Pausiert, bis manuell fortgesetzt</string>
 
@@ -137,7 +137,7 @@
 
     <!-- Filename template dialog -->
     <string name="filename_template_dialog_title">Dateinamenvorlage</string>
-    <string name="filename_template_dialog_message">Benutzerdefinierte Vorlage für den Ausgabedateinamen eingeben. Variablen werden in geschweiften Klammern angegeben (z. B. <annotation type="template">{var}</annotation>). Alternativen werden in eckigen Klammern angegeben (z. B. <annotation type="template">[{contact_name}|Unbekannt]</annotation>).\n\nUnterstützte Variablen: <annotation type="supported_vars">PLACEHOLDER</annotation>. Siehe <annotation type="template_docs">Dokumentation</annotation> für eine vollständige Beschreibung der Syntax.</string>
+    <string name="filename_template_dialog_message">Benutzerdefinierte Vorlage für den Ausgabedateinamen eingeben. Variablen werden in geschweiften Klammern angegeben (z. B. <annotation type="template">{var}</annotation>). Fallbacks werden in eckigen Klammern angegeben (z. B. <annotation type="template">[{contact_name}|Unbekannt]</annotation>).\n\nUnterstützte Variablen: <annotation type="supported_vars">PLACEHOLDER</annotation>. Siehe <annotation type="template_docs">Dokumentation</annotation> für eine vollständige Beschreibung der Syntax.</string>
     <string name="filename_template_dialog_warning_subdirectories">Aufgrund der schlechten Leistung des Android Storage Access Frameworks kann die Verwendung von Unterverzeichnissen (<annotation type="template">/</annotation>-Zeichen) auf einigen Geräten zu erheblichen Verzögerungen beim Speichern der Aufnahme führen. Die Verzögerung tritt am Ende des Anrufs auf und sollte nicht zu einem Verlust des Audios des Anrufs führen.</string>
     <string name="filename_template_dialog_error_empty">Die Vorlage darf nicht leer sein.</string>
     <string name="filename_template_dialog_error_unknown_variable">Unbekannte Vorlagenvariable: <annotation type="template">PLACEHOLDER</annotation></string>
