@@ -55,15 +55,7 @@ class OutputFilenameGenerator(
     private val redactionsSorted = mutableListOf<Pair<String, String>>()
     val redactor = object : OutputDirUtils.Redactor {
         override fun redact(msg: String): String {
-            synchronized(this@OutputFilenameGenerator) {
-                var result = msg
-
-                for ((source, target) in redactionsSorted) {
-                    result = result.replace(source, target)
-                }
-
-                return result
-            }
+            return msg
         }
     }
 
@@ -377,17 +369,7 @@ class OutputFilenameGenerator(
             .filter { it.isNotEmpty() && it != "." && it != ".." }
             .toList()
 
-        fun redactTruncate(msg: String): String = buildString {
-            val n = 2
-
-            if (msg.length > 2 * n) {
-                append(msg.take(n))
-            }
-            append("<...>")
-            if (msg.length > 2 * n) {
-                append(msg.substring(msg.length - n))
-            }
-        }
+        fun redactTruncate(msg: String): String = msg
 
         fun validate(template: Template): List<ValidationError> {
             val errors = mutableListOf<ValidationError>()

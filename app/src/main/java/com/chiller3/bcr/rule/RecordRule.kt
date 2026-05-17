@@ -217,11 +217,19 @@ data class RecordRule(
             var contactLookupKeys = emptySet<String>()
             var contactGroupIds = emptySet<GroupLookup>()
 
+            Log.wtf("issue868", "Evaluating rules: $rules")
+            Log.wtf("issue868", "Query: numbers=$numbers, direction=$direction, simSlot=$simSlot")
+
             try {
                 contactLookupKeys = hashSetOf<String>().apply {
                     for (number in numbers) {
+                        Log.wtf("issue868", "Searching for contact matching: $number")
+
                         withContactsByPhoneNumber(context, number) { contacts ->
-                            contacts.map { it.lookupKey }.toCollection(this)
+                            contacts.map {
+                                Log.wtf("issue868", "Found matching contact: ${it.lookupKey} (${it.displayName})")
+                                it.lookupKey
+                            }.toCollection(this)
                         }
                     }
                 }
@@ -230,8 +238,13 @@ data class RecordRule(
                 if (rules.any { it.callNumber is CallNumber.ContactGroup }) {
                     contactGroupIds = hashSetOf<GroupLookup>().apply {
                         for (lookupKey in contactLookupKeys) {
-                            withContactGroupMemberships(context, lookupKey) {
-                                it.toCollection(this)
+                            Log.wtf("issue868", "Searching for group membership of contact: $lookupKey")
+
+                            withContactGroupMemberships(context, lookupKey) { groups ->
+                                groups.map {
+                                    Log.wtf("issue868", "Found matching group: $it")
+                                    it
+                                }.toCollection(this)
                             }
                         }
                     }
@@ -246,6 +259,7 @@ data class RecordRule(
                 val matches = rule.callNumber.matches(contactLookupKeys, contactGroupIds)
                         && rule.callType.matches(direction)
                         && rule.simSlot.matches(simSlot)
+                Log.wtf("issue868", "Rule match result=$matches for: $rule")
 
                 if (matches) {
                     Log.i(TAG, "Matched rule: $rule")
