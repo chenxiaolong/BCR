@@ -25,6 +25,7 @@
 
     <string name="pref_min_duration_name">最短录音时长</string>
     <plurals name="pref_min_duration_desc">
+        <item quantity="one">保留至少 %d 秒长的录音</item>
         <item quantity="other">保留至少 %d 秒长的录音</item>
     </plurals>
     <string name="pref_min_duration_desc_zero">保留任意时长的录音</string>
@@ -79,6 +80,11 @@
     <string name="record_rules_list_action_move_down">下移规则</string>
     <!-- Accessibility option to remove a rule. -->
     <string name="record_rules_list_action_remove">移除规则</string>
+
+    <!-- Title of the preference category for the conditions that a record rule must match. -->
+    <string name="pref_header_rule_conditions">规则条件</string>
+    <!-- Title of the preference category for the actions to take when a record rule matches. -->
+    <string name="pref_header_rule_actions">规则操作</string>
 
     <!-- Title of the record rule editor section for configuring the call number to match. -->
     <string name="record_rule_number_title">电话号码</string>
@@ -146,11 +152,27 @@
     <!-- Summary shown in the record rules list descriptions. This should include a "Action: " prefix for visual consistency. -->
     <string name="record_rule_action_ignore_summary">动作：忽略通话</string>
 
+    <!-- Title of the record rule editor section to configure whether the recording begins immediately or starts in the paused state. -->
+    <string name="record_rule_initial_state_title">初始状态</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_initial_state_recording_item">立即录音</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_initial_state_paused_item">暂停，直至手动恢复</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_initial_state_recording_desc">录音将立即开始并录制整个通话，除非您在通知中手动选择“暂停”选项</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_initial_state_paused_desc">在通知中手动选择“恢复”选项之前，不会录制音频</string>
+    <!-- Summary shown in the record rules list descriptions. This should include an "Initial state: " prefix for visual consistency. -->
+    <string name="record_rule_initial_state_recording_summary">初始状态：立即录音</string>
+    <!-- Summary shown in the record rules list descriptions. This should include an "Initial state: " prefix for visual consistency. -->
+    <string name="record_rule_initial_state_paused_summary">初始状态：暂停，直至手动恢复</string>
+
     <!-- Output directory settings -->
     <string name="pref_filename_template_name">文件名模板</string>
     <string name="pref_file_retention_name">文件保留策略</string>
     <string name="retention_keep_all">永久保存</string>
     <plurals name="retention_days">
+        <item quantity="one">保留 %d 天</item>
         <item quantity="other">保留 %d 天</item>
     </plurals>
     <string name="retention_unusable">文件保留功能已禁用，因为当前文件名模板与不兼容此特征</string>
@@ -198,17 +220,18 @@
     <!-- Format sample rate -->
     <string name="format_sample_rate">%s Hz</string>
 
-    <!-- Audio source -->
-    <string name="audio_source_voice_call">混合</string>
-    <string name="audio_source_voice_uplink_downlink">上行 + 下行</string>
-    <string name="audio_source_voice_uplink">仅上行</string>
-    <string name="audio_source_voice_downlink">仅下行</string>
-    <string name="audio_source_stereo_warning">极少数设备支持立体声录音。如果录音失败或没有声音，请切换到单声道</string>
+    <!-- Audio sources. There is no length limit to these strings and a newline can be added before the (parentheses) if needed. Translations do not need to 100% match the original English string if rewording them makes the text clearer. -->
+    <string name="audio_source_voice_call">混合（单声道）</string>
+    <string name="audio_source_voice_uplink_downlink">上行 + 下行\n（立体声，独立声道）</string>
+    <string name="audio_source_voice_uplink">仅上行（单声道）</string>
+    <string name="audio_source_voice_downlink">仅下行（单声道）</string>
+    <string name="audio_source_stereo_warning">极少设备支持立体声录音。如果录音失败或音频缺失，请切换为单声道音频源</string>
 
     <!-- Min duration dialog -->
     <string name="min_duration_dialog_title">@string/pref_min_duration_name</string>
     <string name="min_duration_dialog_message">输入要保留录音的最短时长（不含暂停和通话保持时间）。通话期间可通过通知随时覆盖此设置</string>
     <plurals name="min_duration_dialog_seconds">
+        <item quantity="one">%d 秒</item>
         <item quantity="other">%d 秒</item>
     </plurals>
 
@@ -239,6 +262,7 @@
     <string name="notification_move_error">一个或多个文件无法移动到所选输出目录，它们仍保留在默认输出目录中</string>
     <string name="notification_message_delete_at_end">通话结束后将会删除录音，需要保存录音请点击保存按钮</string>
     <plurals name="notification_message_delete_at_end_too_short">
+        <item quantity="one">录音时长不足 %d 秒，将在通话结束后删除。点击“恢复”以保留录音</item>
         <item quantity="other">录音时长不足 %d 秒，将在通话结束后删除。点击“恢复”以保留录音</item>
     </plurals>
     <string name="notification_internal_android_error">通话录音在 Android 内部组件(%s)中失败。此设备或固件可能不支持通话录音</string>
