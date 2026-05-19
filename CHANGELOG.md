@@ -12,6 +12,7 @@
 * Update Traditional Chinese (zh-TW) translations ([PR #869 @anenasa])
 * Update German translations ([Issue #791], [Issue #871], [PR #870 @ElsAr4e], [PR #873 @ElsAr4e])
 * Clarify description strings for the record rule initial state setting ([Issue #871], [PR #872 @chenxiaolong])
+* Update Simplified Chinese (zh-CN) translations ([PR #874 @lofx-lee])
 
 ### Version 2.11
 
@@ -1291,3 +1292,4 @@ Non-user-facing changes:
 [PR #870 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/870
 [PR #872 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/872
 [PR #873 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/873
+[PR #874 @lofx-lee]: https://github.com/chenxiaolong/BCR/pull/874
