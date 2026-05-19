@@ -25,7 +25,6 @@
 
     <string name="pref_min_duration_name">最短录音时长</string>
     <plurals name="pref_min_duration_desc">
-        <item quantity="one">保留至少 %d 秒长的录音</item>
         <item quantity="other">保留至少 %d 秒长的录音</item>
     </plurals>
     <string name="pref_min_duration_desc_zero">保留任意时长的录音</string>
@@ -172,7 +171,6 @@
     <string name="pref_file_retention_name">文件保留策略</string>
     <string name="retention_keep_all">永久保存</string>
     <plurals name="retention_days">
-        <item quantity="one">保留 %d 天</item>
         <item quantity="other">保留 %d 天</item>
     </plurals>
     <string name="retention_unusable">文件保留功能已禁用，因为当前文件名模板与不兼容此特征</string>
@@ -231,7 +229,6 @@
     <string name="min_duration_dialog_title">@string/pref_min_duration_name</string>
     <string name="min_duration_dialog_message">输入要保留录音的最短时长（不含暂停和通话保持时间）。通话期间可通过通知随时覆盖此设置</string>
     <plurals name="min_duration_dialog_seconds">
-        <item quantity="one">%d 秒</item>
         <item quantity="other">%d 秒</item>
     </plurals>
 
@@ -262,7 +259,6 @@
     <string name="notification_move_error">一个或多个文件无法移动到所选输出目录，它们仍保留在默认输出目录中</string>
     <string name="notification_message_delete_at_end">通话结束后将会删除录音，需要保存录音请点击保存按钮</string>
     <plurals name="notification_message_delete_at_end_too_short">
-        <item quantity="one">录音时长不足 %d 秒，将在通话结束后删除。点击“恢复”以保留录音</item>
         <item quantity="other">录音时长不足 %d 秒，将在通话结束后删除。点击“恢复”以保留录音</item>
     </plurals>
     <string name="notification_internal_android_error">通话录音在 Android 内部组件(%s)中失败。此设备或固件可能不支持通话录音</string>
