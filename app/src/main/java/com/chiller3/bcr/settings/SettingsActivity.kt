@@ -5,14 +5,21 @@
 
 package com.chiller3.bcr.settings
 
-import com.chiller3.bcr.PreferenceBaseActivity
-import com.chiller3.bcr.R
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import com.chiller3.bcr.ui.theme.AppTheme
 
-class SettingsActivity : PreferenceBaseActivity() {
-    override val actionBarTitle
-        get() = getString(R.string.app_name_full)
+class SettingsActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
-    override val showUpButton = false
-
-    override fun createFragment() = SettingsFragment()
+        setContent {
+            AppTheme {
+                SettingsScreen()
+            }
+        }
+    }
 }

@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2024-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -7,7 +7,7 @@
 
 package com.chiller3.bcr.format
 
-import android.content.Context
+import android.content.res.Resources
 import android.media.MediaCodecList
 import android.media.MediaFormat
 import android.util.Log
@@ -33,8 +33,8 @@ sealed class SampleRateInfo(
     /**
      * Format [rate] to present as a user-facing string.
      */
-    fun format(context: Context, rate: UInt): String =
-        context.getString(R.string.format_sample_rate, rate.toString())
+    fun format(resources: Resources, rate: UInt): String =
+        resources.getString(R.string.format_sample_rate, rate.toString())
 
     companion object {
         private val TAG = SampleRateInfo::class.java.simpleName

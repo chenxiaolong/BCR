@@ -1,17 +1,17 @@
 /*
- * SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
 package com.chiller3.bcr.output
 
-import android.content.Context
+import android.content.res.Resources
 import com.chiller3.bcr.Preferences
 import com.chiller3.bcr.R
 import java.time.Duration
 
 sealed interface Retention {
-    fun toFormattedString(context: Context): String
+    fun toFormattedString(resources: Resources): String
 
     fun toRawPreferenceValue(): UInt
 
@@ -29,16 +29,16 @@ sealed interface Retention {
 }
 
 data object NoRetention : Retention {
-    override fun toFormattedString(context: Context): String =
-        context.getString(R.string.retention_keep_all)
+    override fun toFormattedString(resources: Resources): String =
+        resources.getString(R.string.retention_keep_all)
 
     override fun toRawPreferenceValue(): UInt = 0u
 }
 
 @JvmInline
 value class DaysRetention(val days: UInt) : Retention {
-    override fun toFormattedString(context: Context): String =
-        context.resources.getQuantityString(R.plurals.retention_days, days.toInt(), days.toInt())
+    override fun toFormattedString(resources: Resources): String =
+        resources.getQuantityString(R.plurals.retention_days, days.toInt(), days.toInt())
 
     override fun toRawPreferenceValue(): UInt = days
 

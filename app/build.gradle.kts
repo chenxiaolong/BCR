@@ -16,6 +16,7 @@ import org.json.JSONObject
 
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
 }
@@ -164,6 +165,7 @@ android {
     }
     buildFeatures {
         buildConfig = true
+        compose = true
         resValues = true
         viewBinding = true
     }
@@ -199,18 +201,21 @@ kotlin {
 }
 
 dependencies {
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.documentfile)
-    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.preference)
     implementation(libs.androidx.preference.ktx)
-    implementation(libs.androidx.recyclerview)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kudzu)
     implementation(libs.libphonenumber)
     implementation(libs.material)
+    implementation(libs.reorderable)
+    debugImplementation(libs.androidx.compose.ui.tooling)
     testImplementation(libs.junit)
 }
 

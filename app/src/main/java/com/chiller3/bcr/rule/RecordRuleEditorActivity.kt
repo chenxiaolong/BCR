@@ -7,41 +7,62 @@ package com.chiller3.bcr.rule
 
 import android.content.Context
 import android.content.Intent
-import com.chiller3.bcr.PreferenceBaseActivity
-import com.chiller3.bcr.R
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.core.content.IntentCompat
+import com.chiller3.bcr.ui.theme.AppTheme
 
-class RecordRuleEditorActivity : PreferenceBaseActivity() {
+class RecordRuleEditorActivity : ComponentActivity() {
     companion object {
-        const val RESULT_POSITION = RecordRuleEditorFragment.RESULT_POSITION
-        const val RESULT_RECORD_RULE = RecordRuleEditorFragment.RESULT_RECORD_RULE
+        private const val ARG_POSITION = "position"
+        private const val ARG_RECORD_RULE = "record_rule"
+        private const val ARG_IS_DEFAULT = "is_default"
+
+        const val RESULT_POSITION = ARG_POSITION
+        const val RESULT_RECORD_RULE = ARG_RECORD_RULE
 
         fun createIntent(context: Context, position: Int, rule: RecordRule, isDefault: Boolean) =
             Intent(context, RecordRuleEditorActivity::class.java).apply {
-                putExtra(RecordRuleEditorFragment.ARG_POSITION, position)
-                putExtra(RecordRuleEditorFragment.ARG_RECORD_RULE, rule)
-                putExtra(RecordRuleEditorFragment.ARG_IS_DEFAULT, isDefault)
+                putExtra(ARG_POSITION, position)
+                putExtra(ARG_RECORD_RULE, rule)
+                putExtra(ARG_IS_DEFAULT, isDefault)
             }
     }
 
-    private val position: Int by lazy {
-        intent.getIntExtra(RecordRuleEditorFragment.ARG_POSITION, -1)
-    }
-    private val isDefault: Boolean by lazy {
-        intent.getBooleanExtra(RecordRuleEditorFragment.ARG_IS_DEFAULT, false)
+    private val position: Int by lazy { intent.getIntExtra(ARG_POSITION, -1) }
+
+    private fun setResult(rule: RecordRule) {
+        setResult(RESULT_OK, Intent().apply {
+            putExtra(RESULT_POSITION, position)
+            putExtra(RESULT_RECORD_RULE, rule)
+        })
     }
 
-    override val actionBarTitle
-        get() = if (position < 0) {
-            getString(R.string.pref_add_new_rule_name)
-        } else if (isDefault) {
-            getString(R.string.record_rules_list_default_name)
-        } else {
-            getString(R.string.record_rules_list_custom_name, position + 1)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+
+        val initialRule = IntentCompat.getParcelableExtra(
+            intent,
+            ARG_RECORD_RULE,
+            RecordRule::class.java,
+        )!!
+        setResult(initialRule)
+
+        val isDefault = intent.getBooleanExtra(ARG_IS_DEFAULT, false)
+
+        setContent {
+            AppTheme {
+                RecordRuleEditorScreen(
+                    position = position,
+                    initialRule = initialRule,
+                    isDefault = isDefault,
+                    onRuleUpdated = ::setResult,
+                    onBack = ::finish,
+                )
+            }
         }
-
-    override val showUpButton = true
-
-    override fun createFragment() = RecordRuleEditorFragment().apply {
-        arguments = intent.extras
     }
 }

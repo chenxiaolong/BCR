@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2023-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2023-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -27,6 +27,10 @@ class SettingsViewModel : ViewModel() {
 
     fun acknowledgeFirstAlert() {
         _alerts.update { it.drop(1) }
+    }
+
+    fun addAlert(alert: SettingsAlert) {
+        _alerts.update { it + alert }
     }
 
     fun saveLogs(uri: Uri) {

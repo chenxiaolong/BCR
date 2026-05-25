@@ -8,6 +8,7 @@ package com.chiller3.bcr
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
@@ -33,57 +34,29 @@ class Preferences(initialContext: Context) {
     companion object {
         private val TAG = Preferences::class.java.simpleName
 
-        const val CATEGORY_DEBUG = "debug"
-
-        const val PREF_CALL_RECORDING = "call_recording"
-        const val PREF_RECORD_RULES = "record_rules"
-        const val PREF_OUTPUT_DIR = "output_dir"
-        const val PREF_OUTPUT_FORMAT = "output_format"
-        const val PREF_MIN_DURATION = "min_duration"
-        private const val PREF_WRITE_METADATA = "write_metadata"
-        private const val PREF_RECORD_TELECOM_APPS = "record_telecom_apps"
-        private const val PREF_RECORD_DIALING_STATE = "record_dialing_state"
-        private const val PREF_NOTIFICATION_OPEN_DIR = "notification_open_dir"
-        const val PREF_SHOW_LAUNCHER_ICON = "show_launcher_icon"
-        const val PREF_VERSION = "version"
-        private const val PREF_FORCE_DIRECT_BOOT = "force_direct_boot"
-        const val PREF_MIGRATE_DIRECT_BOOT = "migrate_direct_boot"
-        const val PREF_SAVE_LOGS = "save_logs"
-
-        // Record rules preferences.
-        const val PREF_ADD_NEW_RULE = "add_new_rule"
-
-        // Record rule editor preferences.
-        const val CATEGORY_RULE_CONDITIONS = "rule_conditions"
-        const val PREF_CALL_NUMBER = "call_number"
-        const val PREF_CALL_TYPE = "call_type"
-        const val PREF_SIM_SLOT = "sim_slot"
-        const val PREF_ACTION = "action"
-        const val PREF_INITIAL_STATE = "initial_state"
-
-        // Output directory preferences.
-        // Reuses PREF_OUTPUT_DIR.
-        const val PREF_FILENAME_TEMPLATE = "filename_template"
-        const val PREF_OUTPUT_RETENTION = "output_retention"
-
-        // Output format preferences.
-        // Reuses PREF_OUTPUT_FORMAT.
-        const val PREF_FORMAT_PARAM = "format_param"
-        const val PREF_SAMPLE_RATE = "sample_rate"
-        const val PREF_AUDIO_SOURCE = "audio_source"
-
-        // Not associated with a UI preference.
+        // Keep in the same order as the helper functions below.
         private const val PREF_DEBUG_MODE = "debug_mode"
+        private const val PREF_FORCE_DIRECT_BOOT = "force_direct_boot"
+        private const val PREF_OUTPUT_DIR = "output_dir"
+        private const val PREF_FILENAME_TEMPLATE = "filename_template"
+        private const val PREF_OUTPUT_RETENTION = "output_retention"
+        const val PREF_CALL_RECORDING = "call_recording"
+        private const val PREF_RECORD_RULES = "record_rules"
         private const val PREF_FORMAT_NAME = "codec_name"
         private const val PREF_FORMAT_PARAM_PREFIX = "codec_param_"
         private const val PREF_FORMAT_SAMPLE_RATE_PREFIX = "codec_sample_rate_"
         private const val PREF_FORMAT_AUDIO_SOURCE = "audio_source"
+        private const val PREF_MIN_DURATION = "min_duration"
+        private const val PREF_WRITE_METADATA = "write_metadata"
+        private const val PREF_RECORD_TELECOM_APPS = "record_telecom_apps"
+        private const val PREF_RECORD_DIALING_STATE = "record_dialing_state"
+        private const val PREF_NOTIFICATION_OPEN_DIR = "notification_open_dir"
         private const val PREF_NEXT_NOTIFICATION_ID = "next_notification_id"
 
-        // Legacy preferences
+        // Legacy preferences.
         private const val PREF_FORMAT_STEREO = "stereo"
 
-        // Defaults
+        // Defaults.
         val DEFAULT_FILENAME_TEMPLATE = Template(
             "{date}" +
                     "[_{direction}|]" +
@@ -116,7 +89,15 @@ class Preferences(initialContext: Context) {
         initialContext.createDeviceProtectedStorageContext()
     }
     private val userManager = context.getSystemService(UserManager::class.java)
-    internal val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+    private val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+    fun registerListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
+        prefs.registerOnSharedPreferenceChangeListener(listener)
+    }
+
+    fun unregisterListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) {
+        prefs.unregisterOnSharedPreferenceChangeListener(listener)
+    }
 
     /**
      * Get a unsigned integer preference value.
@@ -161,7 +142,7 @@ class Preferences(initialContext: Context) {
         set(enabled) = prefs.edit { putBoolean(PREF_DEBUG_MODE, enabled) }
 
     /** Whether to output to direct boot directories even if the device has been unlocked once. */
-    private var forceDirectBoot: Boolean
+    var forceDirectBoot: Boolean
         get() = prefs.getBoolean(PREF_FORCE_DIRECT_BOOT, false)
         set(enabled) = prefs.edit { putBoolean(PREF_FORCE_DIRECT_BOOT, enabled) }
 

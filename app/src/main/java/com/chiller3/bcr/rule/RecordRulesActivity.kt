@@ -5,14 +5,21 @@
 
 package com.chiller3.bcr.rule
 
-import com.chiller3.bcr.PreferenceBaseActivity
-import com.chiller3.bcr.R
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import com.chiller3.bcr.ui.theme.AppTheme
 
-class RecordRulesActivity : PreferenceBaseActivity() {
-    override val actionBarTitle
-        get() = getString(R.string.pref_record_rules_name)
+class RecordRulesActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
-    override val showUpButton = true
-
-    override fun createFragment() = RecordRulesFragment()
+        setContent {
+            AppTheme {
+                RecordRulesScreen(onBack = ::finish)
+            }
+        }
+    }
 }

@@ -5,14 +5,21 @@
 
 package com.chiller3.bcr.settings
 
-import com.chiller3.bcr.PreferenceBaseActivity
-import com.chiller3.bcr.R
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import com.chiller3.bcr.ui.theme.AppTheme
 
-class OutputDirectoryActivity : PreferenceBaseActivity() {
-    override val actionBarTitle
-        get() = getString(R.string.pref_output_dir_name)
+class OutputDirectoryActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
-    override val showUpButton = true
-
-    override fun createFragment() = OutputDirectoryFragment()
+        setContent {
+            AppTheme {
+                OutputDirectoryScreen(onBack = ::finish)
+            }
+        }
+    }
 }

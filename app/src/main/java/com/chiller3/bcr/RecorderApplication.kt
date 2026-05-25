@@ -9,7 +9,6 @@ import android.app.Application
 import android.util.Log
 import androidx.core.net.toFile
 import com.chiller3.bcr.output.OutputDirUtils
-import com.google.android.material.color.DynamicColors
 
 class RecorderApplication : Application() {
     override fun onCreate() {
@@ -41,9 +40,6 @@ class RecorderApplication : Application() {
                 oldCrashHandler?.uncaughtException(t, e)
             }
         }
-
-        // Enable Material You colors
-        DynamicColors.applyToActivitiesIfAvailable(this)
 
         Notifications(this).updateChannels()
 

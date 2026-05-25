@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2024-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -18,6 +18,7 @@ import com.chiller3.bcr.getContactGroupById
 import com.chiller3.bcr.withContactsByUri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.update
@@ -25,23 +26,60 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class RecordRuleEditorViewModel(application: Application) : AndroidViewModel(application) {
-    private val _contactInfoLookup = MutableStateFlow<ContactInfo?>(null)
-    val contactInfoLookup = _contactInfoLookup.asStateFlow()
+    private val _alerts = MutableStateFlow<List<RecordRuleEditorAlert>>(emptyList())
+    val alerts = _alerts.asStateFlow()
 
-    private val _contactGroupInfoLookup = MutableStateFlow<ContactGroupInfo?>(null)
-    val contactGroupInfoLookup = _contactGroupInfoLookup.asStateFlow()
+    private lateinit var _rule: MutableStateFlow<RecordRule>
 
-    private val _contactInfoSelection = MutableStateFlow<ContactInfo?>(null)
-    val contactInfoSelection = _contactInfoSelection.asStateFlow()
+    private val _contactInfo = MutableStateFlow<ContactInfo?>(null)
+    val contactInfo = _contactInfo.asStateFlow()
 
-    private val _contactGroupInfoSelection = MutableStateFlow<ContactGroupInfo?>(null)
-    val contactGroupInfoSelection = _contactGroupInfoSelection.asStateFlow()
+    private val _contactGroupInfo = MutableStateFlow<ContactGroupInfo?>(null)
+    val contactGroupInfo = _contactGroupInfo.asStateFlow()
+
+    fun acknowledgeFirstAlert() {
+        _alerts.update { it.drop(1) }
+    }
+
+    fun addAlert(alert: RecordRuleEditorAlert) {
+        _alerts.update { it + alert }
+    }
+
+    fun initOrGetExisting(initialRule: RecordRule): StateFlow<RecordRule> {
+        if (!::_rule.isInitialized) {
+            _rule = MutableStateFlow(initialRule)
+        }
+
+        return _rule.asStateFlow()
+    }
+
+    fun setRule(rule: RecordRule) {
+        val oldRule = _rule.getAndUpdate { rule }
+        if (oldRule != rule) {
+            refresh()
+        }
+    }
+
+    fun refresh() {
+        when (val callNumber = _rule.value.callNumber) {
+            RecordRule.CallNumber.Any -> {}
+            is RecordRule.CallNumber.Contact ->
+                lookUpContact(callNumber.lookupKey)
+            is RecordRule.CallNumber.ContactGroup ->
+                lookUpContactGroup(callNumber.rowId, callNumber.sourceId)
+            RecordRule.CallNumber.Unknown -> {}
+        }
+    }
 
     // NOTE: The functions that update the lookup fields are inherently racy. We do not try to abort
     // previous lookups when a new one is scheduled because they basically always complete faster
     // than the user is able to react.
 
-    fun lookUpContact(lookupKey: String) {
+    private fun lookUpContact(lookupKey: String) {
+        if (_contactInfo.value?.lookupKey == lookupKey) {
+            return
+        }
+
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val contact = try {
@@ -54,12 +92,17 @@ class RecordRuleEditorViewModel(application: Application) : AndroidViewModel(app
                     null
                 }
 
-                _contactInfoLookup.update { contact }
+                _contactInfo.update { contact }
             }
         }
     }
 
-    fun lookUpContactGroup(rowId: Long, sourceId: String?) {
+    private fun lookUpContactGroup(rowId: Long, sourceId: String?) {
+        val prev = _contactGroupInfo.value
+        if (prev?.rowId == rowId && prev.sourceId == sourceId) {
+            return
+        }
+
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val groupLookup = if (sourceId != null) {
@@ -78,7 +121,7 @@ class RecordRuleEditorViewModel(application: Application) : AndroidViewModel(app
                     null
                 }
 
-                _contactGroupInfoLookup.update { group }
+                _contactGroupInfo.update { group }
             }
         }
     }
@@ -94,25 +137,22 @@ class RecordRuleEditorViewModel(application: Application) : AndroidViewModel(app
                 }
                 if (contact == null) {
                     Log.w(TAG, "Contact not found at $uri")
+                    return@withContext
                 }
 
-                _contactInfoSelection.update { contact }
+                _contactInfo.update { contact }
+
+                val callNumber = RecordRule.CallNumber.Contact(contact.lookupKey)
+                setRule(_rule.value.copy(callNumber = callNumber))
             }
         }
     }
 
     fun selectContactGroup(group: ContactGroupInfo) {
-        _contactGroupInfoSelection.update { group }
-    }
+        _contactGroupInfo.update { group }
 
-    fun useSelectedContact() {
-        val contact = _contactInfoSelection.getAndUpdate { null }
-        _contactInfoLookup.update { contact }
-    }
-
-    fun useSelectedContactGroup() {
-        val group = _contactGroupInfoSelection.getAndUpdate { null }
-        _contactGroupInfoLookup.update { group }
+        val callNumber = RecordRule.CallNumber.ContactGroup(group.rowId, group.sourceId)
+        setRule(_rule.value.copy(callNumber = callNumber))
     }
 
     companion object {

@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -7,7 +7,7 @@
 
 package com.chiller3.bcr.format
 
-import android.content.Context
+import android.content.res.Resources
 import com.chiller3.bcr.R
 
 sealed class FormatParamInfo(
@@ -30,7 +30,7 @@ sealed class FormatParamInfo(
     /**
      * Format [param] to present as a user-facing string.
      */
-    abstract fun format(context: Context, param: UInt): String
+    abstract fun format(resources: Resources, param: UInt): String
 }
 
 enum class RangedParamType {
@@ -54,15 +54,15 @@ class RangedParamInfo(
     /** Clamp [param] to [range]. */
     override fun toNearest(param: UInt): UInt = param.coerceIn(range)
 
-    override fun format(context: Context, param: UInt): String =
+    override fun format(resources: Resources, param: UInt): String =
         when (type) {
             RangedParamType.CompressionLevel ->
-                context.getString(R.string.format_param_compression_level, param.toString())
+                resources.getString(R.string.format_param_compression_level, param.toString())
             RangedParamType.Bitrate -> {
                 if (param % 1_000U == 0U) {
-                    context.getString(R.string.format_param_bitrate_kbps, (param / 1_000U).toString())
+                    resources.getString(R.string.format_param_bitrate_kbps, (param / 1_000U).toString())
                 } else {
-                    context.getString(R.string.format_param_bitrate_bps, param.toString())
+                    resources.getString(R.string.format_param_bitrate_bps, param.toString())
                 }
             }
         }
@@ -75,5 +75,5 @@ data object NoParamInfo : FormatParamInfo(0u, uintArrayOf()) {
 
     override fun toNearest(param: UInt): UInt = param
 
-    override fun format(context: Context, param: UInt): String = ""
+    override fun format(resources: Resources, param: UInt): String = ""
 }

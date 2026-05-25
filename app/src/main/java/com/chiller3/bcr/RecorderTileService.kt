@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -26,14 +26,14 @@ class RecorderTileService : TileService(), SharedPreferences.OnSharedPreferenceC
 
     override fun onStartListening() {
         super.onStartListening()
-        prefs.prefs.registerOnSharedPreferenceChangeListener(this)
+        prefs.registerListener(this)
 
         refreshTileState()
     }
 
     override fun onStopListening() {
         super.onStopListening()
-        prefs.prefs.unregisterOnSharedPreferenceChangeListener(this)
+        prefs.unregisterListener(this)
     }
 
     @SuppressLint("StartActivityAndCollapseDeprecated")

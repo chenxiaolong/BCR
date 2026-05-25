@@ -279,6 +279,7 @@
 
     <!-- Snackbar alerts -->
     <string name="documentsui_not_found">Android\'s builtin file manager (DocumentsUI) is unavailable.</string>
+    <string name="contact_picker_not_found">Android\'s system contact picker is unavailable.</string>
 
     <!-- Separator between elements in the descriptions of the output directory and output format preferences on the main screen. Double quotes are needed to preserve leading or trailing spaces, but don't show up in the actual text. -->
     <string name="summary_separator">", "</string>
