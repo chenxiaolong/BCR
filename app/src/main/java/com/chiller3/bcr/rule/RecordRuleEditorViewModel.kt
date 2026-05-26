@@ -48,6 +48,7 @@ class RecordRuleEditorViewModel(application: Application) : AndroidViewModel(app
     fun initOrGetExisting(initialRule: RecordRule): StateFlow<RecordRule> {
         if (!::_rule.isInitialized) {
             _rule = MutableStateFlow(initialRule)
+            refresh()
         }
 
         return _rule.asStateFlow()
