@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 3.1
 
 * Fix contact name and contact group name not showing up when viewing existing record rule ([PR #880 @chenxiaolong])
 
