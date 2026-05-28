@@ -70,8 +70,8 @@ sealed interface RecordRuleChoiceResult : Parcelable {
 @Composable
 fun RecordRuleChoiceDialog(
     action: RecordRuleChoiceAction,
-    onSelected: (RecordRuleChoiceResult) -> Unit,
-    onDismissed: () -> Unit,
+    onSelect: (RecordRuleChoiceResult) -> Unit,
+    onDismiss: () -> Unit,
 ) {
     val choices = actionChoices(action)
 
@@ -81,17 +81,17 @@ fun RecordRuleChoiceDialog(
             PreferenceColumn(fillScreen = false) {
                 itemsIndexed(choices) { index, (result, text) ->
                     Preference(
-                        onClick = { onSelected(result) },
+                        onClick = { onSelect(result) },
                         shapes = betterSegmentedShapes(index = index, count = choices.size),
                         title = { Text(text = text) },
                     )
                 }
             }
         },
-        onDismissRequest = { onDismissed() },
+        onDismissRequest = onDismiss,
         confirmButton = {},
         dismissButton = {
-            TextButton(onClick = { onDismissed() }) {
+            TextButton(onClick = onDismiss) {
                 Text(text = stringResource(android.R.string.cancel))
             }
         },

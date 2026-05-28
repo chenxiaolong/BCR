@@ -24,7 +24,7 @@ class PickContactGroupActivity : ComponentActivity() {
         setContent {
             AppTheme {
                 PickContactGroupScreen(
-                    onGroupSelected = { group ->
+                    onGroupSelect = { group ->
                         setResult(RESULT_OK, Intent().apply {
                             putExtra(RESULT_CONTACT_GROUP, group)
                         })

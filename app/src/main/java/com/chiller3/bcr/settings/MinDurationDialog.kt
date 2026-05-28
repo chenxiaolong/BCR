@@ -32,8 +32,8 @@ import com.chiller3.bcr.R
 @Composable
 fun MinDurationDialog(
     minDuration: Int,
-    onSelected: (Int) -> Unit,
-    onDismissed: () -> Unit,
+    onSelect: (Int) -> Unit,
+    onDismiss: () -> Unit,
 ) {
     var input by rememberSaveable(minDuration) { mutableStateOf(minDuration.toString()) }
     val minDuration = tryParseInput(input)
@@ -56,17 +56,17 @@ fun MinDurationDialog(
                 )
             }
         },
-        onDismissRequest = { onDismissed() },
+        onDismissRequest = onDismiss,
         confirmButton = {
             TextButton(
-                onClick = { onSelected(minDuration!!) },
+                onClick = { onSelect(minDuration!!) },
                 enabled = minDuration != null,
             ) {
                 Text(text = stringResource(android.R.string.ok))
             }
         },
         dismissButton = {
-            TextButton(onClick = { onDismissed() }) {
+            TextButton(onClick = onDismiss) {
                 Text(text = stringResource(android.R.string.cancel))
             }
         },

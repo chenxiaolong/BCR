@@ -43,8 +43,8 @@ import com.chiller3.bcr.template.templateSyntaxColors
 @Composable
 fun FilenameTemplateDialog(
     template: Template,
-    onSelected: (Template) -> Unit,
-    onDismissed: () -> Unit,
+    onSelect: (Template) -> Unit,
+    onDismiss: () -> Unit,
     onReset: () -> Unit,
 ) {
     val syntaxColors = templateSyntaxColors()
@@ -92,21 +92,21 @@ fun FilenameTemplateDialog(
                 }
             }
         },
-        onDismissRequest = { onDismissed() },
+        onDismissRequest = onDismiss,
         confirmButton = {
             TextButton(
-                onClick = { onSelected((template as TemplateParse.Value).template) },
+                onClick = { onSelect((template as TemplateParse.Value).template) },
                 enabled = template is TemplateParse.Value,
             ) {
                 Text(text = stringResource(android.R.string.ok))
             }
         },
         dismissButton = {
-            TextButton(onClick = { onDismissed() }) {
+            TextButton(onClick = onDismiss) {
                 Text(text = stringResource(android.R.string.cancel))
             }
 
-            TextButton(onClick = { onReset() }) {
+            TextButton(onClick = onReset) {
                 Text(text = stringResource(R.string.filename_template_dialog_action_reset_to_default))
             }
         },

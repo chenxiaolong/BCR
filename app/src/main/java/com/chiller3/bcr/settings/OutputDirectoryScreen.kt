@@ -159,12 +159,12 @@ private fun OutputDirectoryContent(
     if (showTemplateDialog) {
         FilenameTemplateDialog(
             template = template,
-            onSelected = { newTemplate ->
+            onSelect = { newTemplate ->
                 onTemplateClick(newTemplate)
                 @Suppress("AssignedValueIsNeverRead")
                 showTemplateDialog = false
             },
-            onDismissed = {
+            onDismiss = {
                 @Suppress("AssignedValueIsNeverRead")
                 showTemplateDialog = false
             },
@@ -179,12 +179,12 @@ private fun OutputDirectoryContent(
     if (showRetentionDialog) {
         FileRetentionDialog(
             retention = retention,
-            onSelected = { newRetention ->
+            onSelect = { newRetention ->
                 onRetentionClick(newRetention)
                 @Suppress("AssignedValueIsNeverRead")
                 showRetentionDialog = false
             },
-            onDismissed = {
+            onDismiss = {
                 @Suppress("AssignedValueIsNeverRead")
                 showRetentionDialog = false
             }

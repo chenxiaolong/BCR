@@ -166,7 +166,7 @@ private fun OutputFormatContent(
     showFormatChoiceDialog?.let { action ->
         FormatChoiceDialog(
             action = action,
-            onSelected = { result ->
+            onSelect = { result ->
                 when (result) {
                     is FormatChoiceResult.SelectedFormat -> { onFormatChange(result.format) }
                     is FormatChoiceResult.SelectedParam -> {
@@ -191,7 +191,7 @@ private fun OutputFormatContent(
                 @Suppress("AssignedValueIsNeverRead")
                 showFormatChoiceDialog = null
             },
-            onDismissed = {
+            onDismiss = {
                 @Suppress("AssignedValueIsNeverRead")
                 showFormatChoiceDialog = null
             },
@@ -201,12 +201,12 @@ private fun OutputFormatContent(
     if (showFormatParamDialog) {
         FormatParamDialog(
             format = format,
-            onSelected = { newValue ->
+            onSelect = { newValue ->
                 onFormatParamChange(newValue)
                 @Suppress("AssignedValueIsNeverRead")
                 showFormatParamDialog = false
             },
-            onDismissed = {
+            onDismiss = {
                 @Suppress("AssignedValueIsNeverRead")
                 showFormatParamDialog = false
             }
@@ -216,12 +216,12 @@ private fun OutputFormatContent(
     if (showSampleRateDialog) {
         FormatSampleRateDialog(
             format = format,
-            onSelected = { newValue ->
+            onSelect = { newValue ->
                 onSampleRateChange(newValue)
                 @Suppress("AssignedValueIsNeverRead")
                 showSampleRateDialog = false
             },
-            onDismissed = {
+            onDismiss = {
                 @Suppress("AssignedValueIsNeverRead")
                 showSampleRateDialog = false
             }

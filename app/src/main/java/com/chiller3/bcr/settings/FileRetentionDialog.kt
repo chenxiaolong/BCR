@@ -36,8 +36,8 @@ import com.chiller3.bcr.output.Retention
 @Composable
 fun FileRetentionDialog(
     retention: Retention,
-    onSelected: (Retention) -> Unit,
-    onDismissed: () -> Unit,
+    onSelect: (Retention) -> Unit,
+    onDismiss: () -> Unit,
 ) {
     val resources = LocalResources.current
 
@@ -73,17 +73,17 @@ fun FileRetentionDialog(
                 )
             }
         },
-        onDismissRequest = { onDismissed() },
+        onDismissRequest = onDismiss,
         confirmButton = {
             TextButton(
-                onClick = { onSelected((retention as RetentionParse.Value).retention) },
+                onClick = { onSelect((retention as RetentionParse.Value).retention) },
                 enabled = retention is RetentionParse.Value,
             ) {
                 Text(text = stringResource(android.R.string.ok))
             }
         },
         dismissButton = {
-            TextButton(onClick = { onDismissed() }) {
+            TextButton(onClick = onDismiss) {
                 Text(text = stringResource(android.R.string.cancel))
             }
         },

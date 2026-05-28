@@ -38,8 +38,8 @@ import com.chiller3.bcr.format.SampleRateInfo
 @Composable
 fun FormatSampleRateDialog(
     format: Format,
-    onSelected: (UInt) -> Unit,
-    onDismissed: () -> Unit,
+    onSelect: (UInt) -> Unit,
+    onDismiss: () -> Unit,
 ) {
     val sampleRateInfo = format.sampleRateInfo
     if (sampleRateInfo !is RangedSampleRateInfo) {
@@ -75,17 +75,17 @@ fun FormatSampleRateDialog(
                 )
             }
         },
-        onDismissRequest = { onDismissed() },
+        onDismissRequest = onDismiss,
         confirmButton = {
             TextButton(
-                onClick = { onSelected(value!!) },
+                onClick = { onSelect(value!!) },
                 enabled = value != null,
             ) {
                 Text(text = stringResource(android.R.string.ok))
             }
         },
         dismissButton = {
-            TextButton(onClick = { onDismissed() }) {
+            TextButton(onClick = onDismiss) {
                 Text(text = stringResource(android.R.string.cancel))
             }
         },

@@ -116,6 +116,7 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
                         alert.uri.formattedString,
                         alert.error,
                     )
+                    SettingsAlert.BrowserNotFound -> resources.getString(R.string.browser_not_found)
                     SettingsAlert.DocumentsUINotFound -> resources.getString(
                         R.string.documentsui_not_found,
                     )
@@ -194,7 +195,11 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
             },
             onSourceRepoOpen = {
                 val uri = BuildConfig.PROJECT_URL_AT_COMMIT.toUri()
-                context.startActivity(Intent(Intent.ACTION_VIEW, uri))
+                try {
+                    context.startActivity(Intent(Intent.ACTION_VIEW, uri))
+                } catch (_: ActivityNotFoundException) {
+                    viewModel.addAlert(SettingsAlert.BrowserNotFound)
+                }
             },
             onForceDirectBootChange = { enabled ->
                 prefs.forceDirectBoot = enabled
@@ -434,12 +439,12 @@ private fun SettingsContent(
     if (showMinDurationDialog) {
         MinDurationDialog(
             minDuration = minDuration,
-            onSelected = { duration ->
+            onSelect = { duration ->
                 onMinDurationChange(duration)
                 @Suppress("AssignedValueIsNeverRead")
                 showMinDurationDialog = false
             },
-            onDismissed = {
+            onDismiss = {
                 @Suppress("AssignedValueIsNeverRead")
                 showMinDurationDialog = false
             },

@@ -28,7 +28,7 @@ import com.chiller3.bcr.ui.theme.AppTheme
 
 @Composable
 fun PickContactGroupScreen(
-    onGroupSelected: (ContactGroupInfo) -> Unit,
+    onGroupSelect: (ContactGroupInfo) -> Unit,
     onBack: () -> Unit,
     viewModel: PickContactGroupViewModel = viewModel(),
 ) {
@@ -55,7 +55,7 @@ fun PickContactGroupScreen(
 
         PickContactGroupContent(
             groups = groups,
-            onGroupSelect = onGroupSelected,
+            onGroupSelect = onGroupSelect,
             contentPadding = params.contentPadding,
         )
     }

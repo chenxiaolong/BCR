@@ -38,8 +38,8 @@ import com.chiller3.bcr.format.RangedParamType
 @Composable
 fun FormatParamDialog(
     format: Format,
-    onSelected: (UInt) -> Unit,
-    onDismissed: () -> Unit,
+    onSelect: (UInt) -> Unit,
+    onDismiss: () -> Unit,
 ) {
     val resources = LocalResources.current
 
@@ -95,17 +95,17 @@ fun FormatParamDialog(
                 )
             }
         },
-        onDismissRequest = { onDismissed() },
+        onDismissRequest = onDismiss,
         confirmButton = {
             TextButton(
-                onClick = { onSelected(value!!) },
+                onClick = { onSelect(value!!) },
                 enabled = value != null,
             ) {
                 Text(text = stringResource(android.R.string.ok))
             }
         },
         dismissButton = {
-            TextButton(onClick = { onDismissed() }) {
+            TextButton(onClick = onDismiss) {
                 Text(text = stringResource(android.R.string.cancel))
             }
         },

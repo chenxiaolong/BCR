@@ -59,7 +59,7 @@ class RecordRuleEditorActivity : ComponentActivity() {
                     position = position,
                     initialRule = initialRule,
                     isDefault = isDefault,
-                    onRuleUpdated = ::setResult,
+                    onRuleUpdate = ::setResult,
                     onBack = ::finish,
                 )
             }

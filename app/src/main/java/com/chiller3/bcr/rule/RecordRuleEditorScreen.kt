@@ -54,7 +54,7 @@ fun RecordRuleEditorScreen(
     position: Int,
     initialRule: RecordRule,
     isDefault: Boolean,
-    onRuleUpdated: (RecordRule) -> Unit,
+    onRuleUpdate: (RecordRule) -> Unit,
     onBack: () -> Unit,
     viewModel: RecordRuleEditorViewModel = viewModel(),
 ) {
@@ -62,7 +62,7 @@ fun RecordRuleEditorScreen(
 
     val rule by viewModel.initOrGetExisting(initialRule).collectAsStateWithLifecycle()
     LaunchedEffect(rule) {
-        onRuleUpdated(rule)
+        onRuleUpdate(rule)
     }
 
     val contactInfo by viewModel.contactInfo.collectAsStateWithLifecycle()
@@ -278,7 +278,7 @@ fun RecordRuleEditorContent(
     showChoiceDialog?.let { action ->
         RecordRuleChoiceDialog(
             action = action,
-            onSelected = { result ->
+            onSelect = { result ->
                 when (result) {
                     RecordRuleChoiceResult.CallNumber.ANY -> {
                         onRuleUpdate(rule.copy(callNumber = RecordRule.CallNumber.Any))
@@ -317,7 +317,7 @@ fun RecordRuleEditorContent(
                 @Suppress("AssignedValueIsNeverRead")
                 showChoiceDialog = null
             },
-            onDismissed = {
+            onDismiss = {
                 @Suppress("AssignedValueIsNeverRead")
                 showChoiceDialog = null
             },

@@ -186,6 +186,28 @@ fun Preference(
     )
 }
 
+@Composable
+private fun PreferenceSwitch(
+    checked: Boolean,
+    onCheckedChange: ((Boolean) -> Unit)?,
+    enabled: Boolean = true,
+    switchColors: SwitchColors = PreferenceDefaults.switchColors(),
+) {
+    Switch(
+        checked = checked,
+        onCheckedChange = onCheckedChange,
+        enabled = enabled,
+        thumbContent = {
+            Icon(
+                imageVector = if (checked) Icons.Check else Icons.Close,
+                contentDescription = null,
+                modifier = Modifier.size(SwitchDefaults.IconSize),
+            )
+        },
+        colors = switchColors,
+    )
+}
+
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun SwitchPreference(
@@ -216,18 +238,11 @@ fun SwitchPreference(
             .then(modifier),
         enabled = enabled,
         trailingContent = {
-            Switch(
+            PreferenceSwitch(
                 checked = checked,
                 onCheckedChange = null,
                 enabled = enabled,
-                thumbContent = {
-                    Icon(
-                        imageVector = if (checked) Icons.Check else Icons.Close,
-                        contentDescription = null,
-                        modifier = Modifier.size(SwitchDefaults.IconSize),
-                    )
-                },
-                colors = switchColors,
+                switchColors = switchColors,
             )
         },
         supportingContent = summary,

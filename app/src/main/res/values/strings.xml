@@ -278,6 +278,7 @@
     <string name="quick_settings_label">Call recording</string>
 
     <!-- Snackbar alerts -->
+    <string name="browser_not_found">No web browser is available.</string>
     <string name="documentsui_not_found">Android\'s builtin file manager (DocumentsUI) is unavailable.</string>
     <string name="contact_picker_not_found">Android\'s system contact picker is unavailable.</string>
 
