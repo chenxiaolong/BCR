@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Minor code style fixes ([PR #882 @chenxiaolong])
+
 ### Version 3.1
 
 * Fix contact name and contact group name not showing up when viewing existing record rule ([PR #880 @chenxiaolong])
@@ -1304,3 +1306,4 @@ Non-user-facing changes:
 [PR #878 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/878
 [PR #879 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/879
 [PR #880 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/880
+[PR #882 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/882
