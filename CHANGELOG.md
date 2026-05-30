@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Minor code style fixes ([PR #882 @chenxiaolong])
+* Clarify title and description of telecom-integrated calls option ([Issue #881], [PR #883 @chenxiaolong])
 
 ### Version 3.1
 
@@ -937,6 +938,7 @@ Non-user-facing changes:
 [Issue #853]: https://github.com/chenxiaolong/BCR/issues/853
 [Issue #858]: https://github.com/chenxiaolong/BCR/issues/858
 [Issue #871]: https://github.com/chenxiaolong/BCR/issues/871
+[Issue #881]: https://github.com/chenxiaolong/BCR/issues/881
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -1307,3 +1309,4 @@ Non-user-facing changes:
 [PR #879 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/879
 [PR #880 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/880
 [PR #882 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/882
+[PR #883 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/883
