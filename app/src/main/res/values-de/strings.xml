@@ -33,8 +33,8 @@
     <string name="pref_write_metadata_name">Metadaten-Datei erstellen</string>
     <string name="pref_write_metadata_desc">JSON-Datei mit Details zum Anruf neben der Audioaufnahme erstellen.</string>
 
-    <string name="pref_record_telecom_apps_name">Telekom-integrierte Apps aufzeichnen</string>
-    <string name="pref_record_telecom_apps_desc">Anrufe von Drittanbieter-Apps aufnehmen, die in Androids Telekom-System integriert sind. Diese Aufnahmen enthalten wahrscheinlich nur Stille.</string>
+    <string name="pref_record_telecom_apps_name">In das Telecom-Framework integrierte Anrufe aufzeichnen</string>
+    <string name="pref_record_telecom_apps_desc">Anrufe von Drittanbieter-Apps aufnehmen, die das Android-Telecom-Framework verwenden. Aufnahmen dieser Anrufe enthalten wahrscheinlich unvollständiges, fehlendes oder anderweitig unbrauchbares Audio.</string>
 
     <string name="pref_record_dialing_state_name">Anrufe vor Verbindung aufnehmen</string>
     <string name="pref_record_dialing_state_desc">Aufnahme bei ausgehenden Anrufen starten, sobald mit dem Wählen begonnen wird, anstatt zu warten, bis der Anruf verbunden ist.</string>
@@ -72,6 +72,9 @@
     <string name="record_rules_list_action_move_up">Regel nach oben verschieben</string>
     <string name="record_rules_list_action_move_down">Regel nach unten verschieben</string>
     <string name="record_rules_list_action_remove">Regel entfernen</string>
+
+    <string name="pref_header_rule_conditions">Regelbedingungen</string>
+    <string name="pref_header_rule_actions">Regelaktionen</string>
 
     <string name="record_rule_number_title">Rufnummer</string>
     <string name="record_rule_number_any_item">Beliebig</string>
@@ -226,5 +229,10 @@
     <string name="quick_settings_label">Anrufaufnahme</string>
 
     <!-- Snackbar alerts -->
+    <string name="browser_not_found">Kein Webbrowser verfügbar.</string>
     <string name="documentsui_not_found">Der integrierte Dateimanager von Android (DocumentsUI) ist nicht verfügbar.</string>
+    <string name="contact_picker_not_found">Die System-Kontaktauswahl von Android ist nicht verfügbar.</string>
+
+    <!-- Separator between elements in the descriptions of the output directory and output format preferences on the main screen. Double quotes are needed to preserve leading or trailing spaces, but don't show up in the actual text. -->
+    <string name="summary_separator">", "</string>
 </resources>
