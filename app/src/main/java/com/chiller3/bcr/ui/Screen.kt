@@ -110,8 +110,8 @@ fun AppScreen(
         },
         containerColor = PreferenceDefaults.containerColor,
     ) { contentPadding ->
-        val outerPadding = contentPadding.copy(bottom = 0.dp)
-        val innerPadding = contentPadding.copy(start = 0.dp, top = 0.dp, end = 0.dp)
+        val outerPadding = contentPadding.copy(start = 0.dp, end = 0.dp, bottom = 0.dp)
+        val innerPadding = contentPadding.copy(top = 0.dp)
 
         Box(modifier = Modifier.padding(outerPadding)) {
             content(AppScreenParams(

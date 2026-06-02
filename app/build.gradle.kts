@@ -167,7 +167,6 @@ android {
         buildConfig = true
         compose = true
         resValues = true
-        viewBinding = true
     }
     lint {
         // The translations are always going to lag behind new strings being

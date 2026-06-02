@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -61,8 +62,9 @@ fun RecordRuleEditorScreen(
     val resources = LocalResources.current
 
     val rule by viewModel.initOrGetExisting(initialRule).collectAsStateWithLifecycle()
+    val latestOnRuleUpdate by rememberUpdatedState(onRuleUpdate)
     LaunchedEffect(rule) {
-        onRuleUpdate(rule)
+        latestOnRuleUpdate(rule)
     }
 
     val contactInfo by viewModel.contactInfo.collectAsStateWithLifecycle()

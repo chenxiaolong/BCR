@@ -10,16 +10,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.then
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -35,8 +35,8 @@ fun MinDurationDialog(
     onSelect: (Int) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    var input by rememberSaveable(minDuration) { mutableStateOf(minDuration.toString()) }
-    val minDuration = tryParseInput(input)
+    val input = rememberTextFieldState(initialText = minDuration.toString())
+    val minDuration = tryParseInput(input.text.toString())
     val supportingText = minDuration?.let {
         pluralStringResource(R.plurals.min_duration_dialog_seconds, it, it)
     }
@@ -48,11 +48,16 @@ fun MinDurationDialog(
                 Text(text = stringResource(R.string.min_duration_dialog_message))
 
                 OutlinedTextField(
+                    state = input,
                     modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-                    value = input,
-                    onValueChange = { if (it.isDigitsOnly()) input = it },
                     supportingText = { supportingText?.let { Text(text = it) } },
+                    inputTransformation = InputTransformation.then {
+                        if (!asCharSequence().isDigitsOnly()) {
+                            revertAllChanges()
+                        }
+                    },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    lineLimits = TextFieldLineLimits.SingleLine,
                 )
             }
         },
@@ -77,7 +82,6 @@ fun MinDurationDialog(
     )
 }
 
-@Composable
 private fun tryParseInput(input: String): Int? {
     if (input.isEmpty()) {
         return 0
