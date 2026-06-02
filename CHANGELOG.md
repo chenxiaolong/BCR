@@ -13,6 +13,7 @@
 * Clarify title and description of telecom-integrated calls option ([Issue #881], [PR #883 @chenxiaolong])
 * Minor fixes for new Compose UI ([PR #888 @chenxiaolong])
 * Update German translations ([Issue #791], [PR #889 @ElsAr4e])
+* Update French translations ([PR #887 @NSO73])
 
 ### Version 3.1
 
@@ -1312,5 +1313,6 @@ Non-user-facing changes:
 [PR #880 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/880
 [PR #882 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/882
 [PR #883 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/883
+[PR #887 @NSO73]: https://github.com/chenxiaolong/BCR/pull/887
 [PR #888 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/888
 [PR #889 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/889
