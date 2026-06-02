@@ -81,6 +81,11 @@
     <!-- Accessibility option to remove a rule. -->
     <string name="record_rules_list_action_remove">Supprimer la règle</string>
 
+    <!-- Title of the preference category for the conditions that a record rule must match. -->
+    <string name="pref_header_rule_conditions">Conditions de règle</string>
+    <!-- Title of the preference category for the actions to take when a record rule matches. -->
+    <string name="pref_header_rule_actions">Actions de règle</string>
+
     <!-- Title of the record rule editor section for configuring the call number to match. -->
     <string name="record_rule_number_title">Numéro d\'appel</string>
     <!-- Text for the UI item to select this element in the rule editor. -->
@@ -273,5 +278,10 @@
     <string name="quick_settings_label">Enregistrement d\'appels</string>
 
     <!-- Snackbar alerts -->
+    <string name="browser_not_found">Aucun navigateur web disponible.</string>
     <string name="documentsui_not_found">Le gestionnaire de fichier Android (DocumentsUI) n\'est pas disponible.</string>
+    <string name="contact_picker_not_found">Choix de contact d\'Android non disponible.</string>
+
+    <!-- Separator between elements in the descriptions of the output directory and output format preferences on the main screen. Double quotes are needed to preserve leading or trailing spaces, but don't show up in the actual text. -->
+    <string name="summary_separator">", "</string>
 </resources>
