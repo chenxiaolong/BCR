@@ -233,7 +233,7 @@ fun RecordRuleEditorContent(
                     Preference(
                         onClick = { showChoiceDialog = RecordRuleChoiceAction.SimSlot },
                         shapes = BetterSegmentedShapes.bottom(),
-                        title = { Text(text = stringResource(R.string.record_rule_type_title)) },
+                        title = { Text(text = stringResource(R.string.record_rule_sim_title)) },
                         summary = { Text(text = simSlotSummary(rule)) },
                         modifier = Modifier.animateItem(),
                     )
