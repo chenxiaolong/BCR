@@ -14,6 +14,7 @@
 * Minor fixes for new Compose UI ([PR #888 @chenxiaolong])
 * Update German translations ([Issue #791], [PR #889 @ElsAr4e])
 * Update French translations ([PR #887 @NSO73])
+* Fix incorrect title for SIM slot record rule option ([PR #894 @chenxiaolong])
 
 ### Version 3.1
 
@@ -1316,3 +1317,4 @@ Non-user-facing changes:
 [PR #887 @NSO73]: https://github.com/chenxiaolong/BCR/pull/887
 [PR #888 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/888
 [PR #889 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/889
+[PR #894 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/894
