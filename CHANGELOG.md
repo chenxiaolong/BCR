@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 3.2
 
 * Minor code style fixes ([PR #882 @chenxiaolong])
 * Clarify title and description of telecom-integrated calls option ([Issue #881], [PR #883 @chenxiaolong])
