@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Make back navigation icon filled to match Material 3 Expressive styling in Android's system settings ([PR #900 @chenxiaolong])
+* Update target API version to API 37 (Android 17) ([PR #901 @chenxiaolong])
 
 ### Version 3.2
 
@@ -1323,3 +1324,4 @@ Non-user-facing changes:
 [PR #889 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/889
 [PR #894 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/894
 [PR #900 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/900
+[PR #901 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/901
