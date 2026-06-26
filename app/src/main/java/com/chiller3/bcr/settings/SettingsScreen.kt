@@ -441,11 +441,9 @@ private fun SettingsContent(
             minDuration = minDuration,
             onSelect = { duration ->
                 onMinDurationChange(duration)
-                @Suppress("AssignedValueIsNeverRead")
                 showMinDurationDialog = false
             },
             onDismiss = {
-                @Suppress("AssignedValueIsNeverRead")
                 showMinDurationDialog = false
             },
         )

@@ -316,11 +316,9 @@ fun RecordRuleEditorContent(
                     }
                 }
 
-                @Suppress("AssignedValueIsNeverRead")
                 showChoiceDialog = null
             },
             onDismiss = {
-                @Suppress("AssignedValueIsNeverRead")
                 showChoiceDialog = null
             },
         )

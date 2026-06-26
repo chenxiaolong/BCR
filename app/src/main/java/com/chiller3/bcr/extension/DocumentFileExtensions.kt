@@ -60,7 +60,7 @@ private fun <R> DocumentFile.withChildrenWithColumns(
         ),
         columns + arrayOf(DocumentsContract.Document.COLUMN_DOCUMENT_ID),
         null, null, null,
-    ) ?: throw IOException("Query returned null cursor: $uri: $columns")
+    ) ?: throw IOException("Query returned null cursor: $uri: ${columns.contentToString()}")
 
     return cursor.use {
         val indexDocumentId =

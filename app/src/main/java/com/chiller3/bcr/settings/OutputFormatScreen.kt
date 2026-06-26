@@ -188,11 +188,9 @@ private fun OutputFormatContent(
                     }
                 }
 
-                @Suppress("AssignedValueIsNeverRead")
                 showFormatChoiceDialog = null
             },
             onDismiss = {
-                @Suppress("AssignedValueIsNeverRead")
                 showFormatChoiceDialog = null
             },
         )
@@ -203,11 +201,9 @@ private fun OutputFormatContent(
             format = format,
             onSelect = { newValue ->
                 onFormatParamChange(newValue)
-                @Suppress("AssignedValueIsNeverRead")
                 showFormatParamDialog = false
             },
             onDismiss = {
-                @Suppress("AssignedValueIsNeverRead")
                 showFormatParamDialog = false
             }
         )
@@ -218,11 +214,9 @@ private fun OutputFormatContent(
             format = format,
             onSelect = { newValue ->
                 onSampleRateChange(newValue)
-                @Suppress("AssignedValueIsNeverRead")
                 showSampleRateDialog = false
             },
             onDismiss = {
-                @Suppress("AssignedValueIsNeverRead")
                 showSampleRateDialog = false
             }
         )

@@ -190,12 +190,14 @@ fun Preference(
 private fun PreferenceSwitch(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     switchColors: SwitchColors = PreferenceDefaults.switchColors(),
 ) {
     Switch(
         checked = checked,
         onCheckedChange = onCheckedChange,
+        modifier = modifier,
         enabled = enabled,
         thumbContent = {
             Icon(

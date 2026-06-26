@@ -161,16 +161,13 @@ private fun OutputDirectoryContent(
             template = template,
             onSelect = { newTemplate ->
                 onTemplateClick(newTemplate)
-                @Suppress("AssignedValueIsNeverRead")
                 showTemplateDialog = false
             },
             onDismiss = {
-                @Suppress("AssignedValueIsNeverRead")
                 showTemplateDialog = false
             },
             onReset = {
                 onTemplateReset()
-                @Suppress("AssignedValueIsNeverRead")
                 showTemplateDialog = false
             },
         )
@@ -181,11 +178,9 @@ private fun OutputDirectoryContent(
             retention = retention,
             onSelect = { newRetention ->
                 onRetentionClick(newRetention)
-                @Suppress("AssignedValueIsNeverRead")
                 showRetentionDialog = false
             },
             onDismiss = {
-                @Suppress("AssignedValueIsNeverRead")
                 showRetentionDialog = false
             }
         )
