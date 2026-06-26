@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Make back navigation icon filled to match Material 3 Expressive styling in Android's system settings ([PR #900 @chenxiaolong])
+
 ### Version 3.2
 
 * Minor code style fixes ([PR #882 @chenxiaolong])
@@ -1320,3 +1322,4 @@ Non-user-facing changes:
 [PR #888 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/888
 [PR #889 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/889
 [PR #894 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/894
+[PR #900 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/900
