@@ -164,7 +164,14 @@ class Preferences(initialContext: Context) {
     val defaultOutputDir: File = if (isDirectBoot) {
         directBootInProgressDir
     } else {
-        context.getExternalFilesDir(null)!!
+        // [context] is backed by device-protected storage so preferences remain
+        // accessible during direct boot. However, getExternalFilesDir() can return
+        // null when invoked on a device-protected storage context (observed on some
+        // Android 16 builds), which made the !! here crash the app at startup. The
+        // external directory is only ever used once the user has unlocked the device,
+        // so query it from the original credential-protected context and fall back to
+        // internal storage if it is still unavailable.
+        initialContext.getExternalFilesDir(null) ?: directBootCompletedDir
     }
 
     /**
