@@ -43,6 +43,11 @@ fun OutputDirectoryScreen(onBack: () -> Unit) {
     val context = LocalContext.current
     val prefs = remember { Preferences(context) }
 
+    // The output directory is locked to internal device-protected storage while in direct boot, and
+    // Preferences.outputDir throws if it's changed in that state. Disable the picker/reset so the
+    // user can't trigger that crash (e.g. with the "force direct boot" debug option enabled).
+    val isDirectBoot = remember { prefs.isDirectBoot }
+
     var reloadPrefs by remember { mutableIntStateOf(0) }
     var outputDir by remember(reloadPrefs) { mutableStateOf(prefs.outputDirOrDefault) }
     var template by remember(reloadPrefs) {
@@ -61,7 +66,9 @@ fun OutputDirectoryScreen(onBack: () -> Unit) {
         title = { Text(text = stringResource(R.string.pref_output_dir_name)) },
         onBack = onBack,
         onReset = {
-            prefs.outputDir = null
+            if (!isDirectBoot) {
+                prefs.outputDir = null
+            }
             prefs.filenameTemplate = null
             prefs.outputRetention = null
             reloadPrefs++
@@ -71,12 +78,15 @@ fun OutputDirectoryScreen(onBack: () -> Unit) {
             outputDir = outputDir,
             template = template,
             retention = retention,
+            outputDirEnabled = !isDirectBoot,
             onOutputDirClick = {
                 requestSafOutputDir.launch(null)
             },
             onOutputDirReset = {
-                prefs.outputDir = null
-                reloadPrefs++
+                if (!isDirectBoot) {
+                    prefs.outputDir = null
+                    reloadPrefs++
+                }
             },
             onTemplateClick = { newTemplate ->
                 prefs.filenameTemplate = newTemplate
@@ -105,6 +115,7 @@ private fun OutputDirectoryContent(
     outputDir: Uri,
     template: Template,
     retention: Retention,
+    outputDirEnabled: Boolean,
     onOutputDirClick: () -> Unit,
     onOutputDirReset: () -> Unit,
     onTemplateClick: (Template) -> Unit,
@@ -128,6 +139,7 @@ private fun OutputDirectoryContent(
             Preference(
                 onClick = onOutputDirClick,
                 onLongClick = onOutputDirReset,
+                enabled = outputDirEnabled,
                 shapes = BetterSegmentedShapes.top(),
                 title = { Text(text = stringResource(R.string.pref_output_dir_name)) },
                 summary = { Text(text = outputDirFormatted) },
@@ -225,6 +237,7 @@ private fun PreviewOutputDirectoryScreen() {
                 outputDir = uri,
                 template = Preferences.DEFAULT_FILENAME_TEMPLATE,
                 retention = DaysRetention(365U),
+                outputDirEnabled = true,
                 onOutputDirClick = {},
                 onOutputDirReset = {},
                 onTemplateClick = {},

@@ -147,7 +147,7 @@ class Preferences(initialContext: Context) {
         set(enabled) = prefs.edit { putBoolean(PREF_FORCE_DIRECT_BOOT, enabled) }
 
     /** Whether we're running in direct boot mode. */
-    private val isDirectBoot: Boolean
+    val isDirectBoot: Boolean
         get() = !userManager.isUserUnlocked || forceDirectBoot
 
     /** Default output directory in the BFU state. */
