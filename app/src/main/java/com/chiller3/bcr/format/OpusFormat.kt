@@ -8,7 +8,6 @@
 package com.chiller3.bcr.format
 
 import android.media.MediaFormat
-import android.media.MediaMuxer
 import android.os.Build
 import androidx.annotation.RequiresApi
 import java.io.FileDescriptor
@@ -52,5 +51,5 @@ class OpusFormat : Format() {
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun getContainer(fd: FileDescriptor): Container =
-        MediaMuxerContainer(fd, MediaMuxer.OutputFormat.MUXER_OUTPUT_OGG)
+        OggContainer(fd)
 }
