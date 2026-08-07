@@ -10,9 +10,11 @@ package com.chiller3.bcr.format
 import android.media.MediaCodec
 import android.media.MediaFormat
 import android.media.MediaMuxer
+import android.os.Build
 import android.system.Os
 import android.system.OsConstants
 import android.util.Log
+import androidx.annotation.RequiresApi
 import com.chiller3.bcr.writeFully
 import java.io.FileDescriptor
 import java.io.IOException
@@ -33,6 +35,7 @@ import java.nio.ByteBuffer
  * @param fd Output file descriptor. This class does not take ownership of it and it should not be
  * touched outside of this class until [stop] is called and returns.
  */
+@RequiresApi(Build.VERSION_CODES.Q)
 class OggContainer(private val fd: FileDescriptor) : Container {
     private val muxer = MediaMuxer(fd, MediaMuxer.OutputFormat.MUXER_OUTPUT_OGG)
     private var isStarted = false

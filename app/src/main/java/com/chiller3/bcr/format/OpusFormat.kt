@@ -50,6 +50,5 @@ class OpusFormat : Format() {
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    override fun getContainer(fd: FileDescriptor): Container =
-        OggContainer(fd)
+    override fun getContainer(fd: FileDescriptor): Container = OggContainer(fd)
 }
