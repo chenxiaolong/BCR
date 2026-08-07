@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 3.6
 
 * Work around an Android bug where its muxer does not mark the final OGG page as the end of the stream ([PR #922 @django23])
   * This affects audio players with stricter checks for OGG files, like Firefox.
