@@ -9,6 +9,10 @@
 
 ### Unreleased
 
+* Work around an Android bug where its muxer does not mark the final OGG page as the end of the stream ([PR #922 @django23])
+  * This affects audio players with stricter checks for OGG files, like Firefox.
+  * Existing recordings can be fixed by losslessly remuxing the file with ffmpeg: `ffmpeg -i input.oga -c copy output.oga`.
+
 ### Version 3.5
 
 * Update Simplified Chinese (zh-CN) translations ([PR #908 @lofx-lee])
@@ -1341,3 +1345,4 @@ Non-user-facing changes:
 [PR #906 @PatrykMis]: https://github.com/chenxiaolong/BCR/pull/906
 [PR #907 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/907
 [PR #908 @lofx-lee]: https://github.com/chenxiaolong/BCR/pull/908
+[PR #922 @django23]: https://github.com/chenxiaolong/BCR/pull/922
