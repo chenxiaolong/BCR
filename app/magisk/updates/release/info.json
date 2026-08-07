@@ -1,6 +1,6 @@
 {
-    "zipUrl": "https://github.com/chenxiaolong/BCR/releases/download/v3.5/BCR-3.5-release.zip",
-    "changelog": "https://github.com/chenxiaolong/BCR/raw/v3.5/app/magisk/updates/release/changelog.txt",
-    "version": "3.5",
-    "versionCode": 197888
+    "zipUrl": "https://github.com/chenxiaolong/BCR/releases/download/v3.6/BCR-3.6-release.zip",
+    "changelog": "https://github.com/chenxiaolong/BCR/raw/v3.6/app/magisk/updates/release/changelog.txt",
+    "version": "3.6",
+    "versionCode": 198144
 }
