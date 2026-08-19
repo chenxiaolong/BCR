@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Add Korean translations ([PR #926 @RobertGarciaa])
+
 ### Version 3.6
 
 * Work around an Android bug where its muxer does not mark the final OGG page as the end of the stream ([PR #922 @django23])
@@ -1350,3 +1352,4 @@ Non-user-facing changes:
 [PR #908 @lofx-lee]: https://github.com/chenxiaolong/BCR/pull/908
 [PR #922 @django23]: https://github.com/chenxiaolong/BCR/pull/922
 [PR #923 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/923
+[PR #926 @RobertGarciaa]: https://github.com/chenxiaolong/BCR/pull/926
