@@ -11,6 +11,7 @@
 
 * Add Korean translations ([PR #926 @RobertGarciaa])
 * Minor build system cleanup ([PR #928 @chenxiaolong])
+* Update dependencies ([PR #929 @chenxiaolong])
 
 ### Version 3.6
 
@@ -1355,3 +1356,4 @@ Non-user-facing changes:
 [PR #923 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/923
 [PR #926 @RobertGarciaa]: https://github.com/chenxiaolong/BCR/pull/926
 [PR #928 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/928
+[PR #929 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/929
