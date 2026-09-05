@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 3.8
 
 * Request URI permissions again when selecting the same output directory ([Issue #919], [PR #935 @chenxiaolong])
   * If Android revokes BCR's permission to the output directory, reselecting it will now work. Previously, a different output directory had to be selected first.
