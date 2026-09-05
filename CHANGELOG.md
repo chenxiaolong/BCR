@@ -9,6 +9,9 @@
 
 ### Unreleased
 
+* Request URI permissions again when selecting the same output directory ([Issue #919], [PR #935 @chenxiaolong])
+  * If Android revokes BCR's permission to the output directory, reselecting it will now work. Previously, a different output directory had to be selected first.
+
 ### Version 3.7
 
 * Add Korean translations ([PR #926 @RobertGarciaa])
@@ -973,6 +976,7 @@ Non-user-facing changes:
 [Issue #858]: https://github.com/chenxiaolong/BCR/issues/858
 [Issue #871]: https://github.com/chenxiaolong/BCR/issues/871
 [Issue #881]: https://github.com/chenxiaolong/BCR/issues/881
+[Issue #919]: https://github.com/chenxiaolong/BCR/issues/919
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -1359,3 +1363,4 @@ Non-user-facing changes:
 [PR #926 @RobertGarciaa]: https://github.com/chenxiaolong/BCR/pull/926
 [PR #928 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/928
 [PR #929 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/929
+[PR #935 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/935
