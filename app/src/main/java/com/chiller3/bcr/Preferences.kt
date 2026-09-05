@@ -197,10 +197,6 @@ class Preferences(initialContext: Context) {
             }
 
             val oldUri = outputDir
-            if (oldUri == uri) {
-                // URI is the same as before or both are null
-                return
-            }
 
             prefs.edit {
                 if (uri != null) {
@@ -218,7 +214,7 @@ class Preferences(initialContext: Context) {
 
             // Release persisted permissions on the old directory only after the new URI is set to
             // guarantee atomicity
-            if (oldUri != null) {
+            if (oldUri != null && oldUri != uri) {
                 // It's not documented, but this can throw an exception when trying to release a
                 // previously persisted URI that's associated with an app that's no longer installed
                 try {
