@@ -233,6 +233,14 @@ class Preferences(initialContext: Context) {
             Notifications(context).dismissAll()
         }
 
+    fun hasOutputDirPermissions(): Boolean {
+        val outputDir = outputDir ?: return true
+
+        return context.contentResolver.persistedUriPermissions.any {
+            it.uri == outputDir && it.isReadPermission && it.isWritePermission
+        }
+    }
+
     /**
      * Get the user-specified output directory or the default if none was set. This method does not
      * perform any filesystem operations to check if the user-specified directory is still valid.

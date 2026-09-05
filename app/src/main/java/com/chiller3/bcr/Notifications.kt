@@ -395,7 +395,7 @@ class Notifications(
     }
 
     /** Send a file move failure alert notification. */
-    fun notifyMoveFailure(errorMsg: String?) {
+    fun notifyMoveFailure(exception: Exception) {
         val notificationId = prefs.nextNotificationId
 
         val notification = Notification.Builder(context, CHANNEL_ID_FAILURE).run {
@@ -404,7 +404,12 @@ class Notifications(
             setContentText(buildString {
                 append(context.getString(R.string.notification_move_error))
 
-                errorMsg?.trim()?.let {
+                val details = if (exception is RecorderThread.LostOutputDirPermissionsException) {
+                    context.getString(R.string.notification_move_error_permissions)
+                } else {
+                    exception.localizedMessage?.trim()
+                }
+                details?.let {
                     append("\n\n")
                     append(it)
                 }

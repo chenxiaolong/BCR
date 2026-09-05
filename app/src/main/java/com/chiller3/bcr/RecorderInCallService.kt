@@ -475,7 +475,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
             val firstMoveError = file?.moveError
                 ?: additionalFiles.firstNotNullOfOrNull { it.moveError }
             if (firstMoveError != null) {
-                notifications.notifyMoveFailure(firstMoveError.localizedMessage)
+                notifications.notifyMoveFailure(firstMoveError)
             }
 
             when (status) {

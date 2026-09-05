@@ -299,7 +299,11 @@ class RecorderThread(
                             )
                             outputDocPath = finalPath
                         } catch (e: Exception) {
-                            moveError = e
+                            moveError = if (prefs.hasOutputDirPermissions()) {
+                                e
+                            } else {
+                                LostOutputDirPermissionsException(e)
+                            }
                         }
 
                         writeMetadataFile(finalPath.value, recordingInfo)?.let {
@@ -929,6 +933,9 @@ class RecorderThread(
 
     private class PureSilenceException(cause: Throwable? = null)
         : Exception("Audio contained pure silence", cause)
+
+    class LostOutputDirPermissionsException(cause: Throwable? = null)
+        : Exception("Lost permissions to output directory", cause)
 
     sealed interface FailureComponent {
         data class AndroidMedia(val stackFrame: StackTraceElement) : FailureComponent

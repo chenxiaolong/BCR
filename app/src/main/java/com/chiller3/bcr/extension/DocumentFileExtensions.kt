@@ -184,6 +184,28 @@ fun DocumentFile.findOrCreateDirectories(path: List<String>): DocumentFile? {
     return file
 }
 
+/** Like [DocumentFile.name], but does not eat the exception. */
+private val DocumentFile.nameWithException: String
+    get() = when (uri.scheme) {
+        ContentResolver.SCHEME_CONTENT -> {
+            val cursor = context!!.contentResolver.query(
+                uri,
+                arrayOf(DocumentsContract.Document.COLUMN_DISPLAY_NAME),
+                null, null, null,
+            ) ?: throw IOException("Query returned null cursor: $uri")
+
+            cursor.use {
+                if (cursor.moveToFirst() && !cursor.isNull(0)) {
+                    return cursor.getString(0)
+                }
+            }
+
+            throw IOException("Cursor returned no display name: $uri")
+        }
+        // This leaves only RawDocumentFile, which never returns null.
+        else -> name!!
+    }
+
 /**
  * This is a horrible workaround to reduce the chance of an Android bug. Sometimes, when making
  * DocumentsContract calls, com.android.externalstorage will be frozen according to:
@@ -201,14 +223,21 @@ fun DocumentFile.findOrCreateDirectories(path: List<String>): DocumentFile? {
  * This just repeatedly tries to talk to com.android.externalstorage to try and get it out of the
  * frozen state.
  */
-fun DocumentFile.workAroundBinderBug() {
+private fun DocumentFile.workAroundBinderBug() {
     Log.d(TAG, "Working around Android binder bug")
     val deadline = System.nanoTime() + 2_000_000_000L
 
     while (System.nanoTime() < deadline) {
-        if (name != null) {
-            Log.d(TAG, "Got binder response")
+        try {
+            val name = nameWithException
+            Log.d(TAG, "Got binder response: $name")
             return
+        } catch (e: SecurityException) {
+            // This is going to fail forever if we lost access to the directory.
+            Log.d(TAG, "Skipping workaround due to losing access to URI: $uri", e)
+            return
+        } catch (_: Exception) {
+            // Ignore.
         }
 
         Thread.sleep(100)
