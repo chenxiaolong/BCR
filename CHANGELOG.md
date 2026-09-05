@@ -7,6 +7,8 @@
     to update the actual links at the bottom of the file.
 -->
 
+### Unreleased
+
 ### Version 3.8
 
 * Request URI permissions again when selecting the same output directory ([Issue #919], [PR #935 @chenxiaolong])
