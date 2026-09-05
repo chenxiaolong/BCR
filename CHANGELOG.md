@@ -12,6 +12,7 @@
 * Request URI permissions again when selecting the same output directory ([Issue #919], [PR #935 @chenxiaolong])
   * If Android revokes BCR's permission to the output directory, reselecting it will now work. Previously, a different output directory had to be selected first.
 * Ask the user to reselect the output directory when BCR's permissions to it are lost ([Issue #919], [PR #936 @chenxiaolong])
+* Update dependencies ([PR #937 @chenxiaolong])
 
 ### Version 3.7
 
@@ -1366,3 +1367,4 @@ Non-user-facing changes:
 [PR #929 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/929
 [PR #935 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/935
 [PR #936 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/936
+[PR #937 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/937
