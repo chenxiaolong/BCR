@@ -9,6 +9,7 @@
 
 ### Unreleased
 
+* Add `phone_number_e164`, `app_version_code`, and `app_version_name` to metadata JSON ([Issue #946], [Issue #949], [PR #955 @chenxiaolong])
 * Update Italian translations ([PR #939 @federicocarboni])
 * Update German translations ([Issue #791], [PR #940 @ElsAr4e])
 
@@ -984,6 +985,8 @@ Non-user-facing changes:
 [Issue #871]: https://github.com/chenxiaolong/BCR/issues/871
 [Issue #881]: https://github.com/chenxiaolong/BCR/issues/881
 [Issue #919]: https://github.com/chenxiaolong/BCR/issues/919
+[Issue #946]: https://github.com/chenxiaolong/BCR/issues/946
+[Issue #949]: https://github.com/chenxiaolong/BCR/issues/949
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -1375,3 +1378,4 @@ Non-user-facing changes:
 [PR #937 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/937
 [PR #939 @federicocarboni]: https://github.com/chenxiaolong/BCR/pull/939
 [PR #940 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/940
+[PR #955 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/955
