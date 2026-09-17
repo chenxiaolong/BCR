@@ -6,6 +6,7 @@
 package com.chiller3.bcr.output
 
 import android.content.Context
+import com.chiller3.bcr.BuildConfig
 import com.chiller3.bcr.format.FormatParamInfo
 import com.chiller3.bcr.format.NoParamInfo
 import com.chiller3.bcr.format.RangedParamInfo
@@ -36,6 +37,8 @@ data class CallPartyDetails(
 data class CallPartyDetailsJson(
     @SerialName("phone_number")
     val phoneNumber: String?,
+    @SerialName("phone_number_e164")
+    val phoneNumberE164: String?,
     @SerialName("phone_number_formatted")
     val phoneNumberFormatted: String?,
     @SerialName("caller_name")
@@ -45,6 +48,8 @@ data class CallPartyDetailsJson(
 ) {
     constructor(context: Context, details: CallPartyDetails) : this(
         phoneNumber = details.phoneNumber?.toString(),
+        phoneNumberE164 = details.phoneNumber
+            ?.format(context, PhoneNumberUtil.PhoneNumberFormat.E164),
         phoneNumberFormatted = details.phoneNumber
             ?.format(context, PhoneNumberUtil.PhoneNumberFormat.NATIONAL),
         callerName = details.callerName,
@@ -64,6 +69,10 @@ data class CallMetadata(
 
 @Serializable
 data class CallMetadataJson(
+    @SerialName("app_version_code")
+    val appVersionCode: Int,
+    @SerialName("app_version_name")
+    val appVersionName: String,
     @SerialName("timestamp_unix_ms")
     val timestampUnixMs: Long,
     val timestamp: String,
@@ -78,6 +87,8 @@ data class CallMetadataJson(
     val output: OutputJson,
 ) {
     constructor(context: Context, metadata: CallMetadata, output: OutputJson) : this(
+        appVersionCode = BuildConfig.VERSION_CODE,
+        appVersionName = BuildConfig.VERSION_NAME,
         timestampUnixMs = metadata.timestamp.toInstant().toEpochMilli(),
         packageName = metadata.packageName,
         timestamp = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(metadata.timestamp),

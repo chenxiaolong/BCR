@@ -177,10 +177,16 @@ Note that due to Android Storage Access Framework's poor performance, using subd
 
 If the `Write metadata file` option is enabled, BCR will write a JSON file to the output directory containing all of the details that BCR knows about the call as well as information about the recorded audio. The file has the same name as the audio file, except with a `.json` extension.
 
-The JSON structure is shown in the following example. Note that only `timestamp_unix_ms`, `timestamp`, and `output.format.*` are guaranteed to exist. If the value for a field can't be determined (eg. when an error occurs or a required permission is denied), then it is set to `null`.
+The JSON structure is shown in the following example. Note that only `app_version_code`, `app_version_name`, `timestamp_unix_ms`, `timestamp`, and `output.format.*` are guaranteed to exist. If the value for a field can't be determined (eg. when an error occurs or a required permission is denied), then it is set to `null`. Fields that are guaranteed to exist will never be removed in a minor release of BCR, only in a major release.
 
 ```jsonc
 {
+    // BCR version code.
+    "app_version_code": 196608,
+
+    // BCR version name.
+    "app_version_name": "3.0",
+
     // The timestamp represented as milliseconds since the Unix epoch in UTC.
     "timestamp_unix_ms": 1689817988931,
 
@@ -212,6 +218,10 @@ The JSON structure is shown in the following example. Note that only `timestamp_
             // this is usually what the user typed. For incoming calls, this is
             // usually E.164 formatted. This will be null for private calls.
             "phone_number": "+11234567890",
+
+            // The phone number formatted as E.164. This will be null for
+            // private calls.
+            "phone_number_e164": "+11234567890",
 
             // The phone number formatted using the country-specific style. This
             // will be null for private calls or if Android cannot determine the
