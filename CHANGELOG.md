@@ -9,6 +9,9 @@
 
 ### Unreleased
 
+* Disable HE-AAC on Android <15 to work around Android's broken encoder ([Issue #960], [PR #962 @chenxiaolong])
+  * HE-AAC is normally used for bit rates below 32 kbps. These low bit rate recordings will use regular AAC-LC instead on these older Android versions.
+
 ### Version 3.9
 
 * Add `phone_number_e164`, `app_version_code`, and `app_version_name` to metadata JSON ([Issue #946], [Issue #949], [PR #955 @chenxiaolong])
@@ -989,6 +992,7 @@ Non-user-facing changes:
 [Issue #919]: https://github.com/chenxiaolong/BCR/issues/919
 [Issue #946]: https://github.com/chenxiaolong/BCR/issues/946
 [Issue #949]: https://github.com/chenxiaolong/BCR/issues/949
+[Issue #960]: https://github.com/chenxiaolong/BCR/issues/960
 [PR #2 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/2
 [PR #4 @EleoXDA]: https://github.com/chenxiaolong/BCR/pull/4
 [PR #7 @marat2509]: https://github.com/chenxiaolong/BCR/pull/7
@@ -1381,3 +1385,4 @@ Non-user-facing changes:
 [PR #939 @federicocarboni]: https://github.com/chenxiaolong/BCR/pull/939
 [PR #940 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/940
 [PR #955 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/955
+[PR #962 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/962
