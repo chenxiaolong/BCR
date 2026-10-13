@@ -7,6 +7,8 @@
     to update the actual links at the bottom of the file.
 -->
 
+### Unreleased
+
 ### Version 3.10
 
 * Disable HE-AAC on Android <15 to work around Android's broken encoder ([Issue #960], [PR #962 @chenxiaolong])
