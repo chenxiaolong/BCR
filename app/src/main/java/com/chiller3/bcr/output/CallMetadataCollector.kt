@@ -19,7 +19,6 @@ import com.chiller3.bcr.extension.phoneNumber
 import com.chiller3.bcr.withContactsByPhoneNumber
 import java.time.Instant
 import java.time.ZoneId
-import java.time.ZonedDateTime
 
 class CallMetadataCollector(
     private val context: Context,
@@ -210,7 +209,7 @@ class CallMetadataCollector(
         allowBlockingCalls: Boolean,
     ): CallMetadata {
         val instant = Instant.ofEpochMilli(parentDetails.creationTimeMillis)
-        val timestamp = ZonedDateTime.ofInstant(instant, ZoneId.systemDefault())
+        val timestamp = instant.atZone(ZoneId.systemDefault())
         val packageName = parentDetails.accountHandle.componentName.packageName
 
         // AOSP's telephony framework has internal documentation that specifies that the call

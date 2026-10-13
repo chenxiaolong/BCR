@@ -7,7 +7,6 @@ package com.chiller3.bcr.settings
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -92,7 +91,6 @@ fun OutputFormatScreen(onBack: () -> Unit) {
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun OutputFormatContent(
     format: Format,

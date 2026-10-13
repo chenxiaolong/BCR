@@ -13,7 +13,6 @@ import android.os.Parcelable
 import android.telephony.SubscriptionManager
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -66,7 +65,6 @@ sealed interface RecordRuleChoiceResult : Parcelable {
     data class InitialState(val initialState: RecordRule.InitialState) : RecordRuleChoiceResult
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun RecordRuleChoiceDialog(
     action: RecordRuleChoiceAction,

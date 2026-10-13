@@ -12,7 +12,6 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Surface
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.Text
@@ -47,7 +46,6 @@ import com.chiller3.bcr.ui.theme.AppTheme
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun RecordRulesScreen(
     onBack: () -> Unit,
@@ -112,7 +110,6 @@ fun RecordRulesScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun RecordRulesContent(
     rules: List<DisplayableRule>,

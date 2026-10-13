@@ -6,13 +6,11 @@
 package com.chiller3.bcr.ui
 
 import androidx.compose.foundation.shape.CornerBasedShape
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.ListItemDefaults.shapes
 import androidx.compose.material3.ListItemShapes
 import androidx.compose.runtime.Composable
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun betterSegmentedShapes(
     index: Int,
@@ -39,7 +37,6 @@ fun betterSegmentedShapes(
     return ListItemDefaults.segmentedShapes(index, count, defaultShapes)
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 object BetterSegmentedShapes {
     @Composable
     fun top() = betterSegmentedShapes(0, 3)

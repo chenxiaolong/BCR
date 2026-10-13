@@ -288,27 +288,22 @@ class OutputFilenameGenerator(
 
         const val DATE_VAR = "date"
 
-        private fun isValidCodePoint(codePoint: Int): Boolean {
-            if (codePoint in 0x00..0x1f) {
-                return false
-            }
-
-            return when (codePoint) {
-                '"'.code,
-                '*'.code,
-                '/'.code,
-                ':'.code,
-                '<'.code,
-                '>'.code,
-                '?'.code,
-                '\\'.code,
-                '|'.code,
-                0x7F -> false
-                else -> !UCharacter.hasBinaryProperty(
-                    codePoint,
-                    UProperty.DEFAULT_IGNORABLE_CODE_POINT,
-                )
-            }
+        private fun isValidCodePoint(codePoint: Int): Boolean = when (codePoint) {
+            '"'.code,
+            '*'.code,
+            '/'.code,
+            ':'.code,
+            '<'.code,
+            '>'.code,
+            '?'.code,
+            '\\'.code,
+            '|'.code,
+            in 0x00..0x1f -> false
+            0x7F -> false
+            else -> !UCharacter.hasBinaryProperty(
+                codePoint,
+                UProperty.DEFAULT_IGNORABLE_CODE_POINT,
+            )
         }
 
         /**

@@ -12,7 +12,6 @@ import com.chiller3.bcr.BuildConfig
 import java.lang.invoke.MethodHandles
 import java.nio.file.Path
 import java.nio.file.Paths
-import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.deleteIfExists
 import kotlin.io.path.isRegularFile
 import kotlin.io.path.readBytes
@@ -53,7 +52,6 @@ private fun ByteArray.indexOfSubarray(needle: ByteArray, start: Int = 0): Int {
     return -1
 }
 
-@OptIn(ExperimentalPathApi::class)
 private fun clearPackageManagerCache(appId: String): Boolean {
     // The current implementation of the package cache uses PackageImpl.writeToParcel(), which
     // serializes the cache entry to the file as a Parcel. The current Parcel implementation stores

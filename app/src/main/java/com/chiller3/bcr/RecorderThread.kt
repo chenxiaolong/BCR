@@ -16,7 +16,6 @@ import android.telecom.Call
 import android.util.Log
 import androidx.core.net.toFile
 import androidx.documentfile.provider.DocumentFile
-import com.chiller3.bcr.RecorderThread.Companion.BYTES_PER_SAMPLE
 import com.chiller3.bcr.extension.deleteIfEmptyDir
 import com.chiller3.bcr.extension.listFilesWithPathsRecursively
 import com.chiller3.bcr.extension.phoneNumber
