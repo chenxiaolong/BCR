@@ -10,6 +10,7 @@ package com.chiller3.bcr.format
 import android.media.MediaCodecInfo
 import android.media.MediaFormat
 import android.media.MediaMuxer
+import android.os.Build
 import java.io.FileDescriptor
 
 class AacFormat : Format() {
@@ -39,7 +40,20 @@ class AacFormat : Format() {
 
     override fun updateMediaFormat(mediaFormat: MediaFormat, param: UInt) {
         mediaFormat.apply {
-            val profile = if (param >= 32_000u) {
+            // Android 9, 10, 12, 12L, 13, and 14 have a broken HE-AAC encoder that produces files
+            // ffmpeg fails to decode with:
+            //
+            //   [ffmpeg/audio] aac: Reserved bit set.
+            //   [ffmpeg/audio] aac: Number of scalefactor bands in group (48) exceeds limit (40).
+            //
+            // Android 11 produces files that ffmpeg fails to decode with:
+            //
+            //   [ffmpeg/audio] aac: Input buffer exhausted before END element found
+            //
+            // VLC also fails to decode these files. Android 15 and newer produce files that play
+            // back fine without any warnings or errors.
+            val profile = if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM
+                    || param >= 32_000u) {
                 MediaCodecInfo.CodecProfileLevel.AACObjectLC
             } else {
                 MediaCodecInfo.CodecProfileLevel.AACObjectHE
