@@ -7,7 +7,7 @@
     to update the actual links at the bottom of the file.
 -->
 
-### Unreleased
+### Version 3.10
 
 * Disable HE-AAC on Android <15 to work around Android's broken encoder ([Issue #960], [PR #962 @chenxiaolong])
   * HE-AAC is normally used for bit rates below 32 kbps. These low bit rate recordings will use regular AAC-LC instead on these older Android versions.
