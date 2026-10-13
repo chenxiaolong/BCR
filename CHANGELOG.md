@@ -11,6 +11,7 @@
 
 * Disable HE-AAC on Android <15 to work around Android's broken encoder ([Issue #960], [PR #962 @chenxiaolong])
   * HE-AAC is normally used for bit rates below 32 kbps. These low bit rate recordings will use regular AAC-LC instead on these older Android versions.
+* Update dependencies ([PR #963 @chenxiaolong])
 
 ### Version 3.9
 
@@ -1386,3 +1387,4 @@ Non-user-facing changes:
 [PR #940 @ElsAr4e]: https://github.com/chenxiaolong/BCR/pull/940
 [PR #955 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/955
 [PR #962 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/962
+[PR #963 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/963
