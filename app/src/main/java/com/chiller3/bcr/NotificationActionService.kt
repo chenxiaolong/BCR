@@ -1,5 +1,5 @@
 /*
- * SPDX-FileCopyrightText: 2022-2024 Andrew Gunnerson
+ * SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
  * SPDX-License-Identifier: GPL-3.0-only
  */
 
@@ -76,6 +76,12 @@ class NotificationActionService : Service() {
                             } catch (e: Exception) {
                                 Log.w(TAG, "Failed to delete ${file.redacted}", e)
                             }
+
+                            Log.d(TAG, "Revoking share URI permissions: ${file.redacted}")
+                            revokeUriPermission(
+                                RecorderProvider.fromOrigUri(file.uri),
+                                Intent.FLAG_GRANT_READ_URI_PERMISSION,
+                            )
                         }
 
                         handler.post {
