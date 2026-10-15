@@ -194,16 +194,11 @@ fun RecordRuleEditorContent(
             }
 
             val hasCallType = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
-            val hasSimSlot = simCount > 1
 
             item(key = "call_number") {
                 Preference(
                     onClick = { showChoiceDialog = RecordRuleChoiceAction.CallNumber },
-                    shapes = if (hasCallType || hasSimSlot) {
-                        BetterSegmentedShapes.top()
-                    } else {
-                        BetterSegmentedShapes.single()
-                    },
+                    shapes = BetterSegmentedShapes.top(),
                     title = { Text(text = stringResource(R.string.record_rule_number_title)) },
                     summary = { Text(text = callNumberSummary(rule, contactInfo, contactGroupInfo)) },
                     modifier = Modifier.animateItem(),
@@ -214,11 +209,7 @@ fun RecordRuleEditorContent(
                 item(key = "call_type") {
                     Preference(
                         onClick = { showChoiceDialog = RecordRuleChoiceAction.CallType },
-                        shapes = if (hasSimSlot) {
-                            BetterSegmentedShapes.middle()
-                        } else {
-                            BetterSegmentedShapes.bottom()
-                        },
+                        shapes = BetterSegmentedShapes.middle(),
                         title = { Text(text = stringResource(R.string.record_rule_type_title)) },
                         summary = { Text(text = callTypeSummary(rule)) },
                         modifier = Modifier.animateItem(),
@@ -230,12 +221,22 @@ fun RecordRuleEditorContent(
                 item(key = "sim_slot") {
                     Preference(
                         onClick = { showChoiceDialog = RecordRuleChoiceAction.SimSlot },
-                        shapes = BetterSegmentedShapes.bottom(),
+                        shapes = BetterSegmentedShapes.middle(),
                         title = { Text(text = stringResource(R.string.record_rule_sim_title)) },
                         summary = { Text(text = simSlotSummary(rule)) },
                         modifier = Modifier.animateItem(),
                     )
                 }
+            }
+
+            item(key = "source_app") {
+                Preference(
+                    onClick = { showChoiceDialog = RecordRuleChoiceAction.SourceApp(rule.sourceApp) },
+                    shapes = BetterSegmentedShapes.bottom(),
+                    title = { Text(text = stringResource(R.string.record_rule_source_title)) },
+                    summary = { Text(text = sourceAppSummary(LocalContext.current, rule.sourceApp)) },
+                    modifier = Modifier.animateItem(),
+                )
             }
         }
 
@@ -297,6 +298,9 @@ fun RecordRuleEditorContent(
                     }
                     is RecordRuleChoiceResult.SimSlot -> {
                         onRuleUpdate(rule.copy(simSlot = result.simSlot))
+                    }
+                    is RecordRuleChoiceResult.SourceApp -> {
+                        onRuleUpdate(rule.copy(sourceApp = result.sourceApp))
                     }
                     is RecordRuleChoiceResult.Action -> {
                         onRuleUpdate(rule.copy(action = result.action))

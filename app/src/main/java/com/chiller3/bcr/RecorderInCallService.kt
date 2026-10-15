@@ -23,7 +23,7 @@ class RecorderInCallService : InCallService(), RecorderThread.OnRecordingComplet
     companion object {
         private val TAG = RecorderInCallService::class.java.simpleName
 
-        private const val PHONE_PACKAGE = "com.android.phone"
+        internal const val PHONE_PACKAGE = "com.android.phone"
 
         private val ACTION_PAUSE = "${RecorderInCallService::class.java.canonicalName}.pause"
         private val ACTION_RESUME = "${RecorderInCallService::class.java.canonicalName}.resume"

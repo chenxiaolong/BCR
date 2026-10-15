@@ -31,6 +31,12 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <queries>
+        <intent>
+            <action android:name="android.telecom.ConnectionService" />
+        </intent>
+    </queries>
+
     <application
         android:name=".RecorderApplication"
         android:allowBackup="true"

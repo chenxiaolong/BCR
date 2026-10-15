@@ -63,6 +63,8 @@ data class RecordRule(
     @SerialName("sim_slot")
     val simSlot: SimSlot,
     val action: Action,
+    @SerialName("source_app")
+    val sourceApp: SourceApp = SourceApp.Any,
 ) : Parcelable {
     @Parcelize
     @Serializable
@@ -163,6 +165,27 @@ data class RecordRule(
 
     @Parcelize
     @Serializable
+    sealed interface SourceApp : Parcelable {
+        fun matches(packageName: String?): Boolean
+
+        @Parcelize
+        @Serializable
+        @SerialName("any")
+        data object Any : SourceApp {
+            override fun matches(packageName: String?): Boolean = true
+        }
+
+        @Parcelize
+        @Serializable
+        @SerialName("specific")
+        data class Specific(val packageName: String) : SourceApp {
+            override fun matches(packageName: String?): Boolean =
+                this.packageName.isNotEmpty() && this.packageName == packageName
+        }
+    }
+
+    @Parcelize
+    @Serializable
     enum class InitialState : Parcelable {
         RECORDING,
         PAUSED,
@@ -213,6 +236,7 @@ data class RecordRule(
             numbers: Collection<PhoneNumber>,
             direction: CallDirection?,
             simSlot: Int?,
+            sourcePackage: String?,
         ): Action {
             var contactLookupKeys = emptySet<String>()
             var contactGroupIds = emptySet<GroupLookup>()
@@ -246,6 +270,7 @@ data class RecordRule(
                 val matches = rule.callNumber.matches(contactLookupKeys, contactGroupIds)
                         && rule.callType.matches(direction)
                         && rule.simSlot.matches(simSlot)
+                        && rule.sourceApp.matches(sourcePackage)
 
                 if (matches) {
                     Log.i(TAG, "Matched rule: $rule")

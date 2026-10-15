@@ -206,7 +206,9 @@ class RecorderThread(
         val metadata = callMetadataCollector.callMetadata
 
         val action = try {
-            RecordRule.evaluate(context, rules, numbers, metadata.direction, metadata.simSlot)
+            RecordRule.evaluate(
+                context, rules, numbers, metadata.direction, metadata.simSlot, metadata.packageName,
+            )
         } catch (e: Exception) {
             Log.w(tag, "Failed to evaluate record rules", e)
             // Err on the side of caution.

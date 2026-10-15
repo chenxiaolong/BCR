@@ -16,6 +16,8 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.chiller3.bcr.R
@@ -23,6 +25,8 @@ import com.chiller3.bcr.ui.Preference
 import com.chiller3.bcr.ui.PreferenceColumn
 import com.chiller3.bcr.ui.betterSegmentedShapes
 import kotlinx.parcelize.Parcelize
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Parcelize
 sealed interface RecordRuleChoiceAction : Parcelable {
@@ -34,6 +38,9 @@ sealed interface RecordRuleChoiceAction : Parcelable {
 
     @Parcelize
     data object SimSlot : RecordRuleChoiceAction
+
+    @Parcelize
+    data class SourceApp(val current: RecordRule.SourceApp) : RecordRuleChoiceAction
 
     @Parcelize
     data class Action(val origAction: RecordRule.Action) : RecordRuleChoiceAction
@@ -57,6 +64,9 @@ sealed interface RecordRuleChoiceResult : Parcelable {
 
     @Parcelize
     data class SimSlot(val simSlot: RecordRule.SimSlot) : RecordRuleChoiceResult
+
+    @Parcelize
+    data class SourceApp(val sourceApp: RecordRule.SourceApp) : RecordRuleChoiceResult
 
     @Parcelize
     data class Action(val action: RecordRule.Action) : RecordRuleChoiceResult
@@ -101,6 +111,7 @@ private fun actionTitle(action: RecordRuleChoiceAction) = when (action) {
     RecordRuleChoiceAction.CallNumber -> stringResource(R.string.record_rule_number_title)
     RecordRuleChoiceAction.CallType -> stringResource(R.string.record_rule_type_title)
     RecordRuleChoiceAction.SimSlot -> stringResource(R.string.record_rule_sim_title)
+    is RecordRuleChoiceAction.SourceApp -> stringResource(R.string.record_rule_source_title)
     is RecordRuleChoiceAction.Action -> stringResource(R.string.record_rule_action_title)
     RecordRuleChoiceAction.InitialState -> stringResource(R.string.record_rule_initial_state_title)
 }
@@ -155,6 +166,20 @@ private fun actionChoices(action: RecordRuleChoiceAction) =
                         add(RecordRuleChoiceResult.SimSlot(RecordRule.SimSlot.Specific(i))
                                 to stringResource(R.string.record_rule_sim_specific_item, i))
                     }
+                }
+            }
+            is RecordRuleChoiceAction.SourceApp -> {
+                add(RecordRuleChoiceResult.SourceApp(RecordRule.SourceApp.Any)
+                        to stringResource(R.string.record_rule_source_any_item))
+
+                val apps by produceState(emptyList<Pair<String, String>>(), context, action.current) {
+                    value = withContext(Dispatchers.IO) {
+                        sourceAppChoices(context, action.current)
+                    }
+                }
+                for ((packageName, label) in apps) {
+                    add(RecordRuleChoiceResult.SourceApp(RecordRule.SourceApp.Specific(packageName))
+                            to label)
                 }
             }
             is RecordRuleChoiceAction.Action -> {

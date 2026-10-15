@@ -323,6 +323,14 @@ private fun ruleSummary(
         append('\n')
     }
 
+    if (rule.sourceApp != RecordRule.SourceApp.Any) {
+        append(stringResource(
+            R.string.record_rule_source_specific_summary,
+            sourceAppSummary(LocalContext.current, rule.sourceApp),
+        ))
+        append('\n')
+    }
+
     val actionMsgId = when (rule.action) {
         is RecordRule.Action.Save -> R.string.record_rule_action_save_summary
         is RecordRule.Action.Discard -> R.string.record_rule_action_discard_summary

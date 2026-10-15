@@ -122,6 +122,12 @@
     <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
     <string name="record_rule_type_conference_summary">Type: Conference call</string>
 
+    <!-- Title of the record rule editor condition for matching the app that provides the call. -->
+    <string name="record_rule_source_title">Source app</string>
+    <string name="record_rule_source_any_item">Any app</string>
+    <string name="record_rule_source_cellular_item">Cellular calls</string>
+    <string name="record_rule_source_specific_summary">Source app: %s</string>
+
     <!-- Title of the record rule editor section for configuring which SIM slot to match. -->
     <string name="record_rule_sim_title">SIM slot</string>
     <!-- Text for the UI item to select this element in the rule editor. -->
