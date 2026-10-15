@@ -9,6 +9,9 @@
 
 ### Unreleased
 
+* Add `OpenableColumns` metadata when sharing recordings ([Issue #747], [PR #965 @chenxiaolong])
+  * Prevents a OneDrive bug from causing it to crash when sharing a recording in BCR's default output directory to OneDrive.
+
 ### Version 3.10
 
 * Disable HE-AAC on Android <15 to work around Android's broken encoder ([Issue #960], [PR #962 @chenxiaolong])
@@ -979,6 +982,7 @@ Non-user-facing changes:
 [Issue #732]: https://github.com/chenxiaolong/BCR/issues/732
 [Issue #733]: https://github.com/chenxiaolong/BCR/issues/733
 [Issue #742]: https://github.com/chenxiaolong/BCR/issues/742
+[Issue #747]: https://github.com/chenxiaolong/BCR/issues/747
 [Issue #761]: https://github.com/chenxiaolong/BCR/issues/761
 [Issue #763]: https://github.com/chenxiaolong/BCR/issues/763
 [Issue #791]: https://github.com/chenxiaolong/BCR/issues/791
@@ -1390,3 +1394,4 @@ Non-user-facing changes:
 [PR #955 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/955
 [PR #962 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/962
 [PR #963 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/963
+[PR #965 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/965
