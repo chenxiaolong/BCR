@@ -48,6 +48,7 @@ class Preferences(initialContext: Context) {
         private const val PREF_FORMAT_AUDIO_SOURCE = "audio_source"
         private const val PREF_MIN_DURATION = "min_duration"
         private const val PREF_WRITE_METADATA = "write_metadata"
+        private const val PREF_RECORD_CELLULAR_CALLS = "record_cellular_calls"
         private const val PREF_RECORD_TELECOM_APPS = "record_telecom_apps"
         private const val PREF_RECORD_DIALING_STATE = "record_dialing_state"
         private const val PREF_NOTIFICATION_OPEN_DIR = "notification_open_dir"
@@ -400,6 +401,11 @@ class Preferences(initialContext: Context) {
     var writeMetadata: Boolean
         get() = prefs.getBoolean(PREF_WRITE_METADATA, false)
         set(enabled) = prefs.edit { putBoolean(PREF_WRITE_METADATA, enabled) }
+
+    /** Whether to record ordinary cellular calls. Defaults to the existing behavior. */
+    var recordCellularCalls: Boolean
+        get() = prefs.getBoolean(PREF_RECORD_CELLULAR_CALLS, true)
+        set(enabled) = prefs.edit { putBoolean(PREF_RECORD_CELLULAR_CALLS, enabled) }
 
     /** Whether to record calls from telecom-integrated apps. */
     var recordTelecomApps: Boolean

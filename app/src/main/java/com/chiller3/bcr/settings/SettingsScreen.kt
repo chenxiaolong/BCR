@@ -70,6 +70,7 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
     val savedFormat = remember(reloadPrefs) { Format.fromPreferences(prefs) }
     val minDuration = remember(reloadPrefs) { prefs.minDuration }
     val writeMetadata = remember(reloadPrefs) { prefs.writeMetadata }
+    val recordCellularCalls = remember(reloadPrefs) { prefs.recordCellularCalls }
     val recordTelecomApps = remember(reloadPrefs) { prefs.recordTelecomApps }
     val recordDialingState = remember(reloadPrefs) { prefs.recordDialingState }
     val notificationOpenDir = remember(reloadPrefs) { prefs.notificationOpenDir }
@@ -133,6 +134,7 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
             savedFormat = savedFormat,
             minDuration = minDuration,
             writeMetadata = writeMetadata,
+            recordCellularCalls = recordCellularCalls,
             recordTelecomApps = recordTelecomApps,
             recordDialingState = recordDialingState,
             notificationOpenDir = notificationOpenDir,
@@ -170,6 +172,10 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
             },
             onWriteMetadataChange = { enabled ->
                 prefs.writeMetadata = enabled
+                reloadPrefs++
+            },
+            onRecordCellularCallsChange = { enabled ->
+                prefs.recordCellularCalls = enabled
                 reloadPrefs++
             },
             onRecordTelecomAppsChange = { enabled ->
@@ -230,6 +236,7 @@ private fun SettingsContent(
     savedFormat: Format.Companion.SavedFormat,
     minDuration: Int,
     writeMetadata: Boolean,
+    recordCellularCalls: Boolean,
     recordTelecomApps: Boolean,
     recordDialingState: Boolean,
     notificationOpenDir: Boolean,
@@ -243,6 +250,7 @@ private fun SettingsContent(
     onOutputFormatSettings: () -> Unit,
     onMinDurationChange: (Int) -> Unit,
     onWriteMetadataChange: (Boolean) -> Unit,
+    onRecordCellularCallsChange: (Boolean) -> Unit,
     onRecordTelecomAppsChange: (Boolean) -> Unit,
     onRecordDialingStateChange: (Boolean) -> Unit,
     onNotificationOpenDirChange: (Boolean) -> Unit,
@@ -327,6 +335,17 @@ private fun SettingsContent(
                 shapes = BetterSegmentedShapes.middle(),
                 title = { Text(text = stringResource(R.string.pref_write_metadata_name)) },
                 summary = { Text(text = stringResource(R.string.pref_write_metadata_desc)) },
+                modifier = Modifier.animateItem(),
+            )
+        }
+
+        item(key = "record_cellular_calls") {
+            SwitchPreference(
+                checked = recordCellularCalls,
+                onCheckedChange = onRecordCellularCallsChange,
+                shapes = BetterSegmentedShapes.middle(),
+                title = { Text(text = stringResource(R.string.pref_record_cellular_calls_name)) },
+                summary = { Text(text = stringResource(R.string.pref_record_cellular_calls_desc)) },
                 modifier = Modifier.animateItem(),
             )
         }
@@ -534,6 +553,7 @@ private fun PreviewSettingsScreen() {
                 savedFormat = savedFormat,
                 minDuration = 5,
                 writeMetadata = true,
+                recordCellularCalls = true,
                 recordTelecomApps = false,
                 recordDialingState = false,
                 notificationOpenDir = false,
@@ -547,6 +567,7 @@ private fun PreviewSettingsScreen() {
                 onOutputFormatSettings = {},
                 onMinDurationChange = {},
                 onWriteMetadataChange = {},
+                onRecordCellularCallsChange = {},
                 onRecordTelecomAppsChange = {},
                 onRecordDialingStateChange = {},
                 onNotificationOpenDirChange = {},

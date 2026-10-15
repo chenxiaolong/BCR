@@ -33,6 +33,8 @@
     <string name="pref_write_metadata_name">Write metadata file</string>
     <string name="pref_write_metadata_desc">Create a JSON file containing details about the call next to the audio file.</string>
 
+    <string name="pref_record_cellular_calls_name">Record cellular calls</string>
+    <string name="pref_record_cellular_calls_desc">Turn off to leave ordinary phone calls to another recorder. Third-party app calls follow the setting below.</string>
     <string name="pref_record_telecom_apps_name">Record telecom-integrated calls</string>
     <string name="pref_record_telecom_apps_desc">Record calls from third-party apps that use the Android telecom framework. Recordings of these calls will likely contain incomplete, missing or otherwise unusable audio.</string>
 
