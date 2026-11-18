@@ -1,0 +1,288 @@
+<!--
+    SPDX-FileCopyrightText: 2022-2026 Andrew Gunnerson
+    SPDX-License-Identifier: GPL-3.0-only
+-->
+<resources>
+    <string name="app_name_full">Basic Call Recorder</string>
+
+    <!-- Preference headers -->
+    <string name="pref_header_general">Geral</string>
+    <string name="pref_header_about">Sobre</string>
+    <string name="pref_header_debug">Depuração</string>
+
+    <!-- General preferences -->
+    <string name="pref_call_recording_name">Gravação de chamadas</string>
+    <string name="pref_call_recording_desc">Grave chamadas recebidas e efetuadas. As permissões de microfone e de notificações são necessárias para gravar em segundo plano.</string>
+
+    <string name="pref_record_rules_name">Regras de gravação automática</string>
+    <string name="pref_record_rules_desc">Configure quais chamadas devem ser gravadas automaticamente.</string>
+
+    <string name="pref_output_dir_name">Diretório de saída</string>
+    <string name="pref_output_dir_desc">Escolha um diretório para armazenar as gravações. Pressione e segure para abrir no gerenciador de arquivos.</string>
+
+    <string name="pref_output_format_name">Formato de saída</string>
+    <string name="pref_output_format_desc">Selecione um formato de codificação para as gravações.</string>
+
+    <string name="pref_min_duration_name">Duração mínima da gravação</string>
+    <plurals name="pref_min_duration_desc">
+        <item quantity="one">Manter gravações com pelo menos %d segundo de duração.</item>
+        <item quantity="other">Manter gravações com pelo menos %d segundos de duração.</item>
+    </plurals>
+    <string name="pref_min_duration_desc_zero">Manter gravações de qualquer duração.</string>
+
+    <string name="pref_write_metadata_name">Gravar arquivo de metadados</string>
+    <string name="pref_write_metadata_desc">Criar um arquivo JSON com detalhes sobre a chamada ao lado do arquivo de áudio.</string>
+
+    <string name="pref_record_telecom_apps_name">Gravar chamadas integradas à telefonia</string>
+    <string name="pref_record_telecom_apps_desc">Grave chamadas de apps de terceiros que usam o framework de telefonia do Android. As gravações dessas chamadas provavelmente conterão áudio incompleto, ausente ou inutilizável de outra forma.</string>
+
+    <string name="pref_record_dialing_state_name">Gravar chamadas antes da conexão</string>
+    <string name="pref_record_dialing_state_desc">Para chamadas efetuadas, começar a gravar assim que a discagem iniciar, em vez de esperar até a chamada se conectar.</string>
+
+    <string name="pref_notification_open_dir_name">Abrir diretório pela notificação</string>
+    <string name="pref_notification_open_dir_desc">Abrir o diretório de saída em vez do arquivo de gravação ao tocar na notificação de gravação concluída.</string>
+
+    <string name="pref_show_launcher_icon_name">Mostrar ícone na tela inicial</string>
+    <string name="pref_show_launcher_icon_desc">Quando o ícone estiver oculto, disque <b>*#*#BCR#*#*</b> para abrir o app.</string>
+
+    <!-- About "preference" -->
+    <string name="pref_version_name">Versão</string>
+
+    <!-- Debug preferences -->
+    <string name="pref_force_direct_boot_name">Forçar modo de inicialização direta</string>
+    <string name="pref_force_direct_boot_desc">Fingir que o dispositivo está no estado anterior ao primeiro desbloqueio, para fins de teste.</string>
+
+    <string name="pref_migrate_direct_boot_name">Migrar gravações da inicialização direta</string>
+    <string name="pref_migrate_direct_boot_desc">Migrar gravações feitas antes do primeiro desbloqueio. Isso normalmente acontece automaticamente após o primeiro desbloqueio.</string>
+
+    <string name="pref_save_logs_name">Salvar logs</string>
+    <string name="pref_save_logs_desc">Salvar os logs do logcat em um arquivo.</string>
+
+    <!-- Pick contact group activity -->
+    <string name="pick_contact_group_title">Escolher grupo de contatos</string>
+    <string name="pick_contact_group_local_group">Grupo local</string>
+
+    <!-- Title of the preference category holding the "Add new rule" option and the list of record rules. -->
+    <string name="pref_header_rules">Regras</string>
+    <!-- Message shown above the record rules list that indicates what rules do and how to interact with the list UI. -->
+    <string name="record_rules_info">As regras determinam qual ação tomar para uma chamada correspondente. Elas são processadas de cima para baixo até que uma correspondência seja encontrada. Toque e segure para reordenar as regras ou deslize para excluí-las.</string>
+    <!-- Title of preference option for adding a new record rule. -->
+    <string name="pref_add_new_rule_name">Adicionar nova regra</string>
+    <!-- Description of preference option for adding a new record rule. -->
+    <string name="pref_add_new_rule_desc">Adicione uma nova regra para determinar a ação a tomar para uma chamada correspondente.</string>
+    <!-- Numeric title for every custom rule (excluding the default rule). The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rules_list_custom_name">Regra %d</string>
+    <!-- Title for the default/fallback rule at the bottom of the list. -->
+    <string name="record_rules_list_default_name">Regra padrão</string>
+    <!-- Accessibility option to move a rule up by one spot in the list. -->
+    <string name="record_rules_list_action_move_up">Mover regra para cima</string>
+    <!-- Accessibility option to move a rule down by one spot in the list. -->
+    <string name="record_rules_list_action_move_down">Mover regra para baixo</string>
+    <!-- Accessibility option to remove a rule. -->
+    <string name="record_rules_list_action_remove">Remover regra</string>
+
+    <!-- Title of the preference category for the conditions that a record rule must match. -->
+    <string name="pref_header_rule_conditions">Condições da regra</string>
+    <!-- Title of the preference category for the actions to take when a record rule matches. -->
+    <string name="pref_header_rule_actions">Ações da regra</string>
+
+    <!-- Title of the record rule editor section for configuring the call number to match. -->
+    <string name="record_rule_number_title">Número da chamada</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_number_any_item">Qualquer número</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_number_unknown_item">Números desconhecidos</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_number_contact_item">Contato</string>
+    <!-- Text for the UI item to select this element in the rule editor. This represents contact group rules as a category, not a specific contact group. -->
+    <string name="record_rule_number_contact_group_item">Grupo de contatos</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Match: " prefix for visual consistency. -->
+    <string name="record_rule_number_unknown_summary">Correspondência: Números desconhecidos</string>
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. When the contacts permission is denied, this will display an internal contact ID instead of the contact name. -->
+    <string name="record_rule_number_contact_summary">Contato: %s</string>
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. This variant is only used when the contacts permission is denied and only the group ID is available (not the group name or account). -->
+    <string name="record_rule_number_contact_group_unknown_summary">Grupo de contatos: %s</string>
+    <!-- Summary shown in the record rules list descriptions. This intentionally has no "Match: " prefix because it already has another prefix. -->
+    <string name="record_rule_number_contact_group_with_account_summary">Grupo de contatos: %1$s (%2$s)</string>
+
+    <!-- Title of the record rule editor section for configuring the type of call to match. -->
+    <string name="record_rule_type_title">Tipo de chamada</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_any_item">Qualquer</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_incoming_item">Chamada recebida</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_outgoing_item">Chamada efetuada</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_type_conference_item">Chamada em conferência</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_incoming_summary">Tipo: Chamada recebida</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_outgoing_summary">Tipo: Chamada efetuada</string>
+    <!-- Summary shown in the record rules list descriptions. This should include a "Type: " prefix for visual consistency. -->
+    <string name="record_rule_type_conference_summary">Tipo: Chamada em conferência</string>
+
+    <!-- Title of the record rule editor section for configuring which SIM slot to match. -->
+    <string name="record_rule_sim_title">Slot do SIM</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_sim_any_item">Qualquer</string>
+    <!-- Text for the UI item to select a specific SIM slot in the rule editor. The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rule_sim_specific_item">SIM %d</string>
+    <!-- Summary shown in the record rules list descriptions. This should have a prefix, like other summary lines, for visual consistency. The placeholder value (Arabic numerals) is a number starting at 1. -->
+    <string name="record_rule_sim_specific_summary">Slot do SIM: %d</string>
+
+    <!-- Title of the record rule editor section to configure the action to take when all conditions match. -->
+    <string name="record_rule_action_title">Ação</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_action_save_item">Salvar gravação</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_action_discard_item">Descartar gravação</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_action_ignore_item">Ignorar chamada</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_save_desc">Salvar a gravação. A gravação pode ser marcada para exclusão ao final da chamada através da notificação exibida durante a chamada.</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_discard_desc">Descartar a gravação ao final da chamada. A gravação pode ser preservada através da notificação exibida durante a chamada.</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_action_ignore_desc">Ignorar completamente a chamada. A chamada não será gravada e não é possível iniciar a gravação durante a chamada.</string>
+    <!-- Summary shown in the record rules list descriptions. This should include an "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_save_summary">Ação: Salvar gravação</string>
+    <!-- Summary shown in the record rules list descriptions. This should include an "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_discard_summary">Ação: Descartar gravação</string>
+    <!-- Summary shown in the record rules list descriptions. This should include an "Action: " prefix for visual consistency. -->
+    <string name="record_rule_action_ignore_summary">Ação: Ignorar chamada</string>
+
+    <!-- Title of the record rule editor section to configure whether the recording begins immediately or starts in the paused state. -->
+    <string name="record_rule_initial_state_title">Estado inicial</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_initial_state_recording_item">Gravar imediatamente</string>
+    <!-- Text for the UI item to select this element in the rule editor. -->
+    <string name="record_rule_initial_state_paused_item">Pausado até retomar manualmente</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_initial_state_recording_desc">A gravação começará imediatamente e toda a chamada será gravada, a menos que a opção \"Pausar\" seja selecionada manualmente na notificação.</string>
+    <!-- Description shown for this action in the rule editor. The text can be as verbose as necessary. -->
+    <string name="record_rule_initial_state_paused_desc">O áudio não será gravado até que a opção \"Retomar\" seja selecionada manualmente na notificação.</string>
+    <!-- Summary shown in the record rules list descriptions. This should include an "Initial state: " prefix for visual consistency. -->
+    <string name="record_rule_initial_state_recording_summary">Estado inicial: Gravar imediatamente</string>
+    <!-- Summary shown in the record rules list descriptions. This should include an "Initial state: " prefix for visual consistency. -->
+    <string name="record_rule_initial_state_paused_summary">Estado inicial: Pausado até retomar manualmente</string>
+
+    <!-- Output directory settings -->
+    <string name="pref_filename_template_name">Modelo de nome de arquivo</string>
+    <string name="pref_file_retention_name">Retenção de arquivos</string>
+    <string name="retention_keep_all">Manter tudo</string>
+    <plurals name="retention_days">
+        <item quantity="one">Manter %d dia</item>
+        <item quantity="other">Manter %d dias</item>
+    </plurals>
+    <string name="retention_unusable">A retenção de arquivos está desativada porque o modelo de nome de arquivo atual é incompatível com o recurso.</string>
+
+    <!-- Output format settings -->
+    <string name="pref_format_param_desc_compression_level">Nível de compressão</string>
+    <string name="pref_format_param_desc_bitrate">Taxa de bits</string>
+    <string name="pref_sample_rate_name">Taxa de amostragem</string>
+    <string name="pref_audio_source_name">Fonte de áudio</string>
+    <string name="custom_param_value">Personalizado</string>
+
+    <string name="reset_to_defaults">Restaurar padrões</string>
+
+    <!-- Filename template dialog -->
+    <string name="filename_template_dialog_title">Modelo de nome de arquivo</string>
+    <!-- NOTE: For the "supported_vars" annotation, the content MUST not be empty. Any string can go inside of it as a placeholder. -->
+    <string name="filename_template_dialog_message">Insira um modelo personalizado para o nome do arquivo de saída. As variáveis são especificadas com chaves (ex.: <annotation type="template">{var}</annotation>). Os valores alternativos são especificados com colchetes (ex.: <annotation type="template">[{contact_name}|Unknown]</annotation>).\n\nVariáveis suportadas: <annotation type="supported_vars">PLACEHOLDER</annotation>. Consulte <annotation type="template_docs">a documentação</annotation> para uma descrição completa da sintaxe.</string>
+    <string name="filename_template_dialog_warning_subdirectories">Devido ao fraco desempenho do Storage Access Framework do Android, usar subdiretórios (caractere <annotation type="template">/</annotation>) pode causar atrasos significativos ao salvar a gravação em alguns dispositivos. O atraso ocorre ao final da chamada e não deve resultar em qualquer perda de áudio da chamada.</string>
+    <string name="filename_template_dialog_error_empty">O modelo não pode ficar vazio</string>
+    <string name="filename_template_dialog_error_unknown_variable">Variável de modelo desconhecida: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_has_argument">A variável não pode ter um argumento: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_argument">Argumento de variável inválido: <annotation type="template">PLACEHOLDER</annotation></string>
+    <string name="filename_template_dialog_error_invalid_syntax">A sintaxe do modelo é inválida</string>
+    <string name="filename_template_dialog_action_reset_to_default">Restaurar para o padrão</string>
+
+    <!-- File retention dialog -->
+    <string name="file_retention_dialog_title">@string/pref_file_retention_name</string>
+    <string name="file_retention_dialog_message">Insira o número de dias para manter as gravações.</string>
+    <string name="file_retention_error_too_large">O número é muito grande</string>
+
+    <!-- Format parameter dialog -->
+    <string name="format_param_dialog_title">Parâmetro personalizado</string>
+    <string name="format_param_dialog_message">Insira um valor no intervalo [%1$s, %2$s].</string>
+
+    <!-- Format sample rate dialog -->
+    <string name="format_sample_rate_dialog_title">Taxa de amostragem personalizada</string>
+    <string name="format_sample_rate_dialog_message_desc">Insira uma taxa de amostragem dentro de um destes intervalos:</string>
+    <string name="format_sample_rate_dialog_message_range">[%1$s, %2$s]</string>
+
+    <!-- Format parameter -->
+    <string name="format_param_bitrate_bps">%s bps</string>
+    <string name="format_param_bitrate_kbps">%s kbps</string>
+    <string name="format_param_compression_level">Nível %s</string>
+
+    <!-- Format sample rate -->
+    <string name="format_sample_rate">%s Hz</string>
+
+    <!-- Audio sources. There is no length limit to these strings and a newline can be added before the (parentheses) if needed. Translations do not need to 100% match the original English string if rewording them makes the text clearer. -->
+    <string name="audio_source_voice_call">Combinado (Mono)</string>
+    <string name="audio_source_voice_uplink_downlink">Uplink + downlink\n(Estéreo, canais separados)</string>
+    <string name="audio_source_voice_uplink">Apenas uplink (Mono)</string>
+    <string name="audio_source_voice_downlink">Apenas downlink (Mono)</string>
+    <string name="audio_source_stereo_warning">Pouquíssimos dispositivos suportam gravação em estéreo. Se a gravação falhar ou ficar sem áudio, mude para uma fonte de áudio mono.</string>
+
+    <!-- Min duration dialog -->
+    <string name="min_duration_dialog_title">@string/pref_min_duration_name</string>
+    <string name="min_duration_dialog_message">Insira a duração mínima para que uma gravação seja mantida, excluindo pausas e chamadas em espera. Isso sempre pode ser substituído durante uma chamada pela notificação.</string>
+    <plurals name="min_duration_dialog_seconds">
+        <item quantity="one">%d segundo</item>
+        <item quantity="other">%d segundos</item>
+    </plurals>
+
+    <!-- Snackbar alerts -->
+    <string name="alert_logcat_success">Logs salvos com sucesso em %1$s</string>
+    <string name="alert_logcat_failure">Falha ao salvar os logs em %1$s: %2$s</string>
+    <string name="alert_contact_group_query_failure">Falha ao consultar os grupos de contatos: %1$s</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_persistent_name">Serviços em segundo plano</string>
+    <string name="notification_channel_persistent_desc">Notificação permanente para gravação de chamadas em segundo plano</string>
+    <string name="notification_channel_failure_name">Alertas de falha</string>
+    <string name="notification_channel_failure_desc">Alertas de erros durante a gravação de chamadas</string>
+    <string name="notification_channel_success_name">Alertas de sucesso</string>
+    <string name="notification_channel_success_desc">Alertas de gravações de chamadas bem-sucedidas</string>
+    <string name="notification_channel_silence_name">Avisos de silêncio total</string>
+    <string name="notification_channel_silence_desc">Avisar se as gravações de chamadas contiverem silêncio total</string>
+    <string name="notification_direct_boot_migration_failed">Falha ao migrar as gravações</string>
+    <string name="notification_direct_boot_migration_error">Algumas gravações salvas antes do primeiro desbloqueio do dispositivo não puderam ser movidas para o diretório de saída.</string>
+    <string name="notification_recording_initializing">Inicializando gravação da chamada</string>
+    <string name="notification_recording_in_progress">Gravação da chamada em andamento</string>
+    <string name="notification_recording_finalizing">Finalizando gravação da chamada</string>
+    <string name="notification_recording_paused">Gravação da chamada pausada</string>
+    <string name="notification_recording_on_hold">Chamada em espera</string>
+    <string name="notification_recording_failed">Falha ao gravar a chamada</string>
+    <string name="notification_recording_succeeded">Chamada gravada com sucesso</string>
+    <string name="notification_move_failed">Falha ao mover a gravação</string>
+    <string name="notification_move_error">Um ou mais arquivos não puderam ser movidos para o diretório de saída selecionado. Eles ainda estão presentes no diretório de saída padrão.</string>
+    <string name="notification_move_error_permissions">Isso foi causado pela revogação, pelo Android, das permissões existentes do BCR para o diretório. Selecionar o mesmo diretório de saída concederá novamente as permissões necessárias.</string>
+    <string name="notification_message_delete_at_end">A gravação será excluída ao final da chamada. Toque em Restaurar para manter a gravação.</string>
+    <plurals name="notification_message_delete_at_end_too_short">
+        <item quantity="one">A gravação será excluída ao final da chamada se for menor que %d segundo. Toque em Restaurar para manter a gravação.</item>
+        <item quantity="other">A gravação será excluída ao final da chamada se for menor que %d segundos. Toque em Restaurar para manter a gravação.</item>
+    </plurals>
+    <string name="notification_internal_android_error">A gravação falhou em um componente interno do Android (%s). Este dispositivo ou firmware pode não suportar gravação de chamadas.</string>
+    <string name="notification_pure_silence_error">A gravação foi descartada porque o áudio estava completamente silencioso. Este dispositivo pode não suportar a gravação de chamadas associadas ao app \'%s\'.</string>
+    <string name="notification_action_open">Abrir</string>
+    <string name="notification_action_share">Compartilhar</string>
+    <string name="notification_action_delete">Excluir</string>
+    <string name="notification_action_restore">Restaurar</string>
+    <string name="notification_action_pause">Pausar</string>
+    <string name="notification_action_resume">Retomar</string>
+
+    <!-- Quick settings tile -->
+    <string name="quick_settings_label">Gravação de chamadas</string>
+
+    <!-- Snackbar alerts -->
+    <string name="browser_not_found">Nenhum navegador da web está disponível.</string>
+    <string name="documentsui_not_found">O gerenciador de arquivos integrado do Android (DocumentsUI) está indisponível.</string>
+    <string name="contact_picker_not_found">O seletor de contatos do sistema Android está indisponível.</string>
+
+    <!-- Separator between elements in the descriptions of the output directory and output format preferences on the main screen. Double quotes are needed to preserve leading or trailing spaces, but don't show up in the actual text. -->
+    <string name="summary_separator">", "</string>
+</resources>
