@@ -9,6 +9,8 @@
 
 ### Unreleased
 
+* Add Brazilian Portuguese translations ([PR #974 @VictorGabriel7Dev])
+
 ### Version 3.11
 
 * Add `OpenableColumns` metadata when sharing recordings ([Issue #747], [PR #965 @chenxiaolong])
@@ -1397,3 +1399,4 @@ Non-user-facing changes:
 [PR #962 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/962
 [PR #963 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/963
 [PR #965 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/965
+[PR #974 @VictorGabriel7Dev]: https://github.com/chenxiaolong/BCR/pull/974
