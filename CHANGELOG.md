@@ -7,6 +7,8 @@
     to update the actual links at the bottom of the file.
 -->
 
+### Unreleased
+
 ### Version 3.12
 
 * Add Brazilian Portuguese translations ([PR #974 @VictorGabriel7Dev])
