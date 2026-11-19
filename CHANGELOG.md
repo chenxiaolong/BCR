@@ -10,6 +10,7 @@
 ### Unreleased
 
 * Add Brazilian Portuguese translations ([PR #974 @VictorGabriel7Dev])
+* Update dependencies ([PR #975 @chenxiaolong])
 
 ### Version 3.11
 
@@ -1400,3 +1401,4 @@ Non-user-facing changes:
 [PR #963 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/963
 [PR #965 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/965
 [PR #974 @VictorGabriel7Dev]: https://github.com/chenxiaolong/BCR/pull/974
+[PR #975 @chenxiaolong]: https://github.com/chenxiaolong/BCR/pull/975
